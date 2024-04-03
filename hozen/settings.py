@@ -7,9 +7,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 env = environ.Env()
 env.read_env(os.path.join(BASE_DIR, '.env'))
 
-SECRET_KEY='django-insecure-c41s!3707&=*$*c@&*!4+xwb#6nfkr_!0k#likbpcazvfbrg0$'
+SECRET_KEY=env('SECRET_KEY')
 
-DEBUG=True
+DEBUG=env.bool('DEBUG')
 
 ALLOWED_HOSTS = [os.environ['WEBSITE_SITE_NAME'] + '.azurewebsites.net', '127.0.0.1'] if 'WEBSITE_SITE_NAME' in os.environ else []
 
@@ -67,10 +67,10 @@ WSGI_APPLICATION = 'hozen.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'kosu_data',
-        'USER': 'nomura',
-        'PASSWORD': 'pm5441454414',
-        'HOST': 'localhost',
+        'NAME': env('DB_NAME'),
+        'USER': env('DB_USER'),
+        'PASSWORD': env('DB_PASSWORD'),
+        'HOST': env('DB_HOST'),
         'POST': '5432',
     }
 }
