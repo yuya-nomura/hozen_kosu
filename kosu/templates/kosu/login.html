@@ -12,8 +12,7 @@
   <h1 class="display-1 text-primary">{{title}}</h1>
   <p>　</p>
   <form action="{% url 'login' %}" method="post">
-  <form method="POST">
-  {% csrf_token %}
+    {% csrf_token %}
     {{form.as_p}}
     <input type="submit" value="ログイン" class="btn btn-primary mt-2">
   </form>
