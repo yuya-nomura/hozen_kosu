@@ -1,0 +1,743 @@
+{% load static %}
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{title}}</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap/dist/css/bootstrap.css"
+    rel="stylesheet" crossorigin="anonymous">
+  <link rel="stylesheet" type="text/css" href="{% static 'kosu/css/bootstrap.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'kosu/css/loading.css' %}">
+</head>
+<body class="container">
+  <h1 class="display-1 text-primary">{{title}}</h1>
+  <p class="h4"><a href="{% url 'kosu_main' %}">工数MENUへ</a></p>
+  <form action="{% url 'schedule' %}" method="post">
+  {% csrf_token %}
+    <table class="table table-bordered border-dark">
+      <p>表示月指定</p>
+      <p>{{form2.year}}年　{{form2.month}}月　　
+        <input type="submit" value="表示切替" name = time_update class="btn btn-blue2 mt-2">　　　　　
+        <input type="submit" value="勤務登録" name = work_update class="btn btn-blue2 mt-2">
+      </p>
+      {% for message in messages %}
+      <div {% if message.tags %}class="{{ message.tags }}"{% endif %}>
+        <p  class="text-danger">
+          {{ message }}
+        </p>
+      </div>
+      {% endfor %}
+      <p>
+        <svg width="100" height="40">
+          <rect x="0" y="0" width="90" height="40" fill="#33ff00" />
+          <text x="30" y="25" font-weight="bold">勤務</text>
+        </svg>
+        工数転記済み
+      </p>
+      <p>
+        <svg width="100" height="40">
+          <rect x="0" y="0" width="90" height="40" fill="#33ff00" />
+          <text x="15" y="25" font-weight="bold">入力時間</text>
+        </svg>
+        工数入力OK
+      </p>
+      <tr><p>　</p></tr>
+      <tr>
+        <th class="table-danger"><div class="text-center">日</div></th>
+        <th><div class="text-center">月</div></th>
+        <th><div class="text-center">火</div></th>
+        <th><div class="text-center">水</div></th>
+        <th><div class="text-center">木</div></th>
+        <th><div class="text-center">金</div></th>
+        <th class="table-primary"><div class="text-center">土</div></th>
+      </tr>
+
+      <tr>
+        {% for i in day_list|slice:":7" %}
+        {% if forloop.first %}
+        <td class="table-danger">
+        {% else %}
+        {% if forloop.last %}
+        <td class="table-primary">
+        {% else %}
+        <td>
+        {% endif %}
+        {% endif %}
+          <div class="text-center fw-bold">{{i}}</div>
+        </td>
+        {% endfor %}
+      </tr>
+
+      <tr>
+        {% if input_list.0 == True %}<td class="table-green">{% else %}
+        {% if input_list.0 != True %}<td class="table-danger">{% endif %}{% endif %}
+          {% if day_list.0 != '' %}<div class="text-center">{{form.day1}}</div>{% endif %}</td>
+        {% if input_list.1 == True %}<td class="table-green">{% else %}
+        {% if input_list.1 != True %}<td>{% endif %}{% endif %}
+          {% if day_list.1 != '' %}<div class="text-center">{{form.day2}}</div>{% endif %}</td>
+        {% if input_list.2 == True %}<td class="table-green">{% else %}
+        {% if input_list.2 != True %}<td>{% endif %}{% endif %}
+          {% if day_list.2 != '' %}<div class="text-center">{{form.day3}}</div>{% endif %}</td>
+        {% if input_list.3 == True %}<td class="table-green">{% else %}
+        {% if input_list.3 != True %}<td>{% endif %}{% endif %}
+          {% if day_list.3 != '' %}<div class="text-center">{{form.day4}}</div>{% endif %}</td>
+        {% if input_list.4 == True %}<td class="table-green">{% else %}
+        {% if input_list.4 != True %}<td>{% endif %}{% endif %}
+          {% if day_list.4 != '' %}<div class="text-center">{{form.day5}}</div>{% endif %}</td>
+        {% if input_list.5 == True %}<td class="table-green">{% else %}
+        {% if input_list.5 != True %}<td>{% endif %}{% endif %}
+          {% if day_list.5 != '' %}<div class="text-center">{{form.day6}}</div>{% endif %}</td>
+        {% if input_list.6 == True %}<td class="table-green">{% else %}
+        {% if input_list.6 != True %}<td class="table-primary">{% endif %}{% endif %}
+          {% if day_list.6 != '' %}<div class="text-center">{{form.day7}}</div>{% endif %}</td>
+      </tr>
+
+      <tr>
+        {% if OK_NG_list.0 == True %}<td class="table-green">
+        {% else %}
+        {% if OK_NG_list.0 != True %}<td class="table-danger">
+        {% endif %}
+        {% endif %}
+        {% if day_list.0 != '' %}<div class="text-center">
+        {% for i in time_list1 %}
+          {{i}}<br>
+        {% endfor %}
+        {% endif %}
+        </div></td>
+        {% if OK_NG_list.1 == True %}<td class="table-green">
+        {% else %}
+        {% if OK_NG_list.1 != True %}<td>
+        {% endif %}
+        {% endif %}
+        {% if day_list.1 != '' %}<div class="text-center">
+        {% for i in time_list2 %}
+          {{i}}<br>
+        {% endfor %}
+        {% endif %}
+        </div></td>
+        {% if OK_NG_list.2 == True %}<td class="table-green">
+        {% else %}
+        {% if OK_NG_list.2 != True %}<td>
+        {% endif %}
+        {% endif %}
+        {% if day_list.2 != '' %}<div class="text-center">
+        {% for i in time_list3 %}
+          {{i}}<br>
+        {% endfor %}
+        {% endif %}
+        </div></td>
+        {% if OK_NG_list.3 == True %}<td class="table-green">
+        {% else %}
+        {% if OK_NG_list.3 != True %}<td>
+        {% endif %}
+        {% endif %}
+        {% if day_list.3 != '' %}<div class="text-center">
+        {% for i in time_list4 %}
+          {{i}}<br>
+        {% endfor %}
+        {% endif %}
+        </div></td>
+        {% if OK_NG_list.4 == True %}<td class="table-green">
+        {% else %}
+        {% if OK_NG_list.4 != True %}<td>
+        {% endif %}
+        {% endif %}
+        {% if day_list.4 != '' %}<div class="text-center">
+        {% for i in time_list5 %}
+          {{i}}<br>
+        {% endfor %}
+        {% endif %}
+        </div></td>
+        {% if OK_NG_list.5 == True %}<td class="table-green">
+        {% else %}
+        {% if OK_NG_list.5 != True %}<td>
+        {% endif %}
+        {% endif %}
+        {% if day_list.5 != '' %}<div class="text-center">
+        {% for i in time_list6 %}
+          {{i}}<br>
+        {% endfor %}
+        {% endif %}
+        </div></td>
+        {% if OK_NG_list.6 == True %}<td class="table-green">
+        {% else %}
+        {% if OK_NG_list.6 != True %}<td class="table-primary">
+        {% endif %}
+        {% endif %}
+        {% if day_list.6 != '' %}<div class="text-center">
+        {% for i in time_list7 %}
+          {{i}}<br>
+        {% endfor %}
+        {% endif %}
+        </div></td>  
+      </tr>
+
+      <tr>
+        {% for i in day_list|slice:"7:14" %}
+        {% if forloop.first %}
+        <td class="table-danger">
+        {% else %}
+        {% if forloop.last %}
+        <td class="table-primary">
+        {% else %}
+        <td>
+        {% endif %}
+        {% endif %}
+          <div class="text-center fw-bold">{{i}}</div>
+        </td>
+        {% endfor %}
+      </tr>
+
+      <tr>
+        {% if input_list.7 == True %}<td class="table-green">{% else %}
+        {% if input_list.7 != True %}<td class="table-danger">{% endif %}{% endif %}
+          {% if day_list.7 != '' %}<div class="text-center">{{form.day8}}</div>{% endif %}</td>
+        {% if input_list.8 == True %}<td class="table-green">{% else %}
+        {% if input_list.8 != True %}<td>{% endif %}{% endif %}
+          {% if day_list.8 != '' %}<div class="text-center">{{form.day9}}</div>{% endif %}</td>
+        {% if input_list.9 == True %}<td class="table-green">{% else %}
+        {% if input_list.9 != True %}<td>{% endif %}{% endif %}
+          {% if day_list.9 != '' %}<div class="text-center">{{form.day10}}</div>{% endif %}</td>
+        {% if input_list.10 == True %}<td class="table-green">{% else %}
+        {% if input_list.10 != True %}<td>{% endif %}{% endif %}
+          {% if day_list.10 != '' %}<div class="text-center">{{form.day11}}</div>{% endif %}</td>
+        {% if input_list.11 == True %}<td class="table-green">{% else %}
+        {% if input_list.11 != True %}<td>{% endif %}{% endif %}
+          {% if day_list.11 != '' %}<div class="text-center">{{form.day12}}</div>{% endif %}</td>
+        {% if input_list.12 == True %}<td class="table-green">{% else %}
+        {% if input_list.12 != True %}<td>{% endif %}{% endif %}
+          {% if day_list.13 != '' %}<div class="text-center">{{form.day13}}</div>{% endif %}</td>
+        {% if input_list.13 == True %}<td class="table-green">{% else %}
+        {% if input_list.13 != True %}<td class="table-primary">{% endif %}{% endif %}
+          {% if day_list.13 != '' %}<div class="text-center">{{form.day14}}</div>{% endif %}</td>
+      </tr>
+
+      <tr>
+        {% if OK_NG_list.7 == True %}<td class="table-green">
+        {% else %}
+        {% if OK_NG_list.7 != True %}<td class="table-danger">
+        {% endif %}
+        {% endif %}
+        {% if day_list.7 != '' %}<div class="text-center">
+        {% for i in time_list8 %}
+          {{i}}<br>
+        {% endfor %}
+        {% endif %}
+        </div></td>
+        {% if OK_NG_list.8 == True %}<td class="table-green">
+        {% else %}
+        {% if OK_NG_list.8 != True %}<td>
+        {% endif %}
+        {% endif %}
+        {% if day_list.8 != '' %}<div class="text-center">
+        {% for i in time_list9 %}
+          {{i}}<br>
+        {% endfor %}
+        {% endif %}
+        </div></td>
+        {% if OK_NG_list.9 == True %}<td class="table-green">
+        {% else %}
+        {% if OK_NG_list.9 != True %}<td>
+        {% endif %}
+        {% endif %}
+        {% if day_list.9 != '' %}<div class="text-center">
+        {% for i in time_list10 %}
+          {{i}}<br>
+        {% endfor %}
+        {% endif %}
+        </div></td>
+        {% if OK_NG_list.10 == True %}<td class="table-green">
+        {% else %}
+        {% if OK_NG_list.10 != True %}<td>
+        {% endif %}
+        {% endif %}
+        {% if day_list.10 != '' %}<div class="text-center">
+        {% for i in time_list11 %}
+          {{i}}<br>
+        {% endfor %}
+        {% endif %}
+        </div></td>
+        {% if OK_NG_list.11 == True %}<td class="table-green">
+        {% else %}
+        {% if OK_NG_list.11 != True %}<td>
+        {% endif %}
+        {% endif %}
+        {% if day_list.11 != '' %}<div class="text-center">
+        {% for i in time_list12 %}
+          {{i}}<br>
+        {% endfor %}
+        {% endif %}
+        </div></td>
+        {% if OK_NG_list.12 == True %}<td class="table-green">
+        {% else %}
+        {% if OK_NG_list.12 != True %}<td>
+        {% endif %}
+        {% endif %}
+        {% if day_list.12 != '' %}<div class="text-center">
+        {% for i in time_list13 %}
+          {{i}}<br>
+        {% endfor %}
+        {% endif %}
+        </div></td>
+        {% if OK_NG_list.13 == True %}<td class="table-green">
+        {% else %}
+        {% if OK_NG_list.13 != True %}<td class="table-primary">
+        {% endif %}
+        {% endif %}
+        {% if day_list.13 != '' %}<div class="text-center">
+        {% for i in time_list14 %}
+          {{i}}<br>
+        {% endfor %}
+        {% endif %}
+        </div></td>  
+      </tr>
+
+      <tr>
+        {% for i in day_list|slice:"14:21" %}
+        {% if forloop.first %}
+        <td class="table-danger">
+        {% else %}
+        {% if forloop.last %}
+        <td class="table-primary">
+        {% else %}
+        <td>
+        {% endif %}
+        {% endif %}
+          <div class="text-center fw-bold">{{i}}</div>
+        </td>
+        {% endfor %}
+      </tr>
+
+      <tr>
+        {% if input_list.14 == True %}<td class="table-green">{% else %}
+        {% if input_list.14 != True %}<td class="table-danger">{% endif %}{% endif %}
+          {% if day_list.14 != '' %}<div class="text-center">{{form.day15}}</div>{% endif %}</td>
+        {% if input_list.15 == True %}<td class="table-green">{% else %}
+        {% if input_list.15 != True %}<td>{% endif %}{% endif %}
+          {% if day_list.15 != '' %}<div class="text-center">{{form.day16}}</div>{% endif %}</td>
+        {% if input_list.16 == True %}<td class="table-green">{% else %}
+        {% if input_list.16 != True %}<td>{% endif %}{% endif %}
+          {% if day_list.16 != '' %}<div class="text-center">{{form.day17}}</div>{% endif %}</td>
+        {% if input_list.17 == True %}<td class="table-green">{% else %}
+        {% if input_list.17 != True %}<td>{% endif %}{% endif %}
+          {% if day_list.17 != '' %}<div class="text-center">{{form.day18}}</div>{% endif %}</td>
+        {% if input_list.18 == True %}<td class="table-green">{% else %}
+        {% if input_list.18 != True %}<td>{% endif %}{% endif %}
+          {% if day_list.18 != '' %}<div class="text-center">{{form.day19}}</div>{% endif %}</td>
+        {% if input_list.19 == True %}<td class="table-green">{% else %}
+        {% if input_list.19 != True %}<td>{% endif %}{% endif %}
+          {% if day_list.19 != '' %}<div class="text-center">{{form.day20}}</div>{% endif %}</td>
+        {% if input_list.20 == True %}<td class="table-green">{% else %}
+        {% if input_list.20 != True %}<td class="table-primary">{% endif %}{% endif %}
+          {% if day_list.20 != '' %}<div class="text-center">{{form.day21}}</div>{% endif %}</td>
+      </tr>
+
+      <tr>
+        {% if OK_NG_list.14 == True %}<td class="table-green">
+        {% else %}
+        {% if OK_NG_list.14 != True %}<td class="table-danger">
+        {% endif %}
+        {% endif %}
+        {% if day_list.14 != '' %}<div class="text-center">
+        {% for i in time_list15 %}
+          {{i}}<br>
+        {% endfor %}
+        {% endif %}
+        </div></td>
+        {% if OK_NG_list.15 == True %}<td class="table-green">
+        {% else %}
+        {% if OK_NG_list.15 != True %}<td>
+        {% endif %}
+        {% endif %}
+        {% if day_list.15 != '' %}<div class="text-center">
+        {% for i in time_list16 %}
+          {{i}}<br>
+        {% endfor %}
+        {% endif %}
+        </div></td>
+        {% if OK_NG_list.16 == True %}<td class="table-green">
+        {% else %}
+        {% if OK_NG_list.16 != True %}<td>
+        {% endif %}
+        {% endif %}
+        {% if day_list.16 != '' %}<div class="text-center">
+        {% for i in time_list17 %}
+          {{i}}<br>
+        {% endfor %}
+        {% endif %}
+        </div></td>
+        {% if OK_NG_list.17 == True %}<td class="table-green">
+        {% else %}
+        {% if OK_NG_list.17 != True %}<td>
+        {% endif %}
+        {% endif %}
+        {% if day_list.17 != '' %}<div class="text-center">
+        {% for i in time_list18 %}
+          {{i}}<br>
+        {% endfor %}
+        {% endif %}
+        </div></td>
+        {% if OK_NG_list.18 == True %}<td class="table-green">
+        {% else %}
+        {% if OK_NG_list.18 != True %}<td>
+        {% endif %}
+        {% endif %}
+        {% if day_list.18 != '' %}<div class="text-center">
+        {% for i in time_list19 %}
+          {{i}}<br>
+        {% endfor %}
+        {% endif %}
+        </div></td>
+        {% if OK_NG_list.19 == True %}<td class="table-green">
+        {% else %}
+        {% if OK_NG_list.19 != True %}<td>
+        {% endif %}
+        {% endif %}
+        {% if day_list.19 != '' %}<div class="text-center">
+        {% for i in time_list20 %}
+          {{i}}<br>
+        {% endfor %}
+        {% endif %}
+        </div></td>
+        {% if OK_NG_list.20 == True %}<td class="table-green">
+        {% else %}
+        {% if OK_NG_list.20 != True %}<td class="table-primary">
+        {% endif %}
+        {% endif %}
+        {% if day_list.20 != '' %}<div class="text-center">
+        {% for i in time_list21 %}
+          {{i}}<br>
+        {% endfor %}
+        {% endif %}
+        </div></td>  
+      </tr>
+
+      <tr>
+        {% for i in day_list|slice:"21:28" %}
+        {% if forloop.first %}
+        <td class="table-danger">
+        {% else %}
+        {% if forloop.last %}
+        <td class="table-primary">
+        {% else %}
+        <td>
+        {% endif %}
+        {% endif %}
+          <div class="text-center fw-bold">{{i}}</div>
+        </td>
+        {% endfor %}
+      </tr>
+
+      <tr>
+        {% if input_list.21 == True %}<td class="table-green">{% else %}
+        {% if input_list.21 != True %}<td class="table-danger">{% endif %}{% endif %}
+          {% if day_list.21 != '' %}<div class="text-center">{{form.day22}}</div>{% endif %}</td>
+        {% if input_list.22 == True %}<td class="table-green">{% else %}
+        {% if input_list.22 != True %}<td>{% endif %}{% endif %}
+          {% if day_list.22 != '' %}<div class="text-center">{{form.day23}}</div>{% endif %}</td>
+        {% if input_list.23 == True %}<td class="table-green">{% else %}
+        {% if input_list.23 != True %}<td>{% endif %}{% endif %}
+          {% if day_list.23 != '' %}<div class="text-center">{{form.day24}}</div>{% endif %}</td>
+        {% if input_list.24 == True %}<td class="table-green">{% else %}
+        {% if input_list.24 != True %}<td>{% endif %}{% endif %}
+          {% if day_list.24 != '' %}<div class="text-center">{{form.day25}}</div>{% endif %}</td>
+        {% if input_list.25 == True %}<td class="table-green">{% else %}
+        {% if input_list.25 != True %}<td>{% endif %}{% endif %}
+          {% if day_list.25 != '' %}<div class="text-center">{{form.day26}}</div>{% endif %}</td>
+        {% if input_list.26 == True %}<td class="table-green">{% else %}
+        {% if input_list.26 != True %}<td>{% endif %}{% endif %}
+          {% if day_list.26 != '' %}<div class="text-center">{{form.day27}}</div>{% endif %}</td>
+        {% if input_list.27 == True %}<td class="table-green">{% else %}
+        {% if input_list.27 != True %}<td class="table-primary">{% endif %}{% endif %}
+          {% if day_list.27 != '' %}<div class="text-center">{{form.day28}}</div>{% endif %}</td>
+      </tr>
+
+      <tr>
+        {% if OK_NG_list.21 == True %}<td class="table-green">
+        {% else %}
+        {% if OK_NG_list.21 != True %}<td class="table-danger">
+        {% endif %}
+        {% endif %}
+        {% if day_list.21 != '' %}<div class="text-center">
+        {% for i in time_list22 %}
+          {{i}}<br>
+        {% endfor %}
+        {% endif %}
+        </div></td>
+        {% if OK_NG_list.22 == True %}<td class="table-green">
+        {% else %}
+        {% if OK_NG_list.22 != True %}<td>
+        {% endif %}
+        {% endif %}
+        {% if day_list.22 != '' %}<div class="text-center">
+        {% for i in time_list23 %}
+          {{i}}<br>
+        {% endfor %}
+        {% endif %}
+        </div></td>
+        {% if OK_NG_list.23 == True %}<td class="table-green">
+        {% else %}
+        {% if OK_NG_list.23 != True %}<td>
+        {% endif %}
+        {% endif %}
+        {% if day_list.23 != '' %}<div class="text-center">
+        {% for i in time_list24 %}
+          {{i}}<br>
+        {% endfor %}
+        {% endif %}
+        </div></td>
+        {% if OK_NG_list.24 == True %}<td class="table-green">
+        {% else %}
+        {% if OK_NG_list.24 != True %}<td>
+        {% endif %}
+        {% endif %}
+        {% if day_list.24 != '' %}<div class="text-center">
+        {% for i in time_list25 %}
+          {{i}}<br>
+        {% endfor %}
+        {% endif %}
+        </div></td>
+        {% if OK_NG_list.25 == True %}<td class="table-green">
+        {% else %}
+        {% if OK_NG_list.25 != True %}<td>
+        {% endif %}
+        {% endif %}
+        {% if day_list.25 != '' %}<div class="text-center">
+        {% for i in time_list26 %}
+          {{i}}<br>
+        {% endfor %}
+        {% endif %}
+        </div></td>
+        {% if OK_NG_list.26 == True %}<td class="table-green">
+        {% else %}
+        {% if OK_NG_list.26 != True %}<td>
+        {% endif %}
+        {% endif %}
+        {% if day_list.26 != '' %}<div class="text-center">
+        {% for i in time_list27 %}
+          {{i}}<br>
+        {% endfor %}
+        {% endif %}
+        </div></td>
+        {% if OK_NG_list.27 == True %}<td class="table-green">
+        {% else %}
+        {% if OK_NG_list.27 != True %}<td class="table-primary">
+        {% endif %}
+        {% endif %}
+        {% if day_list.27 != '' %}<div class="text-center">
+        {% for i in time_list28 %}
+          {{i}}<br>
+        {% endfor %}
+        {% endif %}
+        </div></td>  
+      </tr>
+
+      {% if day_list.28 != '' %}
+      <tr>
+        {% for i in day_list|slice:"28:35" %}
+        {% if forloop.first %}
+        <td class="table-danger">
+        {% else %}
+        {% if forloop.last %}
+        <td class="table-primary">
+        {% else %}
+        <td>
+        {% endif %}
+        {% endif %}
+          <div class="text-center fw-bold">{{i}}</div>
+        </td>
+        {% endfor %}
+      </tr>
+
+      <tr>
+        {% if input_list.28 == True %}<td class="table-green">{% else %}
+        {% if input_list.28 != True %}<td class="table-danger">{% endif %}{% endif %}
+          {% if day_list.28 != '' %}<div class="text-center">{{form.day29}}</div>{% endif %}</td>
+        {% if input_list.29 == True %}<td class="table-green">{% else %}
+        {% if input_list.29 != True %}<td>{% endif %}{% endif %}
+          {% if day_list.29 != '' %}<div class="text-center">{{form.day30}}</div>{% endif %}</td>
+        {% if input_list.30 == True %}<td class="table-green">{% else %}
+        {% if input_list.30 != True %}<td>{% endif %}{% endif %}
+          {% if day_list.30 != '' %}<div class="text-center">{{form.day31}}</div>{% endif %}</td>
+        {% if input_list.31 == True %}<td class="table-green">{% else %}
+        {% if input_list.31 != True %}<td>{% endif %}{% endif %}
+          {% if day_list.31 != '' %}<div class="text-center">{{form.day32}}</div>{% endif %}</td>
+        {% if input_list.32 == True %}<td class="table-green">{% else %}
+        {% if input_list.32 != True %}<td>{% endif %}{% endif %}
+          {% if day_list.32 != '' %}<div class="text-center">{{form.day33}}</div>{% endif %}</td>
+        {% if input_list.33 == True %}<td class="table-green">{% else %}
+        {% if input_list.33 != True %}<td>{% endif %}{% endif %}
+          {% if day_list.33 != '' %}<div class="text-center">{{form.day34}}</div>{% endif %}</td>
+        {% if input_list.34 == True %}<td class="table-green">{% else %}
+        {% if input_list.34 != True %}<td class="table-primary">{% endif %}{% endif %}
+          {% if day_list.34 != '' %}<div class="text-center">{{form.day35}}</div>{% endif %}</td>
+      </tr>
+      
+      <tr>
+        {% if OK_NG_list.28 == True %}<td class="table-green">
+        {% else %}
+        {% if OK_NG_list.28 != True %}<td class="table-danger">
+        {% endif %}
+        {% endif %}
+        {% if day_list.28 != '' %}<div class="text-center">
+        {% for i in time_list29 %}
+          {{i}}<br>
+        {% endfor %}
+        {% endif %}
+        </div></td>
+        {% if OK_NG_list.29 == True %}<td class="table-green">
+        {% else %}
+        {% if OK_NG_list.29 != True %}<td>
+        {% endif %}
+        {% endif %}
+        {% if day_list.29 != '' %}<div class="text-center">
+        {% for i in time_list30 %}
+          {{i}}<br>
+        {% endfor %}
+        {% endif %}
+        </div></td>
+        {% if OK_NG_list.30 == True %}<td class="table-green">
+        {% else %}
+        {% if OK_NG_list.30 != True %}<td>
+        {% endif %}
+        {% endif %}
+        {% if day_list.30 != '' %}<div class="text-center">
+        {% for i in time_list31 %}
+          {{i}}<br>
+        {% endfor %}
+        {% endif %}
+        </div></td>
+        {% if OK_NG_list.31 == True %}<td class="table-green">
+        {% else %}
+        {% if OK_NG_list.31 != True %}<td>
+        {% endif %}
+        {% endif %}
+        {% if day_list.31 != '' %}<div class="text-center">
+        {% for i in time_list32 %}
+          {{i}}<br>
+        {% endfor %}
+        {% endif %}
+        </div></td>
+        {% if OK_NG_list.32 == True %}<td class="table-green">
+        {% else %}
+        {% if OK_NG_list.32 != True %}<td>
+        {% endif %}
+        {% endif %}
+        {% if day_list.32 != '' %}<div class="text-center">
+        {% for i in time_list33 %}
+          {{i}}<br>
+        {% endfor %}
+        {% endif %}
+        </div></td>
+        {% if OK_NG_list.33 == True %}<td class="table-green">
+        {% else %}
+        {% if OK_NG_list.33 != True %}<td>
+        {% endif %}
+        {% endif %}
+        {% if day_list.33 != '' %}<div class="text-center">
+        {% for i in time_list34 %}
+          {{i}}<br>
+        {% endfor %}
+        {% endif %}
+        </div></td>
+        {% if OK_NG_list.34 == True %}<td class="table-green">
+        {% else %}
+        {% if OK_NG_list.34 != True %}<td class="table-primary">
+        {% endif %}
+        {% endif %}
+        {% if day_list.34 != '' %}<div class="text-center">
+        {% for i in time_list35 %}
+          {{i}}<br>
+        {% endfor %}
+        {% endif %}
+        </div></td>  
+      </tr>
+      {% endif %}
+
+      {% if day_list.35 != '' %}
+      <tr>
+        {% for i in day_list|slice:"35:37" %}
+        {% if forloop.first %}
+        <td class="table-danger">
+        {% else %}
+        <td>
+        {% endif %}
+          <div class="text-center fw-bold">{{i}}</div>
+        </td>
+        {% endfor %}
+        <td><div class="text-center"></div></td>
+        <td><div class="text-center"></div></td>
+        <td><div class="text-center"></div></td>
+        <td><div class="text-center"></div></td>
+        <td class="table-primary"><div class="text-center"></div></td>
+      </tr>
+
+      <tr>
+        {% if input_list.35 == True %}<td class="table-green">{% else %}
+        {% if input_list.35 != True %}<td class="table-danger">{% endif %}{% endif %}
+          {% if day_list.35 != '' %}<div class="text-center">{{form.day36}}</div>{% endif %}</td>
+        {% if input_list.36 == True %}<td class="table-green">{% else %}
+        {% if input_list.36 != True %}<td>{% endif %}{% endif %}
+          {% if day_list.36 != '' %}<div class="text-center">{{form.day37}}</div>{% endif %}</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td class="table-primary"></td>
+      </tr>
+
+      <tr>
+        {% if OK_NG_list.35 == True %}<td class="table-green">
+        {% else %}
+        {% if OK_NG_list.35 != True %}<td class="table-danger">
+        {% endif %}
+        {% endif %}
+        {% if day_list.35 != '' %}<div class="text-center">
+        {% for i in time_list36 %}
+          {{i}}<br>
+        {% endfor %}
+        {% endif %}
+        </div></td>
+        {% if OK_NG_list.36 == True %}<td class="table-green">
+        {% else %}
+        {% if OK_NG_list.36 != True %}<td>
+        {% endif %}
+        {% endif %}
+        {% if day_list.36 != '' %}<div class="text-center">
+        {% for i in time_list37 %}
+          {{i}}<br>
+        {% endfor %}
+        {% endif %}
+        </div></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td class="table-primary"></td>
+      </tr>
+
+      {% endif %}
+    </table>
+    <p>　</p>
+    <h4 class="display-3 text-primary">業務工数ファイルへ転記</h4>
+    <p class="d-block d-md-none">
+      PCでアプリ使用時のみ使用できる機能です。
+    </p>
+    <p class="d-none d-md-block">
+      <input type="date" name="work_day1" id="work_day1" min={{min_day}} max={{max_day}} value={{default_day}}>～
+      <input type="date" name="work_day2" id="work_day2" min={{min_day}} max={{max_day}} value={{default_day}}>　　
+      <button type="submit" name="kosu_load" id="kosu_load" class="btn btn-blue2 mt-2">転記</button>
+    </p>
+    <p class="d-none d-md-block">
+      <input type="date" name="reset_day1" id="reset_day1" min={{min_day}} max={{max_day}} value={{default_day}}>～
+      <input type="date" name="reset_day2" id="reset_day2" min={{min_day}} max={{max_day}} value={{default_day}}>　　
+      <input type="submit" value="工数転記済みリセット" name = "reset_load" class="btn btn-blue2 mt-2">
+    </p>
+     <p class="d-none d-md-block">
+      ※転記済みの色塗りが消えるだけで転記した値に影響はしません。
+    </p>
+
+    <script src="{% static 'kosu/js/loading.js' %}"></script>
+  </body>
+</html>
