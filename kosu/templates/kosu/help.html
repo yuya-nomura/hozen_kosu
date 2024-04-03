@@ -22,8 +22,8 @@
   {% endfor %}
   <table class="table">
   <form action="{% url 'help' %}" method="post">
-  {% csrf_token %}
-  {% if display == False %}
+    {% csrf_token %}
+    {% if display == False %}
   <tr>
     <th>
       復帰パスワード
