@@ -1569,9 +1569,6 @@ def help(request):
     # レコード数取得
     data_num = ws.max_row
 
-    # 人員情報取得
-    member_del = member.objects.all()
-
 
     # Excelからデータを読み込み
     for i in range(1, data_num):
@@ -1623,9 +1620,6 @@ def help(request):
 
     # レコード数取得
     data_num = ws1.max_row
-
-    # 工数区分定義取得
-    def_del = kosu_division.objects.all()
 
 
     # Excelからデータを読み込み
@@ -1809,9 +1803,6 @@ def help(request):
     # レコード数取得
     data_num = ws2.max_row
 
-    # 設定情報取得
-    setting_del = administrator_data.objects.all()
-    
 
     # Excelからデータを読み込み
     for i in range(1, data_num):
