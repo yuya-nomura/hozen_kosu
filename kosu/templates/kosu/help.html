@@ -21,7 +21,7 @@
   </div>
   {% endfor %}
   <table class="table">
-  <form action="{% url 'help' %}" method="post">
+  <form action="{% url 'help' %}" method="post" enctype="multipart/form-data">
     {% csrf_token %}
     {% if display == False %}
   <tr>
@@ -43,7 +43,7 @@
       人員情報ロードファイルパス
     </th>
     <td>
-      <input type="text" name=member_file><br>
+      <input type="file" name="member_file">
     </td>
   </tr>
   <tr><th><td>
@@ -54,7 +54,7 @@
       工数区分定義ロードファイルパス
     </th>
     <td>
-      <input type="text" name=def_file><br>
+      {{form.def_file}}
     </td>
   </tr>
   <tr><th><td>
@@ -65,7 +65,7 @@
       管理者設定ロードファイルパス
     </th>
     <td>
-      <input type="text" name=setting_file><br>
+      {{form.setting_file}}
     </td>
   </tr>
   <tr>

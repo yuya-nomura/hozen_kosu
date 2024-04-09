@@ -455,3 +455,10 @@ class team_memberForm(forms.Form):
   member9_check = forms.BooleanField(label = 'メンバー9チェック', required = False)
   member10_check = forms.BooleanField(label = 'メンバー10チェック', required = False)
 
+
+
+class uploadForm(forms.Form):
+  member_file = forms.FileField(label = '人員ファイル選択')
+  def_file = forms.FileField(label = '工数区分定義ファイル選択')
+  setting_file = forms.FileField(label = '設定ファイル選択')
+

@@ -14,7 +14,7 @@ from ..models import team_member
 from ..models import administrator_data
 from ..forms import loginForm
 from ..forms import administrator_data_Form
-
+from ..forms import uploadForm
 
 
 
@@ -1521,10 +1521,17 @@ def help(request):
   env = environ.Env()
   env.read_env(os.path.join(BASE_DIR, '.env'))
 
+
+  # フォームを定義
+  form = uploadForm(request.POST)
+
+
+
   # GET時の処理
   if (request.method == 'GET'):
     # ファイルロード欄非表示
     display = False
+
 
 
   # 復帰パスワード入力時処理
@@ -1537,91 +1544,97 @@ def help(request):
       messages.error(request, 'パスワードが違います。ERROR042')
    
 
+
   # データ読み込み
   if 'data_load' in request.POST:
-
-    # 登録したファイルがない場合の処理
-    #if os.path.isfile(request.POST['member_file']) == False:
-      # エラーメッセージ出力
-      #messages.error(request, 'ロードしようとした人員ファイルは存在しません。ERROR039')
-      # このページをリダイレクト
-      #return redirect(to = '/help')
-
-    # 登録したファイルがない場合の処理
-    #if os.path.isfile(request.POST['def_file']) == False:
-      # エラーメッセージ出力
-      #messages.error(request, 'ロードしようとした工数区分定義ファイルは存在しません。ERROR040')
-      # このページをリダイレクト
-      #return redirect(to = '/help')
-
-    # 登録したファイルがない場合の処理
-    #if os.path.isfile(request.POST['setting_file']) == False:
-      # エラーメッセージ出力
-      #messages.error(request, 'ロードしようとした工数区分定義ファイルは存在しません。ERROR041')
-      # このページをリダイレクト
-      #return redirect(to = '/help')
     
     # データ読み込み欄表示
     display = True
 
-    # 人員ロードファイルパスが指定されている場合の処理
-    if request.POST['member_file'] != '':
-      # POSTされたファイルパスを変数に入れる
-      file_path = request.POST['member_file']
-      # 指定Excelを開く
-      wb = openpyxl.load_workbook('{}'.format(file_path), data_only = True)
-      # 書き込みシート選択
-      ws = wb.worksheets[0]
-      # レコード数取得
-      data_num = ws.max_row
 
-      # 人員情報を全て削除
-      member_del = member.objects.all()
-      member_del.delete()
-      # Excelからデータを読み込み
-      for i in range(1, data_num):
-        new_data = member(employee_No = ws.cell(row = i + 1, column = 1).value, \
-                          name = ws.cell(row = i + 1, column = 2).value, \
-                          shop = ws.cell(row = i + 1, column = 3).value, \
-                          authority = ws.cell(row = i + 1, column = 4).value, \
-                          administrator = ws.cell(row = i + 1, column = 5).value, \
-                          break_time1 = ws.cell(row = i + 1, column = 6).value, \
-                          break_time1_over1 = ws.cell(row = i + 1, column = 7).value, \
-                          break_time1_over2 = ws.cell(row = i + 1, column = 8).value, \
-                          break_time1_over3 = ws.cell(row = i + 1, column = 9).value, \
-                          break_time2 = ws.cell(row = i + 1, column = 10).value, \
-                          break_time2_over1 = ws.cell(row = i + 1, column = 11).value, \
-                          break_time2_over2 = ws.cell(row = i + 1, column = 12).value, \
-                          break_time2_over3 = ws.cell(row = i + 1, column = 13).value, \
-                          break_time3 = ws.cell(row = i + 1, column = 14).value, \
-                          break_time3_over1 = ws.cell(row = i + 1, column = 15).value, \
-                          break_time3_over2 = ws.cell(row = i + 1, column = 16).value, \
-                          break_time3_over3 = ws.cell(row = i + 1, column = 17).value, \
-                          break_time4 = ws.cell(row = i + 1, column = 18).value, \
-                          break_time4_over1 = ws.cell(row = i + 1, column = 19).value, \
-                          break_time4_over2 = ws.cell(row = i + 1, column = 20).value, \
-                          break_time4_over3 = ws.cell(row = i + 1, column = 21).value)                           
+    # 人員ファイル定義
+    uploaded_file = request.FILES['member_file']
 
-        new_data.save()
-   
+    # 一時的なファイルをサーバー上に作成
+    with open('member_file_path.xlsx', 'wb+') as destination:
 
-    # 工数定義区分ロードファイルパスが指定されている場合の処理
-    if request.POST['def_file'] != '':
-      # POSTされたファイルパスを変数に入れる
-      file_path = request.POST['def_file']
-      # 指定Excelを開く
-      wb1 = openpyxl.load_workbook('{}'.format(file_path), data_only = True)
-      # 書き込みシート選択
-      ws1 = wb1.worksheets[0]
-      # レコード数取得
-      data_num = ws1.max_row
+      # アップロードしたファイルを一時ファイルに書き込み
+      for chunk in uploaded_file.chunks():
+        destination.write(chunk)
 
-      # 工数区分定義を全て削除
-      def_del = kosu_division.objects.all()
-      def_del.delete()
-      # Excelからデータを読み込み
-      for i in range(1, data_num):
-        new_data1 = kosu_division(kosu_name = ws1.cell(row = i + 1, column = 1).value, \
+    # 一時ファイルを開く
+    wb = openpyxl.load_workbook('member_file_path.xlsx')
+
+    # 一番最初のシートを指定
+    ws = wb.worksheets[0]
+
+    # レコード数取得
+    data_num = ws.max_row
+
+    # 人員情報を全て削除
+    member_del = member.objects.all()
+    member_del.delete()
+
+
+    # Excelからデータを読み込み
+    for i in range(1, data_num):
+      new_data = member(employee_No = ws.cell(row = i + 1, column = 1).value, \
+                        name = ws.cell(row = i + 1, column = 2).value, \
+                        shop = ws.cell(row = i + 1, column = 3).value, \
+                        authority = ws.cell(row = i + 1, column = 4).value, \
+                        administrator = ws.cell(row = i + 1, column = 5).value, \
+                        break_time1 = ws.cell(row = i + 1, column = 6).value, \
+                        break_time1_over1 = ws.cell(row = i + 1, column = 7).value, \
+                        break_time1_over2 = ws.cell(row = i + 1, column = 8).value, \
+                        break_time1_over3 = ws.cell(row = i + 1, column = 9).value, \
+                        break_time2 = ws.cell(row = i + 1, column = 10).value, \
+                        break_time2_over1 = ws.cell(row = i + 1, column = 11).value, \
+                        break_time2_over2 = ws.cell(row = i + 1, column = 12).value, \
+                        break_time2_over3 = ws.cell(row = i + 1, column = 13).value, \
+                        break_time3 = ws.cell(row = i + 1, column = 14).value, \
+                        break_time3_over1 = ws.cell(row = i + 1, column = 15).value, \
+                        break_time3_over2 = ws.cell(row = i + 1, column = 16).value, \
+                        break_time3_over3 = ws.cell(row = i + 1, column = 17).value, \
+                        break_time4 = ws.cell(row = i + 1, column = 18).value, \
+                        break_time4_over1 = ws.cell(row = i + 1, column = 19).value, \
+                        break_time4_over2 = ws.cell(row = i + 1, column = 20).value, \
+                        break_time4_over3 = ws.cell(row = i + 1, column = 21).value)                           
+
+      new_data.save()
+
+
+    # 一時ファイル削除
+    os.remove('member_file_path.xlsx')
+
+
+
+    # 工数定義区分ファイル定義
+    uploaded_file = request.FILES['def_file']
+
+    # 一時的なファイルをサーバー上に作成
+    with open('def_file_path.xlsx', 'wb+') as destination:
+
+      # アップロードしたファイルを一時ファイルに書き込み
+      for chunk in uploaded_file.chunks():
+        destination.write(chunk)
+
+    # 一時ファイルを開く
+    wb1 = openpyxl.load_workbook('def_file_path.xlsx')
+
+    # 一番最初のシートを指定
+    ws1 = wb1.worksheets[0]
+
+    # レコード数取得
+    data_num = ws1.max_row
+
+    # 工数区分定義を全て削除
+    def_del = kosu_division.objects.all()
+    def_del.delete()
+
+
+    # Excelからデータを読み込み
+    for i in range(1, data_num):
+      new_data1 = kosu_division(kosu_name = ws1.cell(row = i + 1, column = 1).value, \
                                 kosu_title_1 = ws1.cell(row = i + 1, column = 2).value, \
                                 kosu_division_1_1 = ws1.cell(row = i + 1, column = 3).value, \
                                 kosu_division_2_1 = ws1.cell(row = i + 1, column = 4).value, \
@@ -1773,44 +1786,60 @@ def help(request):
                                 kosu_division_1_50 = ws1.cell(row = i + 1, column = 150).value, \
                                 kosu_division_2_50 = ws1.cell(row = i + 1, column = 151).value)
 
-        new_data1.save()
+      new_data1.save()
 
 
-    # 工数定義区分ロードファイルパスが指定されている場合の処理
-    if request.POST['setting_file'] != '':
-      # POSTされたファイルパスを変数に入れる
-      file_path = request.POST['setting_file']
-      # 指定Excelを開く
-      wb2 = openpyxl.load_workbook('{}'.format(file_path), data_only = True)
-      # 書き込みシート選択
-      ws2 = wb2.worksheets[0]
-      # レコード数取得
-      data_num = ws2.max_row
+    # 一時ファイル削除
+    os.remove('def_file_path.xlsx')
 
-      # 設定情報を全て削除
-      setting_del = administrator_data.objects.all()
-      setting_del.delete()
-      # Excelからデータを読み込み
-      for i in range(1, data_num):
-        new_data2 = administrator_data(menu_row = ws2.cell(row = i + 1, column = 1).value, \
-                                      file_location_P = ws2.cell(row = i + 1, column = 2).value, \
-                                      file_location_R = ws2.cell(row = i + 1, column = 3).value, \
-                                      file_location_W1 = ws2.cell(row = i + 1, column = 4).value, \
-                                      file_location_W2 = ws2.cell(row = i + 1, column = 5).value, \
-                                      file_location_T1 = ws2.cell(row = i + 1, column = 6).value, \
-                                      file_location_T2 = ws2.cell(row = i + 1, column = 7).value, \
-                                      file_location_A1 = ws2.cell(row = i + 1, column = 8).value, \
-                                      file_location_A2 = ws2.cell(row = i + 1, column = 9).value, \
-                                      backup_file = ws2.cell(row = i + 1, column = 10).value)
 
-        new_data2.save()
+
+    # 工数定義区分ファイル定義
+    uploaded_file = request.FILES['setting_file']
+
+    # 一時的なファイルをサーバー上に作成
+    with open('setting_file_path.xlsx', 'wb+') as destination:
+
+      # アップロードしたファイルを一時ファイルに書き込み
+      for chunk in uploaded_file.chunks():
+        destination.write(chunk)
+
+    # 一時ファイルを開く
+    wb2 = openpyxl.load_workbook('setting_file_path.xlsx')
+
+    # 一番最初のシートを指定
+    ws2 = wb2.worksheets[0]
+
+    # レコード数取得
+    data_num = ws2.max_row
+
+    # 設定情報を全て削除
+    setting_del = administrator_data.objects.all()
+    setting_del.delete()
+
+
+    # Excelからデータを読み込み
+    for i in range(1, data_num):
+      new_data2 = administrator_data(menu_row = ws2.cell(row = i + 1, column = 1).value, \
+                                     file_location_P = ws2.cell(row = i + 1, column = 2).value, \
+                                     file_location_R = ws2.cell(row = i + 1, column = 3).value, \
+                                     file_location_W1 = ws2.cell(row = i + 1, column = 4).value, \
+                                     file_location_W2 = ws2.cell(row = i + 1, column = 5).value, \
+                                     file_location_T1 = ws2.cell(row = i + 1, column = 6).value, \
+                                     file_location_T2 = ws2.cell(row = i + 1, column = 7).value, \
+                                     file_location_A1 = ws2.cell(row = i + 1, column = 8).value, \
+                                     file_location_A2 = ws2.cell(row = i + 1, column = 9).value, \
+                                     backup_file = ws2.cell(row = i + 1, column = 10).value)
+
+      new_data2.save()
 
 
 
   # HTMLに渡す辞書
   library_m = {
     'title' : 'ヘルプ',
-    'display' : display
+    'form' : form,
+    'display' : display,
     }
   
 
@@ -1824,11 +1853,8 @@ def help(request):
 
 #--------------------------------------------------------------------------------------------------------
 
-
-
-
-
-
-
-
+def handle_uploaded_file(f):
+    with open('some/filename', 'wb+') as destination:
+        for chunk in f.chunks():
+            destination.write(chunk)
 
