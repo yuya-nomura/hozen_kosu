@@ -1541,25 +1541,25 @@ def help(request):
   if 'data_load' in request.POST:
 
     # 登録したファイルがない場合の処理
-    if os.path.isfile(request.POST['member_file']) == False:
+    #if os.path.isfile(request.POST['member_file']) == False:
       # エラーメッセージ出力
-      messages.error(request, 'ロードしようとした人員ファイルは存在しません。ERROR039')
+      #messages.error(request, 'ロードしようとした人員ファイルは存在しません。ERROR039')
       # このページをリダイレクト
-      return redirect(to = '/help')
+      #return redirect(to = '/help')
 
     # 登録したファイルがない場合の処理
-    if os.path.isfile(request.POST['def_file']) == False:
+    #if os.path.isfile(request.POST['def_file']) == False:
       # エラーメッセージ出力
-      messages.error(request, 'ロードしようとした工数区分定義ファイルは存在しません。ERROR040')
+      #messages.error(request, 'ロードしようとした工数区分定義ファイルは存在しません。ERROR040')
       # このページをリダイレクト
-      return redirect(to = '/help')
+      #return redirect(to = '/help')
 
     # 登録したファイルがない場合の処理
-    if os.path.isfile(request.POST['setting_file']) == False:
+    #if os.path.isfile(request.POST['setting_file']) == False:
       # エラーメッセージ出力
-      messages.error(request, 'ロードしようとした工数区分定義ファイルは存在しません。ERROR041')
+      #messages.error(request, 'ロードしようとした工数区分定義ファイルは存在しません。ERROR041')
       # このページをリダイレクト
-      return redirect(to = '/help')
+      #return redirect(to = '/help')
     
     # データ読み込み欄表示
     display = True
