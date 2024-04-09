@@ -1853,8 +1853,4 @@ def help(request):
 
 #--------------------------------------------------------------------------------------------------------
 
-def handle_uploaded_file(f):
-    with open('some/filename', 'wb+') as destination:
-        for chunk in f.chunks():
-            destination.write(chunk)
 
