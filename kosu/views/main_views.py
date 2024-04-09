@@ -28,8 +28,6 @@ from ..forms import uploadForm
 # ログイン画面定義
 def login(request):
 
-
-
   # POST時の処理
   if (request.method == 'POST'):
 
@@ -1574,10 +1572,6 @@ def help(request):
     # 人員情報取得
     member_del = member.objects.all()
 
-    # 人員情報あれば削除
-    if member_del.count() != 0:
-      member_del.delete()
-
 
     # Excelからデータを読み込み
     for i in range(1, data_num):
@@ -1632,10 +1626,6 @@ def help(request):
 
     # 工数区分定義取得
     def_del = kosu_division.objects.all()
-
-    # 工数区分定義あれば削除
-    if def_del.count() != 0:
-      def_del.delete()
 
 
     # Excelからデータを読み込み
@@ -1821,11 +1811,7 @@ def help(request):
 
     # 設定情報取得
     setting_del = administrator_data.objects.all()
-
-    # 設定情報あれば削除
-    if setting_del.count() != 0:
-      setting_del.delete()
-
+    
 
     # Excelからデータを読み込み
     for i in range(1, data_num):
