@@ -104,6 +104,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
-CSRF_TRUSTED_ORIGINS = ['https://kosu-hozen.azurewebsites.net/']
+CSRF_TRUSTED_ORIGINS = ['https://kosu-hozen.azurewebsites.net']
 
 
