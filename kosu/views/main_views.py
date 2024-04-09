@@ -1571,9 +1571,12 @@ def help(request):
     # レコード数取得
     data_num = ws.max_row
 
-    # 人員情報を全て削除
+    # 人員情報取得
     member_del = member.objects.all()
-    member_del.delete()
+
+    # 人員情報あれば削除
+    if member_del.count() != 0:
+      member_del.delete()
 
 
     # Excelからデータを読み込み
@@ -1627,9 +1630,12 @@ def help(request):
     # レコード数取得
     data_num = ws1.max_row
 
-    # 工数区分定義を全て削除
+    # 工数区分定義取得
     def_del = kosu_division.objects.all()
-    def_del.delete()
+
+    # 工数区分定義あれば削除
+    if def_del.count() != 0:
+      def_del.delete()
 
 
     # Excelからデータを読み込み
@@ -1813,9 +1819,12 @@ def help(request):
     # レコード数取得
     data_num = ws2.max_row
 
-    # 設定情報を全て削除
+    # 設定情報取得
     setting_del = administrator_data.objects.all()
-    setting_del.delete()
+
+    # 設定情報あれば削除
+    if setting_del.count() != 0:
+      setting_del.delete()
 
 
     # Excelからデータを読み込み
