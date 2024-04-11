@@ -453,7 +453,7 @@ def administrator_menu(request):
     # Excelに書き込み(項目)
     for index, dt in enumerate(kosu_gurahu):
       ws.cell(row = index + 2, column = 1, value = dt.employee_No3)
-      ws.cell(row = index + 2, column = 2, value = dt.name)
+      ws.cell(row = index + 2, column = 2, value = str(dt.name))
       ws.cell(row = index + 2, column = 3, value = dt.def_Ver2)
       ws.cell(row = index + 2, column = 4, value = dt.work_day2)
       ws.cell(row = index + 2, column = 5, value = dt.tyoku2)
