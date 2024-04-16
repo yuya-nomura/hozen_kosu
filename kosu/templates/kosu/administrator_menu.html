@@ -21,7 +21,7 @@
   </div>
   {% endfor %}
   <table class="table">
-  <form action="{% url 'administrator' %}" method="post">
+  <form action="{% url 'administrator' %}" method="post" enctype="multipart/form-data">
   {% csrf_token %}
      {{form.as_table}}
   <tr><th><td>
@@ -48,7 +48,7 @@
       工数データロードファイルパス
     </th>
     <td>
-      <input type="text" name=kosu_file><br>
+      {{load_form.kosu_file}}
       <input type="submit" value="ロード" name=kosu_load class="btn btn-gray mt-2">
     </td>
   </tr>
@@ -68,7 +68,7 @@
       人員情報ロードファイルパス
     </th>
     <td>
-      <input type="text" name=member_file><br>
+      {{load_form.member_file}}
       <input type="submit" value="ロード" name=member_load class="btn btn-gray mt-2">
     </td>
   </tr>
@@ -88,7 +88,7 @@
       班員情報ロードファイルパス
     </th>
     <td>
-      <input type="text" name=team_file><br>
+      {{load_form.team_file}}
       <input type="submit" value="ロード" name=team_load class="btn btn-gray mt-2">
     </td>
   </tr>
@@ -108,7 +108,7 @@
       工数区分定義ロードファイルパス
     </th>
     <td>
-      <input type="text" name=def_file><br>
+      {{load_form.def_file}}
       <input type="submit" value="ロード" name=def_load class="btn btn-gray mt-2">
     </td>
   </tr>
@@ -128,7 +128,7 @@
       管理者設定ロードファイルパス
     </th>
     <td>
-      <input type="text" name=setting_file><br>
+      {{load_form.setting_file}}
       <input type="submit" value="ロード" name=setting_load class="btn btn-gray mt-2">
     </td>
   </tr>

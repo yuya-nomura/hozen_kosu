@@ -11,7 +11,7 @@
 </head>
 <body class="container">
   <h1 class="display-4 text-warning">{{title}}</h1>
-    <p class="h4"><a href="{% url 'member' 1 %}" class="text-warning">一覧へ戻る</a></p>
+    <p class="h6"><a href="{% url 'member' 1 %}" class="text-warning">一覧へ戻る</a></p>
     <p>以下の人員データを削除します</p>
     <p>削除した人員の工数もデータから消えてしまうので<br>バックアップをしてから実施のこと</p>
     <table class="table">
@@ -29,9 +29,12 @@
       <tr><th><td>
       <form action="{% url 'member_delete' employee_No %}" method="post">
       {% csrf_token %}
-        <input type="submit" value="人員登録削除" class="btn btn-yellow1 mt-2">
+        <input type="submit" value="人員登録削除" onclick="return confirmDelete();" class="btn btn-yellow1 mt-2">
       </form>
       </td></th></tr>
     </table>
+  <script>
+    function confirmDelete() {return confirm('この操作は元に戻せません。本当に削除しますか？');}
+  </script>
 </body>
 </html>

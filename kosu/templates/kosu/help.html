@@ -11,7 +11,7 @@
 </head>
 <body class="container">
   <h1 class="display-1 text-dark">{{title}}</h1>
-  <a href="{% url 'login' %}" class="text-dark h4">ログインページへ</a>
+  <a href="{% url 'login' %}" class="text-dark h6">ログインページへ</a>
   <p>　</p>
   {% for message in messages %}
   <div {% if message.tags %}class="{{ message.tags }}"{% endif %}>
@@ -43,7 +43,7 @@
       人員情報ロードファイルパス
     </th>
     <td>
-      <input type="file" name="member_file">
+      {{form.member_file}}
     </td>
   </tr>
   <tr><th><td>

@@ -11,13 +11,13 @@
 </head>
 <body class="container">
   <h1 class="display-4 text-success">{{title}}</h1>
-    <p class="h4"><a href="{% url 'def_list' 1 %}" class="text-success">一覧へ戻る</a></p>
+    <p class="h6"><a href="{% url 'def_list' 1 %}" class="text-success">一覧へ戻る</a></p>
 
   <table class="table">
     <tr><td>
         <form action="{% url 'def_delete' id %}" method="post">
         {% csrf_token %}
-        <input type="submit" value="工数区分定義削除" class="btn btn-green1 mt-2">
+        <input type="submit" value="工数区分定義削除" onclick="return confirmDelete();" class="btn btn-green1 mt-2">
         </form>
       </td></tr>
     <tr><td>工数区分定義Ver：<br>{{obj.kosu_name}}</td></tr>
@@ -224,9 +224,12 @@
     <tr><th>
       <form action="{% url 'def_delete' id %}" method="post">
       {% csrf_token %}
-      <input type="submit" value="工数区分定義削除" class="btn btn-green1 mt-2">
+      <input type="submit" value="工数区分定義削除" onclick="return confirmDelete();" class="btn btn-green1 mt-2">
       </form>
     </th></tr>
   </table>
+  <script>
+    function confirmDelete() {return confirm('この操作は全員の工数入力に大きく影響します。本当に削除しますか？');}
+  </script>
 </body>
 </html>

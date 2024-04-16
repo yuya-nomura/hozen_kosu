@@ -11,7 +11,7 @@
 </head>
 <body class="container">
   <h1 class="display-4 text-primary">{{title}}</h1>
-  <p class="h4"><a href="{% url 'kosu_list' 1 %}">履歴へ</a></p>
+  <p class="h6"><a href="{% url 'kosu_list' 1 %}">履歴へ</a></p>
   <form action="{% url 'delete' id %}" method="post">
   {% csrf_token %}
   <p>　</p>
@@ -20,7 +20,7 @@
       <p class="h5">※{{day}}の工数データを一括で削除します。</p>
     </tr>
     <tr>
-      <input type="submit" value="工数データ削除" class="btn btn-blue2 mt-2">
+      <input type="submit" value="工数データ削除" onclick="return confirmDelete();" class="btn btn-blue2 mt-2">
     </tr>
     <tr>
       <h1 class="display-4 text-primary">　</h1>
@@ -41,5 +41,8 @@
     {% endfor %}
   </table>
   </form>
+  <script>
+    function confirmDelete() {return confirm('この操作は元に戻せません。本当に削除しますか？');}
+  </script>
 </body>
 </html>

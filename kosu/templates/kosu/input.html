@@ -12,8 +12,8 @@
 </head>
 <body class="container">
   <h1 class="display-4 text-primary">{{title}}</h1>
-  <p class="h4"><a href="{% url 'kosu_main' %}">工数MENUへ</a></p>
-  <p class="h4"><a href="{% url 'kosu_list' 1 %}">履歴へ</a></p>
+  <p class="h6"><a href="{% url 'kosu_main' %}">工数MENUへ</a></p>
+  <p class="h6"><a href="{% url 'kosu_list' 1 %}">履歴へ</a></p>
   <form action="{% url 'input' %}" method="post">
     {% csrf_token %}
     <table class="table">

@@ -10,43 +10,61 @@ from ..forms import member_findForm
 
 
 
+
+
 #--------------------------------------------------------------------------------------------------------
+
+
 
 
 
 # 人員一覧画面定義
 def member_page(request, num): 
+
   # 未ログインならログインページに飛ぶ
   if request.session.get('login_No', None) == None:
+
     return redirect(to = '/login')
+
 
   # ログイン者の情報取得
   data = member.objects.get(employee_No = request.session.get('login_No', None))
+
   # ログイン者に権限がなければメインページに戻る
   if data.authority == False:
+
     return redirect(to = '/')
+
 
   # 設定データ取得
   page_num = administrator_data.objects.order_by("id").last()
 
+
+
   # POST時の処理
   if (request.method == 'POST'):
+
     # POST送信時のフォームの状態(POSTした値は入ったまま)
     form = member_findForm(request.POST)
+
     # POSTした値を変数に入れる
     find = request.POST['shop2']
     find2 = request.POST['employee_No6']
     request.session['find_shop'] = find
     request.session['find_employee_No'] = find2
+
     # 就業日とログイン者の従業員番号でフィルターをかけて一致したものを変数に入れる
     data2 = member.objects.filter(shop__contains = find, \
             employee_No__contains = find2).order_by('employee_No')
     page = Paginator(data2, page_num.menu_row)
 
+
   else:
+
     # フォームの初期値設定
     form_default = {'shop2' : request.session.get('find_shop', ''), \
                     'employee_No6' : request.session.get('find_employee_No', '')}
+  
     # POST送信していない時のフォームの状態(空のフォーム)
     form = member_findForm(form_default)
 
@@ -54,6 +72,8 @@ def member_page(request, num):
     data2 = member.objects.filter(shop__contains = request.session.get('find_shop', ''), \
             employee_No__contains = request.session.get('find_employee_No', '')).order_by('employee_No')
     page = Paginator(data2, page_num.menu_row)
+
+
 
   # HTMLに渡す辞書
   library_m = {
@@ -63,8 +83,12 @@ def member_page(request, num):
     'num' : num
   }
 
+
+
   # 指定したHTMLに辞書を渡して表示を完成させる
   return render(request, 'kosu/member.html', library_m)
+
+
 
 
 
@@ -72,17 +96,25 @@ def member_page(request, num):
 
 
 
+
+
 # 人員登録画面定義
 def member_new(request):
+
   # 未ログインならログインページに飛ぶ
   if request.session.get('login_No', None) == None:
     return redirect(to = '/login')
 
+
   # ログイン者の情報取得
   data = member.objects.get(employee_No = request.session.get('login_No', None))
+
   # ログイン者に権限がなければメインページに戻る
   if data.authority == False:
+
     return redirect(to = '/')
+
+
 
   # POST時の処理
   if (request.method == 'POST'):

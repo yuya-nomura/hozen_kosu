@@ -12,7 +12,7 @@
 </head>
 <body class="container">
   <h1 class="display-4 text-danger">{{title}}</h1>
-  <p class="h4"><a href="{% url 'team_main' %}" class="text-danger">班員MENUへ</a></p>
+  <p class="h6"><a href="{% url 'team_main' %}" class="text-danger">班員MENUへ</a></p>
   <form action="{% url 'team_calendar' %}" method="post">
   {% csrf_token %}
     <p>　</p>

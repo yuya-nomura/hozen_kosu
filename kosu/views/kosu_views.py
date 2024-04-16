@@ -2118,6 +2118,7 @@ def input(request):
 
   # 現在時刻取得処理
   if "now_time" in request.POST:
+    
     # 現在時刻取得
     now_time = datetime.datetime.now().time()
     # 現在時刻を5分単位で丸め
@@ -2431,6 +2432,7 @@ def input(request):
 
   # フォームの初期状態定義
   form = input_kosuForm(kosu_list)
+  
   # フォームの選択肢定義
   form.fields['kosu_def_list'].choices = choices_list
 

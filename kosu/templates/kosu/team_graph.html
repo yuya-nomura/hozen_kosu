@@ -12,8 +12,8 @@
 </head>
 <body class="container">
   <h1 class="display-4 text-danger">{{title}}</h1>
-  <p class="h4"><a href="{% url 'team_main' %}" class="text-danger">班員MENUへ</a></p>
-  <p class="h4"><a href="{% url 'team_kosu' 1 %}" class="text-danger">班員工数詳細へ</a></p>
+  <p class="h6"><a href="{% url 'team_main' %}" class="text-danger">班員MENUへ</a></p>
+  <p class="h6"><a href="{% url 'team_kosu' 1 %}" class="text-danger">班員工数詳細へ</a></p>
   {% for message in messages %}
     <div {% if message.tags %}class="{{ message.tags }}"{% endif %}>
       <p  class="text-danger">

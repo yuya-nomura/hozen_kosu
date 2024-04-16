@@ -11,7 +11,7 @@
 </head>
 <body class="container">
   <h1 class="display-1 text-danger">{{title}}</h1>
-  <p class="h3"><a href="{% url 'main' %}" class="text-danger">メインMENUへ</a></p>
+  <p class="h6"><a href="{% url 'main' %}" class="text-danger">メインMENUへ</a></p>
   {% if data.authority == True %}
   <button onclick="location.href='/team'" class="btn btn-orange1 w-100 mt-2 btn-lg">
     班員登録</button>

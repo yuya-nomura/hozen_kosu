@@ -4,6 +4,7 @@ from .views import kosu_views
 from .views import member_views
 from .views import team_views
 from .views import def_views
+from .views import inquiry_views
 
 
 
@@ -40,4 +41,9 @@ urlpatterns = [
     path('def_delete/<int:num>', def_views.def_delete, name = 'def_delete'),
     path('administrator', main_views.administrator_menu, name = 'administrator'),
     path('help', main_views.help, name = 'help'),
+    path('inquiry_main', main_views.inquiry_main, name = 'inquiry_main'),
+    path('inquiry_new', inquiry_views.inquiry_new, name = 'inquiry_new'),
+    path('inquiry_list/<int:num>',inquiry_views.inquiry_list, name = 'inquiry_list'),
+    path('inquiry_display/<int:num>',inquiry_views.inquiry_display, name = 'inquiry_display'),
+    path('inquiry_edit/<int:num>',inquiry_views.inquiry_edit, name = 'inquiry_edit'),
 ]

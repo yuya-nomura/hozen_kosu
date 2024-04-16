@@ -283,20 +283,81 @@
 }
 
 
+.btn-pink1 {
+  --bs-btn-color: #fff;
+  --bs-btn-bg: #fc009b;
+  --bs-btn-border-color: #fc009b;
+  --bs-btn-hover-color: #fc009b;
+  --bs-btn-hover-bg: #ffffff;
+  --bs-btn-hover-border-color: #fc009b;
+  --bs-btn-focus-shadow-rgb: 49, 132, 253;
+  --bs-btn-active-color: #fc009b;
+  --bs-btn-active-bg: #ffffff;
+  --bs-btn-active-border-color: #fc009b;
+  --bs-btn-active-shadow: inset 0 3px 5px rgb(0, 0, 0);
+  --bs-btn-disabled-color: #fff;
+  --bs-btn-disabled-bg: #fc009b;
+  --bs-btn-disabled-border-color: #fc009b;
+}
 
 
+.btn-pink2 {
+  --bs-btn-color: #fff;
+  --bs-btn-bg: #fc00e7;
+  --bs-btn-border-color: #fc00e7;
+  --bs-btn-hover-color: #fc00e7;
+  --bs-btn-hover-bg: #ffffff;
+  --bs-btn-hover-border-color: #fc00e7;
+  --bs-btn-focus-shadow-rgb: 49, 132, 253;
+  --bs-btn-active-color: #fc00e7;
+  --bs-btn-active-bg: #ffffff;
+  --bs-btn-active-border-color: #fc00e7;
+  --bs-btn-active-shadow: inset 0 3px 5px rgb(0, 0, 0);
+  --bs-btn-disabled-color: #fff;
+  --bs-btn-disabled-bg: #fc00e7;
+  --bs-btn-disabled-border-color: #fc00e7;
+}
 
 
+.btn-pink3 {
+  --bs-btn-color: #fff;
+  --bs-btn-bg: #ff8bf5;
+  --bs-btn-border-color: #ff8bf5;
+  --bs-btn-hover-color: #ff8bf5;
+  --bs-btn-hover-bg: #ffffff;
+  --bs-btn-hover-border-color: #ff8bf5;
+  --bs-btn-focus-shadow-rgb: 49, 132, 253;
+  --bs-btn-active-color: #ff8bf5;
+  --bs-btn-active-bg: #ffffff;
+  --bs-btn-active-border-color: #ff8bf5;
+  --bs-btn-active-shadow: inset 0 3px 5px rgb(0, 0, 0);
+  --bs-btn-disabled-color: #fff;
+  --bs-btn-disabled-bg: #ff8bf5;
+  --bs-btn-disabled-border-color: #ff8bf5;
+}
 
 
+.btn-pink4 {
+  --bs-btn-color: #fff;
+  --bs-btn-bg: #fdacf6;
+  --bs-btn-border-color: #fdacf6;
+  --bs-btn-hover-color: #fdacf6;
+  --bs-btn-hover-bg: #ffffff;
+  --bs-btn-hover-border-color: #fdacf6;
+  --bs-btn-focus-shadow-rgb: 49, 132, 253;
+  --bs-btn-active-color: #fdacf6;
+  --bs-btn-active-bg: #ffffff;
+  --bs-btn-active-border-color: #fdacf6;
+  --bs-btn-active-shadow: inset 0 3px 5px rgb(0, 0, 0);
+  --bs-btn-disabled-color: #fff;
+  --bs-btn-disabled-bg: #fdacf6;
+  --bs-btn-disabled-border-color: #fdacf6;
+}
 
 
-
-
-
-
-
-
+.text-pink {
+  color: #fc009b;
+}
 
 
 

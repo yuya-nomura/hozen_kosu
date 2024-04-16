@@ -3,6 +3,9 @@ from bootstrap_datepicker_plus.widgets import DatePickerInput
 from.models import member
 from.models import kosu_division
 from.models import administrator_data
+from.models import inquiry_data
+
+
 
 
 
@@ -82,7 +85,8 @@ class input_kosuForm(forms.Form):
   end_min = forms.ChoiceField(label = '作業終了分', choices = min_list)
   tomorrow_check = forms.BooleanField(label = '日跨ぎ', required = False)
   kosu_def_list = forms.ChoiceField(label = '工数区分', required = False)
-  work_detail = forms.CharField(label='作業詳細', required = False)
+  work_detail = forms.CharField(label='作業詳細', required = False, \
+                                widget=forms.TextInput(attrs={'placeholder': '未入力可 メモで使用'}))
   over_work = forms.IntegerField(label = '残業', required = False)
   work = forms.ChoiceField(label = '勤務', choices=employment_list, required = False)
 
@@ -458,7 +462,29 @@ class team_memberForm(forms.Form):
 
 
 class uploadForm(forms.Form):
-  member_file = forms.FileField(label = '人員ファイル選択')
-  def_file = forms.FileField(label = '工数区分定義ファイル選択')
-  setting_file = forms.FileField(label = '設定ファイル選択')
+  kosu_file = forms.FileField(label = '工数ファイル選択', required = False)
+  team_file = forms.FileField(label = '班員ファイル選択', required = False)
+  member_file = forms.FileField(label = '人員ファイル選択', required = False)
+  def_file = forms.FileField(label = '工数区分定義ファイル選択', required = False)
+  setting_file = forms.FileField(label = '設定ファイル選択', required = False)
 
+
+
+class inquiryForm(forms.ModelForm):
+  class Meta:
+    model = inquiry_data
+    fields = ['employee_No2', 'content_choice', 'inquiry', 'answer']
+    
+    widgets = {'inquiry': forms.Textarea(attrs={'placeholder': '可能限り具体的に記入下さい。'})}
+
+
+
+class inquiry_findForm(forms.Form):
+  category_list = [
+    ('', ''),
+    ('要望', '要望'),
+    ('不具合', '不具合'),
+    ]
+
+  category = forms.ChoiceField(label = 'カテゴリー', choices = category_list, required = False)
+  name_list = forms.ChoiceField(label = '氏名', required = False)

@@ -10,66 +10,78 @@
   <link rel="stylesheet" type="text/css" href="{% static 'kosu/css/bootstrap.css' %}">
 </head>
 <body class="container">
-  <h1 class="display-4 text-warning">{{title}}</h1>
-  <p class="h6"><a href="{% url 'member_main' %}" class="text-warning">人員MENUへ</a></p>
-  <p class="h6"><a href="{% url 'member_new' %}" class="text-warning">新規登録</a></p>
-  <form action="{% url 'member' num %}" method="post">
+  <h1 class="display-4 text-pink">{{title}}</h1>
+  <p class="h6"><a class="text-pink" href="{% url 'inquiry_main' %}">問い合わせMENUへ</a></p>
+  <p class="h6"><a class="text-pink" href="{% url 'inquiry_new' %}">問い合わせ入力</a></p>
+  <form action="{% url 'inquiry_list' num %}" method="post">
   {% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="検索" class="btn btn-yellow1 mt-2">
+    <p>　</p>
+    <p>カテゴリー</p>
+    {{form.category}}
+    <p>氏名</p>
+    {{form.name_list}}
+    <p><input type="submit" value="検索" class="btn btn-pink1 mt-2"></p>
   </form>
   <table class="table">
+    <tr>
+      <th>氏名</th>
+      <th>カテゴリー</th>
+      <th>内容</th>
+      <th>回答</th>
+    </tr>
     {% for i in data %}
       <tr>
-        <td>{{i}}</td>
-        <td><a href="{% url 'member_edit' i.employee_No %}" class="text-warning">編集</a></td>
-        <td><a href="{% url 'member_delete' i.employee_No %}" class="text-warning">削除</a></td>
-      <tr>
+        <td><a class="text-pink" href="{% url 'inquiry_display' i.id %}">{{i.name}}</a></td>
+        <td>{{i.content_choice}}</td>
+        <td>{{i.inquiry|truncatechars:5}}</td>
+        <td>{{i.answer|truncatechars:5}}</td>
+      </tr>
     {% endfor %}
-    </table>
+  </table>
+
     <ul class="pagination justify-content-center">
       {% if data.has_previous %}
       <li class="page-item">
-        <a class="page-link text-warning" href="{% url 'member' 1 %}">
+        <a class="page-link text-pink" href="{% url 'member' 1 %}">
           &laquo; 最初のページへ</a>
       </li>
       <li class="page-item">
-        <a class="page-link text-warning" 
+        <a class="page-link text-pink" 
         href="{% url 'member' data.previous_page_number %}">
           &laquo; 前のページへ</a>
       </li>
       {% else %}
       <li class="page-item">
-        <a class="page-link text-warning">
+        <a class="page-link text-pink">
           &laquo; 最初のページへ</a>
       </li>
       <li class="page-item">
-        <a class="page-link text-warning">
+        <a class="page-link text-pink">
           &laquo; 前のページへ</a>
       </li>
       {% endif %}
       <li class="page-item">
-        <a class="page-link text-warning">
+        <a class="page-link text-pink">
           {{data.number}}/{{data.paginator.num_pages}}</a>
       </li>
       {% if data.has_next %}
       <li class="page-item">
-        <a class="page-link text-warning" 
+        <a class="page-link text-pink" 
           href="{% url 'member' data.next_page_number %}">
             次のページへ &raquo;</a>
       </li>
       <li class="page-item">
-        <a class="page-link text-warning" 
+        <a class="page-link text-pink" 
           href="{% url 'member' data.paginator.num_pages %}">
             最後のページへ &raquo;</a>
       </li>
       {% else %}
       <li class="page-item">
-        <a class="page-link text-warning">
+        <a class="page-link text-pink">
           次のページへ &raquo;</a>
       </li>
       <li class="page-item">
-        <a class="page-link text-warning">
+        <a class="page-link text-pink">
           最後のページへ &raquo;</a>
       </li>
       {% endif %}

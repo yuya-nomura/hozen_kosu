@@ -11,8 +11,9 @@
 </head>
 <body class="container">
     <h1 class="display-6 text-danger">{{data.name}}さん{{title}}</h1>
-    <p class="h4"><a href="{% url 'team_main' %}" class="text-danger">班員MENUへ</a></p>
-    <p class="h4"><a href="{% url 'team_graph' %}" class="text-danger">班員工数グラフへ</a></p>
+    <p class="h6"><a href="{% url 'team_main' %}" class="text-danger">班員MENUへ</a></p>
+    <p class="h6"><a href="{% url 'team_graph' %}" class="text-danger">班員工数グラフへ</a></p>
+    <p>　</p>
   <form action="{% url 'team_kosu' num %}" method="post">
   {% csrf_token %}
     {% bootstrap_javascript jquery='full' %} 
