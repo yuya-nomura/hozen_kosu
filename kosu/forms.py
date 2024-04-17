@@ -430,9 +430,7 @@ class schedule_timeForm(forms.Form):
 class administrator_data_Form(forms.ModelForm):
   class Meta:
     model = administrator_data
-    fields = ['menu_row', 'file_location_P', 'file_location_R', 'file_location_W1', \
-              'file_location_W2', 'file_location_T1', 'file_location_T2', 'file_location_A1', \
-                'file_location_A2', 'backup_file']
+    fields = ['menu_row']
     
 
 

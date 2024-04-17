@@ -1,12 +1,15 @@
 from django.shortcuts import render
 from django.shortcuts import redirect
 from django.contrib import messages
+from django.http import HttpResponse
 from pathlib import Path
+from io import BytesIO
 import openpyxl
 import datetime
 import math
 import os
 import environ
+import urllib.parse
 from ..models import member
 from ..models import Business_Time_graph
 from ..models import kosu_division
@@ -341,11 +344,7 @@ def administrator_menu(request):
 
 
   # フォーム初期値
-  form_default = {'menu_row' : default_data.menu_row, 'file_location_P' : default_data.file_location_P, \
-                  'file_location_R' : default_data.file_location_R, 'file_location_W1' : default_data.file_location_W1, \
-                    'file_location_W2' : default_data.file_location_W2, 'file_location_T1' : default_data.file_location_T1, \
-                      'file_location_T2' : default_data.file_location_T2, 'file_location_A1' : default_data.file_location_A1, \
-                        'file_location_A2' : default_data.file_location_A2, 'backup_file' : default_data.backup_file}
+  form_default = {'menu_row' : default_data.menu_row}
   
   # パス指定フォームに初期値を入れて定義
   form = administrator_data_Form(form_default)
@@ -369,110 +368,10 @@ def administrator_menu(request):
       return redirect(to = '/administrator')
 
 
-    # 登録したフォルダーがない場合の処理
-    if os.path.isdir(request.POST['file_location_P']) == False:
-
-      # エラーメッセージ出力
-      messages.error(request, 'Pショップの登録しようとした保存場所は存在しません。ERROR030')
-
-      # このページをリダイレクト
-      return redirect(to = '/administrator')
-
-
-    # 登録したフォルダーがない場合の処理
-    if os.path.isdir(request.POST['file_location_R']) == False:
-
-      # エラーメッセージ出力
-      messages.error(request, 'Rショップの登録しようとした保存場所は存在しません。ERROR031')
-  
-      # このページをリダイレクト
-      return redirect(to = '/administrator')
-
-
-    # 登録したフォルダーがない場合の処理
-    if os.path.isdir(request.POST['file_location_W1']) == False:
-
-      # エラーメッセージ出力
-      messages.error(request, 'W1ショップの登録しようとした保存場所は存在しません。ERROR032')
-
-      # このページをリダイレクト
-      return redirect(to = '/administrator')
-
-
-    # 登録したフォルダーがない場合の処理
-    if os.path.isdir(request.POST['file_location_W2']) == False:
-
-      # エラーメッセージ出力
-      messages.error(request, 'W2ショップの登録しようとした保存場所は存在しません。ERROR033')
-
-      # このページをリダイレクト
-      return redirect(to = '/administrator')
-    
-
-    # 登録したフォルダーがない場合の処理
-    if os.path.isdir(request.POST['file_location_T1']) == False:
-
-      # エラーメッセージ出力
-      messages.error(request, 'T1ショップの登録しようとした保存場所は存在しません。ERROR034')
-
-      # このページをリダイレクト
-      return redirect(to = '/administrator')
-
-
-    # 登録したフォルダーがない場合の処理
-    if os.path.isdir(request.POST['file_location_T2']) == False:
-
-      # エラーメッセージ出力
-      messages.error(request, 'T2ショップの登録しようとした保存場所は存在しません。ERROR035')
-
-      # このページをリダイレクト
-      return redirect(to = '/administrator')
-
-
-    # 登録したフォルダーがない場合の処理
-    if os.path.isdir(request.POST['file_location_A1']) == False:
-
-      # エラーメッセージ出力
-      messages.error(request, 'A1ショップの登録しようとした保存場所は存在しません。ERROR036')
-
-      # このページをリダイレクト
-      return redirect(to = '/administrator')
-
-
-    # 登録したフォルダーがない場合の処理
-    if os.path.isdir(request.POST['file_location_A2']) == False:
-
-      # エラーメッセージ出力
-      messages.error(request, 'A2ショップの登録しようとした保存場所は存在しません。ERROR037')
-
-      # このページをリダイレクト
-      return redirect(to = '/administrator')
-    
-
-    # 登録したフォルダーがない場合の処理
-    if os.path.isdir(request.POST['backup_file']) == False:
-  
-      # エラーメッセージ出力
-      messages.error(request, 'バックアップ場所で登録しようとした保存場所は存在しません。ERROR038')
-  
-      # このページをリダイレクト
-      return redirect(to = '/administrator')
-
-
 
     # レコードにPOST送信された値を上書きする
     administrator_data.objects.update_or_create(id = record_id, \
-        defaults = {'menu_row' : request.POST['menu_row'], \
-                    'file_location_P' : request.POST['file_location_P'], \
-                    'file_location_R' : request.POST['file_location_R'], \
-                    'file_location_W1' : request.POST['file_location_W1'], \
-                    'file_location_W2' : request.POST['file_location_W2'], \
-                    'file_location_T1' : request.POST['file_location_T1'], \
-                    'file_location_T2' : request.POST['file_location_T2'], \
-                    'file_location_A1' : request.POST['file_location_A1'], \
-                    'file_location_A2' : request.POST['file_location_A2'], \
-                    'backup_file' : request.POST['backup_file'], \
-                    })
+        defaults = {'menu_row' : request.POST['menu_row']})
     
     # フォームにPOST値を入れて定義
     form = administrator_data_Form(request.POST)
@@ -496,49 +395,54 @@ def administrator_menu(request):
     wb = openpyxl.Workbook()
 
     # 書き込みシート選択
-    ws = wb.worksheets[0]
+    ws = wb.active
 
     # 工数データ取得
-    kosu_gurahu = Business_Time_graph.objects.filter(work_day2__lte = request.POST['data_day'])
+    kosu_data = Business_Time_graph.objects.filter(work_day2__lte = request.POST['data_day'])
 
 
     # Excelに書き込み(項目名)
-    ws.cell(row = 1, column = 1, value = '従業員番号')
-    ws.cell(row = 1, column = 2, value = '氏名')
-    ws.cell(row = 1, column = 3, value = '工数区分定義Ver')
-    ws.cell(row = 1, column = 4, value = '就業日')
-    ws.cell(row = 1, column = 5, value = '直')
-    ws.cell(row = 1, column = 6, value = '作業内容')
-    ws.cell(row = 1, column = 7, value = '作業詳細')
-    ws.cell(row = 1, column = 8, value = '残業時間')
-    ws.cell(row = 1, column = 9, value = '昼休憩時間')
-    ws.cell(row = 1, column = 10, value = '残業休憩時間1')
-    ws.cell(row = 1, column = 11, value = '残業休憩時間2')
-    ws.cell(row = 1, column = 12, value = '残業休憩時間3')
-    ws.cell(row = 1, column = 13, value = '就業形態')
-    ws.cell(row = 1, column = 14, value = '工数出力済')
-    ws.cell(row = 1, column = 15, value = '工数入力OK_NG')
+    headers = [
+        '従業員番号', '氏名', '工数区分定義Ver', '就業日', '直', '作業内容',
+        '作業詳細', '残業時間', '昼休憩時間', '残業休憩時間1', '残業休憩時間2',
+        '残業休憩時間3', '就業形態', '工数出力済', '工数入力OK_NG'
+        ]
+    ws.append(headers)
 
 
-    # Excelに書き込み(項目)
-    for index, dt in enumerate(kosu_gurahu):
-      ws.cell(row = index + 2, column = 1, value = dt.employee_No3)
-      ws.cell(row = index + 2, column = 2, value = str(dt.name))
-      ws.cell(row = index + 2, column = 3, value = dt.def_Ver2)
-      ws.cell(row = index + 2, column = 4, value = dt.work_day2)
-      ws.cell(row = index + 2, column = 5, value = dt.tyoku2)
-      ws.cell(row = index + 2, column = 6, value = dt.time_work)
-      ws.cell(row = index + 2, column = 7, value = dt.detail_work)
-      ws.cell(row = index + 2, column = 8, value = dt.over_time)
-      ws.cell(row = index + 2, column = 9, value = dt.breaktime)
-      ws.cell(row = index + 2, column = 10, value = dt.breaktime_over1)
-      ws.cell(row = index + 2, column = 11, value = dt.breaktime_over2)
-      ws.cell(row = index + 2, column = 12, value = dt.breaktime_over3)
-      ws.cell(row = index + 2, column = 13, value = dt.work_time)
-      ws.cell(row = index + 2, column = 14, value = dt.completion)
-      ws.cell(row = index + 2, column = 15, value = dt.judgement)
+    # Excelに書き込み(データ)
+    for item in kosu_data:
 
-    wb.save(r'{}\{}_工数データバックアップ.xlsx'.format(default_data.backup_file, request.POST['data_day']))
+      row = [
+          item.employee_No3, str(item.name), item.def_Ver2, item.work_day2,
+          item.tyoku2, item.time_work, item.detail_work, item.over_time,
+          item.breaktime, item.breaktime_over1, item.breaktime_over2,
+          item.breaktime_over3, item.work_time, item.completion, item.judgement
+          ]
+      ws.append(row)
+
+
+    # メモリ上にExcelファイルを作成し、BytesIOオブジェクトに保存
+    excel_file = BytesIO()
+    wb.save(excel_file)
+    excel_file.seek(0)
+
+    # ファイル名を設定
+    filename = f'工数データバックアップ_{request.POST["data_day"]}.xlsx'
+
+    # URLエンコーディングされたファイル名を生成
+    quoted_filename = urllib.parse.quote(filename)
+    
+
+    # HttpResponseを作成してファイルをダウンロードさせる
+    response = HttpResponse(
+        excel_file.read(),
+        content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    )
+    # Content-Dispositionヘッダーを設定
+    response['Content-Disposition'] = f'attachment; filename*=UTF-8\'\'{quoted_filename}'
+    
+    return response
 
 
 
@@ -665,64 +569,62 @@ def administrator_menu(request):
   if 'member_backup' in request.POST:
 
     # 今日の日付取得
-    today = datetime.date.today()
+    today = datetime.date.today().strftime('%Y%m%d')
 
     # 新しいExcelブック作成
     wb = openpyxl.Workbook()
+
     # 書き込みシート選択
-    ws = wb.worksheets[0]
+    ws = wb.active
 
     # 人員データ取得
     member_data = member.objects.all()
 
+
     # Excelに書き込み(項目名)
-    ws.cell(row = 1, column = 1, value = '従業員番号')
-    ws.cell(row = 1, column = 2, value = '氏名')
-    ws.cell(row = 1, column = 3, value = 'ショップ')
-    ws.cell(row = 1, column = 4, value = '権限')
-    ws.cell(row = 1, column = 5, value = '管理者')
-    ws.cell(row = 1, column = 6, value = '1直昼休憩時間')
-    ws.cell(row = 1, column = 7, value = '1直残業休憩時間1')
-    ws.cell(row = 1, column = 8, value = '1直残業休憩時間2')
-    ws.cell(row = 1, column = 9, value = '1直残業休憩時間3')
-    ws.cell(row = 1, column = 10, value = '2直昼休憩時間')
-    ws.cell(row = 1, column = 11, value = '2直残業休憩時間1')
-    ws.cell(row = 1, column = 12, value = '2直残業休憩時間2')
-    ws.cell(row = 1, column = 13, value = '2直残業休憩時間3')
-    ws.cell(row = 1, column = 14, value = '3直昼休憩時間')
-    ws.cell(row = 1, column = 15, value = '3直残業休憩時間1')
-    ws.cell(row = 1, column = 16, value = '3直残業休憩時間2')
-    ws.cell(row = 1, column = 17, value = '3直残業休憩時間3')
-    ws.cell(row = 1, column = 18, value = '常昼昼休憩時間')
-    ws.cell(row = 1, column = 19, value = '常昼残業休憩時間1')
-    ws.cell(row = 1, column = 20, value = '常昼残業休憩時間2')
-    ws.cell(row = 1, column = 21, value = '常昼残業休憩時間3')
+    headers = [
+        '従業員番号', '氏名', 'ショップ', '権限', '管理者', '1直昼休憩時間',
+        '1直残業休憩時間1', '1直残業休憩時間2', '1直残業休憩時間3', '2直昼休憩時間', '2直残業休憩時間1',
+        '2直残業休憩時間2', '2直残業休憩時間3', '3直昼休憩時間', '3直残業休憩時間1', '3直残業休憩時間2', 
+        '3直残業休憩時間3', '常昼昼休憩時間', '常昼残業休憩時間1', '常昼残業休憩時間2', '常昼残業休憩時間3',
+    ]
+    ws.append(headers)
 
-    # Excelに書き込み(項目)
-    for index, dt in enumerate(member_data):
-      ws.cell(row = index + 2, column = 1, value = dt.employee_No)
-      ws.cell(row = index + 2, column = 2, value = dt.name)
-      ws.cell(row = index + 2, column = 3, value = dt.shop)
-      ws.cell(row = index + 2, column = 4, value = dt.authority)
-      ws.cell(row = index + 2, column = 5, value = dt.administrator)
-      ws.cell(row = index + 2, column = 6, value = dt.break_time1)
-      ws.cell(row = index + 2, column = 7, value = dt.break_time1_over1)
-      ws.cell(row = index + 2, column = 8, value = dt.break_time1_over2)
-      ws.cell(row = index + 2, column = 9, value = dt.break_time1_over3)
-      ws.cell(row = index + 2, column = 10, value = dt.break_time2)
-      ws.cell(row = index + 2, column = 11, value = dt.break_time2_over1)
-      ws.cell(row = index + 2, column = 12, value = dt.break_time2_over2)
-      ws.cell(row = index + 2, column = 13, value = dt.break_time2_over3)
-      ws.cell(row = index + 2, column = 14, value = dt.break_time3)
-      ws.cell(row = index + 2, column = 15, value = dt.break_time3_over1)
-      ws.cell(row = index + 2, column = 16, value = dt.break_time3_over2)
-      ws.cell(row = index + 2, column = 17, value = dt.break_time3_over3)
-      ws.cell(row = index + 2, column = 18, value = dt.break_time4)
-      ws.cell(row = index + 2, column = 19, value = dt.break_time4_over1)
-      ws.cell(row = index + 2, column = 20, value = dt.break_time4_over2)
-      ws.cell(row = index + 2, column = 21, value = dt.break_time4_over3)
 
-    wb.save(r'{}\{}_人員データバックアップ.xlsx'.format(default_data.backup_file, today))
+    # Excelに書き込み(データ)
+    for item in member_data:
+
+      row = [
+        item.employee_No, item.name, item.shop, item.authority,item.administrator, 
+        item.break_time1, item.break_time1_over1, item.break_time1_over2, item.break_time1_over3, 
+        item.break_time2, item.break_time2_over1, item.break_time2_over2, item.break_time2_over3, 
+        item.break_time3, item.break_time3_over1, item.break_time3_over2, item.break_time3_over3, 
+        item.break_time4, item.break_time4_over1, item.break_time4_over2, item.break_time4_over3,
+        ]
+      ws.append(row)
+
+
+    # メモリ上にExcelファイルを作成
+    excel_file = BytesIO()
+    wb.save(excel_file)
+    excel_file.seek(0)
+
+    # ファイル名を設定
+    filename = f'人員データバックアップ_{today}.xlsx'
+
+    # URLエンコーディングされたファイル名を生成
+    quoted_filename = urllib.parse.quote(filename)
+    
+
+    # HttpResponseを作成してファイルをダウンロードさせる
+    response = HttpResponse(
+        excel_file.read(),
+        content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    )
+    # Content-Dispositionヘッダーを設定
+    response['Content-Disposition'] = f'attachment; filename*=UTF-8\'\'{quoted_filename}'
+    
+    return response
 
 
 
@@ -830,43 +732,56 @@ def administrator_menu(request):
   if 'team_backup' in request.POST:
 
     # 今日の日付取得
-    today = datetime.date.today()
+    today = datetime.date.today().strftime('%Y%m%d')
 
     # 新しいExcelブック作成
     wb = openpyxl.Workbook()
+
     # 書き込みシート選択
-    ws = wb.worksheets[0]
+    ws = wb.active
 
     # 班員データ取得
     team_data = team_member.objects.all()
 
     # Excelに書き込み(項目名)
-    ws.cell(row = 1, column = 1, value = '従業員番号')
-    ws.cell(row = 1, column = 2, value = '班員1')
-    ws.cell(row = 1, column = 3, value = '班員2')
-    ws.cell(row = 1, column = 4, value = '班員3')
-    ws.cell(row = 1, column = 5, value = '班員4')
-    ws.cell(row = 1, column = 6, value = '班員6')
-    ws.cell(row = 1, column = 7, value = '班員7')
-    ws.cell(row = 1, column = 8, value = '班員8')
-    ws.cell(row = 1, column = 9, value = '班員9')
-    ws.cell(row = 1, column = 10, value = '班員10')
+    headers = [
+        '従業員番号', '班員1', '班員2', '班員3', '班員4', '班員5',
+        '班員6', '班員7', '班員8', '班員9', '班員10',
+        ]
+    ws.append(headers)
 
-    # Excelに書き込み(項目)
-    for index, dt in enumerate(team_data):
-      ws.cell(row = index + 2, column = 1, value = dt.employee_No5)
-      ws.cell(row = index + 2, column = 2, value = dt.member1)
-      ws.cell(row = index + 2, column = 3, value = dt.member2)
-      ws.cell(row = index + 2, column = 4, value = dt.member3)
-      ws.cell(row = index + 2, column = 5, value = dt.member4)
-      ws.cell(row = index + 2, column = 6, value = dt.member5)
-      ws.cell(row = index + 2, column = 7, value = dt.member6)
-      ws.cell(row = index + 2, column = 8, value = dt.member7)
-      ws.cell(row = index + 2, column = 9, value = dt.member8)
-      ws.cell(row = index + 2, column = 10, value = dt.member9)
-      ws.cell(row = index + 2, column = 11, value = dt.member10)
 
-    wb.save(r'{}\{}_班員データバックアップ.xlsx'.format(default_data.backup_file, today))
+    # Excelに書き込み(データ)
+    for item in team_data:
+
+      row = [
+        item.employee_No5, item.member1, item.member2, item.member3, item.member4, 
+        item.member5, item.member6, item.member7, item.member8, item.member9, item.member10
+        ]
+      ws.append(row)
+
+
+    # メモリ上にExcelファイルを作成
+    excel_file = BytesIO()
+    wb.save(excel_file)
+    excel_file.seek(0)
+
+    # ファイル名を設定
+    filename = f'班員データバックアップ_{today}.xlsx'
+
+    # URLエンコーディングされたファイル名を生成
+    quoted_filename = urllib.parse.quote(filename)
+    
+
+    # HttpResponseを作成してファイルをダウンロードさせる
+    response = HttpResponse(
+        excel_file.read(),
+        content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    )
+    # Content-Dispositionヘッダーを設定
+    response['Content-Disposition'] = f'attachment; filename*=UTF-8\'\'{quoted_filename}'
+    
+    return response
 
 
 
@@ -960,324 +875,128 @@ def administrator_menu(request):
   if 'def_backup' in request.POST:
 
     # 今日の日付取得
-    today = datetime.date.today()
+    today = datetime.date.today().strftime('%Y%m%d')
 
     # 新しいExcelブック作成
     wb = openpyxl.Workbook()
+
     # 書き込みシート選択
-    ws = wb.worksheets[0]
+    ws = wb.active
 
     # メンバーデータ取得
     def_data = kosu_division.objects.all()
 
+
     # Excelに書き込み(項目名)
-    ws.cell(row = 1, column = 1, value = '工数区分定義Ver名')
-    ws.cell(row = 1, column = 2, value = '工数区分名1')
-    ws.cell(row = 1, column = 3, value = '定義1')
-    ws.cell(row = 1, column = 4, value = '作業内容1')
-    ws.cell(row = 1, column = 5, value = '工数区分名2')
-    ws.cell(row = 1, column = 6, value = '定義2')
-    ws.cell(row = 1, column = 7, value = '作業内容2')
-    ws.cell(row = 1, column = 8, value = '工数区分名3')
-    ws.cell(row = 1, column = 9, value = '定義3')
-    ws.cell(row = 1, column = 10, value = '作業内容3')
-    ws.cell(row = 1, column = 11, value = '工数区分名4')
-    ws.cell(row = 1, column = 12, value = '定義4')
-    ws.cell(row = 1, column = 13, value = '作業内容4')
-    ws.cell(row = 1, column = 14, value = '工数区分名5')
-    ws.cell(row = 1, column = 15, value = '定義5')
-    ws.cell(row = 1, column = 16, value = '作業内容5')
-    ws.cell(row = 1, column = 17, value = '工数区分名6')
-    ws.cell(row = 1, column = 18, value = '定義6')
-    ws.cell(row = 1, column = 19, value = '作業内容6')
-    ws.cell(row = 1, column = 20, value = '工数区分名7')
-    ws.cell(row = 1, column = 21, value = '定義7')
-    ws.cell(row = 1, column = 22, value = '作業内容7')
-    ws.cell(row = 1, column = 23, value = '工数区分名8')
-    ws.cell(row = 1, column = 24, value = '定義8')
-    ws.cell(row = 1, column = 25, value = '作業内容8')
-    ws.cell(row = 1, column = 26, value = '工数区分名9')
-    ws.cell(row = 1, column = 27, value = '定義9')
-    ws.cell(row = 1, column = 28, value = '作業内容9')
-    ws.cell(row = 1, column = 29, value = '工数区分名10')
-    ws.cell(row = 1, column = 30, value = '定義10')
-    ws.cell(row = 1, column = 31, value = '作業内容10')
-    ws.cell(row = 1, column = 32, value = '工数区分名11')
-    ws.cell(row = 1, column = 33, value = '定義11')
-    ws.cell(row = 1, column = 34, value = '作業内容11')
-    ws.cell(row = 1, column = 35, value = '工数区分名12')
-    ws.cell(row = 1, column = 36, value = '定義12')
-    ws.cell(row = 1, column = 37, value = '作業内容12')
-    ws.cell(row = 1, column = 38, value = '工数区分名13')
-    ws.cell(row = 1, column = 39, value = '定義13')
-    ws.cell(row = 1, column = 40, value = '作業内容13')
-    ws.cell(row = 1, column = 41, value = '工数区分名14')
-    ws.cell(row = 1, column = 42, value = '定義14')
-    ws.cell(row = 1, column = 43, value = '作業内容14')
-    ws.cell(row = 1, column = 44, value = '工数区分名15')
-    ws.cell(row = 1, column = 45, value = '定義15')
-    ws.cell(row = 1, column = 46, value = '作業内容15')
-    ws.cell(row = 1, column = 47, value = '工数区分名16')
-    ws.cell(row = 1, column = 48, value = '定義16')
-    ws.cell(row = 1, column = 49, value = '作業内容16')
-    ws.cell(row = 1, column = 50, value = '工数区分名17')
-    ws.cell(row = 1, column = 51, value = '定義17')
-    ws.cell(row = 1, column = 52, value = '作業内容17')
-    ws.cell(row = 1, column = 53, value = '工数区分名18')
-    ws.cell(row = 1, column = 54, value = '定義18')
-    ws.cell(row = 1, column = 55, value = '作業内容18')
-    ws.cell(row = 1, column = 56, value = '工数区分名19')
-    ws.cell(row = 1, column = 57, value = '定義19')
-    ws.cell(row = 1, column = 58, value = '作業内容19')
-    ws.cell(row = 1, column = 59, value = '工数区分名20')
-    ws.cell(row = 1, column = 60, value = '定義20')
-    ws.cell(row = 1, column = 61, value = '作業内容20')
-    ws.cell(row = 1, column = 62, value = '工数区分名21')
-    ws.cell(row = 1, column = 63, value = '定義21')
-    ws.cell(row = 1, column = 64, value = '作業内容21')
-    ws.cell(row = 1, column = 65, value = '工数区分名22')
-    ws.cell(row = 1, column = 66, value = '定義22')
-    ws.cell(row = 1, column = 67, value = '作業内容22')
-    ws.cell(row = 1, column = 68, value = '工数区分名23')
-    ws.cell(row = 1, column = 69, value = '定義23')
-    ws.cell(row = 1, column = 70, value = '作業内容23')
-    ws.cell(row = 1, column = 71, value = '工数区分名24')
-    ws.cell(row = 1, column = 72, value = '定義24')
-    ws.cell(row = 1, column = 73, value = '作業内容24')
-    ws.cell(row = 1, column = 74, value = '工数区分名25')
-    ws.cell(row = 1, column = 75, value = '定義25')
-    ws.cell(row = 1, column = 76, value = '作業内容25')
-    ws.cell(row = 1, column = 77, value = '工数区分名26')
-    ws.cell(row = 1, column = 78, value = '定義26')
-    ws.cell(row = 1, column = 79, value = '作業内容26')
-    ws.cell(row = 1, column = 80, value = '工数区分名27')
-    ws.cell(row = 1, column = 81, value = '定義27')
-    ws.cell(row = 1, column = 82, value = '作業内容27')
-    ws.cell(row = 1, column = 83, value = '工数区分名28')
-    ws.cell(row = 1, column = 84, value = '定義28')
-    ws.cell(row = 1, column = 85, value = '作業内容28')
-    ws.cell(row = 1, column = 86, value = '工数区分名29')
-    ws.cell(row = 1, column = 87, value = '定義29')
-    ws.cell(row = 1, column = 88, value = '作業内容29')
-    ws.cell(row = 1, column = 89, value = '工数区分名30')
-    ws.cell(row = 1, column = 90, value = '定義30')
-    ws.cell(row = 1, column = 91, value = '作業内容30')
-    ws.cell(row = 1, column = 92, value = '工数区分名31')
-    ws.cell(row = 1, column = 93, value = '定義31')
-    ws.cell(row = 1, column = 94, value = '作業内容31')
-    ws.cell(row = 1, column = 95, value = '工数区分名32')
-    ws.cell(row = 1, column = 96, value = '定義32')
-    ws.cell(row = 1, column = 97, value = '作業内容32')
-    ws.cell(row = 1, column = 98, value = '工数区分名33')
-    ws.cell(row = 1, column = 99, value = '定義33')
-    ws.cell(row = 1, column = 100, value = '作業内容33')
-    ws.cell(row = 1, column = 101, value = '工数区分名34')
-    ws.cell(row = 1, column = 102, value = '定義34')
-    ws.cell(row = 1, column = 103, value = '作業内容34')
-    ws.cell(row = 1, column = 104, value = '工数区分名35')
-    ws.cell(row = 1, column = 105, value = '定義35')
-    ws.cell(row = 1, column = 106, value = '作業内容35')
-    ws.cell(row = 1, column = 107, value = '工数区分名36')
-    ws.cell(row = 1, column = 108, value = '定義36')
-    ws.cell(row = 1, column = 109, value = '作業内容36')
-    ws.cell(row = 1, column = 110, value = '工数区分名37')
-    ws.cell(row = 1, column = 111, value = '定義37')
-    ws.cell(row = 1, column = 112, value = '作業内容37')
-    ws.cell(row = 1, column = 113, value = '工数区分名38')
-    ws.cell(row = 1, column = 114, value = '定義38')
-    ws.cell(row = 1, column = 115, value = '作業内容38')
-    ws.cell(row = 1, column = 116, value = '工数区分名39')
-    ws.cell(row = 1, column = 117, value = '定義39')
-    ws.cell(row = 1, column = 118, value = '作業内容39')
-    ws.cell(row = 1, column = 119, value = '工数区分名40')
-    ws.cell(row = 1, column = 120, value = '定義40')
-    ws.cell(row = 1, column = 121, value = '作業内容40')
-    ws.cell(row = 1, column = 122, value = '工数区分名41')
-    ws.cell(row = 1, column = 123, value = '定義41')
-    ws.cell(row = 1, column = 124, value = '作業内容41')
-    ws.cell(row = 1, column = 125, value = '工数区分名42')
-    ws.cell(row = 1, column = 126, value = '定義42')
-    ws.cell(row = 1, column = 127, value = '作業内容42')
-    ws.cell(row = 1, column = 128, value = '工数区分名43')
-    ws.cell(row = 1, column = 129, value = '定義43')
-    ws.cell(row = 1, column = 130, value = '作業内容43')
-    ws.cell(row = 1, column = 131, value = '工数区分名44')
-    ws.cell(row = 1, column = 132, value = '定義44')
-    ws.cell(row = 1, column = 133, value = '作業内容44')
-    ws.cell(row = 1, column = 134, value = '工数区分名45')
-    ws.cell(row = 1, column = 135, value = '定義45')
-    ws.cell(row = 1, column = 136, value = '作業内容45')
-    ws.cell(row = 1, column = 137, value = '工数区分名46')
-    ws.cell(row = 1, column = 138, value = '定義46')
-    ws.cell(row = 1, column = 139, value = '作業内容46')
-    ws.cell(row = 1, column = 140, value = '工数区分名47')
-    ws.cell(row = 1, column = 141, value = '定義47')
-    ws.cell(row = 1, column = 142, value = '作業内容47')
-    ws.cell(row = 1, column = 143, value = '工数区分名48')
-    ws.cell(row = 1, column = 144, value = '定義48')
-    ws.cell(row = 1, column = 145, value = '作業内容48')
-    ws.cell(row = 1, column = 146, value = '工数区分名49')
-    ws.cell(row = 1, column = 147, value = '定義49')
-    ws.cell(row = 1, column = 148, value = '作業内容49')
-    ws.cell(row = 1, column = 149, value = '工数区分名50')
-    ws.cell(row = 1, column = 150, value = '定義50')
-    ws.cell(row = 1, column = 151, value = '作業内容50')
+    headers = [
+        '工数区分定義Ver名', '工数区分名1', '定義1', '作業内容1', '工数区分名2', '定義2', '作業内容2',
+        '工数区分名3', '定義3', '作業内容3', '工数区分名4', '定義4', '作業内容4',
+        '工数区分名5', '定義5', '作業内容5', '工数区分名6', '定義6', '作業内容6',
+        '工数区分名7', '定義7', '作業内容7', '工数区分名8', '定義8', '作業内容8',
+        '工数区分名9', '定義9', '作業内容9', '工数区分名10', '定義10', '作業内容10',
+        '工数区分名11', '定義11', '作業内容11', '工数区分名12', '定義12', '作業内容12',
+        '工数区分名13', '定義13', '作業内容13', '工数区分名14', '定義14', '作業内容14',
+        '工数区分名15', '定義15', '作業内容15', '工数区分名16', '定義16', '作業内容16',
+        '工数区分名17', '定義17', '作業内容17', '工数区分名18', '定義18', '作業内容18',
+        '工数区分名19', '定義19', '作業内容19', '工数区分名20', '定義20', '作業内容20',
+        '工数区分名21', '定義21', '作業内容21', '工数区分名22', '定義22', '作業内容22',
+        '工数区分名23', '定義23', '作業内容23', '工数区分名24', '定義24', '作業内容24',
+        '工数区分名25', '定義25', '作業内容25', '工数区分名26', '定義26', '作業内容26',
+        '工数区分名27', '定義27', '作業内容27', '工数区分名28', '定義28', '作業内容28',
+        '工数区分名29', '定義29', '作業内容29', '工数区分名30', '定義30', '作業内容30',
+        '工数区分名31', '定義31', '作業内容31', '工数区分名32', '定義32', '作業内容32',
+        '工数区分名33', '定義33', '作業内容33', '工数区分名34', '定義34', '作業内容34',
+        '工数区分名35', '定義35', '作業内容35', '工数区分名36', '定義36', '作業内容36',
+        '工数区分名37', '定義37', '作業内容37', '工数区分名38', '定義38', '作業内容38',
+        '工数区分名39', '定義39', '作業内容39', '工数区分名40', '定義40', '作業内容40',
+        '工数区分名41', '定義41', '作業内容41', '工数区分名42', '定義42', '作業内容42',
+        '工数区分名43', '定義43', '作業内容43', '工数区分名44', '定義44', '作業内容44',
+        '工数区分名45', '定義45', '作業内容45', '工数区分名46', '定義46', '作業内容46',
+        '工数区分名47', '定義47', '作業内容47', '工数区分名48', '定義48', '作業内容48',
+        '工数区分名49', '定義49', '作業内容49', '工数区分名50', '定義50', '作業内容50',
+        ]
+    ws.append(headers)
 
-    # Excelに書き込み(項目)
-    for index, dt in enumerate(def_data):
-      ws.cell(row = index + 2, column = 1, value = dt.kosu_name)
-      ws.cell(row = index + 2, column = 2, value = dt.kosu_title_1)
-      ws.cell(row = index + 2, column = 3, value = dt.kosu_division_1_1)
-      ws.cell(row = index + 2, column = 4, value = dt.kosu_division_2_1)
-      ws.cell(row = index + 2, column = 5, value = dt.kosu_title_2)
-      ws.cell(row = index + 2, column = 6, value = dt.kosu_division_1_2)
-      ws.cell(row = index + 2, column = 7, value = dt.kosu_division_2_2)
-      ws.cell(row = index + 2, column = 8, value = dt.kosu_title_3)
-      ws.cell(row = index + 2, column = 9, value = dt.kosu_division_1_3)
-      ws.cell(row = index + 2, column = 10, value = dt.kosu_division_2_3)
-      ws.cell(row = index + 2, column = 11, value = dt.kosu_title_4)
-      ws.cell(row = index + 2, column = 12, value = dt.kosu_division_1_4)
-      ws.cell(row = index + 2, column = 13, value = dt.kosu_division_2_4)
-      ws.cell(row = index + 2, column = 14, value = dt.kosu_title_5)
-      ws.cell(row = index + 2, column = 15, value = dt.kosu_division_1_5)
-      ws.cell(row = index + 2, column = 16, value = dt.kosu_division_2_5)
-      ws.cell(row = index + 2, column = 17, value = dt.kosu_title_6)
-      ws.cell(row = index + 2, column = 18, value = dt.kosu_division_1_6)
-      ws.cell(row = index + 2, column = 19, value = dt.kosu_division_2_6)
-      ws.cell(row = index + 2, column = 20, value = dt.kosu_title_7)
-      ws.cell(row = index + 2, column = 21, value = dt.kosu_division_1_7)
-      ws.cell(row = index + 2, column = 22, value = dt.kosu_division_2_7)
-      ws.cell(row = index + 2, column = 23, value = dt.kosu_title_8)
-      ws.cell(row = index + 2, column = 24, value = dt.kosu_division_1_8)
-      ws.cell(row = index + 2, column = 25, value = dt.kosu_division_2_8)
-      ws.cell(row = index + 2, column = 26, value = dt.kosu_title_9)
-      ws.cell(row = index + 2, column = 27, value = dt.kosu_division_1_9)
-      ws.cell(row = index + 2, column = 28, value = dt.kosu_division_2_9)
-      ws.cell(row = index + 2, column = 29, value = dt.kosu_title_10)
-      ws.cell(row = index + 2, column = 30, value = dt.kosu_division_1_10)
-      ws.cell(row = index + 2, column = 31, value = dt.kosu_division_2_10)
-      ws.cell(row = index + 2, column = 32, value = dt.kosu_title_11)
-      ws.cell(row = index + 2, column = 33, value = dt.kosu_division_1_11)
-      ws.cell(row = index + 2, column = 34, value = dt.kosu_division_2_11)
-      ws.cell(row = index + 2, column = 35, value = dt.kosu_title_12)
-      ws.cell(row = index + 2, column = 36, value = dt.kosu_division_1_12)
-      ws.cell(row = index + 2, column = 37, value = dt.kosu_division_2_12)
-      ws.cell(row = index + 2, column = 38, value = dt.kosu_title_13)
-      ws.cell(row = index + 2, column = 39, value = dt.kosu_division_1_13)
-      ws.cell(row = index + 2, column = 40, value = dt.kosu_division_2_13)
-      ws.cell(row = index + 2, column = 41, value = dt.kosu_title_14)
-      ws.cell(row = index + 2, column = 42, value = dt.kosu_division_1_14)
-      ws.cell(row = index + 2, column = 43, value = dt.kosu_division_2_14)
-      ws.cell(row = index + 2, column = 44, value = dt.kosu_title_15)
-      ws.cell(row = index + 2, column = 45, value = dt.kosu_division_1_15)
-      ws.cell(row = index + 2, column = 46, value = dt.kosu_division_2_15)
-      ws.cell(row = index + 2, column = 47, value = dt.kosu_title_16)
-      ws.cell(row = index + 2, column = 48, value = dt.kosu_division_1_16)
-      ws.cell(row = index + 2, column = 49, value = dt.kosu_division_2_16)
-      ws.cell(row = index + 2, column = 50, value = dt.kosu_title_17)
-      ws.cell(row = index + 2, column = 51, value = dt.kosu_division_1_17)
-      ws.cell(row = index + 2, column = 52, value = dt.kosu_division_2_17)
-      ws.cell(row = index + 2, column = 53, value = dt.kosu_title_18)
-      ws.cell(row = index + 2, column = 54, value = dt.kosu_division_1_18)
-      ws.cell(row = index + 2, column = 55, value = dt.kosu_division_2_18)
-      ws.cell(row = index + 2, column = 56, value = dt.kosu_title_19)
-      ws.cell(row = index + 2, column = 57, value = dt.kosu_division_1_19)
-      ws.cell(row = index + 2, column = 58, value = dt.kosu_division_2_19)
-      ws.cell(row = index + 2, column = 59, value = dt.kosu_title_20)
-      ws.cell(row = index + 2, column = 60, value = dt.kosu_division_1_20)
-      ws.cell(row = index + 2, column = 61, value = dt.kosu_division_2_20)
-      ws.cell(row = index + 2, column = 62, value = dt.kosu_title_21)
-      ws.cell(row = index + 2, column = 63, value = dt.kosu_division_1_21)
-      ws.cell(row = index + 2, column = 64, value = dt.kosu_division_2_21)
-      ws.cell(row = index + 2, column = 65, value = dt.kosu_title_22)
-      ws.cell(row = index + 2, column = 66, value = dt.kosu_division_1_22)
-      ws.cell(row = index + 2, column = 67, value = dt.kosu_division_2_22)
-      ws.cell(row = index + 2, column = 68, value = dt.kosu_title_23)
-      ws.cell(row = index + 2, column = 69, value = dt.kosu_division_1_23)
-      ws.cell(row = index + 2, column = 70, value = dt.kosu_division_2_23)
-      ws.cell(row = index + 2, column = 71, value = dt.kosu_title_24)
-      ws.cell(row = index + 2, column = 72, value = dt.kosu_division_1_24)
-      ws.cell(row = index + 2, column = 73, value = dt.kosu_division_2_24)
-      ws.cell(row = index + 2, column = 74, value = dt.kosu_title_25)
-      ws.cell(row = index + 2, column = 75, value = dt.kosu_division_1_25)
-      ws.cell(row = index + 2, column = 76, value = dt.kosu_division_2_25)
-      ws.cell(row = index + 2, column = 77, value = dt.kosu_title_26)
-      ws.cell(row = index + 2, column = 78, value = dt.kosu_division_1_26)
-      ws.cell(row = index + 2, column = 79, value = dt.kosu_division_2_26)
-      ws.cell(row = index + 2, column = 80, value = dt.kosu_title_27)
-      ws.cell(row = index + 2, column = 81, value = dt.kosu_division_1_27)
-      ws.cell(row = index + 2, column = 82, value = dt.kosu_division_2_27)
-      ws.cell(row = index + 2, column = 83, value = dt.kosu_title_28)
-      ws.cell(row = index + 2, column = 84, value = dt.kosu_division_1_28)
-      ws.cell(row = index + 2, column = 85, value = dt.kosu_division_2_28)
-      ws.cell(row = index + 2, column = 86, value = dt.kosu_title_29)
-      ws.cell(row = index + 2, column = 87, value = dt.kosu_division_1_29)
-      ws.cell(row = index + 2, column = 88, value = dt.kosu_division_2_29)
-      ws.cell(row = index + 2, column = 89, value = dt.kosu_title_30)
-      ws.cell(row = index + 2, column = 90, value = dt.kosu_division_1_30)
-      ws.cell(row = index + 2, column = 91, value = dt.kosu_division_2_30)
-      ws.cell(row = index + 2, column = 92, value = dt.kosu_title_31)
-      ws.cell(row = index + 2, column = 93, value = dt.kosu_division_1_31)
-      ws.cell(row = index + 2, column = 94, value = dt.kosu_division_2_31)
-      ws.cell(row = index + 2, column = 95, value = dt.kosu_title_32)
-      ws.cell(row = index + 2, column = 96, value = dt.kosu_division_1_32)
-      ws.cell(row = index + 2, column = 97, value = dt.kosu_division_2_32)
-      ws.cell(row = index + 2, column = 98, value = dt.kosu_title_33)
-      ws.cell(row = index + 2, column = 99, value = dt.kosu_division_1_33)
-      ws.cell(row = index + 2, column = 100, value = dt.kosu_division_2_33)
-      ws.cell(row = index + 2, column = 101, value = dt.kosu_title_34)
-      ws.cell(row = index + 2, column = 102, value = dt.kosu_division_1_34)
-      ws.cell(row = index + 2, column = 103, value = dt.kosu_division_2_34)
-      ws.cell(row = index + 2, column = 104, value = dt.kosu_title_35)
-      ws.cell(row = index + 2, column = 105, value = dt.kosu_division_1_35)
-      ws.cell(row = index + 2, column = 106, value = dt.kosu_division_2_35)
-      ws.cell(row = index + 2, column = 107, value = dt.kosu_title_36)
-      ws.cell(row = index + 2, column = 108, value = dt.kosu_division_1_36)
-      ws.cell(row = index + 2, column = 109, value = dt.kosu_division_2_36)
-      ws.cell(row = index + 2, column = 110, value = dt.kosu_title_37)
-      ws.cell(row = index + 2, column = 111, value = dt.kosu_division_1_37)
-      ws.cell(row = index + 2, column = 112, value = dt.kosu_division_2_37)
-      ws.cell(row = index + 2, column = 113, value = dt.kosu_title_38)
-      ws.cell(row = index + 2, column = 114, value = dt.kosu_division_1_38)
-      ws.cell(row = index + 2, column = 115, value = dt.kosu_division_2_38)
-      ws.cell(row = index + 2, column = 116, value = dt.kosu_title_39)
-      ws.cell(row = index + 2, column = 117, value = dt.kosu_division_1_39)
-      ws.cell(row = index + 2, column = 118, value = dt.kosu_division_2_39)
-      ws.cell(row = index + 2, column = 119, value = dt.kosu_title_40)
-      ws.cell(row = index + 2, column = 120, value = dt.kosu_division_1_40)
-      ws.cell(row = index + 2, column = 121, value = dt.kosu_division_2_40)
-      ws.cell(row = index + 2, column = 122, value = dt.kosu_title_41)
-      ws.cell(row = index + 2, column = 123, value = dt.kosu_division_1_41)
-      ws.cell(row = index + 2, column = 124, value = dt.kosu_division_2_41)
-      ws.cell(row = index + 2, column = 125, value = dt.kosu_title_42)
-      ws.cell(row = index + 2, column = 126, value = dt.kosu_division_1_42)
-      ws.cell(row = index + 2, column = 127, value = dt.kosu_division_2_42)
-      ws.cell(row = index + 2, column = 128, value = dt.kosu_title_43)
-      ws.cell(row = index + 2, column = 129, value = dt.kosu_division_1_43)
-      ws.cell(row = index + 2, column = 130, value = dt.kosu_division_2_43)
-      ws.cell(row = index + 2, column = 131, value = dt.kosu_title_44)
-      ws.cell(row = index + 2, column = 132, value = dt.kosu_division_1_44)
-      ws.cell(row = index + 2, column = 133, value = dt.kosu_division_2_44)
-      ws.cell(row = index + 2, column = 134, value = dt.kosu_title_45)
-      ws.cell(row = index + 2, column = 135, value = dt.kosu_division_1_45)
-      ws.cell(row = index + 2, column = 136, value = dt.kosu_division_2_45)
-      ws.cell(row = index + 2, column = 137, value = dt.kosu_title_46)
-      ws.cell(row = index + 2, column = 138, value = dt.kosu_division_1_46)
-      ws.cell(row = index + 2, column = 139, value = dt.kosu_division_2_46)
-      ws.cell(row = index + 2, column = 140, value = dt.kosu_title_47)
-      ws.cell(row = index + 2, column = 141, value = dt.kosu_division_1_47)
-      ws.cell(row = index + 2, column = 142, value = dt.kosu_division_2_47)
-      ws.cell(row = index + 2, column = 143, value = dt.kosu_title_48)
-      ws.cell(row = index + 2, column = 144, value = dt.kosu_division_1_48)
-      ws.cell(row = index + 2, column = 145, value = dt.kosu_division_2_48)
-      ws.cell(row = index + 2, column = 146, value = dt.kosu_title_49)
-      ws.cell(row = index + 2, column = 147, value = dt.kosu_division_1_49)
-      ws.cell(row = index + 2, column = 148, value = dt.kosu_division_2_49)
-      ws.cell(row = index + 2, column = 149, value = dt.kosu_title_50)
-      ws.cell(row = index + 2, column = 150, value = dt.kosu_division_1_50)
-      ws.cell(row = index + 2, column = 151, value = dt.kosu_division_2_50)
 
-    wb.save(r'{}\{}_工数区分定義データバックアップ.xlsx'.format(default_data.backup_file, today))
+    # Excelに書き込み(データ)
+    for item in def_data:
+
+      row = [
+        item.kosu_name, item.kosu_title_1, item.kosu_division_1_1, item.kosu_division_2_1,  
+        item.kosu_title_2, item.kosu_division_1_2, item.kosu_division_2_2, 
+        item.kosu_title_3, item.kosu_division_1_3, item.kosu_division_2_3,  
+        item.kosu_title_4, item.kosu_division_1_4, item.kosu_division_2_4,
+        item.kosu_title_5, item.kosu_division_1_5, item.kosu_division_2_5,  
+        item.kosu_title_6, item.kosu_division_1_6, item.kosu_division_2_6, 
+        item.kosu_title_7, item.kosu_division_1_7, item.kosu_division_2_7, 
+        item.kosu_title_8, item.kosu_division_1_8, item.kosu_division_2_8,
+        item.kosu_title_9, item.kosu_division_1_9, item.kosu_division_2_9,  
+        item.kosu_title_10, item.kosu_division_1_10, item.kosu_division_2_10,
+        item.kosu_title_11, item.kosu_division_1_11, item.kosu_division_2_11,  
+        item.kosu_title_12, item.kosu_division_1_12, item.kosu_division_2_12, 
+        item.kosu_title_13, item.kosu_division_1_13, item.kosu_division_2_13,  
+        item.kosu_title_14, item.kosu_division_1_14, item.kosu_division_2_14,
+        item.kosu_title_15, item.kosu_division_1_15, item.kosu_division_2_15,  
+        item.kosu_title_16, item.kosu_division_1_16, item.kosu_division_2_16, 
+        item.kosu_title_17, item.kosu_division_1_17, item.kosu_division_2_17, 
+        item.kosu_title_18, item.kosu_division_1_18, item.kosu_division_2_18,
+        item.kosu_title_19, item.kosu_division_1_19, item.kosu_division_2_19,
+        item.kosu_title_20, item.kosu_division_1_20, item.kosu_division_2_20,
+        item.kosu_title_21, item.kosu_division_1_21, item.kosu_division_2_21,  
+        item.kosu_title_22, item.kosu_division_1_22, item.kosu_division_2_22, 
+        item.kosu_title_23, item.kosu_division_1_23, item.kosu_division_2_23,  
+        item.kosu_title_24, item.kosu_division_1_24, item.kosu_division_2_24,
+        item.kosu_title_25, item.kosu_division_1_25, item.kosu_division_2_25,  
+        item.kosu_title_26, item.kosu_division_1_26, item.kosu_division_2_26, 
+        item.kosu_title_27, item.kosu_division_1_27, item.kosu_division_2_27, 
+        item.kosu_title_28, item.kosu_division_1_28, item.kosu_division_2_28,
+        item.kosu_title_29, item.kosu_division_1_29, item.kosu_division_2_29,  
+        item.kosu_title_30, item.kosu_division_1_30, item.kosu_division_2_30,
+        item.kosu_title_31, item.kosu_division_1_31, item.kosu_division_2_31,  
+        item.kosu_title_32, item.kosu_division_1_32, item.kosu_division_2_32, 
+        item.kosu_title_33, item.kosu_division_1_33, item.kosu_division_2_33,  
+        item.kosu_title_34, item.kosu_division_1_34, item.kosu_division_2_34,
+        item.kosu_title_35, item.kosu_division_1_35, item.kosu_division_2_35,  
+        item.kosu_title_36, item.kosu_division_1_36, item.kosu_division_2_36, 
+        item.kosu_title_37, item.kosu_division_1_37, item.kosu_division_2_37, 
+        item.kosu_title_38, item.kosu_division_1_38, item.kosu_division_2_38,
+        item.kosu_title_39, item.kosu_division_1_39, item.kosu_division_2_39,
+        item.kosu_title_40, item.kosu_division_1_40, item.kosu_division_2_40,
+        item.kosu_title_41, item.kosu_division_1_41, item.kosu_division_2_41,  
+        item.kosu_title_42, item.kosu_division_1_42, item.kosu_division_2_42, 
+        item.kosu_title_43, item.kosu_division_1_43, item.kosu_division_2_43,  
+        item.kosu_title_44, item.kosu_division_1_44, item.kosu_division_2_44,
+        item.kosu_title_45, item.kosu_division_1_45, item.kosu_division_2_45,  
+        item.kosu_title_46, item.kosu_division_1_46, item.kosu_division_2_46, 
+        item.kosu_title_47, item.kosu_division_1_47, item.kosu_division_2_47, 
+        item.kosu_title_48, item.kosu_division_1_48, item.kosu_division_2_48,
+        item.kosu_title_49, item.kosu_division_1_49, item.kosu_division_2_49,  
+        item.kosu_title_50, item.kosu_division_1_50, item.kosu_division_2_50,
+        ]
+      ws.append(row)
+
+
+    # メモリ上にExcelファイルを作成
+    excel_file = BytesIO()
+    wb.save(excel_file)
+    excel_file.seek(0)
+
+    # ファイル名を設定
+    filename = f'工数定義区分データバックアップ_{today}.xlsx'
+
+    # URLエンコーディングされたファイル名を生成
+    quoted_filename = urllib.parse.quote(filename)
+    
+
+    # HttpResponseを作成してファイルをダウンロードさせる
+    response = HttpResponse(
+        excel_file.read(),
+        content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    )
+    # Content-Dispositionヘッダーを設定
+    response['Content-Disposition'] = f'attachment; filename*=UTF-8\'\'{quoted_filename}'
+    
+    return response
 
 
 
@@ -1578,43 +1297,55 @@ def administrator_menu(request):
   if 'setting_backup' in request.POST:
 
     # 今日の日付取得
-    today = datetime.date.today()
+    today = today = datetime.date.today().strftime('%Y%m%d')
 
     # 新しいExcelブック作成
     wb = openpyxl.Workbook()
+
     # 書き込みシート選択
-    ws = wb.worksheets[0]
+    ws = wb.active
 
     # 設定データ取得
     setting_data = administrator_data.objects.all()
 
     # Excelに書き込み(項目名)
-    ws.cell(row = 1, column = 1, value = '一覧表示項目数')
-    ws.cell(row = 1, column = 2, value = 'ファイル場所_P')
-    ws.cell(row = 1, column = 3, value = 'ファイル場所_R')
-    ws.cell(row = 1, column = 4, value = 'ファイル場所_W1')
-    ws.cell(row = 1, column = 5, value = 'ファイル場所_W2')
-    ws.cell(row = 1, column = 6, value = 'ファイル場所_T1')
-    ws.cell(row = 1, column = 7, value = 'ファイル場所_T2')
-    ws.cell(row = 1, column = 8, value = 'ファイル場所_A1')
-    ws.cell(row = 1, column = 9, value = 'ファイル場所_A2')
-    ws.cell(row = 1, column = 10, value = 'バックアップ場所')
+    headers = [
+        '一覧表示項目数', 
+        ]
+    ws.append(headers)
 
-    # Excelに書き込み(項目)
-    for index, dt in enumerate(setting_data):
-      ws.cell(row = index + 2, column = 1, value = dt.menu_row)
-      ws.cell(row = index + 2, column = 2, value = dt.file_location_P)
-      ws.cell(row = index + 2, column = 3, value = dt.file_location_R)
-      ws.cell(row = index + 2, column = 4, value = dt.file_location_W1)
-      ws.cell(row = index + 2, column = 5, value = dt.file_location_W2)
-      ws.cell(row = index + 2, column = 6, value = dt.file_location_T1)
-      ws.cell(row = index + 2, column = 7, value = dt.file_location_T2)
-      ws.cell(row = index + 2, column = 8, value = dt.file_location_A1)
-      ws.cell(row = index + 2, column = 9, value = dt.file_location_A2)
-      ws.cell(row = index + 2, column = 10, value = dt.backup_file)
 
-    wb.save(r'{}\{}_管理者設定データバックアップ.xlsx'.format(default_data.backup_file, today))
+    # Excelに書き込み(データ)
+    for item in setting_data:
 
+      row = [
+        item.menu_row
+        ]
+      ws.append(row)
+
+
+    # メモリ上にExcelファイルを作成
+    excel_file = BytesIO()
+    wb.save(excel_file)
+    excel_file.seek(0)
+
+    # ファイル名を設定
+    filename = f'管理者設定_{today}.xlsx'
+
+    # URLエンコーディングされたファイル名を生成
+    quoted_filename = urllib.parse.quote(filename)
+    
+
+    # HttpResponseを作成してファイルをダウンロードさせる
+    response = HttpResponse(
+        excel_file.read(),
+        content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    )
+    # Content-Dispositionヘッダーを設定
+    response['Content-Disposition'] = f'attachment; filename*=UTF-8\'\'{quoted_filename}'
+    
+    return response
+  
 
 
   # 設定情報読み込み
@@ -1648,11 +1379,7 @@ def administrator_menu(request):
 
 
     # 読み込むファイルが正しいファイルでない場合の処理
-    if ws.cell(1, 1).value != '一覧表示項目数' or ws.cell(1, 2).value != 'ファイル場所_P' or \
-      ws.cell(1, 3).value != 'ファイル場所_R' or ws.cell(1, 4).value != 'ファイル場所_W1' or \
-      ws.cell(1, 5).value != 'ファイル場所_W2' or ws.cell(1, 6).value != 'ファイル場所_T1' or \
-      ws.cell(1, 7).value != 'ファイル場所_T2' or ws.cell(1, 8).value != 'ファイル場所_A1' or \
-      ws.cell(1, 9).value != 'ファイル場所_A2' or ws.cell(1, 10).value != 'バックアップ場所':
+    if ws.cell(1, 1).value != '一覧表示項目数':
 
       # エラーメッセージ出力
       messages.error(request, 'ロードしようとしたファイルは設定情報バックアップではありません。ERROR052')
@@ -1677,16 +1404,7 @@ def administrator_menu(request):
     for i in range(1, data_num):
 
       # Excelからデータを読み込み
-      new_data = administrator_data(menu_row = ws.cell(row = i + 1, column = 1).value, \
-                                    file_location_P = ws.cell(row = i + 1, column = 2).value, \
-                                    file_location_R = ws.cell(row = i + 1, column = 3).value, \
-                                    file_location_W1 = ws.cell(row = i + 1, column = 4).value, \
-                                    file_location_W2 = ws.cell(row = i + 1, column = 5).value, \
-                                    file_location_T1 = ws.cell(row = i + 1, column = 6).value, \
-                                    file_location_T2 = ws.cell(row = i + 1, column = 7).value, \
-                                    file_location_A1 = ws.cell(row = i + 1, column = 8).value, \
-                                    file_location_A2 = ws.cell(row = i + 1, column = 9).value, \
-                                    backup_file = ws.cell(row = i + 1, column = 10).value)
+      new_data = administrator_data(menu_row = ws.cell(row = i + 1, column = 1).value)
 
       new_data.save()
 

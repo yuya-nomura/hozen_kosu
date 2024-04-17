@@ -243,15 +243,6 @@ class kosu_division(models.Model):
 
 class administrator_data(models.Model):
     menu_row = models.CharField('一覧表示項目数', max_length = 3)
-    file_location_P = models.CharField('ファイル場所_P', max_length = 1000)
-    file_location_R = models.CharField('ファイル場所_R', max_length = 1000)
-    file_location_W1 = models.CharField('ファイル場所_W1', max_length = 1000)
-    file_location_W2 = models.CharField('ファイル場所_W2', max_length = 1000)
-    file_location_T1 = models.CharField('ファイル場所_T1', max_length = 1000)
-    file_location_T2 = models.CharField('ファイル場所_T2', max_length = 1000)
-    file_location_A1 = models.CharField('ファイル場所_A1', max_length = 1000)
-    file_location_A2 = models.CharField('ファイル場所_A2', max_length = 1000)
-    backup_file = models.CharField('バックアップ場所', max_length = 1000)
 
     def __str__(self):
         return '設定' + str(self.id)
