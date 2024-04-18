@@ -14,6 +14,7 @@ from ..models import member
 from ..models import Business_Time_graph
 from ..models import kosu_division
 from ..models import team_member
+from ..models import inquiry_data
 from ..models import administrator_data
 from ..forms import loginForm
 from ..forms import administrator_data_Form
@@ -1293,6 +1294,130 @@ def administrator_menu(request):
 
   
 
+  # お問い合わせバックアップ処理
+  if 'inquiry_backup' in request.POST:
+
+    # 今日の日付取得
+    today = datetime.date.today().strftime('%Y%m%d')
+
+    # 新しいExcelブック作成
+    wb = openpyxl.Workbook()
+
+    # 書き込みシート選択
+    ws = wb.active
+
+    # お問い合わせデータ取得
+    data = inquiry_data.objects.all()
+
+
+    # Excelに書き込み(項目名)
+    headers = [
+        '従業員番号', '氏名', '内容選択', '問い合わせ', '回答'
+        ]
+    ws.append(headers)
+
+
+    # Excelに書き込み(データ)
+    for item in data:
+
+      row = [
+        item.employee_No2, item.name, item.content_choice, item.inquiry, item.answer
+        ]
+      ws.append(row)
+
+
+    # メモリ上にExcelファイルを作成
+    excel_file = BytesIO()
+    wb.save(excel_file)
+    excel_file.seek(0)
+
+    # ファイル名を設定
+    filename = f'お問い合わせデータバックアップ_{today}.xlsx'
+
+    # URLエンコーディングされたファイル名を生成
+    quoted_filename = urllib.parse.quote(filename)
+    
+
+    # HttpResponseを作成してファイルをダウンロードさせる
+    response = HttpResponse(
+        excel_file.read(),
+        content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    )
+    # Content-Dispositionヘッダーを設定
+    response['Content-Disposition'] = f'attachment; filename*=UTF-8\'\'{quoted_filename}'
+    
+    return response
+  
+
+
+  # お問い合わせ読み込み
+  if 'inquiry_load' in request.POST:
+
+    # 工数データファイルが未選択時の処理
+    if 'inquiry_file' not in request.FILES:
+
+      # エラーメッセージ出力
+      messages.error(request, 'お問い合わせファイルが選択されていません。ERROR043')
+
+      # このページをリダイレクト
+      return redirect(to = '/administrator')
+
+
+    # POSTされたファイルパスを変数に入れる
+    file_path = request.FILES['inquiry_file']
+
+    # 一時的なファイルをサーバー上に作成
+    with open('inquiry_file_path.xlsx', 'wb+') as destination:
+
+      # アップロードしたファイルを一時ファイルに書き込み
+      for chunk in file_path.chunks():
+        destination.write(chunk)
+
+    # 指定Excelを開く
+    wb = openpyxl.load_workbook('inquiry_file_path.xlsx')
+    # 書き込みシート選択
+    ws = wb.worksheets[0]
+
+
+    # 読み込むファイルが正しいファイルでない場合の処理
+    if ws.cell(1, 1).value != '従業員番号' or ws.cell(1, 2).value != '氏名' or \
+      ws.cell(1, 3).value != '内容選択' or ws.cell(1, 4).value != '問い合わせ' or \
+      ws.cell(1, 5).value != '回答':
+      
+      # エラーメッセージ出力
+      messages.error(request, 'ロードしようとしたファイルはお問い合わせ情報バックアップではありません。ERROR030')
+      # このページをリダイレクト
+      return redirect(to = '/administrator')
+
+
+    # レコード数取得
+    data_num = ws.max_row
+
+    # 全てのお問い合わせデータを取得
+    inquiry_data_get = inquiry_data.objects.all()
+    
+    # 読お問い合わせデータを削除
+    inquiry_data_get.delete()
+
+
+    # Excelからデータを読み込むループ
+    for i in range(1, data_num):
+
+      # Excelからデータを読み込む
+      new_data = inquiry_data(employee_No2 = ws.cell(row = i + 1, column = 1).value, \
+                              name = ws.cell(row = i + 1, column = 2).value, \
+                              content_choice = ws.cell(row = i + 1, column = 3).value, \
+                              inquiry = ws.cell(row = i + 1, column = 4).value, \
+                              answer = ws.cell(row = i + 1, column = 5).value)
+
+      new_data.save()
+
+
+    # 一時ファイル削除
+    os.remove('inquiry_file_path.xlsx')
+
+
+
   # 設定情報バックアップ処理
   if 'setting_backup' in request.POST:
 
@@ -2009,6 +2134,10 @@ def help(request):
     # 一時ファイル削除
     os.remove('setting_file_path.xlsx')
 
+
+    # このページをリダイレクト
+    return redirect(to = '/login')
+  
 
 
   # HTMLに渡す辞書

@@ -464,6 +464,7 @@ class uploadForm(forms.Form):
   team_file = forms.FileField(label = '班員ファイル選択', required = False)
   member_file = forms.FileField(label = '人員ファイル選択', required = False)
   def_file = forms.FileField(label = '工数区分定義ファイル選択', required = False)
+  inquiry_file = forms.FileField(label = 'お問い合わせファイル選択', required = False)
   setting_file = forms.FileField(label = '設定ファイル選択', required = False)
 
 
