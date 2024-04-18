@@ -242,7 +242,7 @@ class kosu_division(models.Model):
 
 
 class administrator_data(models.Model):
-    menu_row = models.CharField('一覧表示項目数', max_length = 3)
+    menu_row = models.CharField('一覧表示項目数', max_length = 4)
 
     def __str__(self):
         return '設定' + str(self.id)
