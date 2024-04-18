@@ -2001,16 +2001,7 @@ def help(request):
     for i in range(1, data_num):
 
       # Excelからデータを読み込み
-      new_data2 = administrator_data(menu_row = ws2.cell(row = i + 1, column = 1).value, \
-                                    file_location_P = ws2.cell(row = i + 1, column = 2).value, \
-                                    file_location_R = ws2.cell(row = i + 1, column = 3).value, \
-                                    file_location_W1 = ws2.cell(row = i + 1, column = 4).value, \
-                                    file_location_W2 = ws2.cell(row = i + 1, column = 5).value, \
-                                    file_location_T1 = ws2.cell(row = i + 1, column = 6).value, \
-                                    file_location_T2 = ws2.cell(row = i + 1, column = 7).value, \
-                                    file_location_A1 = ws2.cell(row = i + 1, column = 8).value, \
-                                    file_location_A2 = ws2.cell(row = i + 1, column = 9).value, \
-                                    backup_file = ws2.cell(row = i + 1, column = 10).value)
+      new_data2 = administrator_data(menu_row = ws2.cell(row = i + 1, column = 1).value)
 
       new_data2.save()
 
