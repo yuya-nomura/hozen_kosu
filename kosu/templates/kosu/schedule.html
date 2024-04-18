@@ -725,9 +725,7 @@
       PCでアプリ使用時のみ使用できる機能です。
     </p>
     <p class="d-none d-md-block">
-      <input type="date" name="work_day1" id="work_day1" min={{min_day}} max={{max_day}} value={{default_day}}>～
-      <input type="date" name="work_day2" id="work_day2" min={{min_day}} max={{max_day}} value={{default_day}}>　　
-      <button type="submit" name="kosu_load" id="kosu_load" class="btn btn-blue2 mt-2">転記</button>
+      <button type="submit" name="kosu_load" id="kosu_load" class="btn btn-blue2 mt-2">表示月のデータをExcelにダウンロード</button>
     </p>
     <p class="d-none d-md-block">
       <input type="date" name="reset_day1" id="reset_day1" min={{min_day}} max={{max_day}} value={{default_day}}>～
@@ -737,7 +735,5 @@
      <p class="d-none d-md-block">
       ※転記済みの色塗りが消えるだけで転記した値に影響はしません。
     </p>
-
-    <script src="{% static 'kosu/js/loading.js' %}"></script>
   </body>
 </html>

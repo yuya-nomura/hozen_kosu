@@ -2,11 +2,12 @@ from django.shortcuts import render
 from django.shortcuts import redirect
 from django.contrib import messages
 from django.core.paginator import Paginator
+from django.http import HttpResponse
+from io import BytesIO
 import datetime
 import itertools
-import xlwings
-import math
-import os
+import openpyxl
+import urllib.parse
 from .. import forms
 from ..models import member
 from ..models import Business_Time_graph
@@ -4788,14 +4789,6 @@ def schedule(request):
   # 工数転記時の処理
   if 'kosu_load' in request.POST:
 
-    # 転記開始日が転記終了日より大きい場合の処理
-    if request.POST['work_day1'] > request.POST['work_day2']:
-
-      # エラーメッセージ出力
-      messages.error(request, '工数転記開始日が終了日を越えていますので転記できません。ERROR053')
-      # このページをリダイレクト
-      return redirect(to = '/schedule')
-
     # セッションから表示月を取り出し
     year = request.session.get('update_year', '')
     month = request.session.get('update_month', '')
@@ -5141,270 +5134,184 @@ def schedule(request):
     form = scheduleForm(form_default_list)
 
 
-    # 年月でファイル名作成
-    file_name = str(year) + str(month).zfill(2)
-    # パス設定取得
-    path_obj = administrator_data.objects.order_by("id").last()
-    # ファイルパスのリスト作成
-    path_list = [path_obj.file_location_P + '\\' + file_name + 'P.xlsx', \
-                 path_obj.file_location_R + '\\' +  file_name + 'R.xlsx', \
-                 path_obj.file_location_W1 + '\\' +  file_name + 'W1.xlsx', \
-                 path_obj.file_location_W2 + '\\' +  file_name + 'W2.xlsx', \
-                 path_obj.file_location_T1 + '\\' +  file_name + 'T1.xlsx', \
-                 path_obj.file_location_T2 + '\\' +  file_name + 'T2.xlsx', \
-                 path_obj.file_location_A1 + '\\' +  file_name + 'A1.xlsx', \
-                 path_obj.file_location_A2 + '\\' +  file_name + 'A2.xlsx']
-    # ショップ名とインデックス定義
-    shop_list = {'P' : 1, 'R' : 2, 'W1' : 3, 'W2' : 4, 'T1' : 5, 'T2' : 6, 'A1' : 7, 'A2' : 8}
+    # 今日の日付取得
+    today = datetime.date.today().strftime('%Y%m%d')
 
-    # ログイン者の情報取得
-    login_data = member.objects.get(employee_No = request.session.get('login_No', ''))
-    # ログイン者のショップ取得
-    login_shop = login_data.shop
+    # 新しいExcelブック作成
+    wb = openpyxl.Workbook()
 
-    # ファイルパスのリストのログイン者のショップを前に持ってくる
-    for shop, val in shop_list.items():
-      if login_shop == shop:
-        path_list = path_list*2
-        del path_list[ : val - 1]
-        del path_list[8 : ]
+    # 書き込みシート選択
+    ws = wb.active
+
+
+    # 項目用リスト定義
+    headers = ['日付']
+    def_item = ['勤務', '残業']
+
+
+    # データのある月の最初の日付の工数定義区分名取得するループ
+    for de in range(1, 31):
+
+      # 1日ごとに工数データがあるか確認
+      month_def_filter = Business_Time_graph.objects.filter(employee_No3 = request.session.get('login_No', None), \
+                                                            work_day2 = datetime.date(int(year), int(month), de))
+      
+      # 工数データがある場合の処理
+      if month_def_filter.count() != 0:
+
+        # 工数データ取得
+        month_def_get = Business_Time_graph.objects.get(employee_No3 = request.session.get('login_No', None), \
+                                                        work_day2 = datetime.date(int(year), int(month), de))
+        
+        # 工数区分定義名取得
+        month_def_Ver = month_def_get.def_Ver2
+
+        # ループから抜ける
         break
 
-    # 転記可否
-    load_Excel = 0
-    # 業務工数ファイル順番に開く
-    for file in path_list:
-      # 業務工数ファイルのパスが使用可能なことを確認
-      if os.path.isfile(file) == True:
 
-        # 業務工数ファイルが他で開かれていれば他を探す
-        if Excel_open(file):
-          error_shop = file[-7:-5]
-          # エラーメッセージ出力
-          messages.error(request, \
-            '{}のファイルは他のPCで開かれているため転記できていません。ERROR054'.format(error_shop))
-          break
+    # 取得した工数区分定義名から工数区分定義データを読み出し
+    def_get = kosu_division.objects.get(kosu_name = month_def_Ver)
 
-        # 指定Excelを開きメニュー画面指定
-        wb = xlwings.Book(file, read_only = False, ignore_read_only_recommended = True)
-        ws = xlwings.sheets["メニュー"]
-        ws.activate()
+    # 工数区分定義カウントリセット
+    def_num = 0
+    # 工数区分定義の数をカウントするループ
+    for n in range(1, 51):
 
-        # ログイン者の従業員番号をメニュー画面から検索
-        member_num = ''
-        for i in range(9):
-          member_page = ''
+      # 工数区分定義の項目がある場合の処理
+      if eval('def_get.kosu_title_{}'.format(n)) != None:
 
-          # A班にログイン者がいるか検索
-          if xlwings.Range((16 + i, 5)).value != None:
-            if str(math.floor(xlwings.Range((16 + i, 5)).value)) == request.session.get('login_No', ''):
-              # 班長かメンバーかを検出
-              if i == 0:
-                member_num = 'HL'
-              else:
-                member_num = 'M' + str(i)
+        # 工数区分定義の項目数記録
+        def_num = n
 
-              # 業務工数ページ名を生成しメニュー画面からの検索ループから抜ける
-              member_page = 'A' + member_num
-              break
-        
-          # B班にログイン者がいるか検索
-          if xlwings.Range((16 + i, 9)).value != None:
-            if str(math.floor(xlwings.Range((16 + i, 9)).value)) == request.session.get('login_No', ''):
-              # 班長かメンバーかを検出
-              if i == 0:
-                member_num = 'HL'
-              else:
-                member_num = 'M' + str(i)
+   
+   # 工数区分定義の項目名のリスト作成ループ
+    for a in range(def_num):
 
-              # 業務工数ページ名を生成しメニュー画面からの検索ループから抜ける
-              member_page = 'B' + member_num
-              break
+      # リストに工数区分定義項目名追加
+      def_item.append(eval('def_get.kosu_title_{}'.format(a + 1)))
 
-          # C班にログイン者がいるか検索
-          if xlwings.Range((16 + i, 13)).value != None:
-            if str(math.floor(xlwings.Range((16 + i, 13)).value)) == request.session.get('login_No', ''):
-              # 班長かメンバーかを検出
-              if i == 0:
-                member_num = 'HL'
-              else:
-                member_num = 'M' + str(i)
 
-              # 業務工数ページ名を生成しメニュー画面からの検索ループから抜ける
-              member_page = 'C' + member_num
-              break
+    # Excelに書き込み(項目名)
+    for d in day_list:
 
-          # 常昼にログイン者がいるか検索
-          if xlwings.Range((6 + i, 5)).value != None:
-            if str(math.floor(xlwings.Range((6 + i, 5)).value)) == request.session.get('login_No', ''):
-              # 業務工数ページ名を生成しメニュー画面からの検索ループから抜ける
-              if i == 0:
-                member_page = 'KL'
-              else:
-                member_page = 'M' + str(i)
+      if d != '':
+        headers.append(datetime.date(year, month, d))
 
-              break
+    ws.append(headers)
 
-          # 白直班にログイン者がいるか検索
-          if xlwings.Range((6 + i, 9)).value != None:
-            if str(math.floor(xlwings.Range((6 + i, 9)).value)) == request.session.get('login_No', ''):
-              # 班長かメンバーかを検出
-              if i == 0:
-                member_num = 'HL'
-              else:
-                member_num = 'M' + str(i)
 
-              # 業務工数ページ名を生成しメニュー画面からの検索ループから抜ける
-              member_page = 'W' + member_num
-              break
+    for item_i, item_d in enumerate(def_item):
 
-          # 黄直班にログイン者がいるか検索
-          if xlwings.Range((6 + i, 13)).value != None:
-            if str(math.floor(xlwings.Range((6 + i, 13)).value)) == request.session.get('login_No', ''):
-              # 班長かメンバーかを検出
-              if i == 0:
-                member_num = 'HL'
-              else:
-                member_num = 'M' + str(i)
+      ws.cell(row = item_i + 2, column = 1, value = item_d)
 
-              # 業務工数ページ名を生成しメニュー画面からの検索ループから抜ける
-              member_page = 'Y' + member_num
-              break
+    # Excelに書き込み(データ)
+    for di, dd in enumerate(day_list):
 
-        # ログイン者の従業員番号がメニューにない場合、Excelを閉じる
-        if member_page == '':
+      if dd != '':
 
-          # Excelを閉じる
-          wb.close()
-          app = xlwings.App()
-          app.kill()
+        # ログイン者の工数データがあるか確認
+        obj_filter = Business_Time_graph.objects.filter(employee_No3 = request.session.get('login_No', None), \
+                                                        work_day2 = datetime.date(int(year), int(month), dd))
 
-        # ログイン者の従業員番号がメニューにあった場合の処理
+        # ログイン者の入力期間の就業データがある場合の処理
+        if obj_filter.count() != 0:
+
+          # ログイン者の就業データ取得
+          obj_get = Business_Time_graph.objects.get(employee_No3 = request.session.get('login_No', None), \
+                                                      work_day2 = datetime.date(int(year), int(month), dd))
+
+          # 勤務データ取得
+          work = obj_get.work_time
+          
+          # 残業データ取得
+          over_time = obj_get.over_time
+
+          # 就業データの中に工数区分定義Verのデータがある場合の処理
+          if obj_get.def_Ver2 !='':
+
+            # 工数区分定義データ取得
+            def_obj_get = kosu_division.objects.get(kosu_name = obj_get.def_Ver2)
+
+            # 工数区分定義の数をカウント
+            def_num = 0
+            for n in range(1, 51):
+              if eval('def_obj_get.kosu_title_{}'.format(n)) != None:
+                def_num = n
+
+            # 工数データをリストに解凍
+            data_list = list(obj_get.time_work)
+
+            # 工数データリスト内の各文字を定義
+            str_list = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', \
+                        'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', \
+                          'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', \
+                              'q', 'r', 's', 't', 'u', 'v', 'w', 'x',]
+            # 工数データリスト内の各文字を工数区分定義の数に調整
+            del str_list[def_num:]
+
+            # 各工数区分定義の累積工数リスト作成
+            str_n = 0
+            kosu_list = []
+
+            for i in str_list:
+
+              for k in range(288):
+                if data_list[k] == i:
+                  str_n += 5
+
+              kosu_list.append(str_n)
+              str_n = 0
+
+
+          # 就業データの中に工数区分定義Verのデータがない場合の処理
+          else:
+            # 空の工数書き込みリスト作成
+            kosu_list = []
+
+            # 工数書き込み済み記録
+            Business_Time_graph.objects.update_or_create(employee_No3 = request.session.get('login_No', None), \
+                            work_day2 = datetime.date(int(year), int(month), dd), defaults = {'completion' : True})
+
+
+        # ログイン者の入力期間の就業データがない場合の処理
         else:
 
-          # ログイン者の工数入力ページアクティブにする
-          ws_write = xlwings.sheets[member_page]
-          ws_write.activate()
+          # 空の工数書き込みリスト作成
+          kosu_list = []
+          work = ''
+          over_time = ''
 
-          # 入力期間の始点、終点のインデックス取得
-          for d in range(31):
-            if xlwings.Range((5, 4 + d)).value == \
-              datetime.datetime.strptime(request.POST['work_day1'], '%Y-%m-%d'):
-              start_kosu = d
 
-            if xlwings.Range((5, 4 + d)).value == \
-              datetime.datetime.strptime(request.POST['work_day2'], '%Y-%m-%d'):
-              end_kosu = d
+        kosu_list.insert(0, over_time)
+        kosu_list.insert(0, work)
+        # 工数リストから工数を1つずつ取り出し書き込み
+        for index, kosu in enumerate(kosu_list):
+          ws.cell(row = index + 2, column = di + 2, value = kosu)
 
-          # 指定期間の工数を入力する
-          for dd in range(start_kosu, end_kosu + 1):
 
-            # ログイン者の工数データがあるか確認
-            kosu_total = Business_Time_graph.objects.filter(employee_No3 = \
-                          request.session.get('login_No', None), work_day2 = \
-                           datetime.date(int(year), int(month), dd + 1))
-            
-            # ログイン者の入力期間の就業データがある場合の処理
-            if kosu_total.count() != 0:
+    # メモリ上にExcelファイルを作成
+    excel_file = BytesIO()
+    wb.save(excel_file)
+    excel_file.seek(0)
 
-              # ログイン者の就業データ取得
-              work_data = Business_Time_graph.objects.get(employee_No3 = \
-                           request.session.get('login_No', None), work_day2 = \
-                            datetime.date(int(year), int(month), dd + 1))
+    # ファイル名を設定
+    filename = f'{year}年{month}月度工数データ_{today}.xlsx'
 
-              # 勤務データ取得
-              work = work_data.work_time
-              # 就業データ書き込み
-              xlwings.Range((8, 4 + dd)).value = work
+    # URLエンコーディングされたファイル名を生成
+    quoted_filename = urllib.parse.quote(filename)
+    
 
-              # 残業データ取得
-              over_time = work_data.over_time
-              # 残業データ書き込み
-              xlwings.Range((10, 4 + dd)).value = over_time
+    # HttpResponseを作成してファイルをダウンロードさせる
+    response = HttpResponse(
+        excel_file.read(),
+        content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    )
+    # Content-Dispositionヘッダーを設定
+    response['Content-Disposition'] = f'attachment; filename*=UTF-8\'\'{quoted_filename}'
+    
+    return response
 
-              # 就業データの中に工数区分定義Verのデータがある場合の処理
-              if work_data.def_Ver2 !='':
-
-                # 工数区分定義データ取得
-                kosu_obj = kosu_division.objects.get(kosu_name = work_data.def_Ver2)
-
-                # 工数区分定義の数をカウント
-                def_num = 0
-                for n in range(1, 51):
-                  if eval('kosu_obj.kosu_title_{}'.format(n)) != None:
-                    def_num = n
-
-                # 工数データをリストに解凍
-                data_list = list(work_data.time_work)
-
-                # 工数データリスト内の各文字を定義
-                str_list = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', \
-                            'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', \
-                              'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', \
-                                  'q', 'r', 's', 't', 'u', 'v', 'w', 'x',]
-                # 工数データリスト内の各文字を工数区分定義の数に調整
-                del str_list[def_num:]
-
-                # 各工数区分定義の累積工数リスト作成
-                str_n = 0
-                kosu_list = []
-
-                for i in str_list:
-
-                  for k in range(288):
-                    if data_list[k] == i:
-                      str_n += 5
-
-                  kosu_list.append(str_n)
-                  str_n = 0
-
-              # 就業データの中に工数区分定義Verのデータがない場合の処理
-              else:
-
-                # 空の工数書き込みリスト作成
-                kosu_list = []
-
-              # 工数書き込み済み記録
-              Business_Time_graph.objects.update_or_create(employee_No3 = \
-                            request.session.get('login_No', None), \
-                             work_day2 = datetime.date(int(year), int(month), dd + 1), \
-                              defaults = {'completion' : True})
-
-            # ログイン者の入力期間の工数集計データがない場合の処理
-            if kosu_total.count() == 0:
-
-              # 空の工数書き込みリスト作成
-              kosu_list = []
-
-            # 工数リストから工数を1つずつ取り出し書き込み
-            for index, kosu in enumerate(kosu_list):
-              xlwings.Range((14 + index, 4 + dd)).value = kosu
-
-          # 転記実施済
-          load_Excel = 1
-
-          # Excel保存
-          wb.save()
-          # Excelを閉じる
-          wb.close()
-          app = xlwings.App()
-          app.kill()
-          break
-
-      # 指定パスが有効でない場合の処理
-      else:
-        
-        # ショップ取得
-        if Excel_open(file):
-          error_shop = file[-7:-5]
-          # エラー出力
-          messages.error(request, '{}のファイルパスが有効ではありません。ERROR055'.format(error_shop))
-
-    # 転記できていない場合エラー出力
-    if load_Excel == 0:
-      # エラーメッセージ出力
-      messages.error(request, \
-        'あなたの従業員番号は各ショップの業務工数ファイルにないため転記できませんでした。ERROR056')
 
 
   # 工数転記済リセット時の処理
@@ -5852,22 +5759,3 @@ def schedule(request):
 
 #--------------------------------------------------------------------------------------------------------
 
-
-
-
-
-# Excelファイルが開いているか判定する関数
-def Excel_open(filepath: str) -> bool:
-  try:
-    f = open(filepath, 'a')
-    f.close()
-  except:
-    return True
-  else:
-    return False
-
-
-
-
-
-#--------------------------------------------------------------------------------------------------------
