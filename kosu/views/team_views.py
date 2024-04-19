@@ -34,13 +34,13 @@ def team(request):
     return redirect(to = '/login')
   
   # ログイン者の情報取得
-  data = member.objects.get(employee_No = request.session.get('login_No', None))
+  data = member.objects.get(employee_no = request.session.get('login_No', None))
   # ログイン者に権限がなければメインページに戻る
   if data.authority == False:
     return redirect(to = '/')
   
   # ログイン者の班員情報取得
-  data2 = team_member.objects.filter(employee_No5 = request.session.get('login_No', None))
+  data2 = team_member.objects.filter(employee_no5 = request.session.get('login_No', None))
 
 
   # ログイン者の班員登録がない場合の処理
@@ -49,19 +49,19 @@ def team(request):
     # ログイン者が組長以上か確認
     if data.shop == '組長以上':
       # 組長以上なら人員登録のオブジェクトを全て取得
-      member_obj = member.objects.all().order_by('employee_No')
+      member_obj = member.objects.all().order_by('employee_no')
     else:
       # そうでないならログイン者と同じショップの人員のオブジェクトを取得
-      member_obj = member.objects.filter(shop = data.shop).order_by('employee_No')
+      member_obj = member.objects.filter(shop = data.shop).order_by('employee_no')
 
     # 人員登録のある従業員番号の選択リスト作成
     choices_list = [('','')]
     for i in member_obj:
-      choices_list.append((i.employee_No, str(i.name)))
+      choices_list.append((i.employee_no, str(i.name)))
     # フォーム初期値を用意
-    employee_No_list = {'employee_No5' : request.session.get('login_No', None)}
+    employee_no_list = {'employee_no5' : request.session.get('login_No', None)}
     # フォームを用意
-    form = teamForm(employee_No_list)
+    form = teamForm(employee_no_list)
     # フォームの選択肢定義
     form.fields['member1'].choices = choices_list
     form.fields['member2'].choices = choices_list
@@ -90,7 +90,7 @@ def team(request):
       member10 = request.POST['member10']
 
       # POSTされた値をモデルのそれぞれのフィールドに入れる
-      new = team_member(employee_No5 = request.session.get('login_No', None), \
+      new = team_member(employee_no5 = request.session.get('login_No', None), \
                         member1 = member1, member2 = member2, member3 = member3, \
                         member4 = member4, member5 = member5, member6 = member6, \
                         member7 = member7, member8 = member8, member9 = member9, \
@@ -105,22 +105,22 @@ def team(request):
   # ログイン者の班員登録がある場合の処理
   if data2.count() >= 1:
     # ログイン者の班員登録のオブジェクトを取得
-    obj = team_member.objects.get(employee_No5 = request.session.get('login_No', None))
+    obj = team_member.objects.get(employee_no5 = request.session.get('login_No', None))
 
     # ログイン者が組長以上か確認
     if data.shop == '組長以上':
       # 組長以上なら人員登録のオブジェクトを全て取得
-      member_obj = member.objects.all().order_by('employee_No')
+      member_obj = member.objects.all().order_by('employee_no')
     else:
       # そうでないならログイン者と同じショップの人員のオブジェクトを取得
-      member_obj = member.objects.filter(shop = data.shop).order_by('employee_No')
+      member_obj = member.objects.filter(shop = data.shop).order_by('employee_no')
 
     # 人員登録のある従業員番号の選択リスト作成
     choices_list = [('','')]
     for i in member_obj:
-      choices_list.append((i.employee_No, str(i.name)))
+      choices_list.append((i.employee_no, str(i.name)))
     # フォーム初期値を用意
-    form_list = {'employee_No5' : request.session.get('login_No', None), \
+    form_list = {'employee_no5' : request.session.get('login_No', None), \
                  'member1' : obj.member1, \
                  'member2' : obj.member2, \
                  'member3' : obj.member3, \
@@ -149,7 +149,7 @@ def team(request):
     if (request.method == 'POST'):
 
       # 指定IDのレコードにPOST送信された値を上書きする
-      team_member.objects.update_or_create(employee_No5 = request.session.get('login_No', None), \
+      team_member.objects.update_or_create(employee_no5 = request.session.get('login_No', None), \
           defaults = {'member1' : request.POST['member1'], 'member2' : request.POST['member2'], \
                       'member3' : request.POST['member3'], 'member4' : request.POST['member4'], \
                       'member5' : request.POST['member5'], 'member6' : request.POST['member6'], \
@@ -182,13 +182,13 @@ def team_graph(request):
     return redirect(to = '/login')
   
   # ログイン者の情報取得
-  data = member.objects.get(employee_No = request.session.get('login_No', None))
+  data = member.objects.get(employee_no = request.session.get('login_No', None))
   # ログイン者に権限がなければメインページに戻る
   if data.authority == False:
     return redirect(to = '/')
 
   # ログイン者の班員登録情報取得
-  data = team_member.objects.filter(employee_No5 = request.session.get('login_No', None))
+  data = team_member.objects.filter(employee_no5 = request.session.get('login_No', None))
   # 班員登録がなければメインページに戻る
   if data.count() == 0:
     return redirect(to = '/')
@@ -222,7 +222,7 @@ def team_graph(request):
     form = team_kosuForm(request.POST)
 
   # ログイン者の班員データ取得
-  obj = team_member.objects.get(employee_No5 = request.session.get('login_No', None))
+  obj = team_member.objects.get(employee_no5 = request.session.get('login_No', None))
   # 班員データに空があった場合0を定義
   for i in range(1, 11):
     if eval('obj.member{}'.format(i)) == '':
@@ -234,9 +234,9 @@ def team_graph(request):
   n = 0
   name_list = []
   for i in range(1, 11):
-    member_filter =  member.objects.filter(employee_No = eval('obj_member{}'.format(i)))
+    member_filter =  member.objects.filter(employee_no = eval('obj_member{}'.format(i)))
     if member_filter.count() != 0:
-      member_data = member.objects.get(employee_No = eval('obj_member{}'.format(i)))
+      member_data = member.objects.get(employee_no = eval('obj_member{}'.format(i)))
       name_list.append(member_data.name)
       n = i
     else:
@@ -244,12 +244,12 @@ def team_graph(request):
 
   
   # グラフデータ作成関数定義
-  def graph_function(employee_No_data):
+  def graph_function(employee_no_data):
     # グラフデータ確認
-    graph_filter = Business_Time_graph.objects.filter(employee_No3 = employee_No_data, work_day2 = kosu_today)
+    graph_filter = Business_Time_graph.objects.filter(employee_no3 = employee_no_data, work_day2 = kosu_today)
 
     # 指定した人員データ取得
-    member_obj = member.objects.get(employee_No = employee_No_data)
+    member_obj = member.objects.get(employee_no = employee_no_data)
 
     # グラフデータ無い場合の処理
     if graph_filter.count() == 0:
@@ -269,7 +269,7 @@ def team_graph(request):
 
     else:
       # グラフデータ取得
-      graph_data = Business_Time_graph.objects.get(employee_No3 = employee_No_data, work_day2 = kosu_today)
+      graph_data = Business_Time_graph.objects.get(employee_no3 = employee_no_data, work_day2 = kosu_today)
       graph_list = list(graph_data.time_work)
 
       # グラフラベルデータ
@@ -486,11 +486,11 @@ def team_kosu(request, num):
   kosu_today = dt.date()
 
   # フォームの初期値に定義する辞書作成
-  if request.session.get('find_employee_No', '') != '' or \
+  if request.session.get('find_employee_no', '') != '' or \
     request.session.get('find_team_day', '') != '':
 
     start_list = {'team_day' : request.session.get('find_team_day', ''), \
-                  'employee_No6' : request.session.get('find_employee_No', '')}
+                  'employee_no6' : request.session.get('find_employee_no', '')}
     
   else:
 
@@ -503,21 +503,21 @@ def team_kosu(request, num):
   
 
   # ログイン者の情報取得
-  data = member.objects.get(employee_No = request.session.get('login_No', None))
+  data = member.objects.get(employee_no = request.session.get('login_No', None))
   # ログイン者に権限がなければメインページに戻る
   if data.authority == False:
     return redirect(to = '/')
 
 
   # ログイン者の班員登録情報取得
-  data3 = team_member.objects.filter(employee_No5 = request.session.get('login_No', None))
+  data3 = team_member.objects.filter(employee_no5 = request.session.get('login_No', None))
   # 班員登録がなければメインページに戻る
   if data3.count() == 0:
     return redirect(to = '/')
   
 
   # フォームの選択肢に使用するログイン者の班員設定のオブジェクト取得
-  form_choices = team_member.objects.get(employee_No5 = request.session.get('login_No', None))
+  form_choices = team_member.objects.get(employee_no5 = request.session.get('login_No', None))
 
   # 選択肢の表示数検出
   for i in range(1, 11):
@@ -530,7 +530,7 @@ def team_kosu(request, num):
 
   # 班員リストリセット
   choices_list = [['','']]
-  employee_No_list = []
+  employee_no_list = []
   name_list =[]
 
   # 班員リスト作成
@@ -540,15 +540,15 @@ def team_kosu(request, num):
     choices_element = []
 
     # 班員の従業員番号リスト作成
-    employee_No_list.append(eval('form_choices.member{}'.format(i + 1)))
+    employee_no_list.append(eval('form_choices.member{}'.format(i + 1)))
 
     # 班員の従業員番号が人員データにあるか確認
-    obj_filter = member.objects.filter(employee_No__contains = employee_No_list[i])
+    obj_filter = member.objects.filter(employee_no__contains = employee_no_list[i])
     # 班員の従業員番号が人員データにある場合の処理
     if obj_filter.count() == 1:
 
       # 班員の従業員番号から人員データ取得
-      obj_get = member.objects.get(employee_No = employee_No_list[i])
+      obj_get = member.objects.get(employee_no = employee_no_list[i])
       # 班員の名前リスト作成
       name_list.append(obj_get.name)
 
@@ -559,7 +559,7 @@ def team_kosu(request, num):
       name_list.append('')
 
     # 従業員番号と名前の選択肢作成
-    choices_element = choices_element + [employee_No_list[i], name_list[i]]
+    choices_element = choices_element + [employee_no_list[i], name_list[i]]
     # 選択肢を選択肢リストに追加
     choices_list.append(choices_element)
 
@@ -575,16 +575,16 @@ def team_kosu(request, num):
     form = team_kosuForm(request.POST)
 
     # フォームの選択肢定義
-    form.fields['employee_No6'].choices = choices_list
+    form.fields['employee_no6'].choices = choices_list
 
     # POSTした値を変数に入れる
-    find = request.POST['employee_No6']
+    find = request.POST['employee_no6']
     find2 = request.POST['team_day']
-    request.session['find_employee_No'] = find
+    request.session['find_employee_no'] = find
     request.session['find_team_day'] = find2
 
     # 就業日と班員の従業員番号でフィルターをかけて一致したものをHTML表示用変数に入れる
-    data2 = Business_Time_graph.objects.filter(employee_No3__icontains = find, \
+    data2 = Business_Time_graph.objects.filter(employee_no3__icontains = find, \
       work_day__contains = find2).order_by('work_day', 'start_hour', 'start_min').reverse()
 
     page = Paginator(data2, page_num.menu_row)
@@ -596,20 +596,20 @@ def team_kosu(request, num):
     form = team_kosuForm(start_list)
 
     # フォームの選択肢定義
-    form.fields['employee_No6'].choices = choices_list
+    form.fields['employee_no6'].choices = choices_list
 
     # 班員の従業員番号でフィルターをかけて一致したものをHTML表示用変数に入れる
-    data2 = Business_Time_graph.objects.filter(Q(employee_No3__icontains = form_choices.member1)|\
-      Q(employee_No3__icontains = form_choices.member2)|\
-      Q(employee_No3__icontains = form_choices.member3)|\
-      Q(employee_No3__icontains = form_choices.member4)|\
-      Q(employee_No3__icontains = form_choices.member5)|\
-      Q(employee_No3__icontains = form_choices.member6)|\
-      Q(employee_No3__icontains = form_choices.member7)|\
-      Q(employee_No3__icontains = form_choices.member8)|\
-      Q(employee_No3__icontains = form_choices.member9)|\
-      Q(employee_No3__icontains = form_choices.member10), \
-      employee_No3__icontains = request.session.get('find_employee_No', ''), \
+    data2 = Business_Time_graph.objects.filter(Q(employee_no3__icontains = form_choices.member1)|\
+      Q(employee_no3__icontains = form_choices.member2)|\
+      Q(employee_no3__icontains = form_choices.member3)|\
+      Q(employee_no3__icontains = form_choices.member4)|\
+      Q(employee_no3__icontains = form_choices.member5)|\
+      Q(employee_no3__icontains = form_choices.member6)|\
+      Q(employee_no3__icontains = form_choices.member7)|\
+      Q(employee_no3__icontains = form_choices.member8)|\
+      Q(employee_no3__icontains = form_choices.member9)|\
+      Q(employee_no3__icontains = form_choices.member10), \
+      employee_no3__icontains = request.session.get('find_employee_no', ''), \
       work_day2__contains = request.session.get('find_team_day', ''))\
       .order_by('work_day2').reverse()
     
@@ -642,13 +642,13 @@ def team_detail(request, num):
     return redirect(to = '/login')
   
   # ログイン者の情報取得
-  data = member.objects.get(employee_No = request.session.get('login_No', None))
+  data = member.objects.get(employee_no = request.session.get('login_No', None))
   # ログイン者に権限がなければメインページに戻る
   if data.authority == False:
     return redirect(to = '/')
 
   # ログイン者の班員登録情報取得
-  data3 = team_member.objects.filter(employee_No5 = request.session.get('login_No', None))
+  data3 = team_member.objects.filter(employee_no5 = request.session.get('login_No', None))
   # 班員登録がなければメインページに戻る
   if data3.count() == 0:
     return redirect(to = '/')
@@ -800,13 +800,13 @@ def team_calendar(request):
     return redirect(to = '/login')
   
   # ログイン者の情報取得
-  data = member.objects.get(employee_No = request.session.get('login_No', None))
+  data = member.objects.get(employee_no = request.session.get('login_No', None))
   # ログイン者に権限がなければメインページに戻る
   if data.authority == False:
     return redirect(to = '/')
 
   # ログイン者の班員登録情報取得
-  data3 = team_member.objects.filter(employee_No5 = request.session.get('login_No', None))
+  data3 = team_member.objects.filter(employee_no5 = request.session.get('login_No', None))
   # 班員登録がなければメインページに戻る
   if data3.count() == 0:
     return redirect(to = '/')
@@ -1156,16 +1156,16 @@ def team_calendar(request):
 
 
   # ログイン者の班員取得
-  obj_get = team_member.objects.get(employee_No5 = request.session.get('login_No', None))
+  obj_get = team_member.objects.get(employee_no5 = request.session.get('login_No', None))
 
 
   # 班員1人目の従業員番号の人員がいるか確認
-  member1_obj_filter = member.objects.filter(employee_No__contains = obj_get.member1)
+  member1_obj_filter = member.objects.filter(employee_no__contains = obj_get.member1)
   # 班員1人目の従業員番号の人員がいる場合の処理
   if member1_obj_filter.count() == 1:
 
      # 班員1人目の名前取得
-    member1_obj_get = member.objects.get(employee_No = obj_get.member1)
+    member1_obj_get = member.objects.get(employee_no = obj_get.member1)
 
   # 班員1人目の従業員番号の人員がいない場合の処理
   else:
@@ -1175,12 +1175,12 @@ def team_calendar(request):
 
 
   # 班員2人目の従業員番号の人員がいるか確認
-  member2_obj_filter = member.objects.filter(employee_No__contains = obj_get.member2)
+  member2_obj_filter = member.objects.filter(employee_no__contains = obj_get.member2)
   # 班員2人目の従業員番号の人員がいる場合の処理
   if member2_obj_filter.count() == 1:
 
     # 班員2人目の名前取得
-    member2_obj_get = member.objects.get(employee_No = obj_get.member2)
+    member2_obj_get = member.objects.get(employee_no = obj_get.member2)
 
   # 班員2人目の従業員番号の人員がいない場合の処理
   else:
@@ -1190,12 +1190,12 @@ def team_calendar(request):
 
 
   # 班員3人目の従業員番号の人員がいるか確認
-  member3_obj_filter = member.objects.filter(employee_No__contains = obj_get.member3)
+  member3_obj_filter = member.objects.filter(employee_no__contains = obj_get.member3)
   # 班員3人目の従業員番号の人員がいる場合の処理
   if member3_obj_filter.count() == 1:
 
     # 班員3人目の名前取得
-    member3_obj_get = member.objects.get(employee_No = obj_get.member3)
+    member3_obj_get = member.objects.get(employee_no = obj_get.member3)
 
   # 班員3人目の従業員番号の人員がいない場合の処理
   else:
@@ -1205,12 +1205,12 @@ def team_calendar(request):
 
 
   # 班員4人目の従業員番号の人員がいるか確認
-  member4_obj_filter = member.objects.filter(employee_No__contains = obj_get.member4)
+  member4_obj_filter = member.objects.filter(employee_no__contains = obj_get.member4)
   # 班員4人目の従業員番号の人員がいる場合の処理
   if member4_obj_filter.count() == 1:
 
     # 班員4人目の名前取得
-    member4_obj_get = member.objects.get(employee_No = obj_get.member4)
+    member4_obj_get = member.objects.get(employee_no = obj_get.member4)
 
   # 班員4人目の従業員番号の人員がいない場合の処理
   else:
@@ -1220,12 +1220,12 @@ def team_calendar(request):
 
 
   # 班員5人目の従業員番号の人員がいるか確認
-  member5_obj_filter = member.objects.filter(employee_No__contains = obj_get.member5)
+  member5_obj_filter = member.objects.filter(employee_no__contains = obj_get.member5)
   # 班員5人目の従業員番号の人員がいる場合の処理
   if member5_obj_filter.count() == 1:
 
     # 班員5人目の名前取得
-    member5_obj_get = member.objects.get(employee_No = obj_get.member5)
+    member5_obj_get = member.objects.get(employee_no = obj_get.member5)
 
   # 班員5人目の従業員番号の人員がいない場合の処理
   else:
@@ -1235,12 +1235,12 @@ def team_calendar(request):
 
 
   # 班員6人目の従業員番号の人員がいるか確認
-  member6_obj_filter = member.objects.filter(employee_No__contains = obj_get.member6)
+  member6_obj_filter = member.objects.filter(employee_no__contains = obj_get.member6)
   # 班員6人目の従業員番号の人員がいる場合の処理
   if member6_obj_filter.count() == 1:
 
     # 班員6人目の名前取得
-    member6_obj_get = member.objects.get(employee_No = obj_get.member6)
+    member6_obj_get = member.objects.get(employee_no = obj_get.member6)
 
   # 班員6人目の従業員番号の人員がいない場合の処理
   else:
@@ -1250,12 +1250,12 @@ def team_calendar(request):
 
 
   # 班員7人目の従業員番号の人員がいるか確認
-  member7_obj_filter = member.objects.filter(employee_No__contains = obj_get.member7)
+  member7_obj_filter = member.objects.filter(employee_no__contains = obj_get.member7)
   # 班員7人目の従業員番号の人員がいる場合の処理
   if member7_obj_filter.count() == 1:
 
     # 班員7人目の名前取得
-    member7_obj_get = member.objects.get(employee_No = obj_get.member7)
+    member7_obj_get = member.objects.get(employee_no = obj_get.member7)
 
   # 班員7人目の従業員番号の人員がいない場合の処理
   else:
@@ -1265,12 +1265,12 @@ def team_calendar(request):
 
 
   # 班員8人目の従業員番号の人員がいるか確認
-  member8_obj_filter = member.objects.filter(employee_No__contains = obj_get.member8)
+  member8_obj_filter = member.objects.filter(employee_no__contains = obj_get.member8)
   # 班員8人目の従業員番号の人員がいる場合の処理
   if member8_obj_filter.count() == 1:
 
     # 班員8人目の名前取得
-    member8_obj_get = member.objects.get(employee_No = obj_get.member8)
+    member8_obj_get = member.objects.get(employee_no = obj_get.member8)
 
   # 班員8人目の従業員番号の人員がいない場合の処理
   else:
@@ -1280,12 +1280,12 @@ def team_calendar(request):
 
 
   # 班員9人目の従業員番号の人員がいるか確認
-  member9_obj_filter = member.objects.filter(employee_No__contains = obj_get.member9)
+  member9_obj_filter = member.objects.filter(employee_no__contains = obj_get.member9)
   # 班員9人目の従業員番号の人員がいる場合の処理
   if member9_obj_filter.count() == 1:
 
     # 班員9人目の名前取得
-    member9_obj_get = member.objects.get(employee_No = obj_get.member9)
+    member9_obj_get = member.objects.get(employee_no = obj_get.member9)
 
   # 班員9人目の従業員番号の人員がいない場合の処理
   else:
@@ -1295,12 +1295,12 @@ def team_calendar(request):
 
 
   # 班員10人目の従業員番号の人員がいるか確認
-  member10_obj_filter = member.objects.filter(employee_No__contains = obj_get.member10)
+  member10_obj_filter = member.objects.filter(employee_no__contains = obj_get.member10)
   # 班員10人目の従業員番号の人員がいる場合の処理
   if member10_obj_filter.count() == 1:
 
     # 班員10人目の名前取得
-    member10_obj_get = member.objects.get(employee_No = obj_get.member10)
+    member10_obj_get = member.objects.get(employee_no = obj_get.member10)
 
   # 班員10人目の従業員番号の人員がいない場合の処理
   else:
@@ -1413,13 +1413,13 @@ def team_calendar(request):
         if day != '':
 
           # 指定日に工数データあるか確認
-          member_obj_filter =Business_Time_graph.objects.filter(employee_No3 = m, work_day2 = day)
+          member_obj_filter =Business_Time_graph.objects.filter(employee_no3 = m, work_day2 = day)
 
           # 指定日に工数データがある場合の処理
           if member_obj_filter.count() != 0:
 
             # 指定日の工数データ取得
-            member_obj_get =Business_Time_graph.objects.get(employee_No3 = m, work_day2 = day)
+            member_obj_get =Business_Time_graph.objects.get(employee_no3 = m, work_day2 = day)
 
             # 就業、残業リストに工数データから就業、残業、工数入力OK_NG、転記済み追加
             exec('work_list{}.append(member_obj_get.work_time)'.format(ind + 1))
@@ -1744,12 +1744,12 @@ def team_calendar(request):
           # リセット日が空欄でない時の処理
           if d != '':
             # 指定班員の指定日に工数データがあるか確認
-            reset_filter = Business_Time_graph.objects.filter(employee_No3 = m, work_day2 = d)
+            reset_filter = Business_Time_graph.objects.filter(employee_no3 = m, work_day2 = d)
 
             # 指定班員の指定日に工数データがある場合の処理
             if reset_filter.count() != 0:
               # 工数転記済みリセット
-              Business_Time_graph.objects.update_or_create(employee_No3 = m, \
+              Business_Time_graph.objects.update_or_create(employee_no3 = m, \
                                                            work_day2 = d, \
                                                            defaults = {'completion' : False})
 
@@ -1869,7 +1869,7 @@ def team_calendar(request):
     shop_list = {'P' : 1, 'R' : 2, 'W1' : 3, 'W2' : 4, 'T1' : 5, 'T2' : 6, 'A1' : 7, 'A2' : 8}
 
     # ログイン者の情報取得
-    login_data = member.objects.get(employee_No = request.session.get('login_No', ''))
+    login_data = member.objects.get(employee_no = request.session.get('login_No', ''))
     # ログイン者のショップ取得
     login_shop = login_data.shop
 
@@ -2018,14 +2018,14 @@ def team_calendar(request):
 
                   if d != '':
                     # 班員の工数データがあるか確認
-                    kosu_filter = Business_Time_graph.objects.filter(employee_No3 = m, \
+                    kosu_filter = Business_Time_graph.objects.filter(employee_no3 = m, \
                                                                     work_day2 = d)
                     
                     # 指定日に工数データがある場合の処理
                     if kosu_filter.count() != 0:
 
                       # 班員の工数データを取得
-                      kosu_get = Business_Time_graph.objects.get(employee_No3 = m, \
+                      kosu_get = Business_Time_graph.objects.get(employee_no3 = m, \
                                                                  work_day2 = d)
                       
                       # 作業内容データが空でない時の処理
@@ -2035,7 +2035,7 @@ def team_calendar(request):
                         kosu_load_list = list(kosu_get.time_work)
 
                         # 工数データを入力した工数定義区分を取得
-                        kosu_def= kosu_division.objects.get(kosu_name = kosu_get.def_Ver2)
+                        kosu_def= kosu_division.objects.get(kosu_name = kosu_get.def_ver2)
 
                         # 工数区分定義の数をカウント
                         def_num = 0
@@ -2084,7 +2084,7 @@ def team_calendar(request):
 
 
                         # 工数書き込み済み記録
-                        Business_Time_graph.objects.update_or_create(employee_No3 = m, \
+                        Business_Time_graph.objects.update_or_create(employee_no3 = m, \
                                                                      work_day2 = d, \
                                                                      defaults = {'completion' : True})
 

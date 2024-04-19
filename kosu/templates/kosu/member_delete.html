@@ -15,7 +15,7 @@
     <p>以下の人員データを削除します</p>
     <p>削除した人員の工数もデータから消えてしまうので<br>バックアップをしてから実施のこと</p>
     <table class="table">
-      <tr><th>従業員番号</th><td>{{obj.employee_No}}</td></tr>
+      <tr><th>従業員番号</th><td>{{obj.employee_no}}</td></tr>
       <tr><th>氏名</th><td>{{obj.name}}</td></tr>
       <tr><th>ショップ</th><td>{{obj.shop}}</td></tr>
       <tr><th>権限</th><td>
@@ -27,7 +27,7 @@
         {% if obj.administrator == True %}有{% endif %}
       </td></tr>
       <tr><th><td>
-      <form action="{% url 'member_delete' employee_No %}" method="post">
+      <form action="{% url 'member_delete' employee_no %}" method="post">
       {% csrf_token %}
         <input type="submit" value="人員登録削除" onclick="return confirmDelete();" class="btn btn-yellow1 mt-2">
       </form>

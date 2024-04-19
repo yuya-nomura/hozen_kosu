@@ -12,7 +12,7 @@ from.models import inquiry_data
 class memberForm(forms.ModelForm):
   class Meta:
     model = member
-    fields = ['employee_No', 'name', 'shop', 'authority', 'administrator', 'break_time1', \
+    fields = ['employee_no', 'name', 'shop', 'authority', 'administrator', 'break_time1', \
               'break_time1_over1', 'break_time1_over2', 'break_time1_over3', 'break_time2', \
               'break_time2_over1', 'break_time2_over2', 'break_time2_over3', 'break_time3', \
               'break_time3_over1', 'break_time3_over2', 'break_time3_over3', 'break_time4', \
@@ -203,7 +203,7 @@ class timeForm(forms.Form):
 
 
 class loginForm(forms.Form):
-  employee_No4 = forms.IntegerField(label = '従業員番号', required = False)
+  employee_no4 = forms.IntegerField(label = '従業員番号', required = False)
 
 
 
@@ -241,7 +241,7 @@ class member_findForm(forms.Form):
     ('組長以上', '組長以上')
     ]
     
-  employee_No6 = forms.IntegerField(label = '従業員番号', required = False)
+  employee_no6 = forms.IntegerField(label = '従業員番号', required = False)
   shop2 = forms.ChoiceField(label = 'ショップ', choices = shop_list, required = False)
 
 
@@ -253,7 +253,7 @@ class inputdayForm(forms.Form):
 
 
 class teamForm(forms.Form):
-  employee_No5 = forms.IntegerField(label = '従業員番号')
+  employee_no5 = forms.IntegerField(label = '従業員番号')
   member1 = forms.ChoiceField(label = 'メンバー従業員番号1', required = False)
   member2 = forms.ChoiceField(label = 'メンバー従業員番号2', required = False)
   member3 = forms.ChoiceField(label = 'メンバー従業員番号3', required = False)
@@ -268,7 +268,7 @@ class teamForm(forms.Form):
 
 
 class team_kosuForm(forms.Form):
-  employee_No6 = forms.ChoiceField(label = '従業員番号', required = False)
+  employee_no6 = forms.ChoiceField(label = '従業員番号', required = False)
   team_day = forms.DateTimeField(label = '日付', required = False, \
                 widget = DatePickerInput(format = '%Y-%m-%d'))
 
@@ -472,7 +472,7 @@ class uploadForm(forms.Form):
 class inquiryForm(forms.ModelForm):
   class Meta:
     model = inquiry_data
-    fields = ['employee_No2', 'content_choice', 'inquiry', 'answer']
+    fields = ['employee_no2', 'content_choice', 'inquiry', 'answer']
     
     widgets = {'inquiry': forms.Textarea(attrs={'placeholder': '可能限り具体的に記入下さい。'})}
 

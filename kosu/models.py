@@ -16,7 +16,7 @@ class member(models.Model):
         ('組長以上', '組長以上')
         ]
     
-    employee_No = models.IntegerField('従業員番号')
+    employee_no = models.IntegerField('従業員番号')
     name = models.CharField('氏名', max_length = 100)
     shop = models.CharField('ショップ', choices = shop_list, max_length = 8)
     authority = models.BooleanField('権限')
@@ -61,12 +61,12 @@ class Business_Time_graph(models.Model):
     judgement = models.BooleanField('工数入力OK_NG', null = True)
 
     def __str__(self):
-        return str(self.id) + '__' + str(self.work_day2) + ':' + str(self.employee_No3)
+        return str(self.id) + '__' + str(self.work_day2) + ':' + str(self.employee_no3)
 
     
 
 class team_member(models.Model):
-    employee_No5 = models.IntegerField('従業員番号')
+    employee_no5 = models.IntegerField('従業員番号')
     member1 = models.CharField('メンバー従業員番号1', max_length = 6, blank = True, null = True)
     member2 = models.CharField('メンバー従業員番号2', max_length = 6, blank = True, null = True)
     member3 = models.CharField('メンバー従業員番号3', max_length = 6, blank = True, null = True)
@@ -79,7 +79,7 @@ class team_member(models.Model):
     member10 = models.CharField('メンバー従業員番号10', max_length = 6, blank = True, null = True)
 
     def __str__(self):
-        return str(self.employee_No5)
+        return str(self.employee_no5)
 
 
 
@@ -255,7 +255,7 @@ class inquiry_data(models.Model):
         ('不具合', '不具合'),
         ]
 
-    employee_No2 = models.IntegerField('従業員番号')
+    employee_no2 = models.IntegerField('従業員番号')
     name = models.ForeignKey(member, verbose_name = '氏名', on_delete = models.CASCADE)
     content_choice = models.CharField('内容選択', choices = content_list, max_length = 3)
     inquiry = models.TextField('問い合わせ')

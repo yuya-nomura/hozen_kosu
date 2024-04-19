@@ -32,7 +32,7 @@ def inquiry_new(request):
 
 
   # ログイン者の情報取得
-  data = member.objects.get(employee_No = request.session.get('login_No', None))
+  data = member.objects.get(employee_no = request.session.get('login_No', None))
 
 
   # POST時の処理
@@ -48,10 +48,10 @@ def inquiry_new(request):
       return redirect(to = '/inquiry_new')
 
     # 従業員番号に該当するmemberインスタンスを取得
-    member_instance = member.objects.get(employee_No = request.session.get('login_No', None))
+    member_instance = member.objects.get(employee_no = request.session.get('login_No', None))
 
     # 問い合わせ内容を変数に入れる
-    new = inquiry_data(employee_No2 = request.session.get('login_No', None), \
+    new = inquiry_data(employee_no2 = request.session.get('login_No', None), \
                        name = member_instance, \
                        content_choice = request.POST['content_choice'], \
                        inquiry = request.POST['inquiry'])
@@ -96,17 +96,17 @@ def inquiry_list(request, num):
 
 
   # 問い合わせ履歴のある従業員番号リスト作成
-  employee_No_list = inquiry_data.objects.values_list('employee_No2', flat=True)\
-                     .order_by('employee_No2').distinct()
+  employee_no_list = inquiry_data.objects.values_list('employee_no2', flat=True)\
+                     .order_by('employee_no2').distinct()
   
   # 名前リスト定義
   name_list = [['', '']]
 
   # 従業員番号を名前に変更するループ
-  for No in list(employee_No_list):
+  for No in list(employee_no_list):
 
     # 指定従業員番号で人員情報取得
-    name = member.objects.get(employee_No = No)
+    name = member.objects.get(employee_no = No)
 
     # 名前リスト作成
     name_list.append([No, name])
@@ -119,7 +119,7 @@ def inquiry_list(request, num):
 
     # お問い合わせデータ取得(氏名とカテゴリーで絞り込み)
     data = inquiry_data.objects.filter(content_choice__contains = request.POST['category'], 
-                                       employee_No2__contains = request.POST['name_list']).order_by('id').reverse()
+                                       employee_no2__contains = request.POST['name_list']).order_by('id').reverse()
 
     # 設定データ取得
     page_num = administrator_data.objects.order_by("id").last()
@@ -191,7 +191,7 @@ def inquiry_display(request, num):
   obj_get = inquiry_data.objects.get(id = num)
 
   # ログイン者の情報取得
-  data = member.objects.get(employee_No = request.session.get('login_No', None))
+  data = member.objects.get(employee_no = request.session.get('login_No', None))
 
   # 本人確認リセット
   himself = False

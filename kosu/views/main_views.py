@@ -37,7 +37,7 @@ def login(request):
   if (request.method == 'POST'):
 
     # POST送信された値を変数に入れる
-    find = request.POST['employee_No4']
+    find = request.POST['employee_no4']
 
     # POST送信された値が空の場合の処理
     if find == '':
@@ -48,7 +48,7 @@ def login(request):
     
 
     # 人員登録データの内、従業員番号がPOST送信された値と等しいレコードのオブジェクトを取得
-    data = member.objects.filter(employee_No = find)
+    data = member.objects.filter(employee_no = find)
 
 
     # POST送信された値が人員登録の中にない場合
@@ -98,7 +98,7 @@ def main(request):
     return redirect(to = '/login')
 
   # ログイン者の情報取得
-  data = member.objects.get(employee_No = request.session.get('login_No', None))
+  data = member.objects.get(employee_no = request.session.get('login_No', None))
 
 
 
@@ -144,7 +144,7 @@ def kosu_main(request):
 
 
   # ログイン者の情報取得
-  data = member.objects.get(employee_No = request.session.get('login_No', None))
+  data = member.objects.get(employee_no = request.session.get('login_No', None))
 
 
 
@@ -178,7 +178,7 @@ def def_main(request):
     return redirect(to = '/login')
 
   # ログイン者の情報取得
-  data = member.objects.get(employee_No = request.session.get('login_No', None))
+  data = member.objects.get(employee_no = request.session.get('login_No', None))
 
 
 
@@ -212,7 +212,7 @@ def member_main(request):
     return redirect(to = '/login')
 
   # ログイン者の情報取得
-  data = member.objects.get(employee_No = request.session.get('login_No', None))
+  data = member.objects.get(employee_no = request.session.get('login_No', None))
 
   # ログイン者に権限がなければメインページに戻る
   if data.authority == False:
@@ -252,7 +252,7 @@ def team_main(request):
 
 
   # ログイン者の情報取得
-  data = member.objects.get(employee_No = request.session.get('login_No', None))
+  data = member.objects.get(employee_no = request.session.get('login_No', None))
 
 
   # ログイン者に権限がなければメインページに戻る
@@ -293,7 +293,7 @@ def inquiry_main(request):
 
 
   # ログイン者の情報取得
-  data = member.objects.get(employee_No = request.session.get('login_No', None))
+  data = member.objects.get(employee_no = request.session.get('login_No', None))
 
 
 
@@ -328,7 +328,7 @@ def administrator_menu(request):
 
 
   # ログイン者の情報取得
-  data = member.objects.get(employee_No = request.session.get('login_No', None))
+  data = member.objects.get(employee_no = request.session.get('login_No', None))
 
 
   # ログイン者が管理者でなければメインページに戻る
@@ -415,7 +415,7 @@ def administrator_menu(request):
     for item in kosu_data:
 
       row = [
-          item.employee_No3, str(item.name), item.def_Ver2, item.work_day2,
+          item.employee_no3, str(item.name), item.def_ver2, item.work_day2,
           item.tyoku2, item.time_work, item.detail_work, item.over_time,
           item.breaktime, item.breaktime_over1, item.breaktime_over2,
           item.breaktime_over3, item.work_time, item.completion, item.judgement
@@ -503,26 +503,26 @@ def administrator_menu(request):
     for i in range(1, data_num):
 
       # 読み込み予定データと同一の日のデータが存在するか確認
-      kosu_data_filter = Business_Time_graph.objects.filter(employee_No3 = ws.cell(row = i + 1, column = 1).value, \
+      kosu_data_filter = Business_Time_graph.objects.filter(employee_no3 = ws.cell(row = i + 1, column = 1).value, \
                                                            work_day2 = ws.cell(row = i + 1, column = 4).value)
 
       # 読み込み予定データと同一の日のデータが存在する場合の処理
       if kosu_data_filter.count() != 0:
 
         # 読み込み予定データと同一の日のデータを取得
-        kosu_data_get = Business_Time_graph.objects.get(employee_No3 = ws.cell(row = i + 1, column = 1).value, \
+        kosu_data_get = Business_Time_graph.objects.get(employee_no3 = ws.cell(row = i + 1, column = 1).value, \
                                                        work_day2 = ws.cell(row = i + 1, column = 4).value)
         
         # 読み込み予定データと同一の日のデータを削除
         kosu_data_get.delete()
 
       # 人員データインスタンス取得
-      member_instance = member.objects.get(employee_No = ws.cell(row = i + 1, column = 1).value)
+      member_instance = member.objects.get(employee_no = ws.cell(row = i + 1, column = 1).value)
 
       # Excelからデータを読み込こみ
-      new_data = Business_Time_graph(employee_No3 = ws.cell(row = i + 1, column = 1).value, \
+      new_data = Business_Time_graph(employee_no3 = ws.cell(row = i + 1, column = 1).value, \
                                       name = member_instance, \
-                                      def_Ver2 = ws.cell(row = i + 1, column = 3).value, \
+                                      def_ver2 = ws.cell(row = i + 1, column = 3).value, \
                                       work_day2 = ws.cell(row = i + 1, column = 4).value, \
                                       tyoku2 = ws.cell(row = i + 1, column = 5).value, \
                                       time_work = ws.cell(row = i + 1, column = 6).value, \
@@ -596,7 +596,7 @@ def administrator_menu(request):
     for item in member_data:
 
       row = [
-        item.employee_No, item.name, item.shop, item.authority,item.administrator, 
+        item.employee_no, item.name, item.shop, item.authority,item.administrator, 
         item.break_time1, item.break_time1_over1, item.break_time1_over2, item.break_time1_over3, 
         item.break_time2, item.break_time2_over1, item.break_time2_over2, item.break_time2_over3, 
         item.break_time3, item.break_time3_over1, item.break_time3_over2, item.break_time3_over3, 
@@ -686,20 +686,20 @@ def administrator_menu(request):
     for i in range(1, data_num):
 
       # 読み込み予定データと同一の従業員番号のデータが存在するか確認
-      member_data_filter = member.objects.filter(employee_No = ws.cell(row = i + 1, column = 1).value)
+      member_data_filter = member.objects.filter(employee_no = ws.cell(row = i + 1, column = 1).value)
 
       # 読み込み予定データと同一の従業員番号のデータが存在する場合の処理
       if member_data_filter.count() != 0:
 
         # 読み込み予定データと同一の従業員番号のデータを取得
-        member_data_get = member.objects.get(employee_No = ws.cell(row = i + 1, column = 1).value)
+        member_data_get = member.objects.get(employee_no = ws.cell(row = i + 1, column = 1).value)
         
         # 読み込み予定データと同一の従業員番号のデータを削除
         member_data_get.delete()
 
       
       # Excelからデータを読み込み
-      new_data = member(employee_No = ws.cell(row = i + 1, column = 1).value, \
+      new_data = member(employee_no = ws.cell(row = i + 1, column = 1).value, \
                         name = ws.cell(row = i + 1, column = 2).value, \
                         shop = ws.cell(row = i + 1, column = 3).value, \
                         authority = ws.cell(row = i + 1, column = 4).value, \
@@ -756,7 +756,7 @@ def administrator_menu(request):
     for item in team_data:
 
       row = [
-        item.employee_No5, item.member1, item.member2, item.member3, item.member4, 
+        item.employee_no5, item.member1, item.member2, item.member3, item.member4, 
         item.member5, item.member6, item.member7, item.member8, item.member9, item.member10
         ]
       ws.append(row)
@@ -839,20 +839,20 @@ def administrator_menu(request):
     for i in range(1, data_num):
 
       # 読み込み予定データと同一の従業員番号のデータが存在するか確認
-      team_data_filter = team_member.objects.filter(employee_No5 = ws.cell(row = i + 1, column = 1).value)
+      team_data_filter = team_member.objects.filter(employee_no5 = ws.cell(row = i + 1, column = 1).value)
 
       # 読み込み予定データと同一の従業員番号のデータが存在する場合の処理
       if team_data_filter.count() != 0:
 
         # 読み込み予定データと同一の従業員番号のデータを取得
-        team_data_get = team_member.objects.get(employee_No5 = ws.cell(row = i + 1, column = 1).value)
+        team_data_get = team_member.objects.get(employee_no5 = ws.cell(row = i + 1, column = 1).value)
         
         # 読み込み予定データと同一の従業員番号のデータを削除
         team_data_get.delete()
 
 
       # Excelからデータ読み込み
-      new_data = team_member(employee_No5 = ws.cell(row = i + 1, column = 1).value, \
+      new_data = team_member(employee_no5 = ws.cell(row = i + 1, column = 1).value, \
                              member1 = ws.cell(row = i + 1, column = 2).value, \
                              member2 = ws.cell(row = i + 1, column = 3).value, \
                              member3 = ws.cell(row = i + 1, column = 4).value, \
@@ -1321,7 +1321,7 @@ def administrator_menu(request):
     for item in data:
 
       row = [
-        item.employee_No2, item.name, item.content_choice, item.inquiry, item.answer
+        item.employee_no2, item.name, item.content_choice, item.inquiry, item.answer
         ]
       ws.append(row)
 
@@ -1404,7 +1404,7 @@ def administrator_menu(request):
     for i in range(1, data_num):
 
       # Excelからデータを読み込む
-      new_data = inquiry_data(employee_No2 = ws.cell(row = i + 1, column = 1).value, \
+      new_data = inquiry_data(employee_no2 = ws.cell(row = i + 1, column = 1).value, \
                               name = ws.cell(row = i + 1, column = 2).value, \
                               content_choice = ws.cell(row = i + 1, column = 3).value, \
                               inquiry = ws.cell(row = i + 1, column = 4).value, \
@@ -1662,18 +1662,18 @@ def help(request):
       for i in range(1, data_num):
 
         # 人員データに指定従業員番号があるか確認
-        member_obj_filter = member.objects.filter(employee_No = ws.cell(row = i + 1, column = 1).value)
+        member_obj_filter = member.objects.filter(employee_no = ws.cell(row = i + 1, column = 1).value)
 
         # 人員データに指定従業員番号がある場合の処理
         if member_obj_filter.count() != 0:
 
           # 指定従業員番号の人員データ取得
-          member_obj_get = member.objects.get(employee_No = ws.cell(row = i + 1, column = 1).value)
+          member_obj_get = member.objects.get(employee_no = ws.cell(row = i + 1, column = 1).value)
           # 取得した人員データを消す
           member_obj_get.delete()
 
         # Excelからデータを読み込み
-        new_data = member(employee_No = ws.cell(row = i + 1, column = 1).value, \
+        new_data = member(employee_no = ws.cell(row = i + 1, column = 1).value, \
                           name = ws.cell(row = i + 1, column = 2).value, \
                           shop = ws.cell(row = i + 1, column = 3).value, \
                           authority = ws.cell(row = i + 1, column = 4).value, \
@@ -1705,7 +1705,7 @@ def help(request):
       for i in range(1, data_num):
 
         # Excelからデータを読み込み
-        new_data = member(employee_No = ws.cell(row = i + 1, column = 1).value, \
+        new_data = member(employee_no = ws.cell(row = i + 1, column = 1).value, \
                           name = ws.cell(row = i + 1, column = 2).value, \
                           shop = ws.cell(row = i + 1, column = 3).value, \
                           authority = ws.cell(row = i + 1, column = 4).value, \

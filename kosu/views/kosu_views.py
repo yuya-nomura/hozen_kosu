@@ -56,7 +56,7 @@ def kosu_list(request, num):
 
 
   # ログイン者の情報取得
-  member_data = member.objects.get(employee_No = request.session.get('login_No', None))
+  member_data = member.objects.get(employee_no = request.session.get('login_No', None))
 
   # セッションにログインした従業員番号がない場合の処理
   if request.session.get('login_No', None) == None:
@@ -83,7 +83,7 @@ def kosu_list(request, num):
 
     # 就業日とログイン者の従業員番号でフィルターをかけて一致した工数データを取得
     obj_filter = Business_Time_graph.objects.filter(work_day2__contains = find, \
-                                                    employee_No3 = request.session.get('login_No', '')).\
+                                                    employee_no3 = request.session.get('login_No', '')).\
                                                     order_by('work_day2').reverse()
 
     # 取得した工数データを1ページあたりの件数分取得
@@ -97,7 +97,7 @@ def kosu_list(request, num):
     form = kosu_dayForm(start_list)
 
     # ログイン者の従業員番号でフィルターをかけて一致した工数データを取得
-    obj_filter = Business_Time_graph.objects.filter(employee_No3 = request.session.get('login_No', ''), \
+    obj_filter = Business_Time_graph.objects.filter(employee_no3 = request.session.get('login_No', ''), \
                                                     work_day2__contains = request.session.get('find_day', '')).\
                                                     order_by('work_day2').reverse()
     
@@ -148,7 +148,7 @@ def input(request):
 
 
   # ログイン者の情報取得
-  member_obj = member.objects.get(employee_No = request.session.get('login_No', None))
+  member_obj = member.objects.get(employee_no = request.session.get('login_No', None))
 
 
 
@@ -171,7 +171,7 @@ def input(request):
   if (request.method == 'GET'):
 
     # グラフデータ確認用データ取得
-    data_count = Business_Time_graph.objects.filter(employee_No3 = request.session.get('login_No', None),\
+    data_count = Business_Time_graph.objects.filter(employee_no3 = request.session.get('login_No', None),\
                                                     work_day2 = new_work_day)
 
 
@@ -201,7 +201,7 @@ def input(request):
     else:
 
       # グラフデータを取得
-      graph_obj = Business_Time_graph.objects.get(employee_No3 = request.session.get('login_No', None),\
+      graph_obj = Business_Time_graph.objects.get(employee_no3 = request.session.get('login_No', None),\
                                                   work_day2 = new_work_day)
 
       # 取得したグラフデータを文字型からリストに解凍
@@ -485,7 +485,7 @@ def input(request):
     new_work_day = request.session.get('day', None)
 
     # グラフデータ確認用データ取得
-    data_count = Business_Time_graph.objects.filter(employee_No3 = request.session.get('login_No', None),\
+    data_count = Business_Time_graph.objects.filter(employee_no3 = request.session.get('login_No', None),\
                                                     work_day2 = new_work_day)
 
 
@@ -531,7 +531,7 @@ def input(request):
     else:
 
       # グラフデータを取得
-      graph_obj = Business_Time_graph.objects.get(employee_No3 = request.session.get('login_No', None),\
+      graph_obj = Business_Time_graph.objects.get(employee_no3 = request.session.get('login_No', None),\
                                                   work_day2 = new_work_day)
 
       # 取得したグラフデータをリストに解凍
@@ -850,7 +850,7 @@ def input(request):
 
 
     # 指定日に工数データが既にあるか確認
-    obj_filter = Business_Time_graph.objects.filter(employee_No3 = request.session.get('login_No', None), \
+    obj_filter = Business_Time_graph.objects.filter(employee_no3 = request.session.get('login_No', None), \
                                                     work_day2 = work_day)
 
     # 作業開始時間のインデント取得
@@ -863,7 +863,7 @@ def input(request):
     if obj_filter.count() != 0:
 
       # 作業内容データからログイン者の従業員番号と就業日が一致したオブジェクトを変数に入れる
-      obj_get = Business_Time_graph.objects.get(employee_No3 = request.session.get('login_No', None), \
+      obj_get = Business_Time_graph.objects.get(employee_no3 = request.session.get('login_No', None), \
                                                 work_day2 = work_day)
 
       # 作業内容データを文字列からリストに解凍
@@ -874,7 +874,7 @@ def input(request):
 
 
       # 以前同日に打ち込んだ工数区分定義と違う場合の処理
-      if obj_get.def_Ver2 != request.session.get('input_def', None) and obj_get.def_Ver2 != '':
+      if obj_get.def_ver2 != request.session.get('input_def', None) and obj_get.def_ver2 != '':
 
         # エラーメッセージ出力
         messages.error(request, '前に入力された工数と工数区分定義のVerが違います。入力できません。ERROR007')
@@ -889,7 +889,7 @@ def input(request):
           obj_get.tyoku2 != tyoku:
 
         # 休憩時間取得
-        break_time_obj = member.objects.get(employee_No = request.session.get('login_No', None))
+        break_time_obj = member.objects.get(employee_no = request.session.get('login_No', None))
 
         # 1直の場合の休憩時間取得
         if request.POST['tyoku2'] == '1':
@@ -1565,8 +1565,8 @@ def input(request):
 
 
       # 作業内容データの内容を上書きして更新
-      Business_Time_graph.objects.update_or_create(employee_No3 = request.session.get('login_No', None), \
-        work_day2 = work_day, defaults = {'def_Ver2' : request.session.get('input_def', None), \
+      Business_Time_graph.objects.update_or_create(employee_no3 = request.session.get('login_No', None), \
+        work_day2 = work_day, defaults = {'def_ver2' : request.session.get('input_def', None), \
                                           'work_time' : work, \
                                           'tyoku2' : tyoku, \
                                           'time_work' : ''.join(kosu_def), \
@@ -1590,7 +1590,7 @@ def input(request):
       detail_list = list(itertools.repeat('', 288))
 
       # 休憩時間取得
-      break_time_obj = member.objects.get(employee_No = request.session.get('login_No', None))
+      break_time_obj = member.objects.get(employee_no = request.session.get('login_No', None))
 
       # 1直の場合の休憩時間取得
       if request.POST['tyoku2'] == '1':
@@ -2039,12 +2039,12 @@ def input(request):
 
 
       # 従業員番号に該当するmemberインスタンスを取得
-      member_instance = member.objects.get(employee_No = request.session.get('login_No', None))
+      member_instance = member.objects.get(employee_no = request.session.get('login_No', None))
 
       # 指定のレコードにPOST送信された値を上書きする 
-      new = Business_Time_graph(employee_No3 = request.session.get('login_No', None), \
+      new = Business_Time_graph(employee_no3 = request.session.get('login_No', None), \
                                 name = member_instance, \
-                                def_Ver2 = request.session.get('input_def', None), \
+                                def_ver2 = request.session.get('input_def', None), \
                                 work_day2 = work_day, \
                                 work_time = work,\
                                 tyoku2 = tyoku, \
@@ -2087,14 +2087,14 @@ def input(request):
 
 
     # 工数データがあるか確認
-    obj_filter = Business_Time_graph.objects.filter(employee_No3 = request.session.get('login_No', None), \
+    obj_filter = Business_Time_graph.objects.filter(employee_no3 = request.session.get('login_No', None), \
                                                     work_day2 = request.POST['work_day'])
 
     # 工数データがある場合の処理
     if obj_filter.count() != 0:
 
       # 残業を上書きして更新
-      Business_Time_graph.objects.update_or_create(employee_No3 = request.session.get('login_No', None), \
+      Business_Time_graph.objects.update_or_create(employee_no3 = request.session.get('login_No', None), \
                                                    work_day2 = request.POST['work_day'], \
                                                    defaults = {'over_time' : request.POST['over_work']})
 
@@ -2102,10 +2102,10 @@ def input(request):
     else:
 
       # 従業員番号に該当するmemberインスタンスを取得
-      member_instance = member.objects.get(employee_No = request.session.get('login_No', None))
+      member_instance = member.objects.get(employee_no = request.session.get('login_No', None))
 
       # 工数データ作成し残業書き込み
-      Business_Time_graph.objects.update_or_create(employee_No3 = request.session.get('login_No', ''), \
+      Business_Time_graph.objects.update_or_create(employee_no3 = request.session.get('login_No', ''), \
                                                    work_day2 = request.POST['work_day'], \
                                                    defaults = {'name' : member_instance, \
                                                                'time_work' : '#'*288, \
@@ -2154,7 +2154,7 @@ def input(request):
                    'tomorrow_check' : POST_check}
 
     # グラフデータ確認用データ取得
-    data_count = Business_Time_graph.objects.filter(employee_No3 = request.session.get('login_No', None),\
+    data_count = Business_Time_graph.objects.filter(employee_no3 = request.session.get('login_No', None),\
                                                     work_day2 = new_work_day)
 
     # グラフラベルデータ
@@ -2176,7 +2176,7 @@ def input(request):
     # 選択されている就業日のグラフデータがある場合の処理
     else:
       # グラフデータを取得
-      graph_obj = Business_Time_graph.objects.get(employee_No3 = request.session.get('login_No', None),\
+      graph_obj = Business_Time_graph.objects.get(employee_no3 = request.session.get('login_No', None),\
                                                   work_day2 = new_work_day)
       # 取得したグラフデータを文字型からリストに解凍
       graph_list = list(graph_obj.time_work)
@@ -2285,7 +2285,7 @@ def input(request):
     request.session['break_today'] = request.POST['work_day']
 
     # 休憩変更したい日に休憩データがあるか確認
-    obj_filter = Business_Time_graph.objects.filter(employee_No3 = request.session.get('login_No', None),\
+    obj_filter = Business_Time_graph.objects.filter(employee_no3 = request.session.get('login_No', None),\
                                                     work_day2 = request.session.get('day', kosu_today))
 
     # 工数データがない場合の処理
@@ -2299,7 +2299,7 @@ def input(request):
     else:
       
       # 工数データ取得
-      obj_get = Business_Time_graph.objects.get(employee_No3 = request.session.get('login_No', None),\
+      obj_get = Business_Time_graph.objects.get(employee_no3 = request.session.get('login_No', None),\
                                                 work_day2 = request.session.get('day', kosu_today))
 
       # 休憩データが空の場合の処理
@@ -2348,14 +2348,14 @@ def input(request):
   
 
   # 残業データあるか確認
-  over_work_filter = Business_Time_graph.objects.filter(employee_No3 = request.session.get('login_No', None),\
+  over_work_filter = Business_Time_graph.objects.filter(employee_no3 = request.session.get('login_No', None),\
                                                         work_day2 = request.session.get('day', kosu_today))
 
 
   # 残業データある場合の処理
   if over_work_filter.count() != 0:
     # 残業データ取得
-    over_work_get = Business_Time_graph.objects.get(employee_No3 = request.session.get('login_No', None),\
+    over_work_get = Business_Time_graph.objects.get(employee_no3 = request.session.get('login_No', None),\
                                                     work_day2 = request.session.get('day', kosu_today))
     over_work_default = over_work_get.over_time
 
@@ -2430,7 +2430,7 @@ def input(request):
     graph_kosu_list.append(eval('kosu_obj.kosu_title_{}'.format(i + 1)))
 
   # ログイン者情報取得
-  data = member.objects.get(employee_No = request.session.get('login_No', None))
+  data = member.objects.get(employee_no = request.session.get('login_No', None))
 
   # フォームの初期状態定義
   form = input_kosuForm(kosu_list)
@@ -2803,7 +2803,7 @@ def break_time(request):
 
 
     # POST送信された休憩時間を上書きする 
-    member.objects.update_or_create(employee_No = request.session.get('login_No', None), \
+    member.objects.update_or_create(employee_no = request.session.get('login_No', None), \
                                     defaults = {'break_time1' : break_time1, \
                                     'break_time1_over1' : break_time1_over1, \
                                     'break_time1_over2' : break_time1_over2, \
@@ -2823,7 +2823,7 @@ def break_time(request):
 
 
   # 休憩データ取得
-  break_data = member.objects.get(employee_No = request.session.get('login_No', None))
+  break_data = member.objects.get(employee_no = request.session.get('login_No', None))
   break1 = break_data.break_time1
   break1_1 = break_data.break_time1_over1
   break1_2 = break_data.break_time1_over2
@@ -3030,14 +3030,14 @@ def today_break_time(request):
 
 
     # 工数データあるか確認
-    kosu_data_filter = Business_Time_graph.objects.filter(employee_No3 = request.session.get('login_No', None), \
+    kosu_data_filter = Business_Time_graph.objects.filter(employee_no3 = request.session.get('login_No', None), \
                                                     work_day2 = request.session.get('break_today', None))
 
     # 工数データある場合の処理
     if kosu_data_filter.count() != 0:
 
       # 作業内容データの内容を上書きして更新
-      Business_Time_graph.objects.update_or_create(employee_No3 = request.session.get('login_No', None), \
+      Business_Time_graph.objects.update_or_create(employee_no3 = request.session.get('login_No', None), \
                                                   work_day2 = request.session.get('break_today', None), \
                                                   defaults = {'breaktime' : break_time1, \
                                                               'breaktime_over1' : break_time1_over1, \
@@ -3048,10 +3048,10 @@ def today_break_time(request):
     else:
 
       # 従業員番号に該当するmemberインスタンスを取得
-      member_instance = member.objects.get(employee_No = request.session.get('login_No', None))
+      member_instance = member.objects.get(employee_no = request.session.get('login_No', None))
 
       # 作業内容データの内容を上書きして更新
-      Business_Time_graph.objects.update_or_create(employee_No3 = request.session.get('login_No', None), \
+      Business_Time_graph.objects.update_or_create(employee_no3 = request.session.get('login_No', None), \
                                                   work_day2 = request.session.get('break_today', None), \
                                                   defaults = {'name' : member_instance, \
                                                               'time_work' : '#'*288, \
@@ -3063,14 +3063,14 @@ def today_break_time(request):
 
 
   # 工数データあるか確認
-  break_data_filter = Business_Time_graph.objects.filter(employee_No3 = request.session.get('login_No', None), \
+  break_data_filter = Business_Time_graph.objects.filter(employee_no3 = request.session.get('login_No', None), \
                                                   work_day2 = request.session.get('break_today', None))
 
   # 工数データがある場合の処理
   if break_data_filter.count() != 0:
 
     # 工数データ取得
-    break_data_get = Business_Time_graph.objects.get(employee_No3 = request.session.get('login_No', None), \
+    break_data_get = Business_Time_graph.objects.get(employee_no3 = request.session.get('login_No', None), \
                                                      work_day2 = request.session.get('break_today', None))
     # 休憩データある取得
     break1 = break_data_get.breaktime
@@ -3326,7 +3326,7 @@ def detail(request, num):
 
 
     # ログイン者の人員データ取得
-    member_obj = member.objects.get(employee_No = request.session.get('login_No', None))
+    member_obj = member.objects.get(employee_no = request.session.get('login_No', None))
 
 
     # ログイン者の登録ショップが三組三交替Ⅱ甲乙丙番Cで1直の場合の処理
@@ -3457,7 +3457,7 @@ def detail(request, num):
 
 
     # 作業内容データの内容を上書きして更新
-    Business_Time_graph.objects.update_or_create(employee_No3 = request.session.get('login_No', None), \
+    Business_Time_graph.objects.update_or_create(employee_no3 = request.session.get('login_No', None), \
       work_day2 = obj_get.work_day2, defaults = {'time_work' : ''.join(work_list), \
                                                  'detail_work' : detail_list_str, \
                                                  'judgement' : judgement})
@@ -3771,7 +3771,7 @@ def total(request):
     return redirect(to = '/login')
 
   # ログイン者の情報取得
-  data = member.objects.get(employee_No = request.session.get('login_No', None))
+  data = member.objects.get(employee_no = request.session.get('login_No', None))
 
   # GET時の処理
   if (request.method == 'GET'):
@@ -3785,7 +3785,7 @@ def total(request):
     form = kosu_dayForm(start_list)
 
     # ログイン者の工数集計データ取得
-    kosu_total = Business_Time_graph.objects.filter(employee_No3 = request.session.get('login_No', None), \
+    kosu_total = Business_Time_graph.objects.filter(employee_no3 = request.session.get('login_No', None), \
                                                     work_day2 = today)
     
     # ログイン者の本日の工数集計データがない場合の処理
@@ -3812,10 +3812,10 @@ def total(request):
     if kosu_total.count() >= 1:
 
       # ログイン者の工数集計データ取得
-      graph_data = Business_Time_graph.objects.get(employee_No3 = request.session.get('login_No', None), \
+      graph_data = Business_Time_graph.objects.get(employee_no3 = request.session.get('login_No', None), \
                                                    work_day2 = today)
       # 工数区分定義データ取得
-      kosu_obj = kosu_division.objects.get(kosu_name = graph_data.def_Ver2)
+      kosu_obj = kosu_division.objects.get(kosu_name = graph_data.def_ver2)
 
       # 工数区分定義の数をカウント
       def_num = 0
@@ -3873,7 +3873,7 @@ def total(request):
       kosu_year = post_day[: 4]
 
       # 指定年の工数取得
-      kosu_total = Business_Time_graph.objects.filter(employee_No3 = request.session.get('login_No', None), \
+      kosu_total = Business_Time_graph.objects.filter(employee_no3 = request.session.get('login_No', None), \
                                                     work_day2__startswith = kosu_year)
 
 
@@ -3905,7 +3905,7 @@ def total(request):
         # 年の最初の日の工数区分定義でグラフ項目リスト作成
         for v in kosu_total:
           # 工数区分定義データ取得
-          kosu_obj = kosu_division.objects.get(kosu_name = v.def_Ver2)
+          kosu_obj = kosu_division.objects.get(kosu_name = v.def_ver2)
           # 工数区分定義の数をカウント
           def_num = 0
           for n in range(1, 51):
@@ -3957,7 +3957,7 @@ def total(request):
       kosu_month = post_day[: 7]
 
       # 指定月の工数取得
-      kosu_total = Business_Time_graph.objects.filter(employee_No3 = request.session.get('login_No', None), \
+      kosu_total = Business_Time_graph.objects.filter(employee_no3 = request.session.get('login_No', None), \
                                                     work_day2__startswith = kosu_month)
       
       #指定月に工数入力がない場合の処理
@@ -3988,7 +3988,7 @@ def total(request):
         # 月の最初の日の工数区分定義でグラフ項目リスト作成
         for v in kosu_total:
           # 工数区分定義データ取得
-          kosu_obj = kosu_division.objects.get(kosu_name = v.def_Ver2)
+          kosu_obj = kosu_division.objects.get(kosu_name = v.def_ver2)
           # 工数区分定義の数をカウント
           def_num = 0
           for n in range(1, 51):
@@ -4036,7 +4036,7 @@ def total(request):
     form = kosu_dayForm(request.POST)
 
     # ログイン者の工数集計データ取得
-    kosu_total = Business_Time_graph.objects.filter(employee_No3 = request.session.get('login_No', None), \
+    kosu_total = Business_Time_graph.objects.filter(employee_no3 = request.session.get('login_No', None), \
                                                     work_day2 = request.POST['kosu_day'])
 
     # ログイン者の本日の工数集計データがない場合の処理
@@ -4064,10 +4064,10 @@ def total(request):
     if kosu_total.count() >= 1 and request.POST['kosu_summarize'] == '1':
 
       # ログイン者の工数集計データ取得
-      graph_data = Business_Time_graph.objects.get(employee_No3 = request.session.get('login_No', None), \
+      graph_data = Business_Time_graph.objects.get(employee_no3 = request.session.get('login_No', None), \
                                                    work_day2 = request.POST['kosu_day'])
       # 工数区分定義データ取得
-      kosu_obj = kosu_division.objects.get(kosu_name = graph_data.def_Ver2)
+      kosu_obj = kosu_division.objects.get(kosu_name = graph_data.def_ver2)
 
       # 工数区分定義の数をカウント
       def_num = 0
@@ -4167,7 +4167,7 @@ def graph(request):
     return redirect(to = '/login')
 
   # ログイン者の情報取得
-  data = member.objects.get(employee_No = request.session.get('login_No', None))
+  data = member.objects.get(employee_no = request.session.get('login_No', None))
   # ログイン者に権限がなければメインページに戻る
   if data.administrator == False:
     return redirect(to = '/')
@@ -4180,12 +4180,12 @@ def graph(request):
   # 班員の従業員番号リスト作成
   choices_list = [('','')]
   for i in obj2:
-    choices_list.append((i.employee_No, i.employee_No))
+    choices_list.append((i.employee_no, i.employee_no))
 
   # フォームの初期状態定義
   form = team_kosuForm()
   # フォームの選択肢定義
-  form.fields['employee_No6'].choices = choices_list
+  form.fields['employee_no6'].choices = choices_list
 
 
   # POST時の処理
@@ -4193,10 +4193,10 @@ def graph(request):
     # POST後のフォーム状態定義
     form = team_kosuForm(request.POST)
     # フォームの選択肢定義
-    form.fields['employee_No6'].choices = choices_list
+    form.fields['employee_no6'].choices = choices_list
 
     # グラフデータ一覧用オブジェクト取得
-    obj = Business_Time_graph.objects.filter(employee_No3__contains = request.POST['employee_No6'], \
+    obj = Business_Time_graph.objects.filter(employee_no3__contains = request.POST['employee_no6'], \
                                              work_day2__contains = request.POST['team_day'])
 
 
@@ -4324,10 +4324,10 @@ def schedule(request):
     form_default_list = {}
     for i in range(37):
       if day_list[i] != '':
-        day_filter = Business_Time_graph.objects.filter(employee_No3 = request.session.get('login_No', None), \
+        day_filter = Business_Time_graph.objects.filter(employee_no3 = request.session.get('login_No', None), \
                                                         work_day2 = datetime.date(year, month, day_list[i]))
         if day_filter.count() > 0:
-          day_get = Business_Time_graph.objects.get(employee_No3 = request.session.get('login_No', None), \
+          day_get = Business_Time_graph.objects.get(employee_no3 = request.session.get('login_No', None), \
                                                     work_day2 = datetime.date(year, month, day_list[i]))
           form_default_list[('day{}'.format(i + 1))] = day_get.work_time
 
@@ -4429,10 +4429,10 @@ def schedule(request):
     form_default_list = {}
     for i in range(37):
       if day_list[i] != '':
-        day_filter = Business_Time_graph.objects.filter(employee_No3 = request.session.get('login_No', None), \
+        day_filter = Business_Time_graph.objects.filter(employee_no3 = request.session.get('login_No', None), \
                                                         work_day2 = datetime.date(year, month, day_list[i]))
         if day_filter.count() > 0:
-          day_get = Business_Time_graph.objects.get(employee_No3 = request.session.get('login_No', None), \
+          day_get = Business_Time_graph.objects.get(employee_no3 = request.session.get('login_No', None), \
                                                     work_day2 = datetime.date(year, month, day_list[i]))
           form_default_list[('day{}'.format(i + 1))] = day_get.work_time
 
@@ -4531,17 +4531,17 @@ def schedule(request):
       if day_list[i] != '':
 
         # 工数データがあるか確認
-        work_filter = Business_Time_graph.objects.filter(employee_No3 = request.session.get('login_No', None), \
+        work_filter = Business_Time_graph.objects.filter(employee_no3 = request.session.get('login_No', None), \
                                                          work_day2 = datetime.date(year, month, day_list[i]))
 
         # 工数データがある場合の処理
         if work_filter.count() != 0:
 
           # 工数データ取得
-          work_get = Business_Time_graph.objects.get(employee_No3 = request.session.get('login_No', None), \
+          work_get = Business_Time_graph.objects.get(employee_no3 = request.session.get('login_No', None), \
                                                      work_day2 = datetime.date(year, month, day_list[i]))
           # ログイン者の情報取得
-          member_obj = member.objects.get(employee_No = request.session.get('login_No', None))
+          member_obj = member.objects.get(employee_no = request.session.get('login_No', None))
 
 
           # 工数データをリストに解凍
@@ -4728,13 +4728,13 @@ def schedule(request):
 
 
           # 就業を上書き
-          Business_Time_graph.objects.update_or_create(employee_No3 = request.session.get('login_No', ''), \
+          Business_Time_graph.objects.update_or_create(employee_no3 = request.session.get('login_No', ''), \
             work_day2 = datetime.date(year, month, day_list[i]), \
               defaults = {'work_time' : eval('request.POST["day{}"]'.format(i + 1)), \
                           'judgement' : judgement})
 
           # 更新後の就業を取得
-          record_del = Business_Time_graph.objects.get(employee_No3 = request.session.get('login_No', ''), \
+          record_del = Business_Time_graph.objects.get(employee_no3 = request.session.get('login_No', ''), \
                                                        work_day2 = datetime.date(year, month, day_list[i]))
 
           # 更新後、就業が消されていて工数データが空であればレコードを消す
@@ -4748,10 +4748,10 @@ def schedule(request):
         if eval('request.POST["day{}"]'.format(i + 1)) != '' and work_filter.count() == 0:
 
           # 従業員番号に該当するmemberインスタンスを取得
-          member_instance = member.objects.get(employee_No = request.session.get('login_No', None))
+          member_instance = member.objects.get(employee_no = request.session.get('login_No', None))
 
           # 就業データ作成(空の工数データも入れる)
-          Business_Time_graph.objects.update_or_create(employee_No3 = request.session.get('login_No', ''), \
+          Business_Time_graph.objects.update_or_create(employee_no3 = request.session.get('login_No', ''), \
             work_day2 = datetime.date(year, month, day_list[i]), \
               defaults = {'name' : member_instance, \
                           'work_time' : eval('request.POST["day{}"]'.format(i + 1)), \
@@ -4770,14 +4770,14 @@ def schedule(request):
       if day_list[i] != '':
 
         # 対応する日付に工数データがあるか確認
-        day_filter = Business_Time_graph.objects.filter(employee_No3 = request.session.get('login_No', None), \
+        day_filter = Business_Time_graph.objects.filter(employee_no3 = request.session.get('login_No', None), \
                                                         work_day2 = datetime.date(year, month, day_list[i]))
 
         # 対応する日付に工数データがある場合の処理
         if day_filter.count() != 0:
 
           # 対応する日付の工数データを取得
-          day_get = Business_Time_graph.objects.get(employee_No3 = request.session.get('login_No', None), \
+          day_get = Business_Time_graph.objects.get(employee_no3 = request.session.get('login_No', None), \
                                                     work_day2 = datetime.date(year, month, day_list[i]))
           
           # 就業データを初期値リストに入れる
@@ -4878,17 +4878,17 @@ def schedule(request):
       if day_list[i] != '':
         
         # 工数データがあるか確認
-        work_filter = Business_Time_graph.objects.filter(employee_No3 = request.session.get('login_No', None), \
+        work_filter = Business_Time_graph.objects.filter(employee_no3 = request.session.get('login_No', None), \
                                                          work_day2 = datetime.date(year, month, day_list[i]))
 
         # 工数データがある場合の処理
         if work_filter.count() != 0:
 
           # 工数データ取得
-          work_get = Business_Time_graph.objects.get(employee_No3 = request.session.get('login_No', None), \
+          work_get = Business_Time_graph.objects.get(employee_no3 = request.session.get('login_No', None), \
                                                      work_day2 = datetime.date(year, month, day_list[i]))
           # ログイン者の情報取得
-          member_obj = member.objects.get(employee_No = request.session.get('login_No', None))
+          member_obj = member.objects.get(employee_no = request.session.get('login_No', None))
 
 
           # 工数データをリストに解凍
@@ -5076,13 +5076,13 @@ def schedule(request):
 
 
           # 就業を上書き
-          Business_Time_graph.objects.update_or_create(employee_No3 = request.session.get('login_No', ''), \
+          Business_Time_graph.objects.update_or_create(employee_no3 = request.session.get('login_No', ''), \
             work_day2 = datetime.date(year, month, day_list[i]), \
               defaults = {'work_time' : eval('request.POST["day{}"]'.format(i + 1)), \
                           'judgement' : judgement})
 
           # 更新後の就業を取得
-          record_del = Business_Time_graph.objects.get(employee_No3 = request.session.get('login_No', ''), \
+          record_del = Business_Time_graph.objects.get(employee_no3 = request.session.get('login_No', ''), \
                                                        work_day2 = datetime.date(year, month, day_list[i]))
 
           # 更新後、就業が消されていて工数データが空であればレコードを消す
@@ -5096,10 +5096,10 @@ def schedule(request):
         if eval('request.POST["day{}"]'.format(i + 1)) != '' and work_filter.count() == 0:
 
           # 従業員番号に該当するmemberインスタンスを取得
-          member_instance = member.objects.get(employee_No = request.session.get('login_No', None))
+          member_instance = member.objects.get(employee_no = request.session.get('login_No', None))
 
           # 就業データ作成(空の工数データも入れる)
-          Business_Time_graph.objects.update_or_create(employee_No3 = request.session.get('login_No', ''), \
+          Business_Time_graph.objects.update_or_create(employee_no3 = request.session.get('login_No', ''), \
             work_day2 = datetime.date(year, month, day_list[i]), \
               defaults = {'name' : member_instance, \
                           'work_time' : eval('request.POST["day{}"]'.format(i + 1)), \
@@ -5118,14 +5118,14 @@ def schedule(request):
       if day_list[i] != '':
 
         # 対応する日付に工数データがあるか確認
-        day_filter = Business_Time_graph.objects.filter(employee_No3 = request.session.get('login_No', None), \
+        day_filter = Business_Time_graph.objects.filter(employee_no3 = request.session.get('login_No', None), \
                                                         work_day2 = datetime.date(year, month, day_list[i]))
 
         # 対応する日付に工数データがある場合の処理
         if day_filter.count() != 0:
 
           # 対応する日付の工数データを取得
-          day_get = Business_Time_graph.objects.get(employee_No3 = request.session.get('login_No', None), \
+          day_get = Business_Time_graph.objects.get(employee_no3 = request.session.get('login_No', None), \
                                                     work_day2 = datetime.date(year, month, day_list[i]))
           
           # 就業データを初期値リストに入れる
@@ -5281,18 +5281,18 @@ def schedule(request):
     for de in range(1, 31):
 
       # 1日ごとに工数データがあるか確認
-      month_def_filter = Business_Time_graph.objects.filter(employee_No3 = request.session.get('login_No', None), \
+      month_def_filter = Business_Time_graph.objects.filter(employee_no3 = request.session.get('login_No', None), \
                                                             work_day2 = datetime.date(int(year), int(month), de))
       
       # 工数データがある場合の処理
       if month_def_filter.count() != 0:
 
         # 工数データ取得
-        month_def_get = Business_Time_graph.objects.get(employee_No3 = request.session.get('login_No', None), \
+        month_def_get = Business_Time_graph.objects.get(employee_no3 = request.session.get('login_No', None), \
                                                         work_day2 = datetime.date(int(year), int(month), de))
         
         # 工数区分定義名取得
-        month_def_Ver = month_def_get.def_Ver2
+        month_def_Ver = month_def_get.def_ver2
 
         # ループから抜ける
         break
@@ -5339,14 +5339,14 @@ def schedule(request):
       if dd != '':
 
         # ログイン者の工数データがあるか確認
-        obj_filter = Business_Time_graph.objects.filter(employee_No3 = request.session.get('login_No', None), \
+        obj_filter = Business_Time_graph.objects.filter(employee_no3 = request.session.get('login_No', None), \
                                                         work_day2 = datetime.date(int(year), int(month), dd))
 
         # ログイン者の入力期間の就業データがある場合の処理
         if obj_filter.count() != 0:
 
           # ログイン者の就業データ取得
-          obj_get = Business_Time_graph.objects.get(employee_No3 = request.session.get('login_No', None), \
+          obj_get = Business_Time_graph.objects.get(employee_no3 = request.session.get('login_No', None), \
                                                       work_day2 = datetime.date(int(year), int(month), dd))
 
           # 勤務データ取得
@@ -5356,10 +5356,10 @@ def schedule(request):
           over_time = obj_get.over_time
 
           # 就業データの中に工数区分定義Verのデータがある場合の処理
-          if obj_get.def_Ver2 !='':
+          if obj_get.def_ver2 !='':
 
             # 工数区分定義データ取得
-            def_obj_get = kosu_division.objects.get(kosu_name = obj_get.def_Ver2)
+            def_obj_get = kosu_division.objects.get(kosu_name = obj_get.def_ver2)
 
             # 工数区分定義の数をカウント
             def_num = 0
@@ -5398,7 +5398,7 @@ def schedule(request):
             kosu_list = []
 
             # 工数書き込み済み記録
-            Business_Time_graph.objects.update_or_create(employee_No3 = request.session.get('login_No', None), \
+            Business_Time_graph.objects.update_or_create(employee_no3 = request.session.get('login_No', None), \
                             work_day2 = datetime.date(int(year), int(month), dd), defaults = {'completion' : True})
 
 
@@ -5538,10 +5538,10 @@ def schedule(request):
     form_default_list = {}
     for i in range(37):
       if day_list[i] != '':
-        day_filter = Business_Time_graph.objects.filter(employee_No3 = request.session.get('login_No', None), \
+        day_filter = Business_Time_graph.objects.filter(employee_no3 = request.session.get('login_No', None), \
                                                         work_day2 = datetime.date(year, month, day_list[i]))
         if day_filter.count() > 0:
-          day_get = Business_Time_graph.objects.get(employee_No3 = request.session.get('login_No', None), \
+          day_get = Business_Time_graph.objects.get(employee_no3 = request.session.get('login_No', None), \
                                                     work_day2 = datetime.date(year, month, day_list[i]))
           form_default_list[('day{}'.format(i + 1))] = day_get.work_time
 
@@ -5559,7 +5559,7 @@ def schedule(request):
     # 転記済記録リセット
     for reset_day in range(reset_start_day, reset_end_day + 1):
       # ログイン者の指定日の就業データがあるか判定
-      work_data = Business_Time_graph.objects.filter(employee_No3 = \
+      work_data = Business_Time_graph.objects.filter(employee_no3 = \
                   request.session.get('login_No', None), work_day2 = \
                   datetime.date(int(year), int(month), reset_day))
 
@@ -5567,7 +5567,7 @@ def schedule(request):
       if work_data.count() != 0:
 
         # 工数書き込み済み記録リセット
-        Business_Time_graph.objects.update_or_create(employee_No3 = \
+        Business_Time_graph.objects.update_or_create(employee_no3 = \
                       request.session.get('login_No', None), \
                         work_day2 = datetime.date(int(year), int(month), reset_day), \
                         defaults = {'completion' : False})
@@ -5630,7 +5630,7 @@ def schedule(request):
     # 日付リストの該当要素が空でない場合の処理
     if day_list[i] != '':
       # ログイン者の工数データを該当日でフィルター 
-      graph_data_filter = Business_Time_graph.objects.filter(employee_No3 = \
+      graph_data_filter = Business_Time_graph.objects.filter(employee_no3 = \
                           request.session.get('login_No', None), \
                           work_day2 = datetime.date(year, month, day_list[i]))
 
@@ -5645,7 +5645,7 @@ def schedule(request):
       if graph_data_filter.count() != 0:
 
         # ログイン者の該当日の工数データ取得
-        graph_data_get = Business_Time_graph.objects.get(employee_No3 = \
+        graph_data_get = Business_Time_graph.objects.get(employee_no3 = \
                         request.session.get('login_No', None), \
                           work_day2 =datetime.date(year, month, day_list[i]))
         # 作業内容リストに解凍
@@ -5790,10 +5790,10 @@ def schedule(request):
   input_list = []
   for inp in range(37):
     if day_list[inp] != '':
-      input_count = Business_Time_graph.objects.filter(employee_No3 = request.session.get('login_No', None), \
+      input_count = Business_Time_graph.objects.filter(employee_no3 = request.session.get('login_No', None), \
                                                        work_day2 = datetime.date(year, month, day_list[inp]))
       if input_count.count() != 0:
-        input_obj = Business_Time_graph.objects.get(employee_No3 = request.session.get('login_No', None), \
+        input_obj = Business_Time_graph.objects.get(employee_no3 = request.session.get('login_No', None), \
                                                     work_day2 = datetime.date(year, month, day_list[inp]))
         if input_obj.completion == True:
           input_list.append(input_obj.completion)
@@ -5809,11 +5809,11 @@ def schedule(request):
   OK_NG_list = []
   for ok_ng in range(37):
     if day_list[ok_ng] != '':
-      OK_NG_filter = Business_Time_graph.objects.filter(employee_No3 = request.session.get('login_No', None), \
+      OK_NG_filter = Business_Time_graph.objects.filter(employee_no3 = request.session.get('login_No', None), \
                                                        work_day2 = datetime.date(year, month, day_list[ok_ng]))
       if OK_NG_filter.count() != 0:
         
-        OK_NG_obj = Business_Time_graph.objects.get(employee_No3 = request.session.get('login_No', None), \
+        OK_NG_obj = Business_Time_graph.objects.get(employee_no3 = request.session.get('login_No', None), \
                                                     work_day2 = datetime.date(year, month, day_list[ok_ng]))
         if OK_NG_obj.judgement == True:
           OK_NG_list.append(input_obj.judgement)

@@ -22,8 +22,8 @@
     {% for i in data %}
       <tr>
         <td>{{i}}</td>
-        <td><a href="{% url 'member_edit' i.employee_No %}" class="text-warning">編集</a></td>
-        <td><a href="{% url 'member_delete' i.employee_No %}" class="text-warning">削除</a></td>
+        <td><a href="{% url 'member_edit' i.employee_no %}" class="text-warning">編集</a></td>
+        <td><a href="{% url 'member_delete' i.employee_no %}" class="text-warning">削除</a></td>
       <tr>
     {% endfor %}
     </table>
