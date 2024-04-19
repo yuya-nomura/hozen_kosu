@@ -8,6 +8,7 @@ import datetime
 import itertools
 import openpyxl
 import urllib.parse
+import os
 from .. import forms
 from ..models import member
 from ..models import Business_Time_graph
@@ -5137,12 +5138,139 @@ def schedule(request):
     # 今日の日付取得
     today = datetime.date.today().strftime('%Y%m%d')
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    # Excelの名前指定
+    file_name = 'Excel.xlsm'
+
+    # 1つ上のディレクトリへのパスを取得
+    one_level_up = os.path.dirname(os.path.dirname(__file__))
+
+    # さらに1つ上、つまり2つ上のディレクトリのパスを取得
+    two_levels_up = os.path.dirname(one_level_up)
+
+    # 上記で取得した2つ上のディレクトリパスにファイル名を結合
+    file_path = os.path.join(two_levels_up, file_name)
+
+    # ワークブックを読み込む
+    workbook = openpyxl.load_workbook(file_path, keep_vba=True)
+    worksheet = workbook.active
+
+    # Excelファイルの編集
+    worksheet['A1'] = 'Updated Value'
+
+    # メモリ上にExcelファイルを書き込む
+    output = BytesIO()
+    workbook.save(output)
+    output.seek(0)  # 最初にカーソルを戻す
+
+    # HttpResponseオブジェクトを作成し、適切なレスポンスヘッダを設定
+    response = HttpResponse(
+        output.read(),
+        content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    )
+    response['Content-Disposition'] = 'attachment; filename=updated_excel.xlsm'
+
+    return response
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     # 新しいExcelブック作成
     wb = openpyxl.Workbook()
 
     # 書き込みシート選択
     ws = wb.active
-
+    ws.title = request.session.get('login_No', None)
 
     # 項目用リスト定義
     headers = ['日付']
@@ -5296,7 +5424,7 @@ def schedule(request):
     excel_file.seek(0)
 
     # ファイル名を設定
-    filename = f'{year}年{month}月度工数データ_{today}.xlsx'
+    filename = f'{year}年{month}月度工数データ_{request.session.get('login_No', None)}_{today}.xlsx'
 
     # URLエンコーディングされたファイル名を生成
     quoted_filename = urllib.parse.quote(filename)
