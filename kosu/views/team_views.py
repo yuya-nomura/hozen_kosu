@@ -6,9 +6,6 @@ from django.db.models import Q
 from dateutil.relativedelta import relativedelta
 import datetime
 import itertools
-import os
-import xlwings
-import math
 from .. import forms
 from ..models import member
 from ..models import Business_Time_graph
@@ -18,7 +15,6 @@ from ..models import administrator_data
 from ..forms import teamForm
 from ..forms import team_kosuForm
 from ..forms import weekForm
-from ..forms import team_memberForm
 
 
 
@@ -836,9 +832,6 @@ def team_calendar(request):
   # 曜日指定フォーム定義
   form = weekForm(week_default)
 
-  # メンバー指定フォーム定義
-  form2 = team_memberForm(member_default)
-
 
 
   # 日付指定時の処理
@@ -1386,17 +1379,6 @@ def team_calendar(request):
   ok_ng_list9 = [False, False, False, False, False, False, False]
   ok_ng_list10 = [False, False, False, False, False, False, False]
 
-  # 転記OK_NGリストリセット
-  print_ok_list1 = [False, False, False, False, False, False, False]
-  print_ok_list2 = [False, False, False, False, False, False, False]
-  print_ok_list3 = [False, False, False, False, False, False, False]
-  print_ok_list4 = [False, False, False, False, False, False, False]
-  print_ok_list5 = [False, False, False, False, False, False, False]
-  print_ok_list6 = [False, False, False, False, False, False, False]
-  print_ok_list7 = [False, False, False, False, False, False, False]
-  print_ok_list8 = [False, False, False, False, False, False, False]
-  print_ok_list9 = [False, False, False, False, False, False, False]
-  print_ok_list10 = [False, False, False, False, False, False, False]
 
 
   # 班員(従業員番号)リストごとに就業、残業、工数入力OK_NG、転記済みリスト作成
@@ -1425,7 +1407,6 @@ def team_calendar(request):
             exec('work_list{}.append(member_obj_get.work_time)'.format(ind + 1))
             exec('over_time_list{}.append(member_obj_get.over_time)'.format(ind + 1))
             exec('ok_ng_list{}[{}] = member_obj_get.judgement'.format(ind + 1, ind2))
-            exec('print_ok_list{}[{}] = member_obj_get.completion'.format(ind + 1, ind2))
 
             # 工数データが空の場合の処理
             if member_obj_get.time_work == '#'*288:
@@ -1626,519 +1607,12 @@ def team_calendar(request):
   ok_ng_list9.reverse()
   ok_ng_list10.reverse()
 
-  # 転記OK_NGリスト反転
-  print_ok_list1.reverse()
-  print_ok_list2.reverse()
-  print_ok_list3.reverse()
-  print_ok_list4.reverse()
-  print_ok_list5.reverse()
-  print_ok_list6.reverse()
-  print_ok_list7.reverse()
-  print_ok_list8.reverse()
-  print_ok_list9.reverse()
-  print_ok_list10.reverse()
-
-
-  # 工数転記済リセット時の処理
-  if 'reset_load' in request.POST:
-
-    # 工数転記済みリセット日とメンバーのリストリセット
-    reset_day_list = ['', '', '', '', '', '', '']
-    reset_member_list = ['', '', '', '', '', '', '', '', '', '']
-
-    # 日曜日の書き込みチェックが入っている場合の処理
-    if ('Sunday_check' in request.POST):
-      # 工数転記済みリセット日のリストに指定日を入れる
-      reset_day_list[0] = day_list[0]
-
-    # 月曜日の書き込みチェックが入っている場合の処理
-    if ('Monday_check' in request.POST):
-      # 工数転記済みリセット日のリストに指定日を入れる
-      reset_day_list[1] = day_list[1]
-
-    # 火曜日の書き込みチェックが入っている場合の処理
-    if ('Tuesday_check' in request.POST):
-      # 工数転記済みリセット日のリストに指定日を入れる
-      reset_day_list[2] = day_list[2]
-
-    # 水曜日の書き込みチェックが入っている場合の処理
-    if ('Wednesday_check' in request.POST):
-      # 工数転記済みリセット日のリストに指定日を入れる
-      reset_day_list[3] = day_list[3]
-
-    # 木曜日の書き込みチェックが入っている場合の処理
-    if ('Thursday_check' in request.POST):
-      # 工数転記済みリセット日のリストに指定日を入れる
-      reset_day_list[4] = day_list[4]
-
-    # 金曜日の書き込みチェックが入っている場合の処理
-    if ('Friday_check' in request.POST):
-      # 工数転記済みリセット日のリストに指定日を入れる
-      reset_day_list[5] = day_list[5]
-
-    # 土曜日の書き込みチェックが入っている場合の処理
-    if ('Satuday_check' in request.POST):
-      # 工数転記済みリセット日のリストに指定日を入れる
-      reset_day_list[6] = day_list[6]
-
-
-    # 班員1人目に書き込みチェックが入っている場合の処理
-    if ('member1_check' in request.POST):
-      # 工数転記済みリセット班員のリストに従業員番号を入れる
-      reset_member_list[0] = obj_get.member1
-
-    # 班員2人目に書き込みチェックが入っている場合の処理
-    if ('member2_check' in request.POST):
-      # 工数転記済みリセット班員のリストに従業員番号を入れる
-      reset_member_list[1] = obj_get.member2
-
-    # 班員3人目に書き込みチェックが入っている場合の処理
-    if ('member3_check' in request.POST):
-      # 工数転記済みリセット班員のリストに従業員番号を入れる
-      reset_member_list[2] = obj_get.member3
-      
-    # 班員4人目に書き込みチェックが入っている場合の処理
-    if ('member4_check' in request.POST):
-      # 工数転記済みリセット班員のリストに従業員番号を入れる
-      reset_member_list[3] = obj_get.member4
-
-    # 班員5人目に書き込みチェックが入っている場合の処理
-    if ('member5_check' in request.POST):
-      # 工数転記済みリセット班員のリストに従業員番号を入れる
-      reset_member_list[4] = obj_get.member5
-
-    # 班員6人目に書き込みチェックが入っている場合の処理
-    if ('member6_check' in request.POST):
-      # 工数転記済みリセット班員のリストに従業員番号を入れる
-      reset_member_list[5] = obj_get.member6
-
-    # 班員7人目に書き込みチェックが入っている場合の処理
-    if ('member7_check' in request.POST):
-      # 工数転記済みリセット班員のリストに従業員番号を入れる
-      reset_member_list[6] = obj_get.member7
-
-    # 班員8人目に書き込みチェックが入っている場合の処理
-    if ('member8_check' in request.POST):
-      # 工数転記済みリセット班員のリストに従業員番号を入れる
-      reset_member_list[7] = obj_get.member8
-
-    # 班員9人目に書き込みチェックが入っている場合の処理
-    if ('member9_check' in request.POST):
-      # 工数転記済みリセット班員のリストに従業員番号を入れる
-      reset_member_list[8] = obj_get.member9
-
-    # 班員10人目に書き込みチェックが入っている場合の処理
-    if ('member10_check' in request.POST):
-      # 工数転記済みリセット班員のリストに従業員番号を入れる
-      reset_member_list[9] = obj_get.member10
-
-
-    # 工数転記済みリセット班員のリストを使用し繰り返し処理
-    for m in reset_member_list:
-
-      # 班員の従業員番号が空欄でない時の処理
-      if m != '':
-        # 工数転記済みリセット日のリストを使用し繰り返し処理
-        for d in reset_day_list:
-
-          # リセット日が空欄でない時の処理
-          if d != '':
-            # 指定班員の指定日に工数データがあるか確認
-            reset_filter = Business_Time_graph.objects.filter(employee_no3 = m, work_day2 = d)
-
-            # 指定班員の指定日に工数データがある場合の処理
-            if reset_filter.count() != 0:
-              # 工数転記済みリセット
-              Business_Time_graph.objects.update_or_create(employee_no3 = m, \
-                                                           work_day2 = d, \
-                                                           defaults = {'completion' : False})
-
-
-    # このページを呼び直す
-    return redirect(to = '/team_calendar')
-
-
-  # 工数転記済リセット時の処理
-  if 'kosu_load' in request.POST:
-
-    # 工数転記日とメンバーのリストリセット
-    load_day_list = ['', '', '', '', '', '', '']
-    load_member_list = ['', '', '', '', '', '', '', '', '', '']
-
-    # 日曜日の書き込みチェックが入っている場合の処理
-    if ('Sunday_check' in request.POST):
-      # 工数転記日のリストに指定日を入れる
-      load_day_list[0] = day_list[0]
-
-    # 月曜日の書き込みチェックが入っている場合の処理
-    if ('Monday_check' in request.POST):
-      # 工数転記日のリストに指定日を入れる
-      load_day_list[1] = day_list[1]
-
-    # 火曜日の書き込みチェックが入っている場合の処理
-    if ('Tuesday_check' in request.POST):
-      # 工数転記日のリストに指定日を入れる
-      load_day_list[2] = day_list[2]
-
-    # 水曜日の書き込みチェックが入っている場合の処理
-    if ('Wednesday_check' in request.POST):
-      # 工数転記日のリストに指定日を入れる
-      load_day_list[3] = day_list[3]
-
-    # 木曜日の書き込みチェックが入っている場合の処理
-    if ('Thursday_check' in request.POST):
-      # 工数転記日のリストに指定日を入れる
-      load_day_list[4] = day_list[4]
-
-    # 金曜日の書き込みチェックが入っている場合の処理
-    if ('Friday_check' in request.POST):
-      # 工数転記日のリストに指定日を入れる
-      load_day_list[5] = day_list[5]
-
-    # 土曜日の書き込みチェックが入っている場合の処理
-    if ('Satuday_check' in request.POST):
-      # 工数転記日のリストに指定日を入れる
-      load_day_list[6] = day_list[6]
-
-
-    # 班員1人目に書き込みチェックが入っている場合の処理
-    if ('member1_check' in request.POST):
-      # 工数転記班員のリストに従業員番号を入れる
-      load_member_list[0] = obj_get.member1
-
-    # 班員2人目に書き込みチェックが入っている場合の処理
-    if ('member2_check' in request.POST):
-      # 工数転記班員のリストに従業員番号を入れる
-      load_member_list[1] = obj_get.member2
-
-    # 班員3人目に書き込みチェックが入っている場合の処理
-    if ('member3_check' in request.POST):
-      # 工数転記班員のリストに従業員番号を入れる
-      load_member_list[2] = obj_get.member3
-      
-    # 班員4人目に書き込みチェックが入っている場合の処理
-    if ('member4_check' in request.POST):
-      # 工数転記班員のリストに従業員番号を入れる
-      load_member_list[3] = obj_get.member4
-
-    # 班員5人目に書き込みチェックが入っている場合の処理
-    if ('member5_check' in request.POST):
-      # 工数転記班員のリストに従業員番号を入れる
-      load_member_list[4] = obj_get.member5
-
-    # 班員6人目に書き込みチェックが入っている場合の処理
-    if ('member6_check' in request.POST):
-      # 工数転記班員のリストに従業員番号を入れる
-      load_member_list[5] = obj_get.member6
-
-    # 班員7人目に書き込みチェックが入っている場合の処理
-    if ('member7_check' in request.POST):
-      # 工数転記班員のリストに従業員番号を入れる
-      load_member_list[6] = obj_get.member7
-
-    # 班員8人目に書き込みチェックが入っている場合の処理
-    if ('member8_check' in request.POST):
-      # 工数転記班員のリストに従業員番号を入れる
-      load_member_list[7] = obj_get.member8
-
-    # 班員9人目に書き込みチェックが入っている場合の処理
-    if ('member9_check' in request.POST):
-      # 工数転記班員のリストに従業員番号を入れる
-      load_member_list[8] = obj_get.member9
-
-    # 班員10人目に書き込みチェックが入っている場合の処理
-    if ('member10_check' in request.POST):
-      # 工数転記班員のリストに従業員番号を入れる
-      load_member_list[9] = obj_get.member10
-
-
-    # 年月でファイル名作成
-    file_name = str(today.year) + str(today.month).zfill(2)
-    # パス設定取得
-    path_obj = administrator_data.objects.order_by("id").last()
-    # ファイルパスのリスト作成
-    path_list = [path_obj.file_location_P + '\\' + file_name + 'P.xlsx', \
-                 path_obj.file_location_R + '\\' +  file_name + 'R.xlsx', \
-                 path_obj.file_location_W1 + '\\' +  file_name + 'W1.xlsx', \
-                 path_obj.file_location_W2 + '\\' +  file_name + 'W2.xlsx', \
-                 path_obj.file_location_T1 + '\\' +  file_name + 'T1.xlsx', \
-                 path_obj.file_location_T2 + '\\' +  file_name + 'T2.xlsx', \
-                 path_obj.file_location_A1 + '\\' +  file_name + 'A1.xlsx', \
-                 path_obj.file_location_A2 + '\\' +  file_name + 'A2.xlsx']
-    # ショップ名とインデックス定義
-    shop_list = {'P' : 1, 'R' : 2, 'W1' : 3, 'W2' : 4, 'T1' : 5, 'T2' : 6, 'A1' : 7, 'A2' : 8}
-
-    # ログイン者の情報取得
-    login_data = member.objects.get(employee_no = request.session.get('login_No', ''))
-    # ログイン者のショップ取得
-    login_shop = login_data.shop
-
-    # ファイルパスのリストのログイン者のショップを前に持ってくる
-    for shop, val in shop_list.items():
-      if login_shop == shop:
-        path_list = path_list*2
-        del path_list[ : val - 1]
-        del path_list[8 : ]
-        break
-
-
-    # 業務工数ファイル順番に開く
-    for file in path_list:
-
-      # Excel開き変数リセット
-      wb_open = 0
-
-      # 書き込み履歴リセット
-      loading_log = 0
-
-      # 工数転記班員リストに従業員番号がある場合の処理
-      if any(member_No != '' for member_No in load_member_list):
-
-        # 業務工数ファイルのパスが使用可能なことを確認
-        if os.path.isfile(file) == True:
-
-          # 業務工数ファイルが他で開かれていれば他を探す
-          if Excel_open(file):
-            error_shop = file[-7:-5]
-            # エラーメッセージ出力
-            messages.error(request, \
-              '{}のファイルは他のPCで開かれているため転記できていません。ERROR017'.format(error_shop))
-
-
-          # 指定Excelを開きメニュー画面指定
-          wb = xlwings.Book(file, read_only = False, ignore_read_only_recommended = True)
-
-          # Excel開き変数ON
-          wb_open = 1
-
-          # 書き込み履歴リセット
-          loading_log = 0
-
-          # 書き込み班員ごとに書き込み処理を行う
-          for m_num, m in enumerate(load_member_list):
-
-            # 書き込み班員リストに従業員番号がある場合の処理
-            if m != '':
-
-              ws = xlwings.sheets["メニュー"]
-              ws.activate()
-
-              # Excelページ名リセット
-              member_page = ''
-
-              # 書き込み班員がExcelにいるか検索
-              for i in range(9):
-
-                # A班にログイン者がいるか検索
-                if xlwings.Range((16 + i, 5)).value != None:
-                  if str(math.floor(xlwings.Range((16 + i, 5)).value)) == m:
-                    # 班長かメンバーかを検出
-                    if i == 0:
-                      member_num = 'HL'
-                    else:
-                      member_num = 'M' + str(i)
-
-                    # 業務工数ページ名を生成しメニュー画面からの検索ループから抜ける
-                    member_page = 'A' + member_num
-                    break
-              
-                # B班にログイン者がいるか検索
-                if xlwings.Range((16 + i, 9)).value != None:
-                  if str(math.floor(xlwings.Range((16 + i, 9)).value)) == m:
-                    # 班長かメンバーかを検出
-                    if i == 0:
-                      member_num = 'HL'
-                    else:
-                      member_num = 'M' + str(i)
-
-                    # 業務工数ページ名を生成しメニュー画面からの検索ループから抜ける
-                    member_page = 'B' + member_num
-                    break
-
-                # C班にログイン者がいるか検索
-                if xlwings.Range((16 + i, 13)).value != None:
-                  if str(math.floor(xlwings.Range((16 + i, 13)).value)) == m:
-                    # 班長かメンバーかを検出
-                    if i == 0:
-                      member_num = 'HL'
-                    else:
-                      member_num = 'M' + str(i)
-
-                    # 業務工数ページ名を生成しメニュー画面からの検索ループから抜ける
-                    member_page = 'C' + member_num
-                    break
-
-                # 常昼にログイン者がいるか検索
-                if xlwings.Range((6 + i, 5)).value != None:
-                  if str(math.floor(xlwings.Range((6 + i, 5)).value)) == m:
-                    # 業務工数ページ名を生成しメニュー画面からの検索ループから抜ける
-                    if i == 0:
-                      member_page = 'KL'
-                    else:
-                      member_page = 'M' + str(i)
-
-                    break
-
-                # 白直班にログイン者がいるか検索
-                if xlwings.Range((6 + i, 9)).value != None:
-                  if str(math.floor(xlwings.Range((6 + i, 9)).value)) == m:
-                    # 班長かメンバーかを検出
-                    if i == 0:
-                      member_num = 'HL'
-                    else:
-                      member_num = 'M' + str(i)
-
-                    # 業務工数ページ名を生成しメニュー画面からの検索ループから抜ける
-                    member_page = 'W' + member_num
-                    break
-
-                # 黄直班にログイン者がいるか検索
-                if xlwings.Range((6 + i, 13)).value != None:
-                  if str(math.floor(xlwings.Range((6 + i, 13)).value)) == m:
-                    # 班長かメンバーかを検出
-                    if i == 0:
-                      member_num = 'HL'
-                    else:
-                      member_num = 'M' + str(i)
-
-                    # 業務工数ページ名を生成しメニュー画面からの検索ループから抜ける
-                    member_page = 'Y' + member_num
-                    break
-
-
-              # 班員が開いているExcelにいた場合の処理
-              if member_page != '':
-
-                # 班員の工数入力ページアクティブにする
-                ws_write = xlwings.sheets[member_page]
-                ws_write.activate()
-
-                # 指定期間の工数を入力する
-                for d in load_day_list:
-
-                  if d != '':
-                    # 班員の工数データがあるか確認
-                    kosu_filter = Business_Time_graph.objects.filter(employee_no3 = m, \
-                                                                    work_day2 = d)
-                    
-                    # 指定日に工数データがある場合の処理
-                    if kosu_filter.count() != 0:
-
-                      # 班員の工数データを取得
-                      kosu_get = Business_Time_graph.objects.get(employee_no3 = m, \
-                                                                 work_day2 = d)
-                      
-                      # 作業内容データが空でない時の処理
-                      if kosu_get.time_work != '#'*288:
-
-                        # 作業内容をリストに解凍
-                        kosu_load_list = list(kosu_get.time_work)
-
-                        # 工数データを入力した工数定義区分を取得
-                        kosu_def= kosu_division.objects.get(kosu_name = kosu_get.def_ver2)
-
-                        # 工数区分定義の数をカウント
-                        def_num = 0
-                        for n in range(1, 51):
-                          if eval('kosu_def.kosu_title_{}'.format(n)) != None:
-                            def_num = n
-
-                        # 作業内容データリスト内の各文字を定義
-                        str_list = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', \
-                                    'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', \
-                                      'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', \
-                                          'q', 'r', 's', 't', 'u', 'v', 'w', 'x',]
-                        # 作業内容データリスト内の各文字を工数区分定義の数に調整
-                        del str_list[def_num:]
-
-                        # 各工数区分定義の累積工数リスト作成
-                        str_n = 0
-                        kosu_total_list = []
-
-                        for i in str_list:
-
-                          for k in range(288):
-                            if kosu_load_list[k] == i:
-                              str_n += 5
-
-                          kosu_total_list.append(str_n)
-                          str_n = 0
-
-                        
-                        # 書き込み日検索
-                        for ddd in range(31):
-
-                          # 書き込み日と一致する列を検出
-                          if xlwings.Range((5, 4 + ddd)).value == d:
-                            # 就業書き込み
-                            xlwings.Range((8, 4 + ddd)).value = kosu_get.work_time
-                            # 残業書き込み
-                            xlwings.Range((10, 4 + ddd)).value = kosu_get.over_time
-
-                            # 工数リストから工数を1つずつ取り出し書き込み
-                            for index, kosu in enumerate(kosu_total_list):
-                              xlwings.Range((14 + index, 4 + ddd)).value = kosu
-                            
-                            # 書き込みループから抜ける
-                            break
-
-
-                        # 工数書き込み済み記録
-                        Business_Time_graph.objects.update_or_create(employee_no3 = m, \
-                                                                     work_day2 = d, \
-                                                                     defaults = {'completion' : True})
-
-                        # 書き込み履歴ON
-                        loading_log = 1
-
-
-            # 工数転記班員リストから書き込み済みの従業員番号を消す
-            load_member_list[m_num] = ''
-        
-        # 指定パスが有効でない場合の処理
-        else:
-
-          # ショップ取得
-          if Excel_open(file):
-            error_shop = file[-7:-5]
-            # エラー出力
-            messages.error(request, '{}のファイルパスが有効ではありません。ERROR018'.format(error_shop))
-
-
-      # 書き込み履歴がある場合の処理
-      if loading_log == 1:
-        # Excel保存
-        wb.save()
-
-
-      # Excelを開いている場合の処理
-      if wb_open == 1:
-
-        # Excelを閉じる
-        wb.close()
-        app = xlwings.App()
-        app.kill()
-
-
-    # 工数転記班員リストに従業員番号がある場合の処理
-    if any(member_No != '' for member_No in load_member_list):
-      for e in load_member_list:
-        if e != '':
-          # エラーメッセージ出力
-          messages.error(request, \
-            '従業員番号:{} は各ショップの業務工数ファイルにないため転記できませんでした。ERROR019'.format(e))
-
-
-    # このページを呼び直す
-    return redirect(to = '/team_calendar')
-
  
 
   # HTMLに渡す辞書
   library_m = {
     'title' : '班員工数入力状況一覧',
     'form' : form,
-    'form2' : form2,
     'default_day' : default_day,
     'member_num' : member_num,
     'day_list' : day_list,
@@ -2147,61 +1621,50 @@ def team_calendar(request):
     'over_time_list1' : over_time_list1,
     'kosu_list1' : kosu_list1,
     'ok_ng_list1' : ok_ng_list1,
-    'print_ok_list1' : print_ok_list1,
     'member_name2' : member_name2,
     'work_list2' : work_list2,
     'over_time_list2' : over_time_list2,
     'kosu_list2' : kosu_list2,
     'ok_ng_list2' : ok_ng_list2,
-    'print_ok_list2' : print_ok_list2,
     'member_name3' : member_name3,
     'work_list3' : work_list3,
     'over_time_list3' : over_time_list3,
     'kosu_list3' : kosu_list3,
     'ok_ng_list3' : ok_ng_list3,
-    'print_ok_list3' : print_ok_list3,
     'member_name4' : member_name4,
     'work_list4' : work_list4,
     'over_time_list4' : over_time_list4,
     'kosu_list4' : kosu_list4,
     'ok_ng_list4' : ok_ng_list4,
-    'print_ok_list4' : print_ok_list4,
     'member_name5' : member_name5,
     'work_list5' : work_list5,
     'over_time_list5' : over_time_list5,
     'kosu_list5' : kosu_list5,
     'ok_ng_list5' : ok_ng_list5,
-    'print_ok_list5' : print_ok_list5,
     'member_name6' : member_name6,
     'work_list6' : work_list6,
     'over_time_list6' : over_time_list6,
     'kosu_list6' : kosu_list6,
-    'ok_ng_list6' : ok_ng_list6,
-    'print_ok_list6' : print_ok_list6,
     'member_name7' : member_name7,
     'work_list7' : work_list7,
     'over_time_list7' : over_time_list7,
     'kosu_list7' : kosu_list7,
     'ok_ng_list7' : ok_ng_list7,
-    'print_ok_list7' : print_ok_list7,
     'member_name8' : member_name8,
     'work_list8' : work_list8,
     'over_time_list8' : over_time_list8,
     'kosu_list8' : kosu_list8,
     'ok_ng_list8' : ok_ng_list8,
-    'print_ok_list8' : print_ok_list8,
     'member_name9' : member_name9,
     'work_list9' : work_list9,
     'over_time_list9' : over_time_list9,
     'kosu_list9' : kosu_list9,
     'ok_ng_list9' : ok_ng_list9,
-    'print_ok_list9' : print_ok_list9,
     'member_name10' : member_name10,
     'work_list10' : work_list10,
     'over_time_list10' : over_time_list10,
     'kosu_list10' : kosu_list10,
     'ok_ng_list10' : ok_ng_list10,
-    'print_ok_list10' : print_ok_list10,
     }
 
   # 指定したHTMLに辞書を渡して表示を完成させる
@@ -2214,21 +1677,3 @@ def team_calendar(request):
 #--------------------------------------------------------------------------------------------------------
 
 
-
-
-
-# Excelファイルが開いているか判定する関数
-def Excel_open(filepath: str) -> bool:
-  try:
-    f = open(filepath, 'a')
-    f.close()
-  except:
-    return True
-  else:
-    return False
-
-
-
-
-
-#--------------------------------------------------------------------------------------------------------

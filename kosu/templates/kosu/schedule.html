@@ -31,13 +31,6 @@
       <p>
         <svg width="100" height="40">
           <rect x="0" y="0" width="90" height="40" fill="#33ff00" />
-          <text x="30" y="25" font-weight="bold">勤務</text>
-        </svg>
-        工数転記済み
-      </p>
-      <p>
-        <svg width="100" height="40">
-          <rect x="0" y="0" width="90" height="40" fill="#33ff00" />
           <text x="15" y="25" font-weight="bold">入力時間</text>
         </svg>
         工数入力OK
@@ -719,21 +712,5 @@
 
       {% endif %}
     </table>
-    <p>　</p>
-    <h4 class="display-3 text-primary">業務工数ファイルへ転記</h4>
-    <p class="d-block d-md-none">
-      PCでアプリ使用時のみ使用できる機能です。
-    </p>
-    <p class="d-none d-md-block">
-      <button type="submit" name="kosu_load" id="kosu_load" class="btn btn-blue2 mt-2">表示月のデータをExcelにダウンロード</button>
-    </p>
-    <p class="d-none d-md-block">
-      <input type="date" name="reset_day1" id="reset_day1" min={{min_day}} max={{max_day}} value={{default_day}}>～
-      <input type="date" name="reset_day2" id="reset_day2" min={{min_day}} max={{max_day}} value={{default_day}}>　　
-      <input type="submit" value="工数転記済みリセット" name = "reset_load" class="btn btn-blue2 mt-2">
-    </p>
-     <p class="d-none d-md-block">
-      ※転記済みの色塗りが消えるだけで転記した値に影響はしません。
-    </p>
   </body>
 </html>

@@ -445,20 +445,6 @@ class weekForm(forms.Form):
 
 
 
-class team_memberForm(forms.Form):
-  member1_check = forms.BooleanField(label = 'メンバー1チェック', required = False)
-  member2_check = forms.BooleanField(label = 'メンバー2チェック', required = False)
-  member3_check = forms.BooleanField(label = 'メンバー3チェック', required = False)
-  member4_check = forms.BooleanField(label = 'メンバー4チェック', required = False)
-  member5_check = forms.BooleanField(label = 'メンバー5チェック', required = False)
-  member6_check = forms.BooleanField(label = 'メンバー6チェック', required = False)
-  member7_check = forms.BooleanField(label = 'メンバー7チェック', required = False)
-  member8_check = forms.BooleanField(label = 'メンバー8チェック', required = False)
-  member9_check = forms.BooleanField(label = 'メンバー9チェック', required = False)
-  member10_check = forms.BooleanField(label = 'メンバー10チェック', required = False)
-
-
-
 class uploadForm(forms.Form):
   kosu_file = forms.FileField(label = '工数ファイル選択', required = False)
   team_file = forms.FileField(label = '班員ファイル選択', required = False)

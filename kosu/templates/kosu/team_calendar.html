@@ -25,13 +25,6 @@
     <p>
       <svg width="100" height="40">
         <rect x="0" y="0" width="90" height="40" fill="#33ff00" />
-        <text x="30" y="25" font-weight="bold">勤務</text>
-      </svg>
-      工数転記済み
-    </p>
-    <p>
-      <svg width="100" height="40">
-        <rect x="0" y="0" width="90" height="40" fill="#33ff00" />
         <text x="15" y="25" font-weight="bold">入力時間</text>
       </svg>
       工数入力OK
@@ -46,17 +39,7 @@
     <p>　</p>
     <table class="table table-bordered border-dark">
       <tr>
-        <th colspan="3"><div class="text-center">書き込み曜日指定</div></th>
-        <th class="table-danger"><div class="text-center">{{form.Sunday_check}}</div></th>
-        <th><div class="text-center">{{form.Monday_check}}</div></th>
-        <th><div class="text-center">{{form.Tuesday_check}}</div></th>
-        <th><div class="text-center">{{form.Wednesday_check}}</div></th>
-        <th><div class="text-center">{{form.Thursday_check}}</div></th>
-        <th><div class="text-center">{{form.Friday_check}}</div></th>
-        <th class="table-primary"><div class="text-center">{{form.Satuday_check}}</div></th>
-      </tr>
-      <tr>
-        <th colspan="3"><div class="text-center">曜日</div></th>
+        <th colspan="2"><div class="text-center">曜日</div></th>
         <th class="table-danger"><div class="text-center">日</div></th>
         <th><div class="text-center">月</div></th>
         <th><div class="text-center">火</div></th>
@@ -67,7 +50,7 @@
       </tr>
 
       <tr>
-        <td colspan="3"><div class="text-center">日付</div></td>
+        <td colspan="2"><div class="text-center">日付</div></td>
         {% for i in day_list|slice:":7" %}
         {% if forloop.first %}
         <td class="table-danger">
@@ -85,7 +68,6 @@
 
       {% if member_num >= 1 %}
       <tr>
-        <td rowspan="3"><div class="text-center"><br><br><br>{{form2.member1_check}}</div></td>
         <td rowspan="3"><div class="text-center"><br><br><br>{{member_name1}}</div></td>
         <td><div class="text-center">勤務</div></td>
         {% for i in work_list1 %}
@@ -129,7 +111,6 @@
       <tr>
         <td><div class="text-center">入力時間</div></td>
         {% for i in kosu_list1 %}
-        {% with inp=ok_ng_list1.pop %}
         {% if forloop.first and inp == False %}
         <td class="table-danger">
         {% else %}
@@ -154,7 +135,6 @@
 
       {% if member_num >= 2 %}
       <tr>
-        <td rowspan="3"><div class="text-center"><br><br><br>{{form2.member2_check}}</div></td>
         <td rowspan="3"><div class="text-center"><br><br><br>{{member_name2}}</div></td>
         <td><div class="text-center">勤務</div></td>
         {% for i in work_list2 %}
@@ -223,7 +203,6 @@
 
       {% if member_num >= 3 %}
       <tr>
-        <td rowspan="3"><div class="text-center"><br><br><br>{{form2.member3_check}}</div></td>
         <td rowspan="3"><div class="text-center"><br><br><br>{{member_name3}}</div></td>
         <td><div class="text-center">勤務</div></td>
         {% for i in work_list3 %}
@@ -292,7 +271,6 @@
 
       {% if member_num >= 4 %}
       <tr>
-        <td rowspan="3"><div class="text-center"><br><br><br>{{form2.member4_check}}</div></td>
         <td rowspan="3"><div class="text-center"><br><br><br>{{member_name4}}</div></td>
         <td><div class="text-center">勤務</div></td>
         {% for i in work_list4 %}
@@ -361,7 +339,6 @@
 
       {% if member_num >= 5 %}
       <tr>
-        <td rowspan="3"><div class="text-center"><br><br><br>{{form2.member5_check}}</div></td>
         <td rowspan="3"><div class="text-center"><br><br><br>{{member_name5}}</div></td>
         <td><div class="text-center">勤務</div></td>
         {% for i in work_list5 %}
@@ -430,7 +407,6 @@
 
       {% if member_num >= 6 %}
       <tr>
-        <td rowspan="3"><div class="text-center"><br><br><br>{{form2.member6_check}}</div></td>
         <td rowspan="3"><div class="text-center"><br><br><br>{{member_name6}}</div></td>
         <td><div class="text-center">勤務</div></td>
         {% for i in work_list6 %}
@@ -499,7 +475,6 @@
 
       {% if member_num >= 7 %}
       <tr>
-        <td rowspan="3"><div class="text-center"><br><br><br>{{form2.member7_check}}</div></td>
         <td rowspan="3"><div class="text-center"><br><br><br>{{member_name7}}</div></td>
         <td><div class="text-center">勤務</div></td>
         {% for i in work_list7 %}
@@ -568,7 +543,6 @@
 
       {% if member_num >= 8 %}
       <tr>
-        <td rowspan="3"><div class="text-center"><br><br><br>{{form2.member8_check}}</div></td>
         <td rowspan="3"><div class="text-center"><br><br><br>{{member_name8}}</div></td>
         <td><div class="text-center">勤務</div></td>
         {% for i in work_list8 %}
@@ -637,7 +611,6 @@
 
       {% if member_num >= 9 %}
       <tr>
-        <td rowspan="3"><div class="text-center"><br><br><br>{{form2.member9_check}}</div></td>
         <td rowspan="3"><div class="text-center"><br><br><br>{{member_name9}}</div></td>
         <td><div class="text-center">勤務</div></td>
         {% for i in work_list9 %}
@@ -706,7 +679,6 @@
 
       {% if member_num >= 10 %}
       <tr>
-        <td rowspan="3"><div class="text-center"><br><br><br>{{form2.member10_check}}</div></td>
         <td rowspan="3"><div class="text-center"><br><br><br>{{member_name10}}</div></td>
         <td><div class="text-center">勤務</div></td>
         {% for i in work_list10 %}
@@ -773,17 +745,5 @@
       </tr>
       {% endif %}
     </table>
-    <p>
-      <button type="submit" name="kosu_load" id="kosu_load" class="btn btn-orange1 mt-2 d-none d-md-block">転記</button>
-    </p>
-    <p class="d-block d-md-none">
-      工数の転記はPCでアプリ使用時のみ使用できます。
-    </p>
-    <p>
-      <input type="submit" value="工数転記済みリセット" name = "reset_load" class="btn btn-orange1 mt-2">
-    </p>
-     <p>※指定日、指定班員の転記済みの色塗りが消えるだけで転記した値に影響はしません。</p>
-
-     <script src="{% static 'kosu/js/loading.js' %}"></script>
   </body>
 </html>
