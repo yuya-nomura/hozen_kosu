@@ -406,7 +406,7 @@ def administrator_menu(request):
     headers = [
         '従業員番号', '氏名', '工数区分定義Ver', '就業日', '直', '作業内容',
         '作業詳細', '残業時間', '昼休憩時間', '残業休憩時間1', '残業休憩時間2',
-        '残業休憩時間3', '就業形態', '工数出力済', '工数入力OK_NG'
+        '残業休憩時間3', '就業形態', '工数入力OK_NG'
         ]
     ws.append(headers)
 
@@ -418,7 +418,7 @@ def administrator_menu(request):
           item.employee_no3, str(item.name), item.def_ver2, item.work_day2,
           item.tyoku2, item.time_work, item.detail_work, item.over_time,
           item.breaktime, item.breaktime_over1, item.breaktime_over2,
-          item.breaktime_over3, item.work_time, item.completion, item.judgement
+          item.breaktime_over3, item.work_time, item.judgement
           ]
       ws.append(row)
 
@@ -485,8 +485,7 @@ def administrator_menu(request):
       ws.cell(1, 7).value != '作業詳細' or ws.cell(1, 8).value != '残業時間' or \
       ws.cell(1, 9).value != '昼休憩時間' or ws.cell(1, 10).value != '残業休憩時間1' or \
       ws.cell(1, 11).value != '残業休憩時間2' or ws.cell(1, 12).value != '残業休憩時間3' or \
-      ws.cell(1, 13).value != '就業形態' or ws.cell(1, 14).value != '工数出力済' or \
-      ws.cell(1, 15).value != '工数入力OK_NG':
+      ws.cell(1, 13).value != '就業形態' or ws.cell(1, 14).value != '工数入力OK_NG':
 
       # エラーメッセージ出力
       messages.error(request, 'ロードしようとしたファイルは工数データバックアップではありません。ERROR048')
@@ -533,8 +532,7 @@ def administrator_menu(request):
                                       breaktime_over2 = ws.cell(row = i + 1, column = 11).value, \
                                       breaktime_over3 = ws.cell(row = i + 1, column = 12).value, \
                                       work_time = ws.cell(row = i + 1, column = 13).value, \
-                                      completion = ws.cell(row = i + 1, column = 14).value, \
-                                      judgement = ws.cell(row = i + 1, column = 15).value) 
+                                      judgement = ws.cell(row = i + 1, column = 14).value) 
 
       # レコードセーブ
       new_data.save()

@@ -71,23 +71,17 @@
         <td rowspan="3"><div class="text-center"><br><br><br>{{member_name1}}</div></td>
         <td><div class="text-center">勤務</div></td>
         {% for i in work_list1 %}
-        {% with com=print_ok_list1.pop %}
         {% if forloop.first %}
         <td class="table-danger">
         {% else %}
         {% if forloop.last %}
         <td class="table-primary">
         {% else %}
-        {% if com == True %}
-        <td class="table-green">
-        {% else %}
         <td>
-        {% endif %}
         {% endif %}
         {% endif %}
           <div class="text-center fw-bold">{{i}}</div>
         </td>
-        {% endwith %}
         {% endfor %}
       </tr>
 
@@ -111,6 +105,7 @@
       <tr>
         <td><div class="text-center">入力時間</div></td>
         {% for i in kosu_list1 %}
+        {% with inp=ok_ng_list1.pop %}
         {% if forloop.first and inp == False %}
         <td class="table-danger">
         {% else %}
@@ -138,23 +133,17 @@
         <td rowspan="3"><div class="text-center"><br><br><br>{{member_name2}}</div></td>
         <td><div class="text-center">勤務</div></td>
         {% for i in work_list2 %}
-        {% with com=print_ok_list2.pop %}
         {% if forloop.first %}
         <td class="table-danger">
         {% else %}
         {% if forloop.last %}
         <td class="table-primary">
         {% else %}
-        {% if com == True %}
-        <td class="table-green">
-        {% else %}
         <td>
-        {% endif %}
         {% endif %}
         {% endif %}
           <div class="text-center fw-bold">{{i}}</div>
         </td>
-        {% endwith %}
         {% endfor %}
       </tr>
 
@@ -206,23 +195,17 @@
         <td rowspan="3"><div class="text-center"><br><br><br>{{member_name3}}</div></td>
         <td><div class="text-center">勤務</div></td>
         {% for i in work_list3 %}
-        {% with com=print_ok_list3.pop %}
         {% if forloop.first %}
         <td class="table-danger">
         {% else %}
         {% if forloop.last %}
         <td class="table-primary">
         {% else %}
-        {% if com == True %}
-        <td class="table-green">
-        {% else %}
         <td>
-        {% endif %}
         {% endif %}
         {% endif %}
           <div class="text-center fw-bold">{{i}}</div>
         </td>
-        {% endwith %}
         {% endfor %}
       </tr>
 
@@ -274,23 +257,17 @@
         <td rowspan="3"><div class="text-center"><br><br><br>{{member_name4}}</div></td>
         <td><div class="text-center">勤務</div></td>
         {% for i in work_list4 %}
-        {% with com=print_ok_list4.pop %}
         {% if forloop.first %}
         <td class="table-danger">
         {% else %}
         {% if forloop.last %}
         <td class="table-primary">
         {% else %}
-        {% if com == True %}
-        <td class="table-green">
-        {% else %}
         <td>
-        {% endif %}
         {% endif %}
         {% endif %}
           <div class="text-center fw-bold">{{i}}</div>
         </td>
-        {% endwith %}
         {% endfor %}
       </tr>
 
@@ -342,23 +319,17 @@
         <td rowspan="3"><div class="text-center"><br><br><br>{{member_name5}}</div></td>
         <td><div class="text-center">勤務</div></td>
         {% for i in work_list5 %}
-        {% with com=print_ok_list5.pop %}
         {% if forloop.first %}
         <td class="table-danger">
         {% else %}
         {% if forloop.last %}
         <td class="table-primary">
         {% else %}
-        {% if com == True %}
-        <td class="table-green">
-        {% else %}
         <td>
-        {% endif %}
         {% endif %}
         {% endif %}
           <div class="text-center fw-bold">{{i}}</div>
         </td>
-        {% endwith %}
         {% endfor %}
       </tr>
 
@@ -410,23 +381,17 @@
         <td rowspan="3"><div class="text-center"><br><br><br>{{member_name6}}</div></td>
         <td><div class="text-center">勤務</div></td>
         {% for i in work_list6 %}
-        {% with com=print_ok_list6.pop %}
         {% if forloop.first %}
         <td class="table-danger">
         {% else %}
         {% if forloop.last %}
         <td class="table-primary">
         {% else %}
-        {% if com == True %}
-        <td class="table-green">
-        {% else %}
         <td>
-        {% endif %}
         {% endif %}
         {% endif %}
           <div class="text-center fw-bold">{{i}}</div>
         </td>
-        {% endwith %}
         {% endfor %}
       </tr>
 
@@ -478,23 +443,17 @@
         <td rowspan="3"><div class="text-center"><br><br><br>{{member_name7}}</div></td>
         <td><div class="text-center">勤務</div></td>
         {% for i in work_list7 %}
-        {% with com=print_ok_list7.pop %}
         {% if forloop.first %}
         <td class="table-danger">
         {% else %}
         {% if forloop.last %}
         <td class="table-primary">
         {% else %}
-        {% if com == True %}
-        <td class="table-green">
-        {% else %}
         <td>
-        {% endif %}
         {% endif %}
         {% endif %}
           <div class="text-center fw-bold">{{i}}</div>
         </td>
-        {% endwith %}
         {% endfor %}
       </tr>
 
@@ -546,23 +505,17 @@
         <td rowspan="3"><div class="text-center"><br><br><br>{{member_name8}}</div></td>
         <td><div class="text-center">勤務</div></td>
         {% for i in work_list8 %}
-        {% with com=print_ok_list8.pop %}
         {% if forloop.first %}
         <td class="table-danger">
         {% else %}
         {% if forloop.last %}
         <td class="table-primary">
         {% else %}
-        {% if com == True %}
-        <td class="table-green">
-        {% else %}
         <td>
-        {% endif %}
         {% endif %}
         {% endif %}
           <div class="text-center fw-bold">{{i}}</div>
         </td>
-        {% endwith %}
         {% endfor %}
       </tr>
 
@@ -614,23 +567,17 @@
         <td rowspan="3"><div class="text-center"><br><br><br>{{member_name9}}</div></td>
         <td><div class="text-center">勤務</div></td>
         {% for i in work_list9 %}
-        {% with com=print_ok_list9.pop %}
         {% if forloop.first %}
         <td class="table-danger">
         {% else %}
         {% if forloop.last %}
         <td class="table-primary">
         {% else %}
-        {% if com == True %}
-        <td class="table-green">
-        {% else %}
         <td>
-        {% endif %}
         {% endif %}
         {% endif %}
           <div class="text-center fw-bold">{{i}}</div>
         </td>
-        {% endwith %}
         {% endfor %}
       </tr>
 
@@ -682,23 +629,17 @@
         <td rowspan="3"><div class="text-center"><br><br><br>{{member_name10}}</div></td>
         <td><div class="text-center">勤務</div></td>
         {% for i in work_list10 %}
-        {% with com=print_ok_list10.pop %}
         {% if forloop.first %}
         <td class="table-danger">
         {% else %}
         {% if forloop.last %}
         <td class="table-primary">
         {% else %}
-        {% if com == True %}
-        <td class="table-green">
-        {% else %}
         <td>
-        {% endif %}
         {% endif %}
         {% endif %}
           <div class="text-center fw-bold">{{i}}</div>
         </td>
-        {% endwith %}
         {% endfor %}
       </tr>
 

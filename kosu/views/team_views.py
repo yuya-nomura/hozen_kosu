@@ -1381,7 +1381,7 @@ def team_calendar(request):
 
 
 
-  # 班員(従業員番号)リストごとに就業、残業、工数入力OK_NG、転記済みリスト作成
+  # 班員(従業員番号)リストごとに就業、残業、工数入力OK_NGリスト作成
   for ind, m in enumerate(member_list):
 
     # 班員登録がある場合の処理
@@ -1403,7 +1403,7 @@ def team_calendar(request):
             # 指定日の工数データ取得
             member_obj_get =Business_Time_graph.objects.get(employee_no3 = m, work_day2 = day)
 
-            # 就業、残業リストに工数データから就業、残業、工数入力OK_NG、転記済み追加
+            # 就業、残業リストに工数データから就業、残業、工数入力OK_NG追加
             exec('work_list{}.append(member_obj_get.work_time)'.format(ind + 1))
             exec('over_time_list{}.append(member_obj_get.over_time)'.format(ind + 1))
             exec('ok_ng_list{}[{}] = member_obj_get.judgement'.format(ind + 1, ind2))
@@ -1645,6 +1645,7 @@ def team_calendar(request):
     'work_list6' : work_list6,
     'over_time_list6' : over_time_list6,
     'kosu_list6' : kosu_list6,
+    'ok_ng_list6' : ok_ng_list6,
     'member_name7' : member_name7,
     'work_list7' : work_list7,
     'over_time_list7' : over_time_list7,
