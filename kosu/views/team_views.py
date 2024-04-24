@@ -14,7 +14,6 @@ from ..models import kosu_division
 from ..models import administrator_data
 from ..forms import teamForm
 from ..forms import team_kosuForm
-from ..forms import weekForm
 
 
 
@@ -829,9 +828,6 @@ def team_calendar(request):
                     'member9_check' : True, \
                     'member10_check' : True}
 
-  # 曜日指定フォーム定義
-  form = weekForm(week_default)
-
 
 
   # 日付指定時の処理
@@ -1612,7 +1608,6 @@ def team_calendar(request):
   # HTMLに渡す辞書
   library_m = {
     'title' : '班員工数入力状況一覧',
-    'form' : form,
     'default_day' : default_day,
     'member_num' : member_num,
     'day_list' : day_list,

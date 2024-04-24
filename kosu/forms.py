@@ -431,17 +431,6 @@ class administrator_data_Form(forms.ModelForm):
   class Meta:
     model = administrator_data
     fields = ['menu_row']
-    
-
-
-class weekForm(forms.Form):
-  Sunday_check = forms.BooleanField(label = '日曜日チェック', required = False)
-  Monday_check = forms.BooleanField(label = '月曜日チェック', required = False)
-  Tuesday_check = forms.BooleanField(label = '火曜日チェック', required = False)
-  Wednesday_check = forms.BooleanField(label = '水曜日チェック', required = False)
-  Thursday_check = forms.BooleanField(label = '木曜日チェック', required = False)
-  Friday_check = forms.BooleanField(label = '金曜日チェック', required = False)
-  Satuday_check = forms.BooleanField(label = '土曜日チェック', required = False)
 
 
 
