@@ -10,17 +10,37 @@ from ..forms import versionchoiceForm
 from ..forms import kosu_divisionForm
 
 
+
+
+
 #--------------------------------------------------------------------------------------------------------
+
+
+
 
 
 # 工数区分定義確認画面定義
 def kosu_def(request):
+
   # 未ログインならログインページに飛ぶ
   if request.session.get('login_No', None) == None:
     return redirect(to = '/login')
 
+
+
   # POST時の処理
   if (request.method == 'POST'):
+
+    # 検索欄が空欄の場合の処理
+    if request.POST['kosu_def_list'] == "":
+
+      # エラーメッセージ出力
+      messages.error(request, '確認する定義区分が選択されていません。ERROR031')
+
+      # このページをリダイレクト
+      return redirect(to = '/kosu_def')
+
+
     # 現在使用している工数区分のオブジェクトを取得
     kosu_obj = kosu_division.objects.get(kosu_name = request.session.get('input_def', None))
     # 工数区分登録カウンターリセット
@@ -52,6 +72,7 @@ def kosu_def(request):
         def1 = eval('obj.kosu_title_{}'.format(n + 1))
         def2 = eval('obj.kosu_division_1_{}'.format(n + 1))
         def3 = eval('obj.kosu_division_2_{}'.format(n + 1))
+
   # POST送信していないときの処理
   else:
     # 表示データ空にする
@@ -92,7 +113,13 @@ def kosu_def(request):
   return render(request, 'kosu/kosu_def.html', library_m)
 
 
+
+
+
 #--------------------------------------------------------------------------------------------------------
+
+
+
 
 
 # 工数区分定義Ver選択画面定義

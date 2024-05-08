@@ -18,6 +18,13 @@
   <p class="h5 mt-4">{{form.kosu_def_list}}</p>
   <input type="submit" value="検索" class="btn btn-green1 mt-2">
   </form>
+  {% for message in messages %}
+  <div {% if message.tags %}class="{{ message.tags }}"{% endif %}>
+    <p  class="text-danger">
+      {{ message }}
+    </p>
+  </div>
+  {% endfor %}
   <h3 class="h5 mt-4">定義</h3>
   <p>{{def2|linebreaksbr}}</p>
   <P>　</P>
