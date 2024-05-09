@@ -11,17 +11,18 @@
 </head>
 <body class="container">
   <h1 class="display-6 text-primary">{{member_data.name}}さんの{{title}}</h1>
-  <p class="h6"><a href="{% url 'kosu_main' %}">工数MENUへ</a></p>
-  <p class="h6"><a href="{% url 'input' %}">工数入力へ</a></p>
-  {% if member_data.administrator == True %}
-    <p class="h6"><a href="{% url 'graph' %}">グラフデータへ</a></p>
-  {% endif %}
+  <p class="h6">
+    <a href="{% url 'kosu_main' %}">工数MENUへ</a>　　　
+    <a href="{% url 'input' %}">工数入力へ</a>
+  </p>
+  <p>　</p>
   <form action="{% url 'kosu_list' num %}" method="post">
   {% csrf_token %}
     {% bootstrap_javascript jquery='full' %} 
     {{ form.media }}
     {{ form.kosu_day }}
     <input type="submit" value="検索" class="btn btn-blue2 mt-2">
+    <p>　</p>
     <div class="table-responsive">
     <table class="table text-nowrap">
       <tr>

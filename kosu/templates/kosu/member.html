@@ -11,8 +11,10 @@
 </head>
 <body class="container">
   <h1 class="display-4 text-warning">{{title}}</h1>
-  <p class="h6"><a href="{% url 'member_main' %}" class="text-warning">人員MENUへ</a></p>
-  <p class="h6"><a href="{% url 'member_new' %}" class="text-warning">新規登録</a></p>
+  <p class="h6">
+    <a href="{% url 'member_main' %}" class="text-warning">人員MENUへ</a>　　　
+    <a href="{% url 'member_new' %}" class="text-warning">新規登録</a>
+  </p>
   <form action="{% url 'member' num %}" method="post">
   {% csrf_token %}
     {{ form.as_p }}
