@@ -4170,17 +4170,29 @@ def graph(request):
   # グラフデータ一覧用オブジェクト取得
   obj = Business_Time_graph.objects.all().order_by('work_day2').reverse()
 
-  # 人員の全てのオブジェクトを取得
-  obj2 = member.objects.all()
-  # 班員の従業員番号リスト作成
-  choices_list = [('','')]
-  for i in obj2:
-    choices_list.append((i.employee_no, i.employee_no))
+
+  # 工数データのある従業員番号リストを作成
+  employee_no_list = Business_Time_graph.objects.values_list('employee_no3', flat=True)\
+                                                .order_by('employee_no3').distinct()
+  
+  # 名前リスト定義
+  name_list = [['', '']]
+
+  # 従業員番号を名前に変更するループ
+  for No in list(employee_no_list):
+
+    # 指定従業員番号で人員情報取得
+    name = member.objects.get(employee_no = No)
+
+    # 名前リスト作成
+    name_list.append([No, name])
+
 
   # フォームの初期状態定義
   form = team_kosuForm()
   # フォームの選択肢定義
-  form.fields['employee_no6'].choices = choices_list
+  form.fields['employee_no6'].choices = name_list
+
 
 
   # POST時の処理
@@ -4188,19 +4200,22 @@ def graph(request):
     # POST後のフォーム状態定義
     form = team_kosuForm(request.POST)
     # フォームの選択肢定義
-    form.fields['employee_no6'].choices = choices_list
+    form.fields['employee_no6'].choices = name_list
 
     # グラフデータ一覧用オブジェクト取得
     obj = Business_Time_graph.objects.filter(employee_no3__contains = request.POST['employee_no6'], \
                                              work_day2__contains = request.POST['team_day'])
 
 
+
   # HTMLに渡す辞書
   library_m = {
-    'title' : 'グラフデータ',
+    'title' : '工数データ',
     'obj' : obj,
     'form' : form
   }
+
+
 
   # 指定したHTMLに辞書を渡して表示を完成させる
   return render(request, 'kosu/graph.html', library_m)
