@@ -33,6 +33,7 @@ urlpatterns = [
     path('team_kosu/<int:num>', team_views.team_kosu, name = 'team_kosu'),
     path('team_detail/<int:num>', team_views.team_detail, name = 'team_detail'),
     path('team_calendar', team_views.team_calendar, name = 'team_calendar'),
+    path('class_list', team_views.class_list, name = 'class_list'),
     path('kosu_def', def_views.kosu_def, name = 'kosu_def'),
     path('kosu_Ver', def_views.kosu_Ver, name = 'kosu_Ver'),
     path('def_list/<int:num>', def_views.def_list, name = 'def_list'),

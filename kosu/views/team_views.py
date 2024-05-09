@@ -14,10 +14,15 @@ from ..models import kosu_division
 from ..models import administrator_data
 from ..forms import teamForm
 from ..forms import team_kosuForm
+from ..forms import member_findForm
+from ..forms import schedule_timeForm
+
 
 
 
 #--------------------------------------------------------------------------------------------------------
+
+
 
 
 
@@ -26,8 +31,10 @@ def team(request):
 
   # 未ログインならログインページに飛ぶ
   if request.session.get('login_No', None) == None:
+
     return redirect(to = '/login')
   
+
   # ログイン者の情報取得
   data = member.objects.get(employee_no = request.session.get('login_No', None))
   # ログイン者に権限がなければメインページに戻る
@@ -1671,5 +1678,177 @@ def team_calendar(request):
 
 
 #--------------------------------------------------------------------------------------------------------
+
+
+
+
+
+# 班員設定画面定義
+def class_list(request):
+
+  # 未ログインならログインページに飛ぶ
+  if request.session.get('login_No', None) == None:
+    return redirect(to = '/login')
+  
+  
+  # ログイン者の情報取得
+  data = member.objects.get(employee_no = request.session.get('login_No', None))
+
+  # ログイン者が組長以上or管理者でないなら前ページに飛ぶ
+  if data.shop != '組長以上' and data.administrator != True:
+
+    return redirect(to = '/team_main')
+
+
+
+  # POST時の処理
+  if (request.method == 'POST'):
+
+    # 検索項目に空欄がある場合の処理
+    if request.POST['year'] == '' or request.POST['month'] == '':
+      # エラーメッセージ出力
+      messages.error(request, '表示年月に未入力箇所があります。ERROR032')
+      # このページをリダイレクト
+      return redirect(to = '/class_list')
+    
+
+    # フォームの初期値定義
+    shop_default = {'shop2' : request.POST['shop2']}
+    schedule_default = {'year' : request.POST['year'], 
+                        'month' : request.POST['month']}
+    
+    # フォーム定義
+    shop_form = member_findForm(shop_default)
+    schedule_form = schedule_timeForm(schedule_default)
+
+    # POSTした値をセッションに登録
+    request.session['find_shop'] = request.POST['shop2']
+    request.session['find_year'] = request.POST['year']
+    request.session['find_month'] = request.POST['month']
+
+
+    # 選択ショップの人員取得
+    member_obj_filter = member.objects.filter(shop__contains = request.POST['shop2'])
+
+    # 空のリスト定義
+    No_list = []
+    name_list = []
+
+    # 取得した人員情報の従業員番号をリスト化するループ
+    for i in member_obj_filter:
+      # 従業員番号をリストに追加
+      No_list.append(i.employee_no)
+      # 名前をリストに追加
+      name_list.append(i.name)
+
+
+    # 指定したショップの人員の工数データ取得
+    work_obj_filter = Business_Time_graph.objects.filter(employee_no3__in = No_list)
+
+    for i in work_obj_filter:
+      print(i)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  # POST時以外の処理
+  else:
+
+    # セッション値に年月のデータがない場合の処理
+    if request.session.get('find_year', '') == '' or request.session.get('find_month', '') == '':
+
+      # 本日の年月取得
+      year = datetime.date.today().year
+      month = datetime.date.today().month
+
+    # セッション値に年月のデータがある場合の処理
+    else:
+
+      # セッション値から年月取得
+      year = request.session.get('find_year', '')
+      month = request.session.get('find_month', '')
+
+
+    # フォームの初期値定義
+    shop_default = {'shop2' : request.session.get('find_shop', '')}
+    schedule_default = {'year' : year, 
+                        'month' : month}
+    
+    # フォーム定義
+    shop_form = member_findForm(shop_default)
+    schedule_form = schedule_timeForm(schedule_default)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  # HTMLに渡す辞書
+  library_m = {
+    'title' : '工数入力可否(組単位)',
+    'shop_form': shop_form,
+    'schedule_form': schedule_form,
+    }
+
+
+
+  # 指定したHTMLに辞書を渡して表示を完成させる
+  return render(request, 'kosu/class_list.html', library_m)
+
+
+
+
+
+#--------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
 
 
