@@ -1824,8 +1824,20 @@ def class_list(request):
     schedule_form = schedule_timeForm(schedule_default)
 
 
-    # ログイン者と同じショップの人員取得
-    member_obj_filter = member.objects.filter(shop__contains = data.shop).order_by('employee_no')
+    # 前回のショップ検索履歴がある場合の処理
+    if request.session.get('find_shop', '') != '':
+
+      # 検索履歴ショップの人員取得
+      member_obj_filter = member.objects.filter(shop__contains = request.session.get('find_shop', ''))\
+                                        .order_by('employee_no')
+      
+
+    # 前回のショップ検索履歴がない場合の処理
+    else:
+
+      # ログイン者と同じショップの人員取得
+      member_obj_filter = member.objects.filter(shop__contains = data.shop).order_by('employee_no')
+
 
     # 空のリスト定義
     No_list = []
