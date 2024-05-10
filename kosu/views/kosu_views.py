@@ -166,7 +166,7 @@ def input(request):
   if (request.method == 'GET'):
 
     # グラフデータ確認用データ取得
-    data_count = Business_Time_graph.objects.filter(employee_no3 = request.session.get('login_No', None),\
+    obj_filter = Business_Time_graph.objects.filter(employee_no3 = request.session.get('login_No', None),\
                                                     work_day2 = new_work_day)
 
 
@@ -186,7 +186,7 @@ def input(request):
 
 
     # 選択されている就業日のグラフデータがない場合の処理
-    if data_count.count() == 0:
+    if obj_filter.count() == 0:
 
       # 0を288個入れたリスト作成
       graph_list = list(itertools.repeat(0, 288))
@@ -196,11 +196,11 @@ def input(request):
     else:
 
       # グラフデータを取得
-      graph_obj = Business_Time_graph.objects.get(employee_no3 = request.session.get('login_No', None),\
+      obj_get = Business_Time_graph.objects.get(employee_no3 = request.session.get('login_No', None),\
                                                   work_day2 = new_work_day)
 
       # 取得したグラフデータを文字型からリストに解凍
-      graph_list = list(graph_obj.time_work)
+      graph_list = list(obj_get.time_work)
 
       # グラフデータリスト内の各文字を定義
       str_list = ['#', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', \
@@ -224,7 +224,7 @@ def input(request):
       if graph_list != list(itertools.repeat(0, 288)):
 
         # 入力直が3直でない場合の処理
-        if graph_obj.tyoku2 != '3':
+        if obj_get.tyoku2 != '3':
 
           # 工数が入力され始めのインデント取得ループ
           for i in range(288):
@@ -271,7 +271,7 @@ def input(request):
 
 
           # 入力直が1直の場合の処理
-          if graph_obj.tyoku2 == '1':
+          if obj_get.tyoku2 == '1':
 
             # 工数が入力され終わりのインデントが184以下である場合の処理(工数入力が15:20以前の場合)
             if graph_end_index <= 184:
@@ -281,7 +281,7 @@ def input(request):
 
 
           # 入力直が2直の場合の処理でログイン者のショップがボデーか組立の場合の処理
-          if graph_obj.tyoku2 == '2' and (member_obj.shop == 'W1' or member_obj.shop == 'W2' or \
+          if obj_get.tyoku2 == '2' and (member_obj.shop == 'W1' or member_obj.shop == 'W2' or \
                                           member_obj.shop == 'A1' or member_obj.shop == 'A2'):
             
             # 工数が入力され終わりのインデントが240以下である場合の処理(工数入力が20:00以前の場合)
@@ -292,7 +292,7 @@ def input(request):
 
 
           # 入力直が2直の場合の処理でログイン者のショップがプレス、成形、塗装、その他、組長以上の場合の処理
-          if graph_obj.tyoku2 == '2' and (member_obj.shop == 'P' or member_obj.shop == 'R' or \
+          if obj_get.tyoku2 == '2' and (member_obj.shop == 'P' or member_obj.shop == 'R' or \
                                           member_obj.shop == 'T1' or member_obj.shop == 'T2' or \
                                           member_obj.shop == 'その他' or member_obj.shop == '組長以上'):
             
@@ -304,7 +304,7 @@ def input(request):
 
 
           # 入力直が常昼の場合の処理
-          if graph_obj.tyoku2 == '4':
+          if obj_get.tyoku2 == '4':
 
             # 工数が入力され終わりのインデントが204以下である場合の処理(工数入力が17:00以前の場合)
             if graph_end_index <= 204:
@@ -526,11 +526,11 @@ def input(request):
     else:
 
       # グラフデータを取得
-      graph_obj = Business_Time_graph.objects.get(employee_no3 = request.session.get('login_No', None),\
+      obj_get = Business_Time_graph.objects.get(employee_no3 = request.session.get('login_No', None),\
                                                   work_day2 = new_work_day)
 
       # 取得したグラフデータをリストに解凍
-      graph_list = list(graph_obj.time_work)
+      graph_list = list(obj_get.time_work)
 
       # グラフデータリスト内の各文字を数値に変更
       str_list = ['#', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', \
@@ -551,10 +551,10 @@ def input(request):
 
 
       # 作業内容が空でない場合の処理
-      if graph_obj.time_work != '#'*288:
+      if obj_get.time_work != '#'*288:
 
         # 入力直が3直でない場合の処理
-        if graph_obj.tyoku2 != '3':
+        if obj_get.tyoku2 != '3':
 
           # 工数が入力され始めのインデント取得ループ
           for i in range(288):
@@ -603,7 +603,7 @@ def input(request):
 
 
           # 入力直が1直の場合の処理
-          if graph_obj.tyoku2 == '1':
+          if obj_get.tyoku2 == '1':
 
             # 工数が入力され終わりのインデントが184以下である場合の処理(工数入力が15:20以前の場合)
             if graph_end_index <= 184:
@@ -613,7 +613,7 @@ def input(request):
 
 
           # 入力直が2直でログイン者のショップがボデーか組立の場合の処理
-          if graph_obj.tyoku2 == '2' and (member_obj.shop == 'W1' or member_obj.shop == 'W2' or \
+          if obj_get.tyoku2 == '2' and (member_obj.shop == 'W1' or member_obj.shop == 'W2' or \
                                           member_obj.shop == 'A1' or member_obj.shop == 'A2'):
             
             # 工数が入力され終わりのインデントが240以下である場合の処理(工数入力が20:00以前の場合)
@@ -624,7 +624,7 @@ def input(request):
 
 
           # 入力直が2直でログイン者のショップがプレス、成形、塗装、その他、組長以上の場合の処理
-          if graph_obj.tyoku2 == '2' and (member_obj.shop == 'P' or member_obj.shop == 'R' or \
+          if obj_get.tyoku2 == '2' and (member_obj.shop == 'P' or member_obj.shop == 'R' or \
                                           member_obj.shop == 'T1' or member_obj.shop == 'T2' or \
                                           member_obj.shop == 'その他' or member_obj.shop == '組長以上'):
             
@@ -636,7 +636,7 @@ def input(request):
 
 
           # 入力直が常昼の場合の処理
-          if graph_obj.tyoku2 == '4':
+          if obj_get.tyoku2 == '4':
 
             # 工数が入力され終わりのインデントが204以下である場合の処理(工数入力が17:00以前の場合)
             if graph_end_index <= 204:
@@ -2171,10 +2171,10 @@ def input(request):
     # 選択されている就業日のグラフデータがある場合の処理
     else:
       # グラフデータを取得
-      graph_obj = Business_Time_graph.objects.get(employee_no3 = request.session.get('login_No', None),\
+      obj_get = Business_Time_graph.objects.get(employee_no3 = request.session.get('login_No', None),\
                                                   work_day2 = new_work_day)
       # 取得したグラフデータを文字型からリストに解凍
-      graph_list = list(graph_obj.time_work)
+      graph_list = list(obj_get.time_work)
 
       # グラフデータリスト内の各文字を数値に変更
       str_list = ['#', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', \
@@ -2189,7 +2189,7 @@ def input(request):
             break
 
       # 工数が入力されていない部分を切り捨てデータを見やすく
-      if graph_obj.tyoku2 != '3':
+      if obj_get.tyoku2 != '3':
         for i in range(288):
           if graph_list[i] != 0:
             if i == 0:
@@ -2206,22 +2206,22 @@ def input(request):
               graph_end_index = 290 - i
               break
 
-        if graph_obj.tyoku2 == '1':
+        if obj_get.tyoku2 == '1':
           if graph_end_index <= 184:
             graph_end_index = 184
 
-        if graph_obj.tyoku2 == '2' and (member_obj.shop == 'W1' or member_obj.shop == 'W2' or \
+        if obj_get.tyoku2 == '2' and (member_obj.shop == 'W1' or member_obj.shop == 'W2' or \
                                         member_obj.shop == 'A1' or member_obj.shop == 'A2'):
           if graph_end_index <= 240:
             graph_end_index = 240
 
-        if graph_obj.tyoku2 == '2' and (member_obj.shop == 'P' or member_obj.shop == 'R' or \
+        if obj_get.tyoku2 == '2' and (member_obj.shop == 'P' or member_obj.shop == 'R' or \
                                         member_obj.shop == 'T1' or member_obj.shop == 'T2' or \
                                          member_obj.shop == 'その他' or member_obj.shop == '組長以上'):
           if graph_end_index <= 270:
             graph_end_index = 270
 
-        if graph_obj.tyoku2 == '4':
+        if obj_get.tyoku2 == '4':
           if graph_end_index <= 204:
             graph_end_index = 204
 
@@ -2434,7 +2434,14 @@ def input(request):
   form.fields['kosu_def_list'].choices = choices_list
 
 
+  # 工数データ無い場合リンクに空を入れる
+  if 'obj_get' in locals():
+    obj_link = obj_get
+  else:
+    obj_link = ''
 
+
+  print(obj_link)
   # HTMLに渡す辞書
   library_m = {
     'title' : '工数登録',
@@ -2445,6 +2452,7 @@ def input(request):
     'graph_kosu_list' : graph_kosu_list,
     'n' : n,
     'OK_NG' : ok_ng,
+    'obj_link' : obj_link,
     }
 
 
