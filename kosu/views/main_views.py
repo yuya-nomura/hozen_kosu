@@ -259,19 +259,6 @@ def team_main(request):
   if data.authority == False:
 
     return redirect(to = '/')
-  
-  
-  # ログイン者が組長以上か管理者である場合の処理
-  if data.shop =='組長' or data.administrator == True:
-
-    # ボタン表示変数ON
-    display_ok = True
-
-  # ログイン者が組長以上か管理者でない場合の処理
-  else:
-     
-     # ボタン表示変数OFF
-     display_ok = False
 
 
 
@@ -279,7 +266,6 @@ def team_main(request):
   library_m = {
     'title' : '班員MENU',
     'data' : data,
-    'display_ok' : display_ok,
     }
 
 

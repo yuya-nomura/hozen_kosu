@@ -29,8 +29,37 @@
       {{schedule_form.month}}月
     </p>
     <input type="submit" value="表示切替" name = update class="btn btn-orange1 mt-2">
+    <p>　</p>
     <table class="table table-bordered border-dark">
-
+      <tr>
+        <td>
+          氏名　　　　
+        </td>
+        {% for d in day_list %}
+        <td>
+          　{{d}}日
+        </td>
+        {% endfor %}
+      </tr>
+      {% for m in ok_list %}
+      <tr>
+        {% for k in m %}
+          {% if forloop.first %}
+          <td>
+            {{k}}
+          {% else %}
+          {% if k == True %}
+          <td class="table-green">
+            　OK　　
+          {% else %}
+          <td>
+            　NG　　
+          {% endif %}
+          {% endif %}
+          </td>
+        {% endfor %}
+      </tr>
+      {% endfor %}
     </table>
   </body>
 </html>

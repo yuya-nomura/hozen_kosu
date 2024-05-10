@@ -1728,11 +1728,12 @@ def class_list(request):
 
 
     # 選択ショップの人員取得
-    member_obj_filter = member.objects.filter(shop__contains = request.POST['shop2'])
+    member_obj_filter = member.objects.filter(shop__contains = request.POST['shop2']).order_by('employee_no')
 
     # 空のリスト定義
     No_list = []
     name_list = []
+    ok_list = []
 
     # 取得した人員情報の従業員番号をリスト化するループ
     for i in member_obj_filter:
@@ -1741,31 +1742,58 @@ def class_list(request):
       # 名前をリストに追加
       name_list.append(i.name)
 
+    
+    # 次の月の最初の日を定義
+    if request.POST['month'] == '12':
+        next_month = datetime.date(int(request.POST['year']) + 1, 1, 1)
 
-    # 指定したショップの人員の工数データ取得
-    work_obj_filter = Business_Time_graph.objects.filter(employee_no3__in = No_list)
+    else:
+        next_month = datetime.date(int(request.POST['year']), int(request.POST['month']) + 1, 1)
 
-    for i in work_obj_filter:
-      print(i)
-
-
-
-
-
-
+    # 次の月の最初の日から1を引くことで、指定した月の最後の日を取得
+    last_day_of_month = next_month - datetime.timedelta(days = 1)
 
 
 
+    # 指定ショップの人員毎に工数入力可否をリストにするループ
+    for name in name_list:
+
+      # 仮リストを空で定義
+      provisional_list = []
+      # 仮リストに人員名を入れる
+      provisional_list.append(name)
+
+      # 人員情報取得
+      member_obj_get = member.objects.get(name = name)
 
 
+      # 取得した人員の工数入力可否をリスト化するループ
+      for day in range(1, last_day_of_month.day + 1):
 
+        # 指定日に工数データがあるか確認
+        obj_filter = Business_Time_graph.objects.filter(employee_no3 = member_obj_get.employee_no, \
+                                                        work_day2 = datetime.date(int(request.POST['year']), \
+                                                                                  int(request.POST['month']), \
+                                                                                  day))
+        
+        # 工数データがある場合の処理
+        if obj_filter.count() != 0:
+          # 工数データ取得
+          obj_get = Business_Time_graph.objects.get(employee_no3 = member_obj_get.employee_no, \
+                                                    work_day2 = datetime.date(int(request.POST['year']), \
+                                                                              int(request.POST['month']), \
+                                                                              day))
 
+          # 工数入力可否を仮リストに入れる
+          provisional_list.append(obj_get.judgement)
 
+        # 工数データがない場合の処理
+        else:
+          # 仮リストに工数入力可否をFalseで入れる
+          provisional_list.append(False)
 
-
-
-
-
+      # 仮リストを工数入力可否リストに入れる
+      ok_list.append(provisional_list)
 
 
   # POST時以外の処理
@@ -1796,28 +1824,68 @@ def class_list(request):
     schedule_form = schedule_timeForm(schedule_default)
 
 
+    # ログイン者と同じショップの人員取得
+    member_obj_filter = member.objects.filter(shop__contains = data.shop).order_by('employee_no')
+
+    # 空のリスト定義
+    No_list = []
+    name_list = []
+    ok_list = []
+
+    # 取得した人員情報の従業員番号をリスト化するループ
+    for i in member_obj_filter:
+      # 従業員番号をリストに追加
+      No_list.append(i.employee_no)
+      # 名前をリストに追加
+      name_list.append(i.name)
+
+
+    # 次の月の最初の日を定義
+    if int(month) == 12:
+        next_month = datetime.date(int(year) + 1, 1, 1)
+
+    else:
+        next_month = datetime.date(int(year), int(month) + 1, 1)
+
+    # 次の月の最初の日から1を引くことで、指定した月の最後の日を取得
+    last_day_of_month = next_month - datetime.timedelta(days = 1)
 
 
 
+    # 指定ショップの人員毎に工数入力可否をリストにするループ
+    for name in name_list:
+
+      # 仮リストを空で定義
+      provisional_list = []
+      # 仮リストに人員名を入れる
+      provisional_list.append(name)
+
+      # 人員情報取得
+      member_obj_get = member.objects.get(name = name)
 
 
+      # 取得した人員の工数入力可否をリスト化するループ
+      for day in range(1, last_day_of_month.day + 1):
 
+        # 指定日に工数データがあるか確認
+        obj_filter = Business_Time_graph.objects.filter(employee_no3 = member_obj_get.employee_no, \
+                                                        work_day2 = datetime.date(int(year), int(month), day))
+        
+        # 工数データがある場合の処理
+        if obj_filter.count() != 0:
+          # 工数データ取得
+          obj_get = Business_Time_graph.objects.get(employee_no3 = member_obj_get.employee_no, \
+                                                    work_day2 = datetime.date(int(year), int(month), day))
+          # 工数入力可否を仮リストに入れる
+          provisional_list.append(obj_get.judgement)
 
+        # 工数データがない場合の処理
+        else:
+          # 仮リストに工数入力可否をFalseで入れる
+          provisional_list.append(False)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+      # 仮リストを工数入力可否リストに入れる
+      ok_list.append(provisional_list)
 
 
 
@@ -1826,6 +1894,8 @@ def class_list(request):
     'title' : '工数入力可否(組単位)',
     'shop_form': shop_form,
     'schedule_form': schedule_form,
+    'day_list' : range(1, last_day_of_month.day + 1),
+    'ok_list' : ok_list,
     }
 
 
