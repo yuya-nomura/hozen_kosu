@@ -33,6 +33,12 @@ from ..forms import uploadForm
 # ログイン画面定義
 def login(request):
 
+  # ログイン済みならメイン画面に飛ぶ
+  if request.session.get('login_No', None) != None:
+    return redirect(to = '/')
+  
+
+
   # POST時の処理
   if (request.method == 'POST'):
 
