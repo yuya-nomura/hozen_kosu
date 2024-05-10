@@ -252,11 +252,12 @@ class inquiry_data(models.Model):
     content_list = [
         ('要望', '要望'),
         ('不具合', '不具合'),
+        ('問い合わせ' ,'問い合わせ'),
         ]
 
     employee_no2 = models.IntegerField('従業員番号')
     name = models.ForeignKey(member, verbose_name = '氏名', on_delete = models.CASCADE)
-    content_choice = models.CharField('内容選択', choices = content_list, max_length = 3)
+    content_choice = models.CharField('内容選択', choices = content_list, max_length = 5)
     inquiry = models.TextField('問い合わせ')
     answer = models.TextField('回答', blank = True)
 

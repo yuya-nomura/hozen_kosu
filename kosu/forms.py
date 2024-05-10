@@ -458,6 +458,7 @@ class inquiry_findForm(forms.Form):
     ('', ''),
     ('要望', '要望'),
     ('不具合', '不具合'),
+    ('問い合わせ' ,'問い合わせ'),
     ]
 
   category = forms.ChoiceField(label = 'カテゴリー', choices = category_list, required = False)
