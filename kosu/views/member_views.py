@@ -253,15 +253,6 @@ def member_edit(request, num):
     # 人員登録データの内、従業員番号がPOST送信された値と等しいレコードのオブジェクトを取得
     data = member.objects.filter(employee_no = find)
 
-    if 'authority' in request.POST == '':
-      authority = False
-    else:
-      authority = True
-
-    if 'administrator' in request.POST == '':
-      administrator = False
-    else:
-      administrator = True
 
     # 編集した従業員番号の登録がすでにあるかチェック
     if int(request.session.get('edit_No', None)) != int(request.POST['employee_no']) \
@@ -277,8 +268,8 @@ def member_edit(request, num):
                                     defaults = {'employee_no' : find, \
                                                 'name' : request.POST['name'], \
                                                 'shop' : request.POST['shop'], \
-                                                'authority' : authority, \
-                                                'administrator' : administrator})
+                                                'authority' : 'authority' in request.POST, \
+                                                'administrator' : 'administrator' in request.POST})
 
     # 工数履歴画面をリダイレクトする
     return redirect(to = '/member/1')
