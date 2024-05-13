@@ -1531,7 +1531,7 @@ def administrator_menu(request):
     for item in data:
 
       row = [
-        item.employee_no2, item.name, item.content_choice, item.inquiry, item.answer
+        item.employee_no2, str(item.name), item.content_choice, item.inquiry, item.answer
         ]
       ws.append(row)
 
