@@ -1821,7 +1821,6 @@ def class_list(request):
         week_list.append('日')
 
 
-
   # POST時以外の処理
   else:
 
@@ -1978,8 +1977,6 @@ def class_list(request):
 
 # 工数詳細確認画面定義
 def class_detail(request, num):
-
-
 
   # 未ログインならログインページに飛ぶ
   if request.session.get('login_No', None) == None:

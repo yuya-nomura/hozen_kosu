@@ -87,6 +87,7 @@
         <input type="submit" value="工数登録"  name="Registration" class="btn btn-blue1 mt-2">　
         <input type="submit" value="休憩変更"  name="change_display" class="btn btn-blue2 mt-2">
       </td></th></tr>
+      {% if obj_link != '' %}
       <tr>
         <th>
           工数詳細
@@ -101,6 +102,7 @@
         {% endfor %}
       </tr>
       {% endfor %}
+      {% endif %}
       <button id="update" name="update" class="btn btn-link"></button>
     </table>
   </form>
