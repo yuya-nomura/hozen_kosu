@@ -16,7 +16,7 @@
     <a href="{% url 'kosu_main' %}">工数MENUへ</a>　　　
     <a href="{% url 'kosu_list' 1 %}">履歴へ</a>　　　
     {% if obj_link != '' %}
-    <a href="{% url 'detail' obj_link.id %}">詳細</a>
+    <a href="{% url 'detail' obj_link.id %}">工数編集</a>
     {% endif %}
   </p>
   <form action="{% url 'input' %}" method="post">
@@ -87,6 +87,20 @@
         <input type="submit" value="工数登録"  name="Registration" class="btn btn-blue1 mt-2">　
         <input type="submit" value="休憩変更"  name="change_display" class="btn btn-blue2 mt-2">
       </td></th></tr>
+      <tr>
+        <th>
+          工数詳細
+        </th>
+      </tr>
+      {% for i in time_display_list %}
+      <tr>
+        {% for k in i %}
+        <td>
+        {{k}}
+        </td>
+        {% endfor %}
+      </tr>
+      {% endfor %}
       <button id="update" name="update" class="btn btn-link"></button>
     </table>
   </form>

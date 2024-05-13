@@ -2441,7 +2441,130 @@ def input(request):
     obj_link = ''
 
 
-  print(obj_link)
+
+  # HTML表示用リストリセット
+  time_display_list = []
+
+  # 工数データある場合の処理
+  if obj_link != '':
+
+    # 作業内容と作業詳細を取得しリストに解凍
+    work_list = list(obj_get.time_work)
+    detail_list = obj_get.detail_work.split('$')
+
+
+    # 作業時間リストリセット
+    kosu_list = []
+    time_list_start = []
+    time_list_end = []
+    def_list = []
+    def_time = []
+    detail_time = []
+
+    # 作業内容と作業詳細毎の開始時間と終了時間インデックス取得
+    for i in range(288):
+
+      # 最初の要素に作業が入っている場合の処理
+      if i == 0 and work_list[i] != '#':
+
+        # 作業時間インデックスリストに要素追加
+        kosu_list.append(i)
+
+      # 時間区分毎に前の作業との差異がある場合の処理
+      if i != 0 and (work_list[i] != work_list[i - 1] or \
+                    detail_list[i] != detail_list[i - 1]):
+        
+        # 作業時間インデックスに作業時間のインデックス記録
+        kosu_list.append(i)
+
+      # 最後の要素に作業が入っている場合の処理
+      if i == 287 and work_list[i] != '#':
+
+        # 作業時間インデックスリストに要素追加
+        kosu_list.append(i)
+
+    # 作業時間インデックスに要素がある場合の処理
+    if len(kosu_list) != 0:
+
+      # 作業時間インデックスを時間表示に修正
+      for ind, t in enumerate(kosu_list):
+
+        # 最後以外のループ処理
+        if len(kosu_list) - 1 != ind:
+
+          # 作業開始時間をSTRで定義
+          time_obj_start = str(int(t)//12).zfill(2) + ':' + str(int(t)%12*5).zfill(2)
+          # 作業終了時間をSTRで定義
+          time_obj_end = str(int(kosu_list[ind + 1])//12).zfill(2) + ':' \
+            + str(int(kosu_list[ind + 1])%12*5).zfill(2)
+          
+          # 作業開始時間と作業終了時間をリストに追加
+          time_list_start.append(time_obj_start)
+          time_list_end.append(time_obj_end)
+
+          # 作業開始時間をSTRで定義
+          time_obj_start = str(int(t)//12).zfill(2) + ':' + str(int(t)%12*5).zfill(2)
+
+
+    # 現在使用している工数区分のオブジェクトを取得
+    kosu_obj = kosu_division.objects.get(kosu_name = request.session.get('input_def', None))
+
+    # 工数区分登録カウンターリセット
+    n = 0
+    # 工数区分登録数カウント
+    for kosu_num in range(1, 50):
+      if eval('kosu_obj.kosu_title_{}'.format(kosu_num)) != None:
+        n = kosu_num
+
+    # 工数区分処理用記号リスト用意
+    str_list = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', \
+                'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', \
+                  'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', \
+                      'q', 'r', 's', 't', 'u', 'v', 'w', 'x',]
+    # リストの長さを工数区分の登録数に応じて調整
+    del str_list[n:]
+
+    # 作業無し記号追加
+    str_list.append('#')
+
+    # 工数区分の選択リスト作成
+    for i, m in enumerate(str_list):
+
+      # 最終ループでない場合の処置
+      if i != len(str_list) - 1:
+
+        # 工数区分定義要素を追加
+        def_list.append(eval('kosu_obj.kosu_title_{}'.format(i + 1)))
+
+      # 最終ループの場合の処置
+      else:
+    
+        # 作業なし追加
+        def_list.append('-')
+
+    # 工数区分辞書作成
+    def_library = dict(zip(str_list, def_list))
+
+
+    # 作業内容と作業詳細リスト作成
+    for ind, t in enumerate(kosu_list):
+
+      # 最後以外のループ処理
+      if len(kosu_list) - 1 != ind:
+
+        def_time.append(def_library[work_list[t]])
+        detail_time.append(detail_list[t])
+
+    # HTML表示用リスト作成
+    for k in range(len(time_list_start)):
+      for_list = []
+      for_list.append(str(time_list_start[k]) + '～' + str(time_list_end[k]))
+      for_list.append(def_time[k])
+      for_list.append(detail_time[k])
+      time_display_list.append(for_list)
+
+
+
   # HTMLに渡す辞書
   library_m = {
     'title' : '工数登録',
@@ -2453,6 +2576,7 @@ def input(request):
     'n' : n,
     'OK_NG' : ok_ng,
     'obj_link' : obj_link,
+    'time_display_list' : time_display_list,
     }
 
 
