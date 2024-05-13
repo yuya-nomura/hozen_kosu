@@ -39,23 +39,23 @@
     <table class="table table-bordered border-dark">
       <tr>
         <th colspan="2"><div class="text-center">曜日</div></th>
-        <th class="table-danger"><div class="text-center">日</div></th>
+        <th class="table-pink"><div class="text-center">日</div></th>
         <th><div class="text-center">月</div></th>
         <th><div class="text-center">火</div></th>
         <th><div class="text-center">水</div></th>
         <th><div class="text-center">木</div></th>
         <th><div class="text-center">金</div></th>
-        <th class="table-primary"><div class="text-center">土</div></th>
+        <th class="table-light_blue"><div class="text-center">土</div></th>
       </tr>
 
       <tr>
         <td colspan="2"><div class="text-center">日付</div></td>
         {% for i in day_list|slice:":7" %}
         {% if forloop.first %}
-        <td class="table-danger">
+        <td class="table-pink">
         {% else %}
         {% if forloop.last %}
-        <td class="table-primary">
+        <td class="table-light_blue">
         {% else %}
         <td>
         {% endif %}
@@ -71,10 +71,10 @@
         <td><div class="text-center">勤務</div></td>
         {% for i in work_list1 %}
         {% if forloop.first %}
-        <td class="table-danger">
+        <td class="table-pink">
         {% else %}
         {% if forloop.last %}
-        <td class="table-primary">
+        <td class="table-light_blue">
         {% else %}
         <td>
         {% endif %}
@@ -88,10 +88,10 @@
         <td><div class="text-center">残業(分)</div></td>
         {% for i in over_time_list1 %}
         {% if forloop.first %}
-        <td class="table-danger">
+        <td class="table-pink">
         {% else %}
         {% if forloop.last %}
-        <td class="table-primary">
+        <td class="table-light_blue">
         {% else %}
         <td>
         {% endif %}
@@ -106,10 +106,10 @@
         {% for i in kosu_list1 %}
         {% with inp=ok_ng_list1.pop %}
         {% if forloop.first and inp == False %}
-        <td class="table-danger">
+        <td class="table-pink">
         {% else %}
         {% if forloop.last and inp == False %}
-        <td class="table-primary">
+        <td class="table-light_blue">
         {% else %}
         {% if inp == True %}
         <td class="table-green">
@@ -133,10 +133,10 @@
         <td><div class="text-center">勤務</div></td>
         {% for i in work_list2 %}
         {% if forloop.first %}
-        <td class="table-danger">
+        <td class="table-pink">
         {% else %}
         {% if forloop.last %}
-        <td class="table-primary">
+        <td class="table-light_blue">
         {% else %}
         <td>
         {% endif %}
@@ -150,10 +150,10 @@
         <td><div class="text-center">残業(分)</div></td>
         {% for i in over_time_list2 %}
         {% if forloop.first %}
-        <td class="table-danger">
+        <td class="table-pink">
         {% else %}
         {% if forloop.last %}
-        <td class="table-primary">
+        <td class="table-light_blue">
         {% else %}
         <td>
         {% endif %}
@@ -168,10 +168,10 @@
         {% for i in kosu_list2 %}
         {% with inp=ok_ng_list2.pop %}
         {% if forloop.first and inp == False %}
-        <td class="table-danger">
+        <td class="table-pink">
         {% else %}
         {% if forloop.last and inp == False %}
-        <td class="table-primary">
+        <td class="table-light_blue">
         {% else %}
         {% if inp == True %}
         <td class="table-green">
@@ -195,10 +195,10 @@
         <td><div class="text-center">勤務</div></td>
         {% for i in work_list3 %}
         {% if forloop.first %}
-        <td class="table-danger">
+        <td class="table-pink">
         {% else %}
         {% if forloop.last %}
-        <td class="table-primary">
+        <td class="table-light_blue">
         {% else %}
         <td>
         {% endif %}
@@ -212,10 +212,10 @@
         <td><div class="text-center">残業(分)</div></td>
         {% for i in over_time_list3 %}
         {% if forloop.first %}
-        <td class="table-danger">
+        <td class="table-pink">
         {% else %}
         {% if forloop.last %}
-        <td class="table-primary">
+        <td class="table-light_blue">
         {% else %}
         <td>
         {% endif %}
@@ -230,10 +230,10 @@
         {% for i in kosu_list3 %}
         {% with inp=ok_ng_list3.pop %}
         {% if forloop.first and inp == False %}
-        <td class="table-danger">
+        <td class="table-pink">
         {% else %}
         {% if forloop.last and inp == False %}
-        <td class="table-primary">
+        <td class="table-light_blue">
         {% else %}
         {% if inp == True %}
         <td class="table-green">
@@ -257,10 +257,10 @@
         <td><div class="text-center">勤務</div></td>
         {% for i in work_list4 %}
         {% if forloop.first %}
-        <td class="table-danger">
+        <td class="table-pink">
         {% else %}
         {% if forloop.last %}
-        <td class="table-primary">
+        <td class="table-light_blue">
         {% else %}
         <td>
         {% endif %}
@@ -274,10 +274,10 @@
         <td><div class="text-center">残業(分)</div></td>
         {% for i in over_time_list4 %}
         {% if forloop.first %}
-        <td class="table-danger">
+        <td class="table-pink">
         {% else %}
         {% if forloop.last %}
-        <td class="table-primary">
+        <td class="table-light_blue">
         {% else %}
         <td>
         {% endif %}
@@ -292,10 +292,10 @@
         {% for i in kosu_list4 %}
         {% with inp=ok_ng_list4.pop %}
         {% if forloop.first and inp == False %}
-        <td class="table-danger">
+        <td class="table-pink">
         {% else %}
         {% if forloop.last and inp == False %}
-        <td class="table-primary">
+        <td class="table-light_blue">
         {% else %}
         {% if inp == True %}
         <td class="table-green">
@@ -319,10 +319,10 @@
         <td><div class="text-center">勤務</div></td>
         {% for i in work_list5 %}
         {% if forloop.first %}
-        <td class="table-danger">
+        <td class="table-pink">
         {% else %}
         {% if forloop.last %}
-        <td class="table-primary">
+        <td class="table-light_blue">
         {% else %}
         <td>
         {% endif %}
@@ -336,10 +336,10 @@
         <td><div class="text-center">残業(分)</div></td>
         {% for i in over_time_list5 %}
         {% if forloop.first %}
-        <td class="table-danger">
+        <td class="table-pink">
         {% else %}
         {% if forloop.last %}
-        <td class="table-primary">
+        <td class="table-light_blue">
         {% else %}
         <td>
         {% endif %}
@@ -354,10 +354,10 @@
         {% for i in kosu_list5 %}
         {% with inp=ok_ng_list5.pop %}
         {% if forloop.first and inp == False %}
-        <td class="table-danger">
+        <td class="table-pink">
         {% else %}
         {% if forloop.last and inp == False %}
-        <td class="table-primary">
+        <td class="table-light_blue">
         {% else %}
         {% if inp == True %}
         <td class="table-green">
@@ -381,10 +381,10 @@
         <td><div class="text-center">勤務</div></td>
         {% for i in work_list6 %}
         {% if forloop.first %}
-        <td class="table-danger">
+        <td class="table-pink">
         {% else %}
         {% if forloop.last %}
-        <td class="table-primary">
+        <td class="table-light_blue">
         {% else %}
         <td>
         {% endif %}
@@ -398,10 +398,10 @@
         <td><div class="text-center">残業(分)</div></td>
         {% for i in over_time_list6 %}
         {% if forloop.first %}
-        <td class="table-danger">
+        <td class="table-pink">
         {% else %}
         {% if forloop.last %}
-        <td class="table-primary">
+        <td class="table-light_blue">
         {% else %}
         <td>
         {% endif %}
@@ -416,10 +416,10 @@
         {% for i in kosu_list6 %}
         {% with inp=ok_ng_list6.pop %}
         {% if forloop.first and inp == False %}
-        <td class="table-danger">
+        <td class="table-pink">
         {% else %}
         {% if forloop.last and inp == False %}
-        <td class="table-primary">
+        <td class="table-light_blue">
         {% else %}
         {% if inp == True %}
         <td class="table-green">
@@ -443,10 +443,10 @@
         <td><div class="text-center">勤務</div></td>
         {% for i in work_list7 %}
         {% if forloop.first %}
-        <td class="table-danger">
+        <td class="table-pink">
         {% else %}
         {% if forloop.last %}
-        <td class="table-primary">
+        <td class="table-light_blue">
         {% else %}
         <td>
         {% endif %}
@@ -460,10 +460,10 @@
         <td><div class="text-center">残業(分)</div></td>
         {% for i in over_time_list7 %}
         {% if forloop.first %}
-        <td class="table-danger">
+        <td class="table-pink">
         {% else %}
         {% if forloop.last %}
-        <td class="table-primary">
+        <td class="table-light_blue">
         {% else %}
         <td>
         {% endif %}
@@ -478,10 +478,10 @@
         {% for i in kosu_list7 %}
         {% with inp=ok_ng_list7.pop %}
         {% if forloop.first and inp == False %}
-        <td class="table-danger">
+        <td class="table-pink">
         {% else %}
         {% if forloop.last and inp == False %}
-        <td class="table-primary">
+        <td class="table-light_blue">
         {% else %}
         {% if inp == True %}
         <td class="table-green">
@@ -505,10 +505,10 @@
         <td><div class="text-center">勤務</div></td>
         {% for i in work_list8 %}
         {% if forloop.first %}
-        <td class="table-danger">
+        <td class="table-pink">
         {% else %}
         {% if forloop.last %}
-        <td class="table-primary">
+        <td class="table-light_blue">
         {% else %}
         <td>
         {% endif %}
@@ -522,10 +522,10 @@
         <td><div class="text-center">残業(分)</div></td>
         {% for i in over_time_list8 %}
         {% if forloop.first %}
-        <td class="table-danger">
+        <td class="table-pink">
         {% else %}
         {% if forloop.last %}
-        <td class="table-primary">
+        <td class="table-light_blue">
         {% else %}
         <td>
         {% endif %}
@@ -540,10 +540,10 @@
         {% for i in kosu_list8 %}
         {% with inp=ok_ng_list8.pop %}
         {% if forloop.first and inp == False %}
-        <td class="table-danger">
+        <td class="table-pink">
         {% else %}
         {% if forloop.last and inp == False %}
-        <td class="table-primary">
+        <td class="table-light_blue">
         {% else %}
         {% if inp == True %}
         <td class="table-green">
@@ -567,10 +567,10 @@
         <td><div class="text-center">勤務</div></td>
         {% for i in work_list9 %}
         {% if forloop.first %}
-        <td class="table-danger">
+        <td class="table-pink">
         {% else %}
         {% if forloop.last %}
-        <td class="table-primary">
+        <td class="table-light_blue">
         {% else %}
         <td>
         {% endif %}
@@ -584,10 +584,10 @@
         <td><div class="text-center">残業(分)</div></td>
         {% for i in over_time_list9 %}
         {% if forloop.first %}
-        <td class="table-danger">
+        <td class="table-pink">
         {% else %}
         {% if forloop.last %}
-        <td class="table-primary">
+        <td class="table-light_blue">
         {% else %}
         <td>
         {% endif %}
@@ -602,10 +602,10 @@
         {% for i in kosu_list9 %}
         {% with inp=ok_ng_list9.pop %}
         {% if forloop.first and inp == False %}
-        <td class="table-danger">
+        <td class="table-pink">
         {% else %}
         {% if forloop.last and inp == False %}
-        <td class="table-primary">
+        <td class="table-light_blue">
         {% else %}
         {% if inp == True %}
         <td class="table-green">
@@ -629,10 +629,10 @@
         <td><div class="text-center">勤務</div></td>
         {% for i in work_list10 %}
         {% if forloop.first %}
-        <td class="table-danger">
+        <td class="table-pink">
         {% else %}
         {% if forloop.last %}
-        <td class="table-primary">
+        <td class="table-light_blue">
         {% else %}
         <td>
         {% endif %}
@@ -646,10 +646,10 @@
         <td><div class="text-center">残業(分)</div></td>
         {% for i in over_time_list10 %}
         {% if forloop.first %}
-        <td class="table-danger">
+        <td class="table-pink">
         {% else %}
         {% if forloop.last %}
-        <td class="table-primary">
+        <td class="table-light_blue">
         {% else %}
         <td>
         {% endif %}
@@ -664,10 +664,10 @@
         {% for i in kosu_list10 %}
         {% with inp=ok_ng_list10.pop %}
         {% if forloop.first and inp == False %}
-        <td class="table-danger">
+        <td class="table-pink">
         {% else %}
         {% if forloop.last and inp == False %}
-        <td class="table-primary">
+        <td class="table-light_blue">
         {% else %}
         {% if inp == True %}
         <td class="table-green">

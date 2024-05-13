@@ -36,22 +36,22 @@
       </p>
       <tr><p>　</p></tr>
       <tr>
-        <th class="table-danger"><div class="text-center">日</div></th>
+        <th class="table-pink"><div class="text-center">日</div></th>
         <th><div class="text-center">月</div></th>
         <th><div class="text-center">火</div></th>
         <th><div class="text-center">水</div></th>
         <th><div class="text-center">木</div></th>
         <th><div class="text-center">金</div></th>
-        <th class="table-primary"><div class="text-center">土</div></th>
+        <th class="table-light_blue"><div class="text-center">土</div></th>
       </tr>
 
       <tr>
         {% for i in day_list|slice:":7" %}
         {% if forloop.first %}
-        <td class="table-danger">
+        <td class="table-pink">
         {% else %}
         {% if forloop.last %}
-        <td class="table-primary">
+        <td class="table-light_blue">
         {% else %}
         <td>
         {% endif %}
@@ -62,7 +62,7 @@
       </tr>
 
       <tr>
-        <td class="table-danger">
+        <td class="table-pink">
           {% if day_list.0 != '' %}<div class="text-center">{{form.day1}}</div>{% endif %}
         </td>
         <td>
@@ -80,7 +80,7 @@
         <td>
           {% if day_list.5 != '' %}<div class="text-center">{{form.day6}}</div>{% endif %}
         </td>
-        <td class="table-primary">
+        <td class="table-light_blue">
           {% if day_list.6 != '' %}<div class="text-center">{{form.day7}}</div>{% endif %}
         </td>
       </tr>
@@ -88,7 +88,7 @@
       <tr>
         {% if OK_NG_list.0 == True %}<td class="table-green">
         {% else %}
-        {% if OK_NG_list.0 != True %}<td class="table-danger">
+        {% if OK_NG_list.0 != True %}<td class="table-pink">
         {% endif %}
         {% endif %}
         {% if day_list.0 != '' %}<div class="text-center">
@@ -154,7 +154,7 @@
         </div></td>
         {% if OK_NG_list.6 == True %}<td class="table-green">
         {% else %}
-        {% if OK_NG_list.6 != True %}<td class="table-primary">
+        {% if OK_NG_list.6 != True %}<td class="table-light_blue">
         {% endif %}
         {% endif %}
         {% if day_list.6 != '' %}<div class="text-center">
@@ -168,10 +168,10 @@
       <tr>
         {% for i in day_list|slice:"7:14" %}
         {% if forloop.first %}
-        <td class="table-danger">
+        <td class="table-pink">
         {% else %}
         {% if forloop.last %}
-        <td class="table-primary">
+        <td class="table-light_blue">
         {% else %}
         <td>
         {% endif %}
@@ -182,7 +182,7 @@
       </tr>
 
       <tr>
-        <td class="table-danger">
+        <td class="table-pink">
           {% if day_list.7 != '' %}<div class="text-center">{{form.day8}}</div>{% endif %}
         </td>
         <td>
@@ -200,7 +200,7 @@
         <td>
           {% if day_list.13 != '' %}<div class="text-center">{{form.day13}}</div>{% endif %}
         </td>
-        <td class="table-primary">
+        <td class="table-light_blue">
           {% if day_list.13 != '' %}<div class="text-center">{{form.day14}}</div>{% endif %}
         </td>
       </tr>
@@ -208,7 +208,7 @@
       <tr>
         {% if OK_NG_list.7 == True %}<td class="table-green">
         {% else %}
-        {% if OK_NG_list.7 != True %}<td class="table-danger">
+        {% if OK_NG_list.7 != True %}<td class="table-pink">
         {% endif %}
         {% endif %}
         {% if day_list.7 != '' %}<div class="text-center">
@@ -274,7 +274,7 @@
         </div></td>
         {% if OK_NG_list.13 == True %}<td class="table-green">
         {% else %}
-        {% if OK_NG_list.13 != True %}<td class="table-primary">
+        {% if OK_NG_list.13 != True %}<td class="table-light_blue">
         {% endif %}
         {% endif %}
         {% if day_list.13 != '' %}<div class="text-center">
@@ -288,10 +288,10 @@
       <tr>
         {% for i in day_list|slice:"14:21" %}
         {% if forloop.first %}
-        <td class="table-danger">
+        <td class="table-pink">
         {% else %}
         {% if forloop.last %}
-        <td class="table-primary">
+        <td class="table-light_blue">
         {% else %}
         <td>
         {% endif %}
@@ -302,7 +302,7 @@
       </tr>
 
       <tr>
-        <td class="table-danger">
+        <td class="table-pink">
           {% if day_list.14 != '' %}<div class="text-center">{{form.day15}}</div>{% endif %}
         </td>
         <td>
@@ -320,7 +320,7 @@
         <td>
           {% if day_list.19 != '' %}<div class="text-center">{{form.day20}}</div>{% endif %}
         </td>
-        <td class="table-primary">
+        <td class="table-light_blue">
           {% if day_list.20 != '' %}<div class="text-center">{{form.day21}}</div>{% endif %}
         </td>
       </tr>
@@ -328,7 +328,7 @@
       <tr>
         {% if OK_NG_list.14 == True %}<td class="table-green">
         {% else %}
-        {% if OK_NG_list.14 != True %}<td class="table-danger">
+        {% if OK_NG_list.14 != True %}<td class="table-pink">
         {% endif %}
         {% endif %}
         {% if day_list.14 != '' %}<div class="text-center">
@@ -394,7 +394,7 @@
         </div></td>
         {% if OK_NG_list.20 == True %}<td class="table-green">
         {% else %}
-        {% if OK_NG_list.20 != True %}<td class="table-primary">
+        {% if OK_NG_list.20 != True %}<td class="table-light_blue">
         {% endif %}
         {% endif %}
         {% if day_list.20 != '' %}<div class="text-center">
@@ -408,10 +408,10 @@
       <tr>
         {% for i in day_list|slice:"21:28" %}
         {% if forloop.first %}
-        <td class="table-danger">
+        <td class="table-pink">
         {% else %}
         {% if forloop.last %}
-        <td class="table-primary">
+        <td class="table-light_blue">
         {% else %}
         <td>
         {% endif %}
@@ -422,7 +422,7 @@
       </tr>
 
       <tr>
-        <td class="table-danger">
+        <td class="table-pink">
           {% if day_list.21 != '' %}<div class="text-center">{{form.day22}}</div>{% endif %}
         </td>
         <td>
@@ -440,7 +440,7 @@
         <td>
           {% if day_list.26 != '' %}<div class="text-center">{{form.day27}}</div>{% endif %}
         </td>
-        <td class="table-primary">
+        <td class="table-light_blue">
           {% if day_list.27 != '' %}<div class="text-center">{{form.day28}}</div>{% endif %}
         </td>
       </tr>
@@ -448,7 +448,7 @@
       <tr>
         {% if OK_NG_list.21 == True %}<td class="table-green">
         {% else %}
-        {% if OK_NG_list.21 != True %}<td class="table-danger">
+        {% if OK_NG_list.21 != True %}<td class="table-pink">
         {% endif %}
         {% endif %}
         {% if day_list.21 != '' %}<div class="text-center">
@@ -514,7 +514,7 @@
         </div></td>
         {% if OK_NG_list.27 == True %}<td class="table-green">
         {% else %}
-        {% if OK_NG_list.27 != True %}<td class="table-primary">
+        {% if OK_NG_list.27 != True %}<td class="table-light_blue">
         {% endif %}
         {% endif %}
         {% if day_list.27 != '' %}<div class="text-center">
@@ -529,10 +529,10 @@
       <tr>
         {% for i in day_list|slice:"28:35" %}
         {% if forloop.first %}
-        <td class="table-danger">
+        <td class="table-pink">
         {% else %}
         {% if forloop.last %}
-        <td class="table-primary">
+        <td class="table-light_blue">
         {% else %}
         <td>
         {% endif %}
@@ -543,7 +543,7 @@
       </tr>
 
       <tr>
-        <td class="table-danger">
+        <td class="table-pink">
           {% if day_list.28 != '' %}<div class="text-center">{{form.day29}}</div>{% endif %}
         </td>
         <td>
@@ -561,7 +561,7 @@
         <td>
           {% if day_list.33 != '' %}<div class="text-center">{{form.day34}}</div>{% endif %}
         </td>
-        <td class="table-primary">
+        <td class="table-light_blue">
           {% if day_list.34 != '' %}<div class="text-center">{{form.day35}}</div>{% endif %}
         </td>
       </tr>
@@ -569,7 +569,7 @@
       <tr>
         {% if OK_NG_list.28 == True %}<td class="table-green">
         {% else %}
-        {% if OK_NG_list.28 != True %}<td class="table-danger">
+        {% if OK_NG_list.28 != True %}<td class="table-pink">
         {% endif %}
         {% endif %}
         {% if day_list.28 != '' %}<div class="text-center">
@@ -635,7 +635,7 @@
         </div></td>
         {% if OK_NG_list.34 == True %}<td class="table-green">
         {% else %}
-        {% if OK_NG_list.34 != True %}<td class="table-primary">
+        {% if OK_NG_list.34 != True %}<td class="table-light_blue">
         {% endif %}
         {% endif %}
         {% if day_list.34 != '' %}<div class="text-center">
@@ -651,7 +651,7 @@
       <tr>
         {% for i in day_list|slice:"35:37" %}
         {% if forloop.first %}
-        <td class="table-danger">
+        <td class="table-pink">
         {% else %}
         <td>
         {% endif %}
@@ -662,11 +662,11 @@
         <td><div class="text-center"></div></td>
         <td><div class="text-center"></div></td>
         <td><div class="text-center"></div></td>
-        <td class="table-primary"><div class="text-center"></div></td>
+        <td class="table-light_blue"><div class="text-center"></div></td>
       </tr>
 
       <tr>
-        <td class="table-danger">
+        <td class="table-pink">
           {% if day_list.35 != '' %}<div class="text-center">{{form.day36}}</div>{% endif %}
         </td>
         <td>
@@ -676,13 +676,13 @@
         <td></td>
         <td></td>
         <td></td>
-        <td class="table-primary"></td>
+        <td class="table-light_blue"></td>
       </tr>
 
       <tr>
         {% if OK_NG_list.35 == True %}<td class="table-green">
         {% else %}
-        {% if OK_NG_list.35 != True %}<td class="table-danger">
+        {% if OK_NG_list.35 != True %}<td class="table-pink">
         {% endif %}
         {% endif %}
         {% if day_list.35 != '' %}<div class="text-center">
@@ -706,7 +706,7 @@
         <td></td>
         <td></td>
         <td></td>
-        <td class="table-primary"></td>
+        <td class="table-light_blue"></td>
       </tr>
 
       {% endif %}

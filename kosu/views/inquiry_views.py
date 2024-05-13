@@ -248,6 +248,9 @@ def inquiry_edit(request, num):
   # 指定IDの工数履歴のレコードのオブジェクトを変数に入れる
   obj_get = inquiry_data.objects.get(id = num)
 
+  # ログイン者情報取得
+  member_obj_get = member.objects.get(employee_no = request.session.get('login_No', None))
+
   # フォーム初期値定義
   form_default = {'content_choice' : obj_get.content_choice, 
                   'inquiry' : obj_get.inquiry, 
@@ -267,8 +270,8 @@ def inquiry_edit(request, num):
                                                       'inquiry' : request.POST['inquiry'], \
                                                       'answer' : request.POST['answer']})
 
-    # このページをリダイレクトする
-    return redirect(to = '/inquiry_edit/{}'.format(num))
+    # お問い合わせ一覧ページをリダイレクトする
+    return redirect(to = '/inquiry_list/1')
 
 
 
@@ -289,6 +292,7 @@ def inquiry_edit(request, num):
     'id' : num,
     'obj' : obj_get,
     'form' : form,
+    'member_obj_get' : member_obj_get,
     }
   
 

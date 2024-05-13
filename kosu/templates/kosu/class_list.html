@@ -33,31 +33,54 @@
     <p>工数データが入力されている日付を選択すると詳細を閲覧できます。</p>
     <table class="table table-bordered border-dark">
       <tr>
-        <td>
+        <td rowspan="2"  style="text-align:center;">
           氏名　　　　
         </td>
-        {% for d in day_list %}
-        <td>
-          {{d}}日　　
-        </td>
+        {% for d, w in day_list %}
+        {% if w == "土" %}
+          <td class="table-light_blue" style="text-align:center;">
+        {% else %}
+        {% if w == "日" %}
+          <td class="table-pink" style="text-align:center;">
+        {% else %}
+          <td style="text-align:center;">
+        {% endif %}
+        {% endif %}
+            {{d}}日　　
+          </td>
+        {% endfor %}
+      </tr>
+      <tr>
+        {% for d in week_list %}
+        {% if d == "土" %}
+          <td class="table-light_blue" style="text-align:center;">
+        {% else %}
+        {% if d == "日" %}
+          <td class="table-pink" style="text-align:center;">
+        {% else %}
+          <td style="text-align:center;">
+        {% endif %}
+        {% endif %}
+            {{d}}
+          </td>
         {% endfor %}
       </tr>
       {% for m in ok_list %}
       <tr>
         {% for k in m %}
           {% if forloop.first %}
-          <td>
+          <td style="text-align:center;">
             {{k}}
           {% else %}
           {% if k.judgement == True %}
-          <td class="table-green">
+          <td class="table-green" style="text-align:center;">
             <a href="{% url 'class_detail' k.id %}">OK</a>
           {% else %}
           {% if k.judgement == False %}
-          <td>
+          <td style="text-align:center;">
             <a href="{% url 'class_detail' k.id %}">NG</a>
           {% else %}
-          <td>
+          <td style="text-align:center;">
             NG
           {% endif %}
           {% endif %}

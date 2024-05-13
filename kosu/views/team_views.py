@@ -1734,6 +1734,7 @@ def class_list(request):
     No_list = []
     name_list = []
     ok_list = []
+    week_list = []
 
     # 取得した人員情報の従業員番号をリスト化するループ
     for i in member_obj_filter:
@@ -1796,6 +1797,31 @@ def class_list(request):
       ok_list.append(provisional_list)
 
 
+    # 曜日リスト作成するループ
+    for d in range(1, last_day_of_month.day + 1):
+      print(d)
+
+      # 曜日を取得する日を作成
+      week_day = datetime.date(int(request.POST['year']), int(request.POST['month']), d)
+
+      # 指定日の曜日をリストに挿入
+      if week_day.weekday() == 0:
+        week_list.append('月')
+      if week_day.weekday() == 1:
+        week_list.append('火')
+      if week_day.weekday() == 2:
+        week_list.append('水')
+      if week_day.weekday() == 3:
+        week_list.append('木')
+      if week_day.weekday() == 4:
+        week_list.append('金')
+      if week_day.weekday() == 5:
+        week_list.append('土')
+      if week_day.weekday() == 6:
+        week_list.append('日')
+
+
+
   # POST時以外の処理
   else:
 
@@ -1843,6 +1869,7 @@ def class_list(request):
     No_list = []
     name_list = []
     ok_list = []
+    week_list = []
 
     # 取得した人員情報の従業員番号をリスト化するループ
     for i in member_obj_filter:
@@ -1900,14 +1927,38 @@ def class_list(request):
       ok_list.append(provisional_list)
 
 
+    # 曜日リスト作成するループ
+    for d in range(1, last_day_of_month.day + 1):
+
+      # 曜日を取得する日を作成
+      week_day = datetime.date(int(year), int(month), d)
+
+      # 指定日の曜日をリストに挿入
+      if week_day.weekday() == 0:
+        week_list.append('月')
+      if week_day.weekday() == 1:
+        week_list.append('火')
+      if week_day.weekday() == 2:
+        week_list.append('水')
+      if week_day.weekday() == 3:
+        week_list.append('木')
+      if week_day.weekday() == 4:
+        week_list.append('金')
+      if week_day.weekday() == 5:
+        week_list.append('土')
+      if week_day.weekday() == 6:
+        week_list.append('日')
+
+
 
   # HTMLに渡す辞書
   library_m = {
     'title' : '工数入力可否(ショップ単位)',
     'shop_form': shop_form,
     'schedule_form': schedule_form,
-    'day_list' : range(1, last_day_of_month.day + 1),
+    'day_list' : zip(range(1, last_day_of_month.day + 1), week_list), 
     'ok_list' : ok_list,
+    'week_list' : week_list,
     }
 
 

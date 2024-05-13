@@ -38,12 +38,14 @@
     <tr>
      <td>{{form.inquiry}}</td>
     </tr>
+    {% if member_obj_get.administrator == True %}
     <tr>
       <th><p class="h5 text-pink">●回答</p></th>
     </tr>
     <tr>
       <td>{{form.answer}}</td>
     </tr>
+    {% endif %}
     <tr><td>
       <input type="submit" value="編集" name="Registration" class="btn btn-pink1 mt-2">　　　　
       <input type="submit" value="削除" name="delete"  onclick="return confirmDelete();" class="btn btn-pink1 mt-2">
