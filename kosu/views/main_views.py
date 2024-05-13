@@ -10,6 +10,7 @@ import math
 import os
 import environ
 import urllib.parse
+import unicodedata
 from ..models import member
 from ..models import Business_Time_graph
 from ..models import kosu_division
@@ -107,6 +108,21 @@ def main(request):
   data = member.objects.get(employee_no = request.session.get('login_No', None))
 
 
+  # 設定データ取得
+  default_data = administrator_data.objects.order_by("id").last()
+
+  # 問い合わせ担当者従業員番号がログイン者の従業員番号と一致している場合、ポップアップ表示設定
+  if default_data.administrator_employee_no1 == request.session.get('login_No', None):
+    pop_up_display = True
+  elif default_data.administrator_employee_no2 == request.session.get('login_No', None):
+    pop_up_display = True
+  elif default_data.administrator_employee_no3 == request.session.get('login_No', None):
+    pop_up_display = True
+
+  else:
+    pop_up_display = False
+
+
 
   # POST時の処理
   if (request.method == 'POST'):
@@ -118,11 +134,13 @@ def main(request):
     return redirect(to = '/login')
 
 
-
+  
   # HTMLに渡す辞書
   library_m = {
     'title' : 'MENU',
     'data' : data,
+    'pop_up_display' : pop_up_display,
+    'pop_up' : default_data,
     }
   
 
@@ -351,18 +369,71 @@ def administrator_menu(request):
 
 
   # フォーム初期値
-  form_default = {'menu_row' : default_data.menu_row}
+  form_default = {
+    'menu_row' : default_data.menu_row,
+    'administrator_employee_no1' : default_data.administrator_employee_no1,
+    'administrator_employee_no2' : default_data.administrator_employee_no2,
+    'administrator_employee_no3' : default_data.administrator_employee_no3,
+    }
   
   # パス指定フォームに初期値を入れて定義
   form = administrator_data_Form(form_default)
 
   # ロードファイル指定フォーム定義
   load_form = uploadForm()
-
-
+    
 
   # 設定更新時の処理
   if 'registration' in request.POST:
+
+    # 一覧表示項目数に文字が入っている場合の処理
+    if not request.POST['menu_row'].isdigit():
+
+      # エラーメッセージ出力
+      messages.error(request, '一覧表示項目数は数字で入力して下さい。ERROR056')
+
+      # このページをリダイレクト
+      return redirect(to = '/administrator')
+
+
+    # 問い合わせ担当者従業員番号が空でない場合の処理
+    if request.POST['administrator_employee_no1'] != '':
+
+      # 問い合わせ担当者従業員番号に文字が入っている場合の処理
+      if not request.POST['administrator_employee_no1'].isdigit():
+
+        # エラーメッセージ出力
+        messages.error(request, '問い合わせ担当者従業員番号は数字で入力して下さい。ERROR077')
+
+        # このページをリダイレクト
+        return redirect(to = '/administrator')
+
+
+    # 問い合わせ担当者従業員番号が空でない場合の処理
+    if request.POST['administrator_employee_no2'] != '':
+
+      # 問い合わせ担当者従業員番号に文字が入っている場合の処理
+      if not request.POST['administrator_employee_no2'].isdigit():
+
+        # エラーメッセージ出力
+        messages.error(request, '問い合わせ担当者従業員番号は数字で入力して下さい。ERROR078')
+
+        # このページをリダイレクト
+        return redirect(to = '/administrator')
+
+
+    # 問い合わせ担当者従業員番号が空でない場合の処理
+    if request.POST['administrator_employee_no3'] != '':
+
+      # 問い合わせ担当者従業員番号に文字が入っている場合の処理
+      if not request.POST['administrator_employee_no3'].isdigit():
+
+        # エラーメッセージ出力
+        messages.error(request, '問い合わせ担当者従業員番号は数字で入力して下さい。ERROR079')
+
+        # このページをリダイレクト
+        return redirect(to = '/administrator')
+
 
     # 一覧表示項目数が自然数でない場合の処理
     if math.floor(float(request.POST['menu_row'])) != float(request.POST['menu_row']) or \
@@ -373,12 +444,147 @@ def administrator_menu(request):
 
       # このページをリダイレクト
       return redirect(to = '/administrator')
+    
 
+    # 問い合わせ担当者従業員番号が空でない場合の処理
+    if request.POST['administrator_employee_no1'] != '':
+
+      # 問い合わせ担当者従業員番号が自然数でない場合の処理
+      if math.floor(float(request.POST['administrator_employee_no1'])) != \
+        float(request.POST['administrator_employee_no1']) or \
+        float(request.POST['administrator_employee_no1']) <= 0:
+
+        # エラーメッセージ出力
+        messages.error(request, '問い合わせ担当者従業員番号は自然数で入力して下さい。ERROR033')
+
+        # このページをリダイレクト
+        return redirect(to = '/administrator')
+
+
+    # 問い合わせ担当者従業員番号が空でない場合の処理
+    if request.POST['administrator_employee_no2'] != '':
+      
+      # 問い合わせ担当者従業員番号が自然数でない場合の処理
+      if math.floor(float(request.POST['administrator_employee_no2'])) != \
+        float(request.POST['administrator_employee_no2']) or \
+        float(request.POST['administrator_employee_no2']) <= 0:
+
+        # エラーメッセージ出力
+        messages.error(request, '問い合わせ担当者従業員番号は自然数で入力して下さい。ERROR034')
+
+        # このページをリダイレクト
+        return redirect(to = '/administrator')
+
+
+    # 問い合わせ担当者従業員番号が空でない場合の処理
+    if request.POST['administrator_employee_no3'] != '':
+      
+      # 問い合わせ担当者従業員番号が自然数でない場合の処理
+      if math.floor(float(request.POST['administrator_employee_no3'])) != \
+        float(request.POST['administrator_employee_no3']) or \
+        float(request.POST['administrator_employee_no3']) <= 0:
+
+        # エラーメッセージ出力
+        messages.error(request, '問い合わせ担当者従業員番号は自然数で入力して下さい。ERROR035')
+
+        # このページをリダイレクト
+        return redirect(to = '/administrator')
+
+
+    # 一覧表示項目数が半角でない場合の処理
+    if has_non_halfwidth_characters(request.POST['menu_row']):
+
+      # エラーメッセージ出力
+      messages.error(request, '一覧表示項目数は半角で入力して下さい。ERROR053')
+
+      # このページをリダイレクト
+      return redirect(to = '/administrator')
+
+
+    # 問い合わせ担当者従業員番号が半角でない場合の処理
+    if has_non_halfwidth_characters(request.POST['administrator_employee_no1']):
+
+      # エラーメッセージ出力
+      messages.error(request, '問い合わせ担当者従業員番号は半角で入力して下さい。ERROR036')
+
+      # このページをリダイレクト
+      return redirect(to = '/administrator')
+    
+
+    # 問い合わせ担当者従業員番号が半角でない場合の処理
+    if has_non_halfwidth_characters(request.POST['administrator_employee_no2']):
+
+      # エラーメッセージ出力
+      messages.error(request, '問い合わせ担当者従業員番号は半角で入力して下さい。ERROR037')
+
+      # このページをリダイレクト
+      return redirect(to = '/administrator')
+    
+
+    # 問い合わせ担当者従業員番号が半角でない場合の処理
+    if has_non_halfwidth_characters(request.POST['administrator_employee_no3']):
+
+      # エラーメッセージ出力
+      messages.error(request, '問い合わせ担当者従業員番号は半角で入力して下さい。ERROR038')
+
+      # このページをリダイレクト
+      return redirect(to = '/administrator')
+
+
+    # 問い合わせ担当者従業員番号が空でない場合の処理
+    if request.POST['administrator_employee_no1'] != '':
+
+      # 送信された問い合わせ担当者従業員番号の人員データあるか確認
+      member_obj_filter = member.objects.filter(employee_no = request.POST['administrator_employee_no1'])
+
+      # 人員データ無い場合の処理
+      if member_obj_filter.count() == 0:
+
+        # エラーメッセージ出力
+        messages.error(request, '入力された問い合わせ担当者従業員番号は登録されていません。ERROR055')
+
+        # このページをリダイレクト
+        return redirect(to = '/administrator')
+
+
+    # 問い合わせ担当者従業員番号が空でない場合の処理
+    if request.POST['administrator_employee_no2'] != '':
+
+      # 送信された問い合わせ担当者従業員番号の人員データあるか確認
+      member_obj_filter = member.objects.filter(employee_no = request.POST['administrator_employee_no2'])
+
+      # 人員データ無い場合の処理
+      if member_obj_filter.count() == 0:
+
+        # エラーメッセージ出力
+        messages.error(request, '入力された問い合わせ担当者従業員番号は登録されていません。ERROR080')
+
+        # このページをリダイレクト
+        return redirect(to = '/administrator')
+
+
+    # 問い合わせ担当者従業員番号が空でない場合の処理
+    if request.POST['administrator_employee_no3'] != '':
+
+      # 送信された問い合わせ担当者従業員番号の人員データあるか確認
+      member_obj_filter = member.objects.filter(employee_no = request.POST['administrator_employee_no3'])
+
+      # 人員データ無い場合の処理
+      if member_obj_filter.count() == 0:
+
+        # エラーメッセージ出力
+        messages.error(request, '入力された問い合わせ担当者従業員番号は登録されていません。ERROR081')
+
+        # このページをリダイレクト
+        return redirect(to = '/administrator')
 
 
     # レコードにPOST送信された値を上書きする
     administrator_data.objects.update_or_create(id = record_id, \
-        defaults = {'menu_row' : request.POST['menu_row']})
+        defaults = {'menu_row' : request.POST['menu_row'], 
+                    'administrator_employee_no1' : request.POST['administrator_employee_no1'],
+                    'administrator_employee_no2' : request.POST['administrator_employee_no2'],
+                    'administrator_employee_no3' : request.POST['administrator_employee_no3']})
     
     # フォームにPOST値を入れて定義
     form = administrator_data_Form(request.POST)
@@ -2161,5 +2367,34 @@ def help(request):
 
 
 #--------------------------------------------------------------------------------------------------------
+
+
+
+
+
+# 半角文字入力チェック関数
+def has_non_halfwidth_characters(input_string):
+
+  for char in input_string:
+
+    # Unicodeの文字幅カテゴリ 'Na' は「ナロー（半角）」を意味します。
+    if unicodedata.east_asian_width(char) != 'Na':
+      # 全角文字かそれ以外（例: 全角スペース、絵文字など）が検出されたらTrueを返す
+      return True
+
+    return False
+
+
+
+
+
+  #--------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
 
 

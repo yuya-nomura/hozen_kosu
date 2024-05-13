@@ -430,7 +430,12 @@ class schedule_timeForm(forms.Form):
 class administrator_data_Form(forms.ModelForm):
   class Meta:
     model = administrator_data
-    fields = ['menu_row']
+    fields = [
+      'menu_row', 
+      'administrator_employee_no1', 
+      'administrator_employee_no2', 
+      'administrator_employee_no3',
+      ]
 
 
 
