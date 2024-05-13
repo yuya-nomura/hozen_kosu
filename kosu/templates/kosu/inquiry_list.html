@@ -22,7 +22,12 @@
     {{form.category}}
     <p>氏名</p>
     {{form.name_list}}
-    <p><input type="submit" value="検索" class="btn btn-pink1 mt-2"></p>
+    <p>
+      <input type="submit" value="検索" name=find class="btn btn-pink1 mt-2">　　　
+      {% if button_display == True %}
+      <input type="submit" value="問い合わせポップアップリセット" name=pop_up_reset class="btn btn-pink1 mt-2">
+      {% endif %}
+    </p>
   </form>
   <table class="table">
     <tr>

@@ -11,7 +11,9 @@
 </head>
 <body class="container">
   <h1 class="display-1 text-dark">{{title}}</h1>
-  <a href="{% url 'main' %}" class="text-dark h4">メインMENUへ</a>
+  <p class="h6">
+    <a href="{% url 'main' %}" class="text-dark">メインMENUへ</a>
+  </p>
   <p>　</p>
   {% for message in messages %}
   <div {% if message.tags %}class="{{ message.tags }}"{% endif %}>
