@@ -3163,13 +3163,282 @@ def today_break_time(request):
     # 工数データある場合の処理
     if kosu_data_filter.count() != 0:
 
+      # 工数データ取得
+      kosu_data_get = Business_Time_graph.objects.get(employee_no3 = request.session.get('login_No', None), \
+                                                      work_day2 = request.session.get('break_today', None))
+
+      # 作業内容と作業詳細をリストに解凍
+      kosu_def = list(kosu_data_get.time_work)
+      detail_list = kosu_data_get.detail_work.split('$')
+
+      # 休憩1開始時間のインデント取得
+      break_start1 = int(break_time1_start_hour)*12 + int(break_time1_start_min)/5
+
+      # 休憩1終了時間のインデント取得
+      break_end1 = int(break_time1_end_hour)*12 + int(break_time1_end_min)/5
+
+      # 休憩1の日またぎ変数リセット
+      break_next_day1 = 0
+
+      # 休憩開始時間より終了時間の方が早い場合の処理
+      if break_start1 > break_end1:
+
+        # 休憩1の日またぎ変数に1を入れる
+        break_next_day1 = 1
+
+
+      # 休憩開始時間より終了時間の方が遅い場合の処理
+      else:
+
+        # 休憩1の日またぎ変数に0を入れる
+        break_next_day1 = 0
+
+
+      # 休憩2開始時間のインデント取得
+      break_start2 = int(break_time1_over1_start_hour)*12 + int(break_time1_over1_start_min)/5
+
+      # 休憩2終了時間のインデント取得
+      break_end2 = int(break_time1_over1_end_hour)*12 + int(break_time1_over1_end_min)/5
+
+
+      # 休憩2の日またぎ変数リセット
+      break_next_day2 = 0
+
+      # 休憩開始時間より終了時間の方が早い場合の処理
+      if break_start2 > break_end2:
+
+        # 休憩2の日またぎ変数に1を入れる
+        break_next_day2 = 1
+
+
+      # 休憩開始時間より終了時間の方が遅い場合の処理
+      else:
+
+        # 休憩2の日またぎ変数に0を入れる
+        break_next_day2 = 0
+
+
+      # 休憩3開始時間のインデント取得
+      break_start3 = int(break_time1_over2_start_hour)*12 + int(break_time1_over2_start_min)/5
+  
+      # 休憩3終了時間のインデント取得
+      break_end3 = int(break_time1_over2_end_hour)*12 + int(break_time1_over2_end_min)/5
+
+
+      # 休憩3の日またぎ変数リセット
+      break_next_day3 = 0
+
+      # 休憩開始時間より終了時間の方が早い場合の処理
+      if break_start3 > break_end3:
+
+        # 休憩3の日またぎ変数に1を入れる
+        break_next_day3 = 1
+
+
+      # 休憩開始時間より終了時間の方が遅い場合の処理
+      else:
+
+        # 休憩3の日またぎ変数に0を入れる
+        break_next_day3 = 0
+
+
+      # 休憩4開始時間のインデント取得
+      break_start4 = int(break_time1_over3_start_hour)*12 + int(break_time1_over3_start_min)/5
+
+      # 休憩4終了時間のインデント取得
+      break_end4 = int(break_time1_over3_end_hour)*12 + int(break_time1_over3_end_min)/5
+
+
+      # 休憩4の日またぎ変数リセット
+      break_next_day4 = 0
+
+      # 休憩開始時間より終了時間の方が早い場合の処理
+      if break_start4 > break_end4:
+
+        # 休憩4の日またぎ変数に1を入れる
+        break_next_day4 = 1
+
+
+      # 休憩開始時間より終了時間の方が遅い場合の処理
+      else:
+
+        # 休憩4の日またぎ変数に0を入れる
+        break_next_day4 = 0
+
+
+      # 休憩1が日を超えている場合の処理
+      if break_next_day1 == 1:
+
+        # 休憩時間内の工数データと作業詳細を消すループ(休憩時間開始～24時まで)
+        for bt1 in range(int(break_start1), 288):
+
+          # 作業内容リストの要素を空にする
+          kosu_def[bt1] = '#'
+
+          # 作業詳細リストの要素を空にする
+          detail_list[bt1] = ''
+
+
+        # 休憩時間内の工数データと作業詳細を消すループ(0時～休憩時間終了まで)
+        for bt1 in range(0, int(break_end1)):
+
+          # 作業内容リストの要素を空にする
+          kosu_def[bt1] = '#'
+
+          # 作業詳細リストの要素を空にする
+          detail_list[bt1] = ''
+
+
+      # 休憩1が日を超えていない場合の処理
+      else:
+
+        # 休憩時間内の工数データと作業詳細を消すループ
+        for bt1 in range(int(break_start1), int(break_end1)):
+
+          # 作業内容リストの要素を空にする
+          kosu_def[bt1] = '#'
+
+          # 作業詳細リストの要素を空にする
+          detail_list[bt1] = ''
+
+
+        # 休憩2が日を超えている場合の処理
+        if break_next_day2 == 1:
+
+          # 休憩時間内の工数データと作業詳細を消すループ(休憩時間開始～24時まで)
+          for bt2 in range(int(break_start2), 288):
+
+            # 作業内容リストの要素を空にする
+            kosu_def[bt2] = '#'
+
+            # 作業詳細リストの要素を空にする
+            detail_list[bt2] = ''
+
+
+          # 休憩時間内の工数データと作業詳細を消すループ(0時～休憩時間終了まで)
+          for bt2 in range(0, int(break_end2)):
+
+            # 作業内容リストの要素を空にする
+            kosu_def[bt2] = '#'
+
+            # 作業詳細リストの要素を空にする
+            detail_list[bt2] = ''
+
+
+        # 休憩2が日を超えていない場合の処理
+        else:
+
+          # 休憩時間内の工数データと作業詳細を消すループ
+          for bt2 in range(int(break_start2), int(break_end2)):
+
+            # 作業内容リストの要素を空にする
+            kosu_def[bt2] = '#'
+
+            # 作業詳細リストの要素を空にする
+            detail_list[bt2] = ''
+
+
+        # 休憩3が日を超えている場合の処理
+        if break_next_day3 == 1:
+
+          # 休憩時間内の工数データと作業詳細を消すループ(休憩時間開始～24時まで)
+          for bt3 in range(int(break_start3), 288):
+
+            # 作業内容リストの要素を空にする
+            kosu_def[bt3] = '#'
+
+            # 作業詳細リストの要素を空にする
+            detail_list[bt3] = ''
+
+          # 休憩時間内の工数データと作業詳細を消すループ(0時～休憩時間終了まで)
+          for bt2 in range(0, int(break_end3)):
+
+            # 作業内容リストの要素を空にする
+            kosu_def[bt3] = '#'
+
+            # 作業詳細リストの要素を空にする
+            detail_list[bt3] = ''
+
+
+        # 休憩3が日を超えていない場合の処理
+        else:
+
+          # 休憩時間内の工数データと作業詳細を消す
+          for bt3 in range(int(break_start3), int(break_end3)):
+
+            # 作業内容リストの要素を空にする
+            kosu_def[bt3] = '#'
+
+            # 作業詳細リストの要素を空にする
+            detail_list[bt3] = ''
+
+
+        # 休憩4が日を超えている場合の処理
+        if break_next_day4 == 1:
+
+          # 休憩時間内の工数データと作業詳細を消すループ(休憩時間開始～24時まで)
+          for bt4 in range(int(break_start4), 288):
+
+            # 作業内容リストの要素を空にする
+            kosu_def[bt4] = '#'
+
+            # 作業詳細リストの要素を空にする
+            detail_list[bt4] = ''
+
+
+          # 休憩時間内の工数データと作業詳細を消すループ(0時～休憩時間終了まで)
+          for bt4 in range(0, int(break_end4)):
+
+            # 作業内容リストの要素を空にする
+            kosu_def[bt4] = '#'
+
+            # 作業詳細リストの要素を空にする
+            detail_list[bt4] = ''
+
+
+        # 休憩4が日を超えていない場合の処理
+        else:
+
+          # 休憩時間内の工数データと作業詳細を消すループ
+          for bt4 in range(int(break_start4), int(break_end4)):
+
+            # 作業内容リストの要素を空にする
+            kosu_def[bt4] = '#'
+
+            # 作業詳細リストの要素を空にする
+            detail_list[bt4] = ''
+
+
+      # 作業詳細変数リセット
+      detail_list_str = ''
+
+      # 作業詳細リストをstr型に変更するループ
+      for i, e in enumerate(detail_list):
+
+        # 最終ループの処理
+        if i == len(detail_list) - 1:
+
+          # 作業詳細変数に作業詳細リストの要素をstr型で追加する
+          detail_list_str = detail_list_str + detail_list[i]
+
+
+        # 最終ループ以外の処理
+        else:
+
+          # 作業詳細変数に作業詳細リストの要素をstr型で追加し、区切り文字の'$'も追加
+          detail_list_str = detail_list_str + detail_list[i] + '$'
+
+
       # 作業内容データの内容を上書きして更新
       Business_Time_graph.objects.update_or_create(employee_no3 = request.session.get('login_No', None), \
                                                   work_day2 = request.session.get('break_today', None), \
-                                                  defaults = {'breaktime' : break_time1, \
+                                                  defaults = {'time_work' : ''.join(kosu_def), \
+                                                              'detail_work' : detail_list_str, \
+                                                              'breaktime' : break_time1, \
                                                               'breaktime_over1' : break_time1_over1, \
                                                               'breaktime_over2' : break_time1_over2, \
                                                               'breaktime_over3' : break_time1_over3})
+
 
     # 工数データない場合の処理
     else:
@@ -3187,6 +3456,9 @@ def today_break_time(request):
                                                               'breaktime_over1' : break_time1_over1, \
                                                               'breaktime_over2' : break_time1_over2, \
                                                               'breaktime_over3' : break_time1_over3})
+    
+    # 工数入力ページへ飛ぶ
+    return redirect(to = '/input')
 
 
   # 工数データあるか確認
