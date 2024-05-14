@@ -30,19 +30,19 @@
       <th><p class="h5 text-pink">●カテゴリー</p></th>
     </tr>
     <tr>
-      <td>{{obj.content_choice}}</td>
+      <td>{{ obj.content_choice | linebreaksbr }}</td>
     </tr>
     <tr>
       <th><p class="h5 text-pink">●お問い合わせ内容</p></th>
     </tr>
     <tr>
-     <td>{{obj.inquiry}}</td>
+     <td>{{ obj.inquiry | linebreaksbr }}</td>
     </tr>
     <tr>
       <th><p class="h5 text-pink">●回答</p></th>
     </tr>
     <tr>
-      <td>{{obj.answer}}</td>
+      <td>{{ obj.answer | linebreaksbr }}</td>
     </tr>
     {% if data.administrator == True %}
     <tr>
