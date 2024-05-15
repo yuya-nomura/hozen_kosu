@@ -53,21 +53,21 @@
       {% if page.has_previous %}
       <li class="page-item">
         <a class="page-link" href="{% url 'kosu_list' 1 %}">
-          &laquo; 最初のページへ</a>
+          &laquo; 最初のページ</a>
       </li>
       <li class="page-item">
         <a class="page-link" 
         href="{% url 'kosu_list' page.previous_page_number %}">
-          &laquo; 前のページへ</a>
+          &laquo; 前ページ</a>
       </li>
       {% else %}
       <li class="page-item">
         <a class="page-link">
-          &laquo; 最初のページへ</a>
+          &laquo; 最初のページ</a>
       </li>
       <li class="page-item">
         <a class="page-link">
-          &laquo; 前のページへ</a>
+          &laquo; 前ページ</a>
       </li>
       {% endif %}
       <li class="page-item">
@@ -78,21 +78,21 @@
       <li class="page-item">
         <a class="page-link" 
           href="{% url 'kosu_list' page.next_page_number %}">
-            次のページへ &raquo;</a>
+            次ページ &raquo;</a>
       </li>
       <li class="page-item">
         <a class="page-link" 
           href="{% url 'kosu_list' page.paginator.num_pages %}">
-            最後のページへ &raquo;</a>
+            最後のページ &raquo;</a>
       </li>
       {% else %}
       <li class="page-item">
         <a class="page-link">
-          次のページへ &raquo;</a>
+          次ページ &raquo;</a>
       </li>
       <li class="page-item">
         <a class="page-link">
-          最後のページへ &raquo;</a>
+          最後のページ &raquo;</a>
       </li>
       {% endif %}
     </ul>
