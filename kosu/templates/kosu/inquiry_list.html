@@ -43,8 +43,8 @@
         <td>{{i.id}}</td>
         <td><a class="text-pink" href="{% url 'inquiry_display' i.id %}">{{i.name}}</a></td>
         <td>{{i.content_choice}}</td>
-        <td>{{i.inquiry|truncatechars:5}}</td>
-        <td>{{i.answer|truncatechars:5}}</td>
+        <td>{{i.inquiry|truncatechars:4}}</td>
+        <td>{{i.answer|truncatechars:4}}</td>
       </tr>
     {% endfor %}
   </table>
