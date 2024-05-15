@@ -24,7 +24,7 @@
     {{form.name_list}}
     <p>
       <input type="submit" value="検索" name=find class="btn btn-pink1 mt-2">　　　
-      <input type="submit" value="問い合わせポップアップ全リセット" name=pop_up_reset class="btn btn-pink1 mt-2">
+      <input type="submit" value="ポップアップ全リセット" name=pop_up_reset class="btn btn-pink1 mt-2">
     </p>
     <p>
       ※ポップアップは該当の問い合わせの詳細を開くと自動で消えます
@@ -53,21 +53,21 @@
       {% if data.has_previous %}
       <li class="page-item">
         <a class="page-link text-pink" href="{% url 'member' 1 %}">
-          &laquo; 最初のページ</a>
+          &laquo; 最初</a>
       </li>
       <li class="page-item">
         <a class="page-link text-pink" 
         href="{% url 'member' data.previous_page_number %}">
-          &laquo; 前ページ</a>
+          &laquo; 前</a>
       </li>
       {% else %}
       <li class="page-item">
         <a class="page-link text-pink">
-          &laquo; 最初のページ</a>
+          &laquo; 最初</a>
       </li>
       <li class="page-item">
         <a class="page-link text-pink">
-          &laquo; 前ページ</a>
+          &laquo; 前</a>
       </li>
       {% endif %}
       <li class="page-item">
@@ -78,21 +78,21 @@
       <li class="page-item">
         <a class="page-link text-pink" 
           href="{% url 'member' data.next_page_number %}">
-            次ページ &raquo;</a>
+            次 &raquo;</a>
       </li>
       <li class="page-item">
         <a class="page-link text-pink" 
           href="{% url 'member' data.paginator.num_pages %}">
-            最後のページ &raquo;</a>
+            最後&raquo;</a>
       </li>
       {% else %}
       <li class="page-item">
         <a class="page-link text-pink">
-          次ページ &raquo;</a>
+          次&raquo;</a>
       </li>
       <li class="page-item">
         <a class="page-link text-pink">
-          最後のページ &raquo;</a>
+          最後&raquo;</a>
       </li>
       {% endif %}
     </ul>

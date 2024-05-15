@@ -33,21 +33,21 @@
       {% if data.has_previous %}
       <li class="page-item">
         <a class="page-link text-warning" href="{% url 'member' 1 %}">
-          &laquo; 最初のページ</a>
+          &laquo; 最初</a>
       </li>
       <li class="page-item">
         <a class="page-link text-warning" 
         href="{% url 'member' data.previous_page_number %}">
-          &laquo; 前ページ</a>
+          &laquo; 前</a>
       </li>
       {% else %}
       <li class="page-item">
         <a class="page-link text-warning">
-          &laquo; 最初のページ</a>
+          &laquo; 最初</a>
       </li>
       <li class="page-item">
         <a class="page-link text-warning">
-          &laquo; 前ページ</a>
+          &laquo; 前</a>
       </li>
       {% endif %}
       <li class="page-item">
@@ -58,21 +58,21 @@
       <li class="page-item">
         <a class="page-link text-warning" 
           href="{% url 'member' data.next_page_number %}">
-            次ページ &raquo;</a>
+            次&raquo;</a>
       </li>
       <li class="page-item">
         <a class="page-link text-warning" 
           href="{% url 'member' data.paginator.num_pages %}">
-            最後のページ &raquo;</a>
+            最後&raquo;</a>
       </li>
       {% else %}
       <li class="page-item">
         <a class="page-link text-warning">
-          次ページ &raquo;</a>
+          次&raquo;</a>
       </li>
       <li class="page-item">
         <a class="page-link text-warning">
-          最後のページ &raquo;</a>
+          最後&raquo;</a>
       </li>
       {% endif %}
     </ul>

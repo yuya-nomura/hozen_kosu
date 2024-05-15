@@ -35,21 +35,21 @@
       {% if obj.has_previous %}
       <li class="page-item">
         <a class="page-link text-success" href="{% url 'def_list' 1 %}">
-          &laquo; 最初のページ</a>
+          &laquo; 最初</a>
       </li>
       <li class="page-item">
         <a class="page-link text-success" 
         href="{% url 'def_list' obj.previous_page_number %}">
-          &laquo; 前ページ</a>
+          &laquo; 前</a>
       </li>
       {% else %}
       <li class="page-item" >
         <a class="page-link text-success">
-          &laquo; 最初のページ</a>
+          &laquo; 最初</a>
       </li>
       <li class="page-item">
         <a class="page-link text-success">
-          &laquo; 前ページ</a>
+          &laquo; 前</a>
       </li>
       {% endif %}
       <li class="page-item">
@@ -60,21 +60,21 @@
       <li class="page-item">
         <a class="page-link text-success" 
           href="{% url 'def_list' obj.next_page_number %}">
-            次ページ &raquo;</a>
+            次&raquo;</a>
       </li>
       <li class="page-item">
         <a class="page-link text-success" 
           href="{% url 'def_list' obj.paginator.num_pages %}">
-            最後のページ &raquo;</a>
+            最後&raquo;</a>
       </li>
       {% else %}
       <li class="page-item">
         <a class="page-link text-success">
-          次ページ &raquo;</a>
+          次&raquo;</a>
       </li>
       <li class="page-item">
         <a class="page-link text-success">
-          最後のページ &raquo;</a>
+          最後&raquo;</a>
       </li>
       {% endif %}
     </ul>

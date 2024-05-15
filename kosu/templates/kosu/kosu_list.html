@@ -50,49 +50,49 @@
     </table>
     </div>
     <ul class="pagination justify-content-center">
-      {% if page.has_previous %}
+      {% if data.has_previous %}
       <li class="page-item">
-        <a class="page-link" href="{% url 'kosu_list' 1 %}">
-          &laquo; 最初のページ</a>
+        <a class="page-link" href="{% url 'member' 1 %}">
+          &laquo; 最初</a>
       </li>
       <li class="page-item">
         <a class="page-link" 
-        href="{% url 'kosu_list' page.previous_page_number %}">
-          &laquo; 前ページ</a>
+        href="{% url 'member' data.previous_page_number %}">
+          &laquo; 前</a>
       </li>
       {% else %}
       <li class="page-item">
         <a class="page-link">
-          &laquo; 最初のページ</a>
+          &laquo; 最初</a>
       </li>
       <li class="page-item">
         <a class="page-link">
-          &laquo; 前ページ</a>
+          &laquo; 前</a>
       </li>
       {% endif %}
       <li class="page-item">
         <a class="page-link">
-          {{page.number}}/{{page.paginator.num_pages}}</a>
+          {{data.number}}/{{data.paginator.num_pages}}</a>
       </li>
-      {% if page.has_next %}
+      {% if data.has_next %}
       <li class="page-item">
         <a class="page-link" 
-          href="{% url 'kosu_list' page.next_page_number %}">
-            次ページ &raquo;</a>
+          href="{% url 'member' data.next_page_number %}">
+            次&raquo;</a>
       </li>
       <li class="page-item">
         <a class="page-link" 
-          href="{% url 'kosu_list' page.paginator.num_pages %}">
-            最後のページ &raquo;</a>
+          href="{% url 'member' data.paginator.num_pages %}">
+            最後&raquo;</a>
       </li>
       {% else %}
       <li class="page-item">
         <a class="page-link">
-          次ページ &raquo;</a>
+          次&raquo;</a>
       </li>
       <li class="page-item">
         <a class="page-link">
-          最後のページ &raquo;</a>
+          最後&raquo;</a>
       </li>
       {% endif %}
     </ul>
