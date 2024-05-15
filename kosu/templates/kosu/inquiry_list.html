@@ -24,13 +24,15 @@
     {{form.name_list}}
     <p>
       <input type="submit" value="検索" name=find class="btn btn-pink1 mt-2">　　　
-      {% if button_display == True %}
-      <input type="submit" value="問い合わせポップアップリセット" name=pop_up_reset class="btn btn-pink1 mt-2">
-      {% endif %}
+      <input type="submit" value="問い合わせポップアップ全リセット" name=pop_up_reset class="btn btn-pink1 mt-2">
+    </p>
+    <p>
+      ※ポップアップは該当の問い合わせの詳細を開くと自動で消えます
     </p>
   </form>
   <table class="table">
     <tr>
+      <th>ID</th>
       <th>氏名</th>
       <th>カテゴリー</th>
       <th>内容</th>
@@ -38,6 +40,7 @@
     </tr>
     {% for i in data %}
       <tr>
+        <td>{{i.id}}</td>
         <td><a class="text-pink" href="{% url 'inquiry_display' i.id %}">{{i.name}}</a></td>
         <td>{{i.content_choice}}</td>
         <td>{{i.inquiry|truncatechars:5}}</td>

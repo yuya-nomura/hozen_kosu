@@ -239,6 +239,18 @@ def inquiry_list(request, num):
                                    'pop_up_id5' : '',
                                    'pop_up5' : '',})
 
+    member.objects.update_or_create(employee_no = request.session.get('login_No', None), \
+                       defaults = {'pop_up_id1' : '',
+                                   'pop_up1' : '',
+                                   'pop_up_id2' : '',
+                                   'pop_up2' : '',
+                                   'pop_up_id3' : '',
+                                   'pop_up3' : '',
+                                   'pop_up_id4' : '',
+                                   'pop_up4' : '',
+                                   'pop_up_id5' : '',
+                                   'pop_up5' : '',})
+    
 
     # このページをリダイレクトする
     return redirect(to = '/inquiry_list/1')
@@ -298,10 +310,95 @@ def inquiry_display(request, num):
   default_data = administrator_data.objects.order_by("id").last()
 
 
+  # ポップアップのデータと一致する場合の処理
+  if data.pop_up_id1 == str(num):
+    # ポップアップ削除
+    member.objects.update_or_create(employee_no = request.session.get('login_No', None), \
+                                    defaults = {'pop_up_id1' : '',
+                                                'pop_up1' : ''})
+    
+  # ポップアップのデータと一致する場合の処理
+  elif data.pop_up_id2 == str(num):
+    # ポップアップ削除
+    member.objects.update_or_create(employee_no = request.session.get('login_No', None), \
+                                    defaults = {'pop_up_id2' : '',
+                                                'pop_up2' : ''})
+    
+  # ポップアップのデータと一致する場合の処理
+  elif data.pop_up_id3 == str(num):
+    # ポップアップ削除
+    member.objects.update_or_create(employee_no = request.session.get('login_No', None), \
+                                    defaults = {'pop_up_id3' : '',
+                                                'pop_up3' : ''})
+    
+  # ポップアップのデータと一致する場合の処理
+  elif data.pop_up_id4 == str(num):
+    # ポップアップ削除
+    member.objects.update_or_create(employee_no = request.session.get('login_No', None), \
+                                    defaults = {'pop_up_id4' : '',
+                                                'pop_up4' : ''})
+    
+  # ポップアップのデータと一致する場合の処理
+  elif data.pop_up_id5 == str(num):
+    # ポップアップ削除
+    member.objects.update_or_create(employee_no = request.session.get('login_No', None), \
+                                    defaults = {'pop_up_id5' : '',
+                                                'pop_up5' : ''})
+
+
+  # ログイン者の情報再取得
+  data = member.objects.get(employee_no = request.session.get('login_No', None))
+
+  # ポップアップ1が空の場合の処理
+  if data.pop_up1 =='':
+    #ポップアップ2の内容をポップアップ1へ移行
+    member.objects.update_or_create(employee_no = request.session.get('login_No', None), \
+                      defaults = {'pop_up_id1' : data.pop_up_id2,
+                                  'pop_up1' : data.pop_up2,
+                                  'pop_up_id2' : '',
+                                  'pop_up2' : ''})
+
+  # ログイン者の情報再取得
+  data = member.objects.get(employee_no = request.session.get('login_No', None))
+
+  # ポップアップ2が空の場合の処理
+  if data.pop_up2 =='':
+    #ポップアップ3の内容をポップアップ2へ移行
+    member.objects.update_or_create(employee_no = request.session.get('login_No', None), \
+                      defaults = {'pop_up_id2' : data.pop_up_id3,
+                                  'pop_up2' : data.pop_up3,
+                                  'pop_up_id3' : '',
+                                  'pop_up3' : ''})
+
+  # ログイン者の情報再取得
+  data = member.objects.get(employee_no = request.session.get('login_No', None))
+
+  # ポップアップ3が空の場合の処理
+  if data.pop_up3 =='':
+    #ポップアップ4の内容をポップアップ3へ移行
+    member.objects.update_or_create(employee_no = request.session.get('login_No', None), \
+                      defaults = {'pop_up_id3' : data.pop_up_id4,
+                                  'pop_up3' : data.pop_up4,
+                                  'pop_up_id4' : '',
+                                  'pop_up4' : ''})
+
+  # ログイン者の情報再取得
+  data = member.objects.get(employee_no = request.session.get('login_No', None))
+
+  # ポップアップ4が空の場合の処理
+  if data.pop_up4 =='':
+    #ポップアップ5の内容をポップアップ4へ移行
+    member.objects.update_or_create(employee_no = request.session.get('login_No', None), \
+                      defaults = {'pop_up_id4' : data.pop_up_id5,
+                                  'pop_up4' : data.pop_up5,
+                                  'pop_up_id5' : '',
+                                  'pop_up5' : ''})
+
+
   # ログイン者が問い合わせ担当者である場合の処理
   if default_data.administrator_employee_no1 == request.session.get('login_No', None) or \
-  default_data.administrator_employee_no2 == request.session.get('login_No', None) or \
-  default_data.administrator_employee_no3 == request.session.get('login_No', None):
+     default_data.administrator_employee_no2 == request.session.get('login_No', None) or \
+     default_data.administrator_employee_no3 == request.session.get('login_No', None):
     
     # ポップアップのデータと一致する場合の処理
     if default_data.pop_up_id1 == str(num):
@@ -432,7 +529,7 @@ def inquiry_edit(request, num):
     return redirect(to = '/login')
 
 
-  # 指定IDの工数履歴のレコードのオブジェクトを変数に入れる
+  # 指定IDの工数履歴のレコードのオブジェクト取得
   obj_get = inquiry_data.objects.get(id = num)
 
   # ログイン者情報取得
@@ -450,6 +547,51 @@ def inquiry_edit(request, num):
 
   # お問い合わせ編集処理
   if "Registration" in request.POST:
+
+    # 指定IDの工数履歴のレコードのオブジェクト取得
+    obj_get = inquiry_data.objects.get(id = num)
+
+    # 問い合わせ者情報取得
+    member_obj_get = member.objects.get(name = obj_get.name)
+
+    # 回答が編集前後で変更がある場合の処理
+    if obj_get.answer != request.POST['answer']:
+
+      # ポップアップ1が空の場合の処理
+      if member_obj_get.pop_up1 == '':
+        # ポップアップにコメント書き込み
+        member.objects.update_or_create(name = obj_get.name, \
+                                        defaults = {'pop_up1' : 'ID{}の問い合わせに回答が来ています。'.format(num), \
+                                                    'pop_up_id1' : num})
+
+      # ポップアップ2が空の場合の処理
+      elif member_obj_get.pop_up2 == '':
+        # ポップアップにコメント書き込み
+        member.objects.update_or_create(name = obj_get.name, \
+                                        defaults = {'pop_up2' : 'ID{}の問い合わせに回答が来ています。'.format(num), \
+                                                    'pop_up_id2' : num})
+
+      # ポップアップ3が空の場合の処理
+      elif member_obj_get.pop_up3 == '':
+        # ポップアップにコメント書き込み
+        member.objects.update_or_create(name = obj_get.name, \
+                                        defaults = {'pop_up3' : 'ID{}の問い合わせに回答が来ています。'.format(num), \
+                                                    'pop_up_id3' : num})
+        
+      # ポップアップ4が空の場合の処理
+      elif member_obj_get.pop_up2 == '':
+        # ポップアップにコメント書き込み
+        member.objects.update_or_create(name = obj_get.name, \
+                                        defaults = {'pop_up4' : 'ID{}の問い合わせに回答が来ています。'.format(num), \
+                                                    'pop_up_id4' : num})
+
+      # ポップアップ5が空の場合の処理
+      elif member_obj_get.pop_up3 == '':
+        # ポップアップにコメント書き込み
+        member.objects.update_or_create(name = obj_get.name, \
+                                        defaults = {'pop_up5' : 'ID{}の問い合わせに回答が来ています。'.format(num), \
+                                                    'pop_up_id5' : num})
+
 
     # 工数データ作成し残業書き込み
     inquiry_data.objects.update_or_create(id = num, \

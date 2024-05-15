@@ -616,10 +616,21 @@ def administrator_menu(request):
 
     # Excelに書き込み(項目名)
     headers = [
-        '従業員番号', '氏名', '工数区分定義Ver', '就業日', '直', '作業内容',
-        '作業詳細', '残業時間', '昼休憩時間', '残業休憩時間1', '残業休憩時間2',
-        '残業休憩時間3', '就業形態', '工数入力OK_NG'
-        ]
+      '従業員番号', 
+      '氏名', 
+      '工数区分定義Ver', 
+      '就業日', 
+      '直', 
+      '作業内容',
+      '作業詳細', 
+      '残業時間', 
+      '昼休憩時間', 
+      '残業休憩時間1', 
+      '残業休憩時間2',
+      '残業休憩時間3', 
+      '就業形態', 
+      '工数入力OK_NG'
+      ]
     ws.append(headers)
 
 
@@ -627,11 +638,21 @@ def administrator_menu(request):
     for item in kosu_data:
 
       row = [
-          item.employee_no3, str(item.name), item.def_ver2, item.work_day2,
-          item.tyoku2, item.time_work, item.detail_work, item.over_time,
-          item.breaktime, item.breaktime_over1, item.breaktime_over2,
-          item.breaktime_over3, item.work_time, item.judgement
-          ]
+        item.employee_no3, 
+        str(item.name), 
+        item.def_ver2, 
+        item.work_day2,
+        item.tyoku2, 
+        item.time_work, 
+        item.detail_work, 
+        item.over_time,
+        item.breaktime, 
+        item.breaktime_over1, 
+        item.breaktime_over2,
+        item.breaktime_over3, 
+        item.work_time, 
+        item.judgement
+        ]
       ws.append(row)
 
 
@@ -794,11 +815,28 @@ def administrator_menu(request):
 
     # Excelに書き込み(項目名)
     headers = [
-        '従業員番号', '氏名', 'ショップ', '権限', '管理者', '1直昼休憩時間',
-        '1直残業休憩時間1', '1直残業休憩時間2', '1直残業休憩時間3', '2直昼休憩時間', '2直残業休憩時間1',
-        '2直残業休憩時間2', '2直残業休憩時間3', '3直昼休憩時間', '3直残業休憩時間1', '3直残業休憩時間2', 
-        '3直残業休憩時間3', '常昼昼休憩時間', '常昼残業休憩時間1', '常昼残業休憩時間2', '常昼残業休憩時間3',
-    ]
+        '従業員番号', 
+        '氏名', 
+        'ショップ', 
+        '権限', 
+        '管理者', 
+        '1直昼休憩時間',
+        '1直残業休憩時間1', 
+        '1直残業休憩時間2', 
+        '1直残業休憩時間3', 
+        '2直昼休憩時間', 
+        '2直残業休憩時間1',
+        '2直残業休憩時間2', 
+        '2直残業休憩時間3', 
+        '3直昼休憩時間', 
+        '3直残業休憩時間1', 
+        '3直残業休憩時間2', 
+        '3直残業休憩時間3', 
+        '常昼昼休憩時間', 
+        '常昼残業休憩時間1', 
+        '常昼残業休憩時間2', 
+        '常昼残業休憩時間3',
+        ]
     ws.append(headers)
 
 
@@ -806,11 +844,27 @@ def administrator_menu(request):
     for item in member_data:
 
       row = [
-        item.employee_no, item.name, item.shop, item.authority,item.administrator, 
-        item.break_time1, item.break_time1_over1, item.break_time1_over2, item.break_time1_over3, 
-        item.break_time2, item.break_time2_over1, item.break_time2_over2, item.break_time2_over3, 
-        item.break_time3, item.break_time3_over1, item.break_time3_over2, item.break_time3_over3, 
-        item.break_time4, item.break_time4_over1, item.break_time4_over2, item.break_time4_over3,
+        item.employee_no, 
+        item.name, 
+        item.shop, 
+        item.authority,
+        item.administrator, 
+        item.break_time1, 
+        item.break_time1_over1, 
+        item.break_time1_over2, 
+        item.break_time1_over3, 
+        item.break_time2, 
+        item.break_time2_over1, 
+        item.break_time2_over2, 
+        item.break_time2_over3, 
+        item.break_time3, 
+        item.break_time3_over1, 
+        item.break_time3_over2, 
+        item.break_time3_over3, 
+        item.break_time4, 
+        item.break_time4_over1, 
+        item.break_time4_over2, 
+        item.break_time4_over3,
         ]
       ws.append(row)
 
@@ -956,8 +1010,17 @@ def administrator_menu(request):
 
     # Excelに書き込み(項目名)
     headers = [
-        '従業員番号', '班員1', '班員2', '班員3', '班員4', '班員5',
-        '班員6', '班員7', '班員8', '班員9', '班員10',
+        '従業員番号', 
+        '班員1', 
+        '班員2', 
+        '班員3', 
+        '班員4', 
+        '班員5',
+        '班員6', 
+        '班員7', 
+        '班員8', 
+        '班員9', 
+        '班員10',
         ]
     ws.append(headers)
 
@@ -966,8 +1029,17 @@ def administrator_menu(request):
     for item in team_data:
 
       row = [
-        item.employee_no5, item.member1, item.member2, item.member3, item.member4, 
-        item.member5, item.member6, item.member7, item.member8, item.member9, item.member10
+        item.employee_no5, 
+        item.member1, 
+        item.member2, 
+        item.member3, 
+        item.member4, 
+        item.member5, 
+        item.member6, 
+        item.member7, 
+        item.member8, 
+        item.member9, 
+        item.member10
         ]
       ws.append(row)
 
@@ -1522,7 +1594,11 @@ def administrator_menu(request):
 
     # Excelに書き込み(項目名)
     headers = [
-        '従業員番号', '氏名', '内容選択', '問い合わせ', '回答'
+        '従業員番号', 
+        '氏名', 
+        '内容選択', 
+        '問い合わせ', 
+        '回答'
         ]
     ws.append(headers)
 
@@ -1531,7 +1607,10 @@ def administrator_menu(request):
     for item in data:
 
       row = [
-        item.employee_no2, str(item.name), item.content_choice, item.inquiry, item.answer
+        item.employee_no2, 
+        str(item.name), 
+        item.content_choice, 
+        item.inquiry, item.answer
         ]
       ws.append(row)
 
@@ -1646,6 +1725,9 @@ def administrator_menu(request):
     # Excelに書き込み(項目名)
     headers = [
         '一覧表示項目数', 
+        '問い合わせ担当者従業員番号1',
+        '問い合わせ担当者従業員番号2',
+        '問い合わせ担当者従業員番号3',
         ]
     ws.append(headers)
 
@@ -1654,7 +1736,10 @@ def administrator_menu(request):
     for item in setting_data:
 
       row = [
-        item.menu_row
+        item.menu_row,
+        item.administrator_employee_no1,
+        item.administrator_employee_no2,
+        item.administrator_employee_no3,
         ]
       ws.append(row)
 
@@ -1714,7 +1799,8 @@ def administrator_menu(request):
 
 
     # 読み込むファイルが正しいファイルでない場合の処理
-    if ws.cell(1, 1).value != '一覧表示項目数':
+    if ws.cell(1, 1).value != '一覧表示項目数' or ws.cell(1, 2).value != '問い合わせ担当者従業員番号1' or \
+      ws.cell(1, 3).value != '問い合わせ担当者従業員番号2' or ws.cell(1, 4).value != '問い合わせ担当者従業員番号4':
 
       # エラーメッセージ出力
       messages.error(request, 'ロードしようとしたファイルは設定情報バックアップではありません。ERROR052')
@@ -1739,8 +1825,10 @@ def administrator_menu(request):
     for i in range(1, data_num):
 
       # Excelからデータを読み込み
-      new_data = administrator_data(menu_row = ws.cell(row = i + 1, column = 1).value)
-
+      new_data = administrator_data(menu_row = ws.cell(row = i + 1, column = 1).value, \
+                                    administrator_employee_no1 = ws.cell(row = i + 1, column = 2).value, \
+                                    administrator_employee_no2 = ws.cell(row = i + 1, column = 3).value, \
+                                    administrator_employee_no3 = ws.cell(row = i + 1, column = 4).value)
       new_data.save()
 
 

@@ -37,6 +37,16 @@ class member(models.Model):
     break_time4_over1 = models.CharField('常昼残業休憩時間1', max_length = 8)
     break_time4_over2 = models.CharField('常昼残業休憩時間2', max_length = 8)
     break_time4_over3 = models.CharField('常昼残業休憩時間3', max_length = 8)
+    pop_up1 = models.CharField('ポップアップ1', blank = True)
+    pop_up_id1 =  models.CharField('ポップアップID1', null = True, blank = True)
+    pop_up2 = models.CharField('ポップアップ2', blank = True)
+    pop_up_id2 =  models.CharField('ポップアップID2', null = True, blank = True)
+    pop_up3 = models.CharField('ポップアップ3', blank = True)
+    pop_up_id3 =  models.CharField('ポップアップID3', null = True, blank = True)
+    pop_up4 = models.CharField('ポップアップ4', blank = True)
+    pop_up_id4 =  models.CharField('ポップアップID4', null = True, blank = True)
+    pop_up5 = models.CharField('ポップアップ5', blank = True)
+    pop_up_id5 =  models.CharField('ポップアップID5', null = True, blank = True)
 
     def __str__(self):
         return self.name
