@@ -14,26 +14,56 @@
   <p class="h5 mt-4">こんにちは、{{data.name}}さん。</p>
   {% if pop_up_display == True %}
   {% if pop_up.pop_up1 != "" %}
-  <p class="h6 mt-4 text-danger">{{pop_up.pop_up1}}</p>
+  <p class="h6 mt-4">
+    <a href="{% url 'inquiry_display' pop_up.pop_up_id1 %}" class="text-danger">{{pop_up.pop_up1}}</a>
+  </p>
   {% endif %}
   {% if pop_up.pop_up2 != "" %}
-  <p class="h6 mt-4 text-danger">{{pop_up.pop_up2}}</p>
+  <p class="h6 mt-4 text-danger">
+    <a href="{% url 'inquiry_display' pop_up.pop_up_id2 %}" class="text-danger">{{pop_up.pop_up2}}</a>
+  </p>
   {% endif %}
   {% if pop_up.pop_up3 != "" %}
-  <p class="h6 mt-4 text-danger">{{pop_up.pop_up3}}</p>
+  <p class="h6 mt-4 text-danger">
+    <a href="{% url 'inquiry_display' pop_up.pop_up_id3 %}" class="text-danger">{{pop_up.pop_up3}}</a>
+  </p>
   {% endif %}
   {% if pop_up.pop_up4 != "" %}
-  <p class="h6 mt-4 text-danger">{{pop_up.pop_up4}}</p>
+  <p class="h6 mt-4 text-danger">
+    <a href="{% url 'inquiry_display' pop_up.pop_up_id4 %}" class="text-danger">{{pop_up.pop_up4}}</a>
+  </p>
   {% endif %}
   {% if pop_up.pop_up5 != "" %}
-  <p class="h6 mt-4 text-danger">{{pop_up.pop_up5}}</p>
+  <p class="h6 mt-4 text-danger">
+    <a href="{% url 'inquiry_display' pop_up.pop_up_id5 %}" class="text-danger">{{pop_up.pop_up5}}</a>
+  </p>
   {% endif %}
   {% endif %}
-  <p class="h6 mt-4 text-danger">{{data.pop_up1}}</p>
-  <p class="h6 mt-4 text-danger">{{data.pop_up2}}</p>
-  <p class="h6 mt-4 text-danger">{{data.pop_up3}}</p>
-  <p class="h6 mt-4 text-danger">{{data.pop_up4}}</p>
-  <p class="h6 mt-4 text-danger">{{data.pop_up5}}</p>
+  {% if data.pop_up1 != "" %}
+  <p class="h6 mt-4 text-danger">
+    <a href="{% url 'inquiry_display' data.pop_up_id1 %}" class="text-danger">{{data.pop_up1}}</a>
+  </p>
+  {% endif %}
+  {% if data.pop_up2 != "" %}
+  <p class="h6 mt-4 text-danger">
+    <a href="{% url 'inquiry_display' data.pop_up_id2 %}" class="text-danger">{{data.pop_up2}}</a>
+  </p>
+  {% endif %}
+  {% if data.pop_up3 != "" %}
+  <p class="h6 mt-4 text-danger">
+    <a href="{% url 'inquiry_display' data.pop_up_id3 %}" class="text-danger">{{data.pop_up3}}</a>
+  </p>
+  {% endif %}
+  {% if data.pop_up4 != "" %}
+  <p class="h6 mt-4 text-danger">
+    <a href="{% url 'inquiry_display' data.pop_up_id4 %}" class="text-danger">{{data.pop_up4}}</a>
+  </p>
+  {% endif %}
+  {% if data.pop_up5 != "" %}
+  <p class="h6 mt-4 text-danger">
+    <a href="{% url 'inquiry_display' data.pop_up_id5 %}" class="text-danger">{{data.pop_up5}}</a>
+  </p>
+  {% endif %}
   <button onclick="location.href='/kosu_main'" class="btn btn-blue1 w-100 mt-2 btn-lg">
     工数MENU</button>
   <button onclick="location.href='/def_main'" class="btn btn-green1 w-100 mt-2 btn-lg">

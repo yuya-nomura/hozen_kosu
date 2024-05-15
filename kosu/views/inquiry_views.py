@@ -607,6 +607,195 @@ def inquiry_edit(request, num):
   # お問い合わせ削除処理
   if "delete" in request.POST:
 
+    # 問い合わせ者の情報取得
+    data = member.objects.get(name = obj_get.name)
+
+    # 削除する問い合わせIDとポップアップのIDが等しいときの処理
+    if data.pop_up_id1 == str(num):
+      # ポップアップ削除
+      member.objects.update_or_create(name = obj_get.name, \
+                                      defaults = {'pop_up_id1' : '',
+                                                  'pop_up1' : ''})
+
+    # 削除する問い合わせIDとポップアップのIDが等しいときの処理
+    if data.pop_up_id2 == str(num):
+      # ポップアップ削除
+      member.objects.update_or_create(name = obj_get.name, \
+                                      defaults = {'pop_up_id2' : '',
+                                                  'pop_up2' : ''})
+
+    # 削除する問い合わせIDとポップアップのIDが等しいときの処理
+    if data.pop_up_id3 == str(num):
+      # ポップアップ削除
+      member.objects.update_or_create(name = obj_get.name, \
+                                      defaults = {'pop_up_id3' : '',
+                                                  'pop_up3' : ''})
+
+    # 削除する問い合わせIDとポップアップのIDが等しいときの処理
+    if data.pop_up_id4 == str(num):
+      # ポップアップ削除
+      member.objects.update_or_create(name = obj_get.name, \
+                                      defaults = {'pop_up_id4' : '',
+                                                  'pop_up4' : ''})
+
+    # 削除する問い合わせIDとポップアップのIDが等しいときの処理
+    if data.pop_up_id5 == str(num):
+      # ポップアップ削除
+      member.objects.update_or_create(name = obj_get.name, \
+                                      defaults = {'pop_up_id5' : '',
+                                                  'pop_up5' : ''})
+      
+
+    # 問い合わせ者の情報再取得
+    data = member.objects.get(name = obj_get.name)
+
+    # ポップアップ1が空の場合の処理
+    if data.pop_up1 =='':
+      #ポップアップ2の内容をポップアップ1へ移行
+      member.objects.update_or_create(name = obj_get.name, \
+                        defaults = {'pop_up_id1' : data.pop_up_id2,
+                                    'pop_up1' : data.pop_up2,
+                                    'pop_up_id2' : '',
+                                    'pop_up2' : ''})
+
+      # 問い合わせ者の情報再取得
+      data = member.objects.get(name = obj_get.name)
+
+    # ポップアップ2が空の場合の処理
+    if data.pop_up2 =='':
+      #ポップアップ3の内容をポップアップ2へ移行
+      member.objects.update_or_create(name = obj_get.name, \
+                        defaults = {'pop_up_id2' : data.pop_up_id3,
+                                    'pop_up2' : data.pop_up3,
+                                    'pop_up_id3' : '',
+                                    'pop_up3' : ''})
+
+      # 問い合わせ者の情報再取得
+      data = member.objects.get(name = obj_get.name)
+
+    # ポップアップ3が空の場合の処理
+    if data.pop_up3 =='':
+      #ポップアップ4の内容をポップアップ3へ移行
+      member.objects.update_or_create(name = obj_get.name, \
+                        defaults = {'pop_up_id3' : data.pop_up_id4,
+                                    'pop_up3' : data.pop_up4,
+                                    'pop_up_id4' : '',
+                                    'pop_up4' : ''})
+
+      # 問い合わせ者の情報再取得
+      data = member.objects.get(name = obj_get.name)
+
+    # ポップアップ4が空の場合の処理
+    if data.pop_up4 =='':
+      #ポップアップ5の内容をポップアップ4へ移行
+      member.objects.update_or_create(name = obj_get.name, \
+                        defaults = {'pop_up_id4' : data.pop_up_id5,
+                                    'pop_up4' : data.pop_up5,
+                                    'pop_up_id5' : '',
+                                    'pop_up5' : ''})
+    
+
+    # 設定データ取得
+    default_data = administrator_data.objects.order_by("id").last()
+
+    # ポップアップのIDが空でない場合の処理
+    if default_data.pop_up_id1 != '':
+      # 削除する問い合わせIDとポップアップのIDが等しいときの処理
+      if default_data.pop_up_id1 == str(num):
+        # ポップアップ削除
+        administrator_data.objects.update_or_create(id = default_data.id, \
+                                        defaults = {'pop_up_id1' : '',
+                                                    'pop_up1' : ''})
+
+    # ポップアップのIDが空でない場合の処理
+    if default_data.pop_up_id2 != '':
+      # 削除する問い合わせIDとポップアップのIDが等しいときの処理
+      if default_data.pop_up_id2 == str(num):
+        # ポップアップ削除
+        administrator_data.objects.update_or_create(id = default_data.id, \
+                                        defaults = {'pop_up_id2' : '',
+                                                    'pop_up2' : ''})
+
+    # ポップアップのIDが空でない場合の処理
+    if default_data.pop_up_id3 != '':
+      # 削除する問い合わせIDとポップアップのIDが等しいときの処理
+      if default_data.pop_up_id3 == str(num):
+        # ポップアップ削除
+        administrator_data.objects.update_or_create(id = default_data.id, \
+                                        defaults = {'pop_up_id3' : '',
+                                                    'pop_up3' : ''})
+
+    # ポップアップのIDが空でない場合の処理
+    if default_data.pop_up_id4 != '':
+      # 削除する問い合わせIDとポップアップのIDが等しいときの処理
+      if default_data.pop_up_id4 == str(num):
+        # ポップアップ削除
+        administrator_data.objects.update_or_create(id = default_data.id, \
+                                        defaults = {'pop_up_id4' : '',
+                                                    'pop_up4' : ''})
+
+    # ポップアップのIDが空でない場合の処理
+    if default_data.pop_up_id5 != '':
+      # 削除する問い合わせIDとポップアッ'プのIDが等しいときの処理
+      if default_data.pop_up_id5 == str(num):
+        # ポップアップ削除
+        administrator_data.objects.update_or_create(id = default_data.id, \
+                                        defaults = {'pop_up_id5' : '',
+                                                    'pop_up5' : ''})
+      
+
+    # 設定データ再取得
+    default_data = administrator_data.objects.order_by("id").last()
+
+    # ポップアップ1が空の場合の処理
+    if default_data.pop_up1 == '':
+      #ポップアップ2の内容をポップアップ1へ移行
+      administrator_data.objects.update_or_create(id = default_data.id, \
+                        defaults = {'pop_up_id1' : default_data.pop_up_id2,
+                                    'pop_up1' : default_data.pop_up2,
+                                    'pop_up_id2' : '',
+                                    'pop_up2' : ''})
+
+      # 設定データ再取得
+      default_data = administrator_data.objects.order_by("id").last()
+
+
+    # ポップアップ2が空の場合の処理
+    if default_data.pop_up2 == '':
+      #ポップアップ3の内容をポップアップ2へ移行
+      administrator_data.objects.update_or_create(id = default_data.id, \
+                        defaults = {'pop_up_id2' : default_data.pop_up_id3,
+                                    'pop_up2' : default_data.pop_up3,
+                                    'pop_up_id3' : '',
+                                    'pop_up3' : ''})
+      
+      # 設定データ再取得
+      default_data = administrator_data.objects.order_by("id").last()
+
+
+    # ポップアップ3が空の場合の処理
+    if default_data.pop_up3 == '':
+      #ポップアップ4の内容をポップアップ3へ移行
+      administrator_data.objects.update_or_create(id = default_data.id, \
+                        defaults = {'pop_up_id3' : default_data.pop_up_id4,
+                                    'pop_up3' : default_data.pop_up4,
+                                    'pop_up_id4' : '',
+                                    'pop_up4' : ''})
+      
+      # 設定データ再取得
+      default_data = administrator_data.objects.order_by("id").last()
+
+
+    # ポップアップ4が空の場合の処理
+    if default_data.pop_up4 == '':
+      #ポップアップ5の内容をポップアップ4へ移行
+      administrator_data.objects.update_or_create(id = default_data.id, \
+                        defaults = {'pop_up_id4' : default_data.pop_up_id5,
+                                    'pop_up4' : default_data.pop_up5,
+                                    'pop_up_id5' : '',
+                                    'pop_up5' : ''})
+
+
     # 取得したレコード削除
     obj_get.delete()
 
