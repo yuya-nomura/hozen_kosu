@@ -602,46 +602,57 @@ def input(request):
     def_work = request.POST['kosu_def_list']
     detail_work = request.POST['work_detail']
     work = request.POST['work']
+
     # 翌日チェック状態リセット
     check = 0
+
+
     # 翌日チェックが入っている場合の処理
     if ('tomorrow_check' in request.POST):
       # 翌日チェック状態に1を入れる
       check = 1
+
     # 翌日チェックが入っていない場合の処理
     else:
       # 翌日チェック状態に0を入れる
       check = 0
+
+
     # 直、工数区分、勤務、残業のいずれかが空欄の場合の処理
     if def_work == '' or work == '' or tyoku == '' or request.POST['over_work'] == '':
       # エラーメッセージ出力
       messages.error(request, '直、工数区分、勤務、残業のいずれかが未入力です。工数登録できませんでした。ERROR060')
       # このページをリダイレクト
       return redirect(to = '/input')
+
     # 作業詳細に'$'が含まれている場合の処理
     if '$' in detail_work:
       # エラーメッセージ出力
       messages.error(request, '作業詳細に『$』は使用できません。工数登録できませんでした。ERROR026')
       # このページをリダイレクト
       return redirect(to = '/input')
+
     # 作業詳細に文字数が100文字以上の場合の処理
     if len(detail_work) >= 100:
       # エラーメッセージ出力
       messages.error(request, '作業詳細は100文字以内で入力して下さい。工数登録できませんでした。ERROR059')
       # このページをリダイレクト
       return redirect(to = '/input')
+
     # 残業時間が15の倍数でない場合の処理
     if int(request.POST['over_work'])%15 != 0:
       # エラーメッセージ出力
       messages.error(request, '残業時間が15分の倍数になっていません。工数登録できませんでした。ERROR058')
       # このページをリダイレクト
       return redirect(to = '/input')
+
     # 作業開始時間と作業終了時間が同じ場合の処理
     if start_hour == end_hour and start_min == end_min:
       # エラーメッセージ出力
       messages.error(request, '作業時間が誤っています。確認して下さい。ERROR003')
       # このページをリダイレクト
       return redirect(to = '/input')
+
     # 作業開始時間が作業終了時間より遅い場合の処理
     if start_hour == end_hour and start_min > end_min and check == 0 or\
         start_hour > end_hour and check == 0:
@@ -649,19 +660,25 @@ def input(request):
       messages.error(request, '作業開始時間が終了時間を越えています。翌日チェックを忘れていませんか？ERROR004')
       # このページをリダイレクト
       return redirect(to = '/input')
+
     # 作業時間が長い場合の処理
     if (int(start_hour) - int(end_hour)) <= 2 and check == 1:
       # エラーメッセージ出力
       messages.error(request, '作業時間が長すぎます。作業時間が誤ってませんか？ERROR005')
       # このページをリダイレクト
       return redirect(to = '/input')
+
+
     # 指定日に工数データが既にあるか確認
     obj_filter = Business_Time_graph.objects.filter(employee_no3 = request.session.get('login_No', None), \
                                                     work_day2 = work_day)
+
     # 作業開始時間のインデント取得
     start_time = int(start_hour)*12 + int(start_min)/5
     # 作業終了時間のインデント取得
     end_time = int(end_hour)*12 + int(end_min)/5
+
+
     # 入力日が作業内容データに登録がある場合の処理
     if obj_filter.count() != 0:
       # 作業内容データからログイン者の従業員番号と就業日が一致したオブジェクトを変数に入れる
@@ -671,42 +688,51 @@ def input(request):
       kosu_def = list(obj_get.time_work)
       # 作業詳細データを文字列からリストに解凍
       detail_list = obj_get.detail_work.split('$')
+
+
       # 以前同日に打ち込んだ工数区分定義と違う場合の処理
       if obj_get.def_ver2 != request.session.get('input_def', None) and obj_get.def_ver2 != '':
         # エラーメッセージ出力
         messages.error(request, '前に入力された工数と工数区分定義のVerが違います。入力できません。ERROR007')
         # このページをリダイレクト
         return redirect(to = '/input')
+
+
       # 工数データに休憩時間データ無いか直が変更されている場合の処理
       if obj_get.breaktime == None or obj_get.breaktime_over1 == None or \
         obj_get.breaktime_over2 == None or obj_get.breaktime_over3 == None or \
           obj_get.tyoku2 != tyoku:
         # 休憩時間取得
         break_time_obj = member.objects.get(employee_no = request.session.get('login_No', None))
+
         # 1直の場合の休憩時間取得
         if request.POST['tyoku2'] == '1':
           breaktime = break_time_obj.break_time1
           breaktime_over1 = break_time_obj.break_time1_over1
           breaktime_over2 = break_time_obj.break_time1_over2
           breaktime_over3 = break_time_obj.break_time1_over3
+
         # 2直の場合の休憩時間取得
         if request.POST['tyoku2'] == '2':
           breaktime = break_time_obj.break_time2
           breaktime_over1 = break_time_obj.break_time2_over1
           breaktime_over2 = break_time_obj.break_time2_over2
           breaktime_over3 = break_time_obj.break_time2_over3
+
         # 3直の場合の休憩時間取得
         if request.POST['tyoku2'] == '3':
           breaktime = break_time_obj.break_time3
           breaktime_over1 = break_time_obj.break_time3_over1
           breaktime_over2 = break_time_obj.break_time3_over2
           breaktime_over3 = break_time_obj.break_time3_over3
+
         # 常昼の場合の休憩時間取得
         if request.POST['tyoku2'] == '4':
           breaktime = break_time_obj.break_time4
           breaktime_over1 = break_time_obj.break_time4_over1
           breaktime_over2 = break_time_obj.break_time4_over2
           breaktime_over3 = break_time_obj.break_time4_over3
+
       # 工数データに休憩時間データある場合の処理
       else:
         # 休憩時間取得
@@ -714,64 +740,86 @@ def input(request):
         breaktime_over1 = obj_get.breaktime_over1
         breaktime_over2 = obj_get.breaktime_over2
         breaktime_over3 = obj_get.breaktime_over3
+
       # 休憩1開始時間のインデント取得
       break_start1 = int(breaktime[0 : 2])*12 + int(breaktime[2 : 4])/5
       # 休憩1終了時間のインデント取得
       break_end1 = int(breaktime[4 : 6])*12 + int(breaktime[6 :])/5
+
       # 休憩1の日またぎ変数リセット
       break_next_day1 = 0
+
       # 休憩開始時間より終了時間の方が早い場合の処理
       if break_start1 > break_end1:
         # 休憩1の日またぎ変数に1を入れる
         break_next_day1 = 1
+
       # 休憩開始時間より終了時間の方が遅い場合の処理
       else:
         # 休憩1の日またぎ変数に0を入れる
         break_next_day1 = 0
+
+
       # 休憩2開始時間のインデント取得
       break_start2 = int(breaktime_over1[0 : 2])*12 + int(breaktime_over1[2 : 4])/5
       # 休憩2終了時間のインデント取得
       break_end2 = int(breaktime_over1[4 : 6])*12 + int(breaktime_over1[6 :])/5
+
       # 休憩2の日またぎ変数リセット
       break_next_day2 = 0
+
       # 休憩開始時間より終了時間の方が早い場合の処理
       if break_start2 > break_end2:
         # 休憩2の日またぎ変数に1を入れる
         break_next_day2 = 1
+
       # 休憩開始時間より終了時間の方が遅い場合の処理
       else:
         # 休憩2の日またぎ変数に0を入れる
         break_next_day2 = 0
+
+
       # 休憩3開始時間のインデント取得
       break_start3 = int(breaktime_over2[0 : 2])*12 + int(breaktime_over2[2 : 4])/5
       # 休憩3終了時間のインデント取得
       break_end3 = int(breaktime_over2[4 : 6])*12 + int(breaktime_over2[6 :])/5
+
       # 休憩3の日またぎ変数リセット
       break_next_day3 = 0
+
       # 休憩開始時間より終了時間の方が早い場合の処理
       if break_start3 > break_end3:
         # 休憩3の日またぎ変数に1を入れる
         break_next_day3 = 1
+
       # 休憩開始時間より終了時間の方が遅い場合の処理
       else:
         # 休憩3の日またぎ変数に0を入れる
         break_next_day3 = 0
+
+
       # 休憩4開始時間のインデント取得
       break_start4 = int(breaktime_over3[0 : 2])*12 + int(breaktime_over3[2 : 4])/5
       # 休憩4終了時間のインデント取得
       break_end4 = int(breaktime_over3[4 : 6])*12 + int(breaktime_over3[6 :])/5
+
       # 休憩4の日またぎ変数リセット
       break_next_day4 = 0
+
       # 休憩開始時間より終了時間の方が早い場合の処理
       if break_start4 > break_end4:
         # 休憩4の日またぎ変数に1を入れる
         break_next_day4 = 1
+
       # 休憩開始時間より終了時間の方が遅い場合の処理
       else:
         # 休憩4の日またぎ変数に0を入れる
         break_next_day4 = 0
+
+
       # 入力時間が日をまたいでいない場合の処理
       if check == 0:
+
         # 工数に被りがないかチェックするループ
         for kosu in range(int(start_time), int(end_time)):
           # 工数データの要素が空でない場合の処理
@@ -780,12 +828,16 @@ def input(request):
             messages.error(request, '入力された作業時間には既に工数が入力されているので入力できません。ERROR008')
             # このページをリダイレクト
             return redirect(to = '/input')
+          
+
         # 作業内容と作業詳細を書き込むループ
         for kosu in range(int(start_time), int(end_time)):
           # 作業内容リストに入力された工数定義区分の対応する記号を入れる
           kosu_def[kosu] = def_work
           # 作業詳細リストに入力した作業詳細を入れる
           detail_list[kosu] = detail_work
+
+
         # 休憩1が日を超えている場合の処理
         if break_next_day1 == 1:
           # 休憩時間内の工数データと作業詳細を消すループ(休憩時間開始～24時まで)
@@ -794,12 +846,16 @@ def input(request):
             kosu_def[bt1] = '#'
             # 作業詳細リストの要素を空にする
             detail_list[bt1] = ''
+
+
           # 休憩時間内の工数データと作業詳細を消すループ(0時～休憩時間終了まで)
           for bt1 in range(0, int(break_end1)):
             # 作業内容リストの要素を空にする
             kosu_def[bt1] = '#'
             # 作業詳細リストの要素を空にする
             detail_list[bt1] = ''
+
+
         # 休憩1が日を超えていない場合の処理
         else:
           # 休憩時間内の工数データと作業詳細を消すループ
@@ -808,6 +864,8 @@ def input(request):
             kosu_def[bt1] = '#'
             # 作業詳細リストの要素を空にする
             detail_list[bt1] = ''
+
+
         # 休憩2が日を超えている場合の処理
         if break_next_day2 == 1:
           # 休憩時間内の工数データと作業詳細を消すループ(休憩時間開始～24時まで)
@@ -816,12 +874,16 @@ def input(request):
             kosu_def[bt2] = '#'
             # 作業詳細リストの要素を空にする
             detail_list[bt2] = ''
+
+
           # 休憩時間内の工数データと作業詳細を消すループ(0時～休憩時間終了まで)
           for bt2 in range(0, int(break_end2)):
             # 作業内容リストの要素を空にする
             kosu_def[bt2] = '#'
             # 作業詳細リストの要素を空にする
             detail_list[bt2] = ''
+
+
         # 休憩2が日を超えていない場合の処理
         else:
           # 休憩時間内の工数データと作業詳細を消すループ
@@ -830,6 +892,8 @@ def input(request):
             kosu_def[bt2] = '#'
             # 作業詳細リストの要素を空にする
             detail_list[bt2] = ''
+
+
         # 休憩3が日を超えている場合の処理
         if break_next_day3 == 1:
           # 休憩時間内の工数データと作業詳細を消すループ(休憩時間開始～24時まで)
@@ -838,12 +902,16 @@ def input(request):
             kosu_def[bt3] = '#'
             # 作業詳細リストの要素を空にする
             detail_list[bt3] = ''
+
+
           # 休憩時間内の工数データと作業詳細を消すループ(0時～休憩時間終了まで)
           for bt2 in range(0, int(break_end3)):
             # 作業内容リストの要素を空にする
             kosu_def[bt3] = '#'
             # 作業詳細リストの要素を空にする
             detail_list[bt3] = ''
+
+
         # 休憩3が日を超えていない場合の処理
         else:
           # 休憩時間内の工数データと作業詳細を消す
@@ -852,6 +920,8 @@ def input(request):
             kosu_def[bt3] = '#'
             # 作業詳細リストの要素を空にする
             detail_list[bt3] = ''
+
+
         # 休憩4が日を超えている場合の処理
         if break_next_day4 == 1:
           # 休憩時間内の工数データと作業詳細を消すループ(休憩時間開始～24時まで)
@@ -860,12 +930,16 @@ def input(request):
             kosu_def[bt4] = '#'
             # 作業詳細リストの要素を空にする
             detail_list[bt4] = ''
+
+
           # 休憩時間内の工数データと作業詳細を消すループ(0時～休憩時間終了まで)
           for bt4 in range(0, int(break_end4)):
             # 作業内容リストの要素を空にする
             kosu_def[bt4] = '#'
             # 作業詳細リストの要素を空にする
             detail_list[bt4] = ''
+
+
         # 休憩4が日を超えていない場合の処理
         else:
           # 休憩時間内の工数データと作業詳細を消すループ
@@ -874,8 +948,11 @@ def input(request):
             kosu_def[bt4] = '#'
             # 作業詳細リストの要素を空にする
             detail_list[bt4] = ''
+
+
       # 入力時間が日をまたいでいる場合の処理
       if check == 1:
+
         # 工数に被りがないかチェックするループ
         for kosu in range(int(start_time), 288):
           # 作業内容の要素が空でない場合の処理
@@ -884,6 +961,7 @@ def input(request):
             messages.error(request, '入力された作業時間には既に工数が入力されているので入力できません。ERROR009')
             # このページをリダイレクト
             return redirect(to = '/input')
+          
         # 工数に被りがないかチェックするループ
         for kosu in range(0, int(end_time)):
           # 作業内容の要素が空でない場合の処理
@@ -893,17 +971,23 @@ def input(request):
             # このページをリダイレクト
             return redirect(to = '/input')
         # 作業内容と作業詳細を書き込むループ(作業開始時間から24時まで)
+
+
         for kosu in range(int(start_time), 288):
           # 作業内容リストに入力した工数区分定義の対応する記号を入れる
           kosu_def[kosu] = def_work
           # 作業詳細リストに入力した作業詳細を入れる
           detail_list[kosu] = detail_work
+
+
         # 作業内容と作業詳細を書き込むループ(0時から作業終了時間まで)
         for kosu in range(0, int(end_time)):
           # 作業内容リストに入力した工数区分定義の対応する記号を入れる
           kosu_def[kosu] = def_work
           # 作業詳細リストに入力した作業詳細を入れる
           detail_list[kosu] = detail_work
+
+
         # 休憩1が日を超えている場合の処理
         if break_next_day1 == 1:
           # 休憩時間内の工数データと作業詳細を消すループ(休憩時間開始～24時まで)
@@ -912,12 +996,16 @@ def input(request):
             kosu_def[bt1] = '#'
             # 作業詳細リストに入力した作業詳細を入れる
             detail_list[bt1] = ''
+
+  
           # 休憩時間内の工数データと作業詳細を消すループ(0時から作業終了時間まで)
           for bt1 in range(0, int(break_end1)):
             # 作業内容リストに入力した工数区分定義の対応する記号を入れる
             kosu_def[bt1] = '#'
             # 作業詳細リストに入力した作業詳細を入れる
             detail_list[bt1] = ''
+
+
         # 休憩1が日を超えていない場合の処理
         else:
           # 休憩時間内の工数データと作業詳細を消すループ
@@ -926,6 +1014,8 @@ def input(request):
             kosu_def[bt1] = '#'
             # 作業詳細リストに入力した作業詳細を入れる
             detail_list[bt1] = ''
+
+
         # 休憩2が日を超えている場合の処理
         if break_next_day2 == 1:
           # 休憩時間内の工数データと作業詳細を消すループ(休憩時間開始～24時まで)
@@ -934,12 +1024,16 @@ def input(request):
             kosu_def[bt2] = '#'
             # 作業詳細リストに入力した作業詳細を入れる
             detail_list[bt2] = ''
+
+
           # 休憩時間内の工数データと作業詳細を消すループ(0時から作業終了時間まで)
           for bt2 in range(0, int(break_end2)):
             # 作業内容リストに入力した工数区分定義の対応する記号を入れる
             kosu_def[bt2] = '#'
             # 作業詳細リストに入力した作業詳細を入れる
             detail_list[bt2] = ''
+
+
         # 休憩2が日を超えていない場合の処理
         else:
           # 休憩時間内の工数データと作業詳細を消すループ
@@ -948,6 +1042,8 @@ def input(request):
             kosu_def[bt2] = '#'
             # 作業詳細リストに入力した作業詳細を入れる
             detail_list[bt2] = ''
+
+
         # 休憩3が日を超えている場合の処理
         if break_next_day3 == 1:
           # 休憩時間内の工数データと作業詳細を消すループ(休憩時間開始～24時まで)
@@ -956,12 +1052,16 @@ def input(request):
             kosu_def[bt3] = '#'
             # 作業詳細リストに入力した作業詳細を入れる
             detail_list[bt3] = ''
+
+
           # 休憩時間内の工数データと作業詳細を消すループ(0時から作業終了時間まで)
           for bt2 in range(0, int(break_end3)):
             # 作業内容リストに入力した工数区分定義の対応する記号を入れる
             kosu_def[bt3] = '#'
             # 作業詳細リストに入力した作業詳細を入れる
             detail_list[bt3] = ''
+
+
         # 休憩3が日を超えていない場合の処理
         else:
           # 休憩時間内の工数データと作業詳細を消すループ
@@ -970,6 +1070,8 @@ def input(request):
             kosu_def[bt3] = '#'
             # 作業詳細リストに入力した作業詳細を入れる
             detail_list[bt3] = ''
+
+
         # 休憩4が日を超えている場合の処理
         if break_next_day4 == 1:
           # 休憩時間内の工数データと作業詳細を消すループ(休憩時間開始～24時まで)
@@ -978,12 +1080,16 @@ def input(request):
             kosu_def[bt4] = '#'
             # 作業詳細リストに入力した作業詳細を入れる
             detail_list[bt4] = ''
+
+
           # 休憩時間内の工数データと作業詳細を消すループ(0時から作業終了時間まで)
           for bt4 in range(0, int(break_end4)):
             # 作業内容リストに入力した工数区分定義の対応する記号を入れる
             kosu_def[bt4] = '#'
             # 作業詳細リストに入力した作業詳細を入れる
             detail_list[bt4] = ''
+
+
         # 休憩4が日を超えていない場合の処理
         else:
           # 休憩時間内の工数データと作業詳細を消すループ
@@ -992,41 +1098,54 @@ def input(request):
             kosu_def[bt4] = '#'
             # 作業詳細リストに入力した作業詳細を入れる
             detail_list[bt4] = ''
+
+
       # 作業詳細変数リセット
       detail_list_str = ''
+
       # 作業詳細リストをstr型に変更するループ
       for i, e in enumerate(detail_list):
         # 最終ループの処理
         if i == len(detail_list) - 1:
           # 作業詳細変数に作業詳細リストの要素をstr型で追加する
           detail_list_str = detail_list_str + detail_list[i]
+
         # 最終ループ以外の処理
         else:
           # 作業詳細変数に作業詳細リストの要素をstr型で追加し、区切り文字の'$'も追加
           detail_list_str = detail_list_str + detail_list[i] + '$'
+
+
       # 工数合計変数リセット
       kosu_total = 0
+
       # 工数の合計を計算するループ
       for k in kosu_def:
         # 作業内容が入っている場合の処理
         if k != '#':
           # 工数の合計に5分加算
           kosu_total += 5
+
+
       # 工数入力OK_NGリセット
       judgement = False
+
       # 出勤、休出時、工数合計と残業に整合性がある場合の処理
       if (work == '出勤' or work == 'シフト出') and \
         kosu_total - int(request.POST['over_work']) == 470:
         # 工数入力OK_NGをOKに切り替え
         judgement = True
+
       # 休出時、工数合計と残業に整合性がある場合の処理
       if work == '休出' and kosu_total == int(request.POST['over_work']):
         # 工数入力OK_NGをOKに切り替え
         judgement = True
+
       # 早退・遅刻時、工数合計と残業に整合性がある場合の処理
       if work == '早退・遅刻' and kosu_total != 0:
         # 工数入力OK_NGをOKに切り替え
         judgement = True
+
       # ログイン者の登録ショップが三組三交替Ⅱ甲乙丙番Cで1直の場合の処理
       if (member_obj.shop == 'W1' or member_obj.shop == 'W2' or \
         member_obj.shop == 'A1' or member_obj.shop == 'A2') and \
@@ -1035,10 +1154,12 @@ def input(request):
         if work == '半前年休' and kosu_total - int(request.POST['over_work']) == 230:
           # 工数入力OK_NGをOKに切り替え
           judgement = True
+
         # 半後年休時、工数合計と残業に整合性がある場合の処理
         if work == '半後年休' and kosu_total - int(request.POST['over_work']) == 240:
           # 工数入力OK_NGをOKに切り替え
           judgement = True
+
       # ログイン者の登録ショップが三組三交替Ⅱ甲乙丙番Cで2直の場合の処理
       if (member_obj.shop == 'W1' or member_obj.shop == 'W2' or \
         member_obj.shop == 'A1' or member_obj.shop == 'A2') and \
@@ -1047,10 +1168,12 @@ def input(request):
         if work == '半前年休' and kosu_total - int(request.POST['over_work']) == 290:
           # 工数入力OK_NGをOKに切り替え
           judgement = True
+
         # 半後年休時、工数合計と残業に整合性がある場合の処理
         if work == '半後年休' and kosu_total - int(request.POST['over_work']) == 180:
           # 工数入力OK_NGをOKに切り替え
           judgement = True
+
       # ログイン者の登録ショップが三組三交替Ⅱ甲乙丙番Cで3直の場合の処理
       if (member_obj.shop == 'W1' or member_obj.shop == 'W2' or \
         member_obj.shop == 'A1' or member_obj.shop == 'A2') and \
@@ -1059,10 +1182,12 @@ def input(request):
         if work == '半前年休' and kosu_total - int(request.POST['over_work']) == 230:
           # 工数入力OK_NGをOKに切り替え
           judgement = True
+
         # 半後年休時、工数合計と残業に整合性がある場合の処理
         if work == '半後年休' and kosu_total - int(request.POST['over_work']) == 240:
           # 工数入力OK_NGをOKに切り替え
           judgement = True
+
       # ログイン者の登録ショップが三組三交替Ⅱ甲乙丙番Bで1直の場合の処理
       if (member_obj.shop == 'P' or member_obj.shop == 'R' or \
         member_obj.shop == 'T1' or member_obj.shop == 'T2' or \
@@ -1072,10 +1197,12 @@ def input(request):
         if work == '半前年休' and kosu_total - int(request.POST['over_work']) == 220:
           # 工数入力OK_NGをOKに切り替え
           judgement = True
+
         # 半後年休時、工数合計と残業に整合性がある場合の処理
         if work == '半後年休' and kosu_total - int(request.POST['over_work']) == 250:
           # 工数入力OK_NGをOKに切り替え
           judgement = True
+
       # ログイン者の登録ショップが三組三交替Ⅱ甲乙丙番Bで2直の場合の処理
       if (member_obj.shop == 'P' or member_obj.shop == 'R' or \
         member_obj.shop == 'T1' or member_obj.shop == 'T2' or \
@@ -1085,10 +1212,12 @@ def input(request):
         if work == '半前年休' and kosu_total - int(request.POST['over_work']) == 230:
           # 工数入力OK_NGをOKに切り替え
           judgement = True
+
         # 半後年休時、工数合計と残業に整合性がある場合の処理
         if work == '半後年休' and kosu_total - int(request.POST['over_work']) == 240:
           # 工数入力OK_NGをOKに切り替え
           judgement = True
+
       # ログイン者の登録ショップが三組三交替Ⅱ甲乙丙番Bで3直の場合の処理
       if (member_obj.shop == 'P' or member_obj.shop == 'R' or \
         member_obj.shop == 'T1' or member_obj.shop == 'T2' or \
@@ -1098,10 +1227,13 @@ def input(request):
         if work == '半前年休' and kosu_total - int(request.POST['over_work']) == 275:
           # 工数入力OK_NGをOKに切り替え
           judgement = True
+
         # 半後年休時、工数合計と残業に整合性がある場合の処理
         if work == '半後年休' and kosu_total - int(request.POST['over_work']) == 195:
           # 工数入力OK_NGをOKに切り替え
           judgement = True
+
+
       # 作業内容データの内容を上書きして更新
       Business_Time_graph.objects.update_or_create(employee_no3 = request.session.get('login_No', None), \
         work_day2 = work_day, defaults = {'def_ver2' : request.session.get('input_def', None), \
@@ -1115,148 +1247,191 @@ def input(request):
                                           'breaktime_over2' : breaktime_over2, \
                                           'breaktime_over3' : breaktime_over3, \
                                           'judgement' : judgement})
+      
+
     # 入力日が作業内容データに登録がない場合の処理
     if obj_filter.count() == 0:
       # '#'が288個並んだ作業内容リスト作成
       kosu_def = list(itertools.repeat('#', 288))
       # ''が288個並んだ作業詳細リスト作成
       detail_list = list(itertools.repeat('', 288))
+
       # 休憩時間取得
       break_time_obj = member.objects.get(employee_no = request.session.get('login_No', None))
+
       # 1直の場合の休憩時間取得
       if request.POST['tyoku2'] == '1':
         breaktime = break_time_obj.break_time1
         breaktime_over1 = break_time_obj.break_time1_over1
         breaktime_over2 = break_time_obj.break_time1_over2
         breaktime_over3 = break_time_obj.break_time1_over3
+
       # 2直の場合の休憩時間取得
       if request.POST['tyoku2'] == '2':
         breaktime = break_time_obj.break_time2
         breaktime_over1 = break_time_obj.break_time2_over1
         breaktime_over2 = break_time_obj.break_time2_over2
         breaktime_over3 = break_time_obj.break_time2_over3
+
       # 3直の場合の休憩時間取得
       if request.POST['tyoku2'] == '3':
         breaktime = break_time_obj.break_time3
         breaktime_over1 = break_time_obj.break_time3_over1
         breaktime_over2 = break_time_obj.break_time3_over2
         breaktime_over3 = break_time_obj.break_time3_over3
+
       # 常昼の場合の休憩時間取得
       if request.POST['tyoku2'] == '4':
         breaktime = break_time_obj.break_time4
         breaktime_over1 = break_time_obj.break_time4_over1
         breaktime_over2 = break_time_obj.break_time4_over2
         breaktime_over3 = break_time_obj.break_time4_over3
+
       # 休憩1開始時間のインデント取得
       break_start1 = int(breaktime[0 : 2])*12 + int(breaktime[2 : 4])/5
       # 休憩1終了時間のインデント取得
       break_end1 = int(breaktime[4 : 6])*12 + int(breaktime[6 :])/5
+
       # 休憩1が日をまたいでいないか確認
       break_next_day1 = 0
+
       if break_start1 > break_end1:
         break_next_day1 = 1
+
       else:
         break_next_day1 = 0
+
       # 休憩2開始時間のインデント取得
       break_start2 = int(breaktime_over1[0 : 2])*12 + int(breaktime_over1[2 : 4])/5
       # 休憩2終了時間のインデント取得
       break_end2 = int(breaktime_over1[4 : 6])*12 + int(breaktime_over1[6 :])/5
+
       # 休憩2が日をまたいでいないか確認
       break_next_day2 = 0
+
       if break_start2 > break_end2:
         break_next_day2 = 1
+
       else:
         break_next_day2 = 0
+
       # 休憩3開始時間のインデント取得
       break_start3 = int(breaktime_over2[0 : 2])*12 + int(breaktime_over2[2 : 4])/5
       # 休憩3終了時間のインデント取得
       break_end3 = int(breaktime_over2[4 : 6])*12 + int(breaktime_over2[6 :])/5
+
       # 休憩3が日をまたいでいないか確認
       break_next_day3 = 0
+
       if break_start3 > break_end3:
         break_next_day3 = 1
+
       else:
         break_next_day3 = 0
+
       # 休憩4開始時間のインデント取得
       break_start4 = int(breaktime_over3[0 : 2])*12 + int(breaktime_over3[2 : 4])/5
       # 休憩4終了時間のインデント取得
       break_end4 = int(breaktime_over3[4 : 6])*12 + int(breaktime_over3[6 :])/5
+
       # 休憩4が日をまたいでいないか確認
       break_next_day4 = 0
+
       if break_start4 > break_end4:
         break_next_day4 = 1
+
       else:
         break_next_day4 = 0
+
+
       # 入力時間が日をまたいでいない場合の処理
       if check == 0:
         # リストの作業時間に合った場所に工数区分と作業詳細を入れる
         for kosu in range(int(start_time), int(end_time)):
           kosu_def[kosu] = def_work
           detail_list[kosu] = detail_work
+
+
         # 休憩1が日を超えている場合の処理
         if break_next_day1 == 1:
           # 休憩時間内の工数データと作業詳細を消す
           for bt1 in range(int(break_start1), 288):
             kosu_def[bt1] = '#'
             detail_list[bt1] = ''
+
           # 休憩時間内の工数データと作業詳細を消す
           for bt1 in range(0, int(break_end1)):
             kosu_def[bt1] = '#'
             detail_list[bt1] = ''
+
         # 休憩1が日を超えていない場合の処理
         else:
           # 休憩時間内の工数データと作業詳細を消す
           for bt1 in range(int(break_start1), int(break_end1)):
             kosu_def[bt1] = '#'
             detail_list[bt1] = ''
+
+
         # 休憩2が日を超えている場合の処理
         if break_next_day2 == 1:
           # 休憩時間内の工数データと作業詳細を消す
           for bt2 in range(int(break_start2), 288):
             kosu_def[bt2] = '#'
             detail_list[bt2] = ''
+
           # 休憩時間内の工数データと作業詳細を消す
           for bt2 in range(0, int(break_end2)):
             kosu_def[bt2] = '#'
             detail_list[bt2] = ''
+
         # 休憩2が日を超えていない場合の処理
         else:
           # 休憩時間内の工数データと作業詳細を消す
           for bt2 in range(int(break_start2), int(break_end2)):
             kosu_def[bt2] = '#'
             detail_list[bt2] = ''
+
+
         # 休憩3が日を超えている場合の処理
         if break_next_day3 == 1:
           # 休憩時間内の工数データと作業詳細を消す
           for bt3 in range(int(break_start3), 288):
             kosu_def[bt3] = '#'
             detail_list[bt3] = ''
+
           # 休憩時間内の工数データと作業詳細を消す
           for bt2 in range(0, int(break_end3)):
             kosu_def[bt3] = '#'
             detail_list[bt3] = ''
+
         # 休憩3が日を超えていない場合の処理
         else:
           # 休憩時間内の工数データと作業詳細を消す
           for bt3 in range(int(break_start3), int(break_end3)):
             kosu_def[bt3] = '#'
             detail_list[bt3] = ''
+
+
         # 休憩4が日を超えている場合の処理
         if break_next_day4 == 1:
           # 休憩時間内の工数データと作業詳細を消す
           for bt4 in range(int(break_start4), 288):
             kosu_def[bt4] = '#'
             detail_list[bt4] = ''
+            
           # 休憩時間内の工数データと作業詳細を消す
           for bt4 in range(0, int(break_end4)):
             kosu_def[bt4] = '#'
             detail_list[bt4] = ''
+
         # 休憩4が日を超えていない場合の処理
         else:
           # 休憩時間内の工数データと作業詳細を消す
           for bt4 in range(int(break_start4), int(break_end4)):
             kosu_def[bt4] = '#'
             detail_list[bt4] = ''
+
+
       # 入力時間が日をまたいでいる場合の処理
       if check == 1:
         # リストの作業時間に合った場所に工数区分と作業詳細を入れる
@@ -1470,6 +1645,9 @@ def input(request):
     request.session['end_min'] = end_min
     # このページをリダイレクトする
     return redirect(to = '/input')
+
+
+
   # 残業登録時の処理
   if "over_time_correction" in request.POST:
     # 未入力がないことを確認

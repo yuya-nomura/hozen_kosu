@@ -560,36 +560,36 @@ def inquiry_edit(request, num):
       if administrator_obj_get.pop_up1 == '':
         # ポップアップにコメント書き込み
         administrator_data.objects.update_or_create(id = administrator_obj_get.id, \
-                                   defaults = {'pop_up_id1' : 'ID{}の問い合わせが編集されました。'.format(num),
-                                               'pop_up1' : num})
+                                   defaults = {'pop_up1' : 'ID{}の問い合わせが編集されました。'.format(num),
+                                               'pop_up_id1' : num})
         
       # ポップアップ2が空の場合の処理
       elif administrator_obj_get.pop_up2 == '':
         # ポップアップにコメント書き込み
         administrator_data.objects.update_or_create(id = administrator_obj_get.id, \
-                                   defaults = {'pop_up_id2' : 'ID{}の問い合わせが編集されました。'.format(num),
-                                               'pop_up2' : num})
+                                   defaults = {'pop_up2' : 'ID{}の問い合わせが編集されました。'.format(num),
+                                               'pop_up_id2' : num})
 
       # ポップアップ3が空の場合の処理
       elif administrator_obj_get.pop_up3 == '':
         # ポップアップにコメント書き込み
         administrator_data.objects.update_or_create(id = administrator_obj_get.id, \
-                                   defaults = {'pop_up_id3' : 'ID{}の問い合わせが編集されました。'.format(num),
-                                               'pop_up3' : num})
+                                   defaults = {'pop_up3' : 'ID{}の問い合わせが編集されました。'.format(num),
+                                               'pop_up_id3' : num})
 
       # ポップアップ4が空の場合の処理
       elif administrator_obj_get.pop_up4 == '':
         # ポップアップにコメント書き込み
         administrator_data.objects.update_or_create(id = administrator_obj_get.id, \
-                                   defaults = {'pop_up_id4' : 'ID{}の問い合わせが編集されました。'.format(num),
-                                               'pop_up4' : num})
+                                   defaults = {'pop_up4' : 'ID{}の問い合わせが編集されました。'.format(num),
+                                               'pop_up_id4' : num})
 
       # ポップアップ5が空の場合の処理
       elif administrator_obj_get.pop_up5 == '':
         # ポップアップにコメント書き込み
         administrator_data.objects.update_or_create(id = administrator_obj_get.id, \
-                                   defaults = {'pop_up_id5' : 'ID{}の問い合わせが編集されました。'.format(num),
-                                               'pop_up5' : num})
+                                   defaults = {'pop_up5' : 'ID{}の問い合わせが編集されました。'.format(num),
+                                               'pop_up_id5' : num})
 
 
     # 回答が編集前後で変更がある場合の処理
