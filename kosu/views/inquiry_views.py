@@ -490,7 +490,6 @@ def inquiry_display(request, num):
 
   # お問い合わせ編集処理
   if "Registration" in request.POST:
-     
     # お問い合わせ編集ページへ飛ぶ
     return redirect(to = '/inquiry_edit/{}'.format(num))
 
@@ -525,7 +524,6 @@ def inquiry_edit(request, num):
 
   # 未ログインならログインページに飛ぶ
   if request.session.get('login_No', None) == None:
-
     return redirect(to = '/login')
 
 
@@ -539,7 +537,6 @@ def inquiry_edit(request, num):
   form_default = {'content_choice' : obj_get.content_choice, 
                   'inquiry' : obj_get.inquiry, 
                   'answer' : obj_get.answer}
-
   # フォーム定義
   form = inquiryForm(form_default)
 
@@ -547,16 +544,56 @@ def inquiry_edit(request, num):
 
   # お問い合わせ編集処理
   if "Registration" in request.POST:
-
     # 指定IDの工数履歴のレコードのオブジェクト取得
     obj_get = inquiry_data.objects.get(id = num)
 
     # 問い合わせ者情報取得
     member_obj_get = member.objects.get(employee_no = obj_get.employee_no2)
 
+    # 設定情報取得
+    administrator_obj_get = administrator_data.objects.order_by("id").last()
+
+
+    # 問い合わせが編集前後で変更がある場合の処理
+    if obj_get.inquiry != request.POST['inquiry']:
+      # ポップアップ1が空の場合の処理
+      if administrator_obj_get.pop_up1 == '':
+        # ポップアップにコメント書き込み
+        administrator_data.objects.update_or_create(id = administrator_obj_get.id, \
+                                   defaults = {'pop_up_id1' : 'ID{}の問い合わせが編集されました。'.format(num),
+                                               'pop_up1' : num})
+        
+      # ポップアップ2が空の場合の処理
+      elif administrator_obj_get.pop_up2 == '':
+        # ポップアップにコメント書き込み
+        administrator_data.objects.update_or_create(id = administrator_obj_get.id, \
+                                   defaults = {'pop_up_id2' : 'ID{}の問い合わせが編集されました。'.format(num),
+                                               'pop_up2' : num})
+
+      # ポップアップ3が空の場合の処理
+      elif administrator_obj_get.pop_up3 == '':
+        # ポップアップにコメント書き込み
+        administrator_data.objects.update_or_create(id = administrator_obj_get.id, \
+                                   defaults = {'pop_up_id3' : 'ID{}の問い合わせが編集されました。'.format(num),
+                                               'pop_up3' : num})
+
+      # ポップアップ4が空の場合の処理
+      elif administrator_obj_get.pop_up4 == '':
+        # ポップアップにコメント書き込み
+        administrator_data.objects.update_or_create(id = administrator_obj_get.id, \
+                                   defaults = {'pop_up_id4' : 'ID{}の問い合わせが編集されました。'.format(num),
+                                               'pop_up4' : num})
+
+      # ポップアップ5が空の場合の処理
+      elif administrator_obj_get.pop_up5 == '':
+        # ポップアップにコメント書き込み
+        administrator_data.objects.update_or_create(id = administrator_obj_get.id, \
+                                   defaults = {'pop_up_id5' : 'ID{}の問い合わせが編集されました。'.format(num),
+                                               'pop_up5' : num})
+
+
     # 回答が編集前後で変更がある場合の処理
     if obj_get.answer != request.POST['answer']:
-
       # ポップアップ1が空の場合の処理
       if member_obj_get.pop_up1 == '':
         # ポップアップにコメント書き込み
