@@ -552,7 +552,7 @@ def inquiry_edit(request, num):
     obj_get = inquiry_data.objects.get(id = num)
 
     # 問い合わせ者情報取得
-    member_obj_get = member.objects.get(name = obj_get.name)
+    member_obj_get = member.objects.get(employee_no = obj_get.employee_no2)
 
     # 回答が編集前後で変更がある場合の処理
     if obj_get.answer != request.POST['answer']:
@@ -560,35 +560,35 @@ def inquiry_edit(request, num):
       # ポップアップ1が空の場合の処理
       if member_obj_get.pop_up1 == '':
         # ポップアップにコメント書き込み
-        member.objects.update_or_create(name = obj_get.name, \
+        member.objects.update_or_create(employee_no = obj_get.employee_no2, \
                                         defaults = {'pop_up1' : 'ID{}の問い合わせに回答が来ています。'.format(num), \
                                                     'pop_up_id1' : num})
 
       # ポップアップ2が空の場合の処理
       elif member_obj_get.pop_up2 == '':
         # ポップアップにコメント書き込み
-        member.objects.update_or_create(name = obj_get.name, \
+        member.objects.update_or_create(employee_no = obj_get.employee_no2, \
                                         defaults = {'pop_up2' : 'ID{}の問い合わせに回答が来ています。'.format(num), \
                                                     'pop_up_id2' : num})
 
       # ポップアップ3が空の場合の処理
       elif member_obj_get.pop_up3 == '':
         # ポップアップにコメント書き込み
-        member.objects.update_or_create(name = obj_get.name, \
+        member.objects.update_or_create(employee_no = obj_get.employee_no2, \
                                         defaults = {'pop_up3' : 'ID{}の問い合わせに回答が来ています。'.format(num), \
                                                     'pop_up_id3' : num})
         
       # ポップアップ4が空の場合の処理
       elif member_obj_get.pop_up2 == '':
         # ポップアップにコメント書き込み
-        member.objects.update_or_create(name = obj_get.name, \
+        member.objects.update_or_create(employee_no = obj_get.employee_no2, \
                                         defaults = {'pop_up4' : 'ID{}の問い合わせに回答が来ています。'.format(num), \
                                                     'pop_up_id4' : num})
 
       # ポップアップ5が空の場合の処理
       elif member_obj_get.pop_up3 == '':
         # ポップアップにコメント書き込み
-        member.objects.update_or_create(name = obj_get.name, \
+        member.objects.update_or_create(employee_no = obj_get.employee_no2, \
                                         defaults = {'pop_up5' : 'ID{}の問い合わせに回答が来ています。'.format(num), \
                                                     'pop_up_id5' : num})
 
@@ -608,87 +608,87 @@ def inquiry_edit(request, num):
   if "delete" in request.POST:
 
     # 問い合わせ者の情報取得
-    data = member.objects.get(name = obj_get.name)
+    data = member.objects.get(employee_no = obj_get.employee_no2)
 
     # 削除する問い合わせIDとポップアップのIDが等しいときの処理
     if data.pop_up_id1 == str(num):
       # ポップアップ削除
-      member.objects.update_or_create(name = obj_get.name, \
+      member.objects.update_or_create(employee_no = obj_get.employee_no2, \
                                       defaults = {'pop_up_id1' : '',
                                                   'pop_up1' : ''})
 
     # 削除する問い合わせIDとポップアップのIDが等しいときの処理
     if data.pop_up_id2 == str(num):
       # ポップアップ削除
-      member.objects.update_or_create(name = obj_get.name, \
+      member.objects.update_or_create(employee_no = obj_get.employee_no2, \
                                       defaults = {'pop_up_id2' : '',
                                                   'pop_up2' : ''})
 
     # 削除する問い合わせIDとポップアップのIDが等しいときの処理
     if data.pop_up_id3 == str(num):
       # ポップアップ削除
-      member.objects.update_or_create(name = obj_get.name, \
+      member.objects.update_or_create(employee_no = obj_get.employee_no2, \
                                       defaults = {'pop_up_id3' : '',
                                                   'pop_up3' : ''})
 
     # 削除する問い合わせIDとポップアップのIDが等しいときの処理
     if data.pop_up_id4 == str(num):
       # ポップアップ削除
-      member.objects.update_or_create(name = obj_get.name, \
+      member.objects.update_or_create(employee_no = obj_get.employee_no2, \
                                       defaults = {'pop_up_id4' : '',
                                                   'pop_up4' : ''})
 
     # 削除する問い合わせIDとポップアップのIDが等しいときの処理
     if data.pop_up_id5 == str(num):
       # ポップアップ削除
-      member.objects.update_or_create(name = obj_get.name, \
+      member.objects.update_or_create(employee_no = obj_get.employee_no2, \
                                       defaults = {'pop_up_id5' : '',
                                                   'pop_up5' : ''})
       
 
     # 問い合わせ者の情報再取得
-    data = member.objects.get(name = obj_get.name)
+    data = member.objects.get(employee_no = obj_get.employee_no2)
 
     # ポップアップ1が空の場合の処理
     if data.pop_up1 =='':
       #ポップアップ2の内容をポップアップ1へ移行
-      member.objects.update_or_create(name = obj_get.name, \
+      member.objects.update_or_create(employee_no = obj_get.employee_no2, \
                         defaults = {'pop_up_id1' : data.pop_up_id2,
                                     'pop_up1' : data.pop_up2,
                                     'pop_up_id2' : '',
                                     'pop_up2' : ''})
 
       # 問い合わせ者の情報再取得
-      data = member.objects.get(name = obj_get.name)
+      data = member.objects.get(employee_no = obj_get.employee_no2)
 
     # ポップアップ2が空の場合の処理
     if data.pop_up2 =='':
       #ポップアップ3の内容をポップアップ2へ移行
-      member.objects.update_or_create(name = obj_get.name, \
+      member.objects.update_or_create(employee_no = obj_get.employee_no2, \
                         defaults = {'pop_up_id2' : data.pop_up_id3,
                                     'pop_up2' : data.pop_up3,
                                     'pop_up_id3' : '',
                                     'pop_up3' : ''})
 
       # 問い合わせ者の情報再取得
-      data = member.objects.get(name = obj_get.name)
+      data = member.objects.get(employee_no = obj_get.employee_no2)
 
     # ポップアップ3が空の場合の処理
     if data.pop_up3 =='':
       #ポップアップ4の内容をポップアップ3へ移行
-      member.objects.update_or_create(name = obj_get.name, \
+      member.objects.update_or_create(employee_no = obj_get.employee_no2, \
                         defaults = {'pop_up_id3' : data.pop_up_id4,
                                     'pop_up3' : data.pop_up4,
                                     'pop_up_id4' : '',
                                     'pop_up4' : ''})
 
       # 問い合わせ者の情報再取得
-      data = member.objects.get(name = obj_get.name)
+      data = member.objects.get(employee_no = obj_get.employee_no2)
 
     # ポップアップ4が空の場合の処理
     if data.pop_up4 =='':
       #ポップアップ5の内容をポップアップ4へ移行
-      member.objects.update_or_create(name = obj_get.name, \
+      member.objects.update_or_create(employee_no = obj_get.employee_no2, \
                         defaults = {'pop_up_id4' : data.pop_up_id5,
                                     'pop_up4' : data.pop_up5,
                                     'pop_up_id5' : '',
