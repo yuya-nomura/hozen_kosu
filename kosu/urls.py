@@ -22,6 +22,7 @@ urlpatterns = [
     path('detail/<int:num>', kosu_views.detail, name = 'detail'),
     path('delete/<int:num>', kosu_views.delete, name = 'delete'),
     path('total', kosu_views.total, name = 'total'),
+    path('kosu_transition', kosu_views.kosu_transition, name = 'kosu_transition'),
     path('graph', kosu_views.graph, name = 'graph'),
     path('schedule', kosu_views.schedule, name = 'schedule'),
     path('member/<int:num>', member_views.member_page, name = 'member'),
@@ -48,4 +49,5 @@ urlpatterns = [
     path('inquiry_list/<int:num>',inquiry_views.inquiry_list, name = 'inquiry_list'),
     path('inquiry_display/<int:num>',inquiry_views.inquiry_display, name = 'inquiry_display'),
     path('inquiry_edit/<int:num>',inquiry_views.inquiry_edit, name = 'inquiry_edit'),
+    path('your-endpoint/', kosu_views.load_names_for_shop, name='load_names_for_shop'),
 ]

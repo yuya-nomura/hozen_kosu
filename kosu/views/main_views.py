@@ -79,13 +79,13 @@ def login(request):
 
    
   # HTMLに渡す辞書
-  library_m = {
+  context = {
     'title' : 'ログイン',
     'form' : loginForm(),
     }
   
   # 指定したHTMLに辞書を渡して表示を完成させる
-  return render(request, 'kosu/login.html', library_m)
+  return render(request, 'kosu/login.html', context)
 
 
 
@@ -105,18 +105,18 @@ def main(request):
     return redirect(to = '/login')
 
   # ログイン者の情報取得
-  data = member.objects.get(employee_no = request.session.get('login_No', None))
+  data = member.objects.get(employee_no = request.session['login_No'])
 
 
   # 設定データ取得
   default_data = administrator_data.objects.order_by("id").last()
 
   # 問い合わせ担当者従業員番号がログイン者の従業員番号と一致している場合、ポップアップ表示設定
-  if default_data.administrator_employee_no1 == request.session.get('login_No', None):
+  if default_data.administrator_employee_no1 == request.session['login_No']:
     pop_up_display = True
-  elif default_data.administrator_employee_no2 == request.session.get('login_No', None):
+  elif default_data.administrator_employee_no2 == request.session['login_No']:
     pop_up_display = True
-  elif default_data.administrator_employee_no3 == request.session.get('login_No', None):
+  elif default_data.administrator_employee_no3 == request.session['login_No']:
     pop_up_display = True
 
   else:
@@ -136,7 +136,7 @@ def main(request):
 
   
   # HTMLに渡す辞書
-  library_m = {
+  context = {
     'title' : 'MENU',
     'data' : data,
     'pop_up_display' : pop_up_display,
@@ -146,7 +146,7 @@ def main(request):
 
 
   # 指定したHTMLに辞書を渡して表示を完成させる
-  return render(request, 'kosu/main.html', library_m)
+  return render(request, 'kosu/main.html', context)
 
 
 
@@ -168,12 +168,12 @@ def kosu_main(request):
 
 
   # ログイン者の情報取得
-  data = member.objects.get(employee_no = request.session.get('login_No', None))
+  data = member.objects.get(employee_no = request.session['login_No'])
 
 
 
   # HTMLに渡す辞書
-  library_m = {
+  context = {
     'title' : '工数MENU',
     'data' : data,
     }
@@ -181,7 +181,7 @@ def kosu_main(request):
 
 
   # 指定したHTMLに辞書を渡して表示を完成させる
-  return render(request, 'kosu/kosu_main.html', library_m)
+  return render(request, 'kosu/kosu_main.html', context)
 
 
 
@@ -202,12 +202,12 @@ def def_main(request):
     return redirect(to = '/login')
 
   # ログイン者の情報取得
-  data = member.objects.get(employee_no = request.session.get('login_No', None))
+  data = member.objects.get(employee_no = request.session['login_No'])
 
 
 
   # HTMLに渡す辞書
-  library_m = {
+  context = {
     'title' : '工数区分定義MENU',
     'data' : data,
     }
@@ -215,7 +215,7 @@ def def_main(request):
 
 
   # 指定したHTMLに辞書を渡して表示を完成させる
-  return render(request, 'kosu/def_main.html', library_m)
+  return render(request, 'kosu/def_main.html', context)
 
 
 
@@ -236,7 +236,7 @@ def member_main(request):
     return redirect(to = '/login')
 
   # ログイン者の情報取得
-  data = member.objects.get(employee_no = request.session.get('login_No', None))
+  data = member.objects.get(employee_no = request.session['login_No'])
 
   # ログイン者に権限がなければメインページに戻る
   if data.authority == False:
@@ -246,7 +246,7 @@ def member_main(request):
 
 
   # HTMLに渡す辞書
-  library_m = {
+  context = {
     'title' : '人員MENU',
     'data' : data,
     }
@@ -254,7 +254,7 @@ def member_main(request):
 
 
   # 指定したHTMLに辞書を渡して表示を完成させる
-  return render(request, 'kosu/member_main.html', library_m)
+  return render(request, 'kosu/member_main.html', context)
 
 
 
@@ -276,7 +276,7 @@ def team_main(request):
 
 
   # ログイン者の情報取得
-  data = member.objects.get(employee_no = request.session.get('login_No', None))
+  data = member.objects.get(employee_no = request.session['login_No'])
 
 
   # ログイン者に権限がなければメインページに戻る
@@ -287,7 +287,7 @@ def team_main(request):
 
 
   # HTMLに渡す辞書
-  library_m = {
+  context = {
     'title' : '班員MENU',
     'data' : data,
     }
@@ -295,7 +295,7 @@ def team_main(request):
 
 
   # 指定したHTMLに辞書を渡して表示を完成させる
-  return render(request, 'kosu/team_main.html', library_m)
+  return render(request, 'kosu/team_main.html', context)
 
 
 
@@ -317,12 +317,12 @@ def inquiry_main(request):
 
 
   # ログイン者の情報取得
-  data = member.objects.get(employee_no = request.session.get('login_No', None))
+  data = member.objects.get(employee_no = request.session['login_No'])
 
 
 
   # HTMLに渡す辞書
-  library_m = {
+  context = {
     'title' : '問い合わせMENU',
     'data' : data,
     }
@@ -330,7 +330,7 @@ def inquiry_main(request):
 
 
   # 指定したHTMLに辞書を渡して表示を完成させる
-  return render(request, 'kosu/inquiry_main.html', library_m)
+  return render(request, 'kosu/inquiry_main.html', context)
 
 
 
@@ -352,7 +352,7 @@ def administrator_menu(request):
 
 
   # ログイン者の情報取得
-  data = member.objects.get(employee_no = request.session.get('login_No', None))
+  data = member.objects.get(employee_no = request.session['login_No'])
 
 
   # ログイン者が管理者でなければメインページに戻る
@@ -1842,7 +1842,7 @@ def administrator_menu(request):
 
 
   # HTMLに渡す辞書
-  library_m = {
+  context = {
     'title' : '管理者MENU',
     'form' : form,
     'load_form' : load_form,
@@ -1851,7 +1851,7 @@ def administrator_menu(request):
 
 
   # 指定したHTMLに辞書を渡して表示を完成させる
-  return render(request, 'kosu/administrator_menu.html', library_m)
+  return render(request, 'kosu/administrator_menu.html', context)
 
 
 
@@ -2439,7 +2439,7 @@ def help(request):
 
 
   # HTMLに渡す辞書
-  library_m = {
+  context = {
     'title' : 'ヘルプ',
     'form' : form,
     'display' : display,
@@ -2448,7 +2448,7 @@ def help(request):
 
 
   # 指定したHTMLに辞書を渡して表示を完成させる
-  return render(request, 'kosu/help.html', library_m)
+  return render(request, 'kosu/help.html', context)
 
 
 

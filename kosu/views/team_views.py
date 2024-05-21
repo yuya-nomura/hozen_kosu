@@ -36,13 +36,13 @@ def team(request):
   
 
   # ログイン者の情報取得
-  data = member.objects.get(employee_no = request.session.get('login_No', None))
+  data = member.objects.get(employee_no = request.session['login_No'])
   # ログイン者に権限がなければメインページに戻る
   if data.authority == False:
     return redirect(to = '/')
   
   # ログイン者の班員情報取得
-  data2 = team_member.objects.filter(employee_no5 = request.session.get('login_No', None))
+  data2 = team_member.objects.filter(employee_no5 = request.session['login_No'])
 
 
   # ログイン者の班員登録がない場合の処理
@@ -92,7 +92,7 @@ def team(request):
       member10 = request.POST['member10']
 
       # POSTされた値をモデルのそれぞれのフィールドに入れる
-      new = team_member(employee_no5 = request.session.get('login_No', None), \
+      new = team_member(employee_no5 = request.session['login_No'], \
                         member1 = member1, member2 = member2, member3 = member3, \
                         member4 = member4, member5 = member5, member6 = member6, \
                         member7 = member7, member8 = member8, member9 = member9, \
@@ -107,7 +107,7 @@ def team(request):
   # ログイン者の班員登録がある場合の処理
   if data2.count() >= 1:
     # ログイン者の班員登録のオブジェクトを取得
-    obj = team_member.objects.get(employee_no5 = request.session.get('login_No', None))
+    obj = team_member.objects.get(employee_no5 = request.session['login_No'])
 
     # ログイン者が組長以上か確認
     if data.shop == '組長以上':
@@ -151,7 +151,7 @@ def team(request):
     if (request.method == 'POST'):
 
       # 指定IDのレコードにPOST送信された値を上書きする
-      team_member.objects.update_or_create(employee_no5 = request.session.get('login_No', None), \
+      team_member.objects.update_or_create(employee_no5 = request.session['login_No'], \
           defaults = {'member1' : request.POST['member1'], 'member2' : request.POST['member2'], \
                       'member3' : request.POST['member3'], 'member4' : request.POST['member4'], \
                       'member5' : request.POST['member5'], 'member6' : request.POST['member6'], \
@@ -162,14 +162,14 @@ def team(request):
       return redirect(to = '/team_main')
 
   # HTMLに渡す辞書
-  library_m = {
+  context = {
     'title' : '班員設定',
     'data' : data,
     'form' : form,
     }
 
   # 指定したHTMLに辞書を渡して表示を完成させる
-  return render(request, 'kosu/team.html', library_m)
+  return render(request, 'kosu/team.html', context)
 
 
 
@@ -184,13 +184,13 @@ def team_graph(request):
     return redirect(to = '/login')
   
   # ログイン者の情報取得
-  data = member.objects.get(employee_no = request.session.get('login_No', None))
+  data = member.objects.get(employee_no = request.session['login_No'])
   # ログイン者に権限がなければメインページに戻る
   if data.authority == False:
     return redirect(to = '/')
 
   # ログイン者の班員登録情報取得
-  data = team_member.objects.filter(employee_no5 = request.session.get('login_No', None))
+  data = team_member.objects.filter(employee_no5 = request.session['login_No'])
   # 班員登録がなければメインページに戻る
   if data.count() == 0:
     return redirect(to = '/')
@@ -224,7 +224,7 @@ def team_graph(request):
     form = team_kosuForm(request.POST)
 
   # ログイン者の班員データ取得
-  obj = team_member.objects.get(employee_no5 = request.session.get('login_No', None))
+  obj = team_member.objects.get(employee_no5 = request.session['login_No'])
   # 班員データに空があった場合0を定義
   for i in range(1, 11):
     if eval('obj.member{}'.format(i)) == '':
@@ -441,7 +441,7 @@ def team_graph(request):
 
 
   # HTMLに渡す辞書
-  library_m = {
+  context = {
     'title' : '班員工数グラフ',
     'form' : form,
     'name_list' : name_list,
@@ -471,7 +471,7 @@ def team_graph(request):
     }
  
   # 指定したHTMLに辞書を渡して表示を完成させる
-  return render(request, 'kosu/team_graph.html', library_m)
+  return render(request, 'kosu/team_graph.html', context)
 
 
 
@@ -505,21 +505,21 @@ def team_kosu(request, num):
   
 
   # ログイン者の情報取得
-  data = member.objects.get(employee_no = request.session.get('login_No', None))
+  data = member.objects.get(employee_no = request.session['login_No'])
   # ログイン者に権限がなければメインページに戻る
   if data.authority == False:
     return redirect(to = '/')
 
 
   # ログイン者の班員登録情報取得
-  data3 = team_member.objects.filter(employee_no5 = request.session.get('login_No', None))
+  data3 = team_member.objects.filter(employee_no5 = request.session['login_No'])
   # 班員登録がなければメインページに戻る
   if data3.count() == 0:
     return redirect(to = '/')
   
 
   # フォームの選択肢に使用するログイン者の班員設定のオブジェクト取得
-  form_choices = team_member.objects.get(employee_no5 = request.session.get('login_No', None))
+  form_choices = team_member.objects.get(employee_no5 = request.session['login_No'])
 
   # 選択肢の表示数検出
   for i in range(1, 11):
@@ -619,7 +619,7 @@ def team_kosu(request, num):
 
 
   # HTMLに渡す辞書
-  library_m = {
+  context = {
     'title' : '班員工数確認',
     'data' : data,
     'data2' : page.get_page(num),
@@ -628,7 +628,7 @@ def team_kosu(request, num):
     }
 
   # 指定したHTMLに辞書を渡して表示を完成させる
-  return render(request, 'kosu/team_kosu.html', library_m)
+  return render(request, 'kosu/team_kosu.html', context)
 
 
 
@@ -644,13 +644,13 @@ def team_detail(request, num):
     return redirect(to = '/login')
   
   # ログイン者の情報取得
-  data = member.objects.get(employee_no = request.session.get('login_No', None))
+  data = member.objects.get(employee_no = request.session['login_No'])
   # ログイン者に権限がなければメインページに戻る
   if data.authority == False:
     return redirect(to = '/')
 
   # ログイン者の班員登録情報取得
-  data3 = team_member.objects.filter(employee_no5 = request.session.get('login_No', None))
+  data3 = team_member.objects.filter(employee_no5 = request.session['login_No'])
   # 班員登録がなければメインページに戻る
   if data3.count() == 0:
     return redirect(to = '/')
@@ -777,7 +777,7 @@ def team_detail(request, num):
 
 
   # HTMLに渡す辞書
-  library_m = {
+  context = {
     'title' : '工数詳細',
     'id' : num,
     'day' : obj_get.work_day2,
@@ -786,7 +786,7 @@ def team_detail(request, num):
     }
 
   # 指定したHTMLに辞書を渡して表示を完成させる
-  return render(request, 'kosu/team_detail.html', library_m)
+  return render(request, 'kosu/team_detail.html', context)
 
 
 
@@ -802,13 +802,13 @@ def team_calendar(request):
     return redirect(to = '/login')
   
   # ログイン者の情報取得
-  data = member.objects.get(employee_no = request.session.get('login_No', None))
+  data = member.objects.get(employee_no = request.session['login_No'])
   # ログイン者に権限がなければメインページに戻る
   if data.authority == False:
     return redirect(to = '/')
 
   # ログイン者の班員登録情報取得
-  data3 = team_member.objects.filter(employee_no5 = request.session.get('login_No', None))
+  data3 = team_member.objects.filter(employee_no5 = request.session['login_No'])
   # 班員登録がなければメインページに戻る
   if data3.count() == 0:
     return redirect(to = '/')
@@ -1152,7 +1152,7 @@ def team_calendar(request):
 
 
   # ログイン者の班員取得
-  obj_get = team_member.objects.get(employee_no5 = request.session.get('login_No', None))
+  obj_get = team_member.objects.get(employee_no5 = request.session['login_No'])
 
 
   # 班員1人目の従業員番号の人員がいるか確認
@@ -1613,7 +1613,7 @@ def team_calendar(request):
  
 
   # HTMLに渡す辞書
-  library_m = {
+  context = {
     'title' : '班員工数入力状況一覧',
     'default_day' : default_day,
     'member_num' : member_num,
@@ -1671,7 +1671,7 @@ def team_calendar(request):
     }
 
   # 指定したHTMLに辞書を渡して表示を完成させる
-  return render(request, 'kosu/team_calendar.html', library_m)
+  return render(request, 'kosu/team_calendar.html', context)
 
 
 
@@ -1692,7 +1692,7 @@ def class_list(request):
   
   
   # ログイン者の情報取得
-  data = member.objects.get(employee_no = request.session.get('login_No', None))
+  data = member.objects.get(employee_no = request.session['login_No'])
 
   # ログイン者が組長以上or管理者でないなら前ページに飛ぶ
   if data.shop != '組長以上' and data.administrator != True:
@@ -1951,7 +1951,7 @@ def class_list(request):
 
 
   # HTMLに渡す辞書
-  library_m = {
+  context = {
     'title' : '工数入力可否(ショップ単位)',
     'shop_form': shop_form,
     'schedule_form': schedule_form,
@@ -1963,7 +1963,7 @@ def class_list(request):
 
 
   # 指定したHTMLに辞書を渡して表示を完成させる
-  return render(request, 'kosu/class_list.html', library_m)
+  return render(request, 'kosu/class_list.html', context)
 
 
 
@@ -2107,7 +2107,7 @@ def class_detail(request, num):
 
 
   # HTMLに渡す辞書
-  library_m = {
+  context = {
     'title' : '工数詳細',
     'id' : num,
     'day' : obj_get.work_day2,
@@ -2118,7 +2118,7 @@ def class_detail(request, num):
 
 
   # 指定したHTMLに辞書を渡して表示を完成させる
-  return render(request, 'kosu/class_detail.html', library_m)
+  return render(request, 'kosu/class_detail.html', context)
 
 
 

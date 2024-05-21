@@ -28,7 +28,7 @@ def member_page(request, num):
 
 
   # ログイン者の情報取得
-  data = member.objects.get(employee_no = request.session.get('login_No', None))
+  data = member.objects.get(employee_no = request.session['login_No'])
 
   # ログイン者に権限がなければメインページに戻る
   if data.authority == False:
@@ -76,7 +76,7 @@ def member_page(request, num):
 
 
   # HTMLに渡す辞書
-  library_m = {
+  context = {
     'title' : '人員一覧',
     'form' : form,
     'data': page.get_page(num),
@@ -86,7 +86,7 @@ def member_page(request, num):
 
 
   # 指定したHTMLに辞書を渡して表示を完成させる
-  return render(request, 'kosu/member.html', library_m)
+  return render(request, 'kosu/member.html', context)
 
 
 
@@ -107,7 +107,7 @@ def member_new(request):
 
 
   # ログイン者の情報取得
-  data = member.objects.get(employee_no = request.session.get('login_No', None))
+  data = member.objects.get(employee_no = request.session['login_No'])
 
   # ログイン者に権限がなければメインページに戻る
   if data.authority == False:
@@ -208,14 +208,14 @@ def member_new(request):
   
 
   # HTMLに渡す辞書
-  library_m = {
+  context = {
     'title': '人員登録',
     'data' : data,
     'form': memberForm(),
   }
 
   # 指定したHTMLに辞書を渡して表示を完成させる
-  return render(request, 'kosu/member_new.html', library_m)
+  return render(request, 'kosu/member_new.html', context)
 
 
 
@@ -231,7 +231,7 @@ def member_edit(request, num):
     return redirect(to = '/login')
 
   # ログイン者の情報取得
-  data = member.objects.get(employee_no = request.session.get('login_No', None))
+  data = member.objects.get(employee_no = request.session['login_No'])
   # ログイン者に権限がなければメインページに戻る
   if data.authority == False:
     return redirect(to = '/')
@@ -275,7 +275,7 @@ def member_edit(request, num):
     return redirect(to = '/member/1')
 
   # HTMLに渡す辞書
-  library_m = {
+  context = {
     'title' : '人員編集',
     'employee_no' : num,
     'data' : data,
@@ -283,7 +283,7 @@ def member_edit(request, num):
     }
 
   # 指定したHTMLに辞書を渡して表示を完成させる
-  return render(request, 'kosu/member_edit.html', library_m)
+  return render(request, 'kosu/member_edit.html', context)
 
 
 
@@ -298,7 +298,7 @@ def member_delete(request, num):
     return redirect(to = '/login')
   
   # ログイン者の情報取得
-  data = member.objects.get(employee_no = request.session.get('login_No', None))
+  data = member.objects.get(employee_no = request.session['login_No'])
   
   # ログイン者に権限がなければメインページに戻る
   if data.authority == False:
@@ -318,14 +318,14 @@ def member_delete(request, num):
     return redirect(to = '/member/1')
 
   # HTMLに渡す辞書
-  library_m = {
+  context = {
     'title' : '人員削除',
     'employee_no' : num,
     'obj' : obj,
     }
 
   # 指定したHTMLに辞書を渡して表示を完成させる
-  return render(request, 'kosu/member_delete.html', library_m)
+  return render(request, 'kosu/member_delete.html', context)
 
 
 

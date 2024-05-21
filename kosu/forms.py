@@ -89,6 +89,7 @@ class input_kosuForm(forms.Form):
                                 widget=forms.TextInput(attrs={'placeholder': '未入力可 メモで使用'}))
   over_work = forms.IntegerField(label = '残業', required = False)
   work = forms.ChoiceField(label = '勤務', choices=employment_list, required = False)
+  break_change = forms.BooleanField(label = '休憩変更', required = False)
 
 
 
@@ -468,3 +469,65 @@ class inquiry_findForm(forms.Form):
 
   category = forms.ChoiceField(label = 'カテゴリー', choices = category_list, required = False)
   name_list = forms.ChoiceField(label = '氏名', required = False)
+
+
+
+shop_list = [
+  ('選択無し', '選択無し'),
+  ('P', 'プレス'),
+  ('R', '成形'),
+  ('W1', '301ボデ'),
+  ('W2', '302ボデ'),
+  ('T1', '301塗装'),
+  ('T2', '302塗装'),
+  ('A1', '301組立'),
+  ('A2', '302組立'),
+  ('その他', 'その他'),
+  ('組長以上', '組長以上')
+  ]
+
+display_list = [
+  ('実工数', '実工数'),
+  ('割合', '割合'),
+  ]
+
+class ShopNameForm(forms.Form):
+  shop_choice1 = forms.ChoiceField(choices = shop_list)
+  name_choice1 = forms.ChoiceField(choices = [])
+  shop_choice2 = forms.ChoiceField(choices = shop_list)
+  name_choice2 = forms.ChoiceField(choices = [])
+  shop_choice3 = forms.ChoiceField(choices = shop_list)
+  name_choice3 = forms.ChoiceField(choices = [])
+  display_choice = forms.ChoiceField(choices = display_list)
+  kosu_def = forms.ChoiceField(required = False)
+  start_day = forms.DateTimeField(label = '開始日付', required = False, \
+                                  widget = DatePickerInput(format = '%Y-%m-%d'))
+  end_day = forms.DateTimeField(label = '開始日付', required = False, \
+                                widget = DatePickerInput(format = '%Y-%m-%d'))
+
+  def __init__(self, *args, **kwargs):
+    super().__init__(*args, **kwargs)
+    for i in range(1, 4):
+      shop_field = f'shop_choice{i}'
+      name_field = f'name_choice{i}'
+      
+      # 各shopフィールドのPOSTデータまたは初期値を基に選択肢を設定
+      shop_val = self.data.get(shop_field) if self.is_bound else self.initial.get(shop_field, shop_list[0][0])
+      self.fields[shop_field].choices = shop_list
+      name_vals = self._get_name_choices(shop_val)
+      self.fields[name_field].choices = [(pair[0], pair[1]) for pair in name_vals]
+      
+      # POSTデータがあればそれを初期値として設定、なければ初期値から設定
+      if self.is_bound:
+        name_initial = self.data.get(name_field) if self.data.get(name_field) in name_vals else ''
+      else:
+        name_initial = self.initial.get(name_field, '')
+      self.fields[name_field].initial = name_initial
+
+  def _get_name_choices(self, shop):
+    if shop:
+      return list(member.objects.filter(shop=shop).order_by('employee_no').values_list('employee_no', 'name'))
+    return []
+    
+
+

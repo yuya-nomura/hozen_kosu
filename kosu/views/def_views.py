@@ -100,7 +100,7 @@ def kosu_def(request):
     form.fields['kosu_def_list'].choices = choices_list
 
   # HTMLに渡す辞書
-  library_m = {
+  context = {
     'title' : '工数区分定義確認',
     'form' : form,
     'def1' : def1,
@@ -110,7 +110,7 @@ def kosu_def(request):
     }
   
   # 指定したHTMLに辞書を渡して表示を完成させる
-  return render(request, 'kosu/kosu_def.html', library_m)
+  return render(request, 'kosu/kosu_def.html', context)
 
 
 
@@ -153,14 +153,14 @@ def kosu_Ver(request):
   mes_obj = kosu_division.objects.get(kosu_name = request.session.get('input_def', ''))
 
   # HTMLに渡す辞書
-  library_m = {
+  context = {
     'title' : '工数区分定義切り替え',
     'message' : mes_obj.kosu_name,
     'form' : form,
     }
   
   # 指定したHTMLに辞書を渡して表示を完成させる
-  return render(request, 'kosu/kosu_Ver.html', library_m)
+  return render(request, 'kosu/kosu_Ver.html', context)
 
 
 
@@ -187,14 +187,14 @@ def def_list(request, num):
   page = Paginator(obj, page_num.menu_row)
 
   # HTMLに渡す辞書
-  library_m = {
+  context = {
     'title' : '工数区分定義一覧',
     'obj' : page.get_page(num),
     'num' : num,
     }
   
   # 指定したHTMLに辞書を渡して表示を完成させる
-  return render(request, 'kosu/def_list.html', library_m)
+  return render(request, 'kosu/def_list.html', context)
 
 
 #--------------------------------------------------------------------------------------------------------
@@ -395,14 +395,14 @@ def def_edit(request, num):
     return redirect(to = '/def_list/1')
 
   # HTMLに渡す辞書
-  library_m = {
+  context = {
     'title' : '工数区分定義編集',
     'id' : num,
     'form' : form,
     }
   
   # 指定したHTMLに辞書を渡して表示を完成させる
-  return render(request, 'kosu/def_edit.html', library_m)
+  return render(request, 'kosu/def_edit.html', context)
 
 
 #--------------------------------------------------------------------------------------------------------
@@ -434,7 +434,7 @@ def def_delete(request, num):
     n.append('osu_division_2_{}'.format(i))
 
   # HTMLに渡す辞書
-  library_m = {
+  context = {
     'title' : '工数区分定義削除',
     'id' : num,
     'obj' : obj,
@@ -442,7 +442,7 @@ def def_delete(request, num):
     }
 
   # 指定したHTMLに辞書を渡して表示を完成させる
-  return render(request, 'kosu/def_delete.html', library_m)
+  return render(request, 'kosu/def_delete.html', context)
 
 
 #--------------------------------------------------------------------------------------------------------
@@ -479,13 +479,13 @@ def def_new(request):
     return redirect(to = '/def_new')
   
   # HTMLに渡す辞書
-  library_m = {
+  context = {
     'title': '工数区分定義新規登録',
     'form': kosu_divisionForm(),
   }
 
   # 指定したHTMLに辞書を渡して表示を完成させる
-  return render(request, 'kosu/def_new.html', library_m)
+  return render(request, 'kosu/def_new.html', context)
 
 
 #--------------------------------------------------------------------------------------------------------

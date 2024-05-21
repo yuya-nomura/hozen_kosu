@@ -32,7 +32,7 @@ def inquiry_new(request):
 
 
   # ログイン者の情報取得
-  data = member.objects.get(employee_no = request.session.get('login_No', None))
+  data = member.objects.get(employee_no = request.session['login_No'])
 
 
   # POST時の処理
@@ -48,10 +48,10 @@ def inquiry_new(request):
       return redirect(to = '/inquiry_new')
 
     # 従業員番号に該当するmemberインスタンスを取得
-    member_instance = member.objects.get(employee_no = request.session.get('login_No', None))
+    member_instance = member.objects.get(employee_no = request.session['login_No'])
 
     # 問い合わせ内容を変数に入れる
-    new = inquiry_data(employee_no2 = request.session.get('login_No', None), \
+    new = inquiry_data(employee_no2 = request.session['login_No'], \
                        name = member_instance, \
                        content_choice = request.POST['content_choice'], \
                        inquiry = request.POST['inquiry'])
@@ -114,7 +114,7 @@ def inquiry_new(request):
 
 
   # HTMLに渡す辞書
-  library_m = {
+  context = {
     'title' : '問い合わせ入力',
     'data' : data,
     'form' : form,
@@ -123,7 +123,7 @@ def inquiry_new(request):
 
 
   # 指定したHTMLに辞書を渡して表示を完成させる
-  return render(request, 'kosu/inquiry_new.html', library_m)
+  return render(request, 'kosu/inquiry_new.html', context)
 
 
 
@@ -167,9 +167,9 @@ def inquiry_list(request, num):
 
 
   # ログイン者が問い合わせ担当者である場合の処理
-  if default_data.administrator_employee_no1 == request.session.get('login_No', None) or \
-  default_data.administrator_employee_no2 == request.session.get('login_No', None) or \
-  default_data.administrator_employee_no3 == request.session.get('login_No', None):
+  if default_data.administrator_employee_no1 == request.session['login_No'] or \
+  default_data.administrator_employee_no2 == request.session['login_No'] or \
+  default_data.administrator_employee_no3 == request.session['login_No']:
     
     # ボタン表示設定
     button_display = True
@@ -239,7 +239,7 @@ def inquiry_list(request, num):
                                    'pop_up_id5' : '',
                                    'pop_up5' : '',})
 
-    member.objects.update_or_create(employee_no = request.session.get('login_No', None), \
+    member.objects.update_or_create(employee_no = request.session['login_No'], \
                        defaults = {'pop_up_id1' : '',
                                    'pop_up1' : '',
                                    'pop_up_id2' : '',
@@ -258,7 +258,7 @@ def inquiry_list(request, num):
 
 
   # HTMLに渡す辞書
-  library_m = {
+  context = {
     'title' : '問い合わせ履歴',
     'form' : form,
     'name_list' : name_list,
@@ -270,7 +270,7 @@ def inquiry_list(request, num):
 
 
   # 指定したHTMLに辞書を渡して表示を完成させる
-  return render(request, 'kosu/inquiry_list.html', library_m)
+  return render(request, 'kosu/inquiry_list.html', context)
 
 
 
@@ -294,7 +294,7 @@ def inquiry_display(request, num):
   obj_get = inquiry_data.objects.get(id = num)
 
   # ログイン者の情報取得
-  data = member.objects.get(employee_no = request.session.get('login_No', None))
+  data = member.objects.get(employee_no = request.session['login_No'])
 
   # 本人確認リセット
   himself = False
@@ -313,82 +313,82 @@ def inquiry_display(request, num):
   # ポップアップのデータと一致する場合の処理
   if data.pop_up_id1 == str(num):
     # ポップアップ削除
-    member.objects.update_or_create(employee_no = request.session.get('login_No', None), \
+    member.objects.update_or_create(employee_no = request.session['login_No'], \
                                     defaults = {'pop_up_id1' : '',
                                                 'pop_up1' : ''})
     
   # ポップアップのデータと一致する場合の処理
   elif data.pop_up_id2 == str(num):
     # ポップアップ削除
-    member.objects.update_or_create(employee_no = request.session.get('login_No', None), \
+    member.objects.update_or_create(employee_no = request.session['login_No'], \
                                     defaults = {'pop_up_id2' : '',
                                                 'pop_up2' : ''})
     
   # ポップアップのデータと一致する場合の処理
   elif data.pop_up_id3 == str(num):
     # ポップアップ削除
-    member.objects.update_or_create(employee_no = request.session.get('login_No', None), \
+    member.objects.update_or_create(employee_no = request.session['login_No'], \
                                     defaults = {'pop_up_id3' : '',
                                                 'pop_up3' : ''})
     
   # ポップアップのデータと一致する場合の処理
   elif data.pop_up_id4 == str(num):
     # ポップアップ削除
-    member.objects.update_or_create(employee_no = request.session.get('login_No', None), \
+    member.objects.update_or_create(employee_no = request.session['login_No'], \
                                     defaults = {'pop_up_id4' : '',
                                                 'pop_up4' : ''})
     
   # ポップアップのデータと一致する場合の処理
   elif data.pop_up_id5 == str(num):
     # ポップアップ削除
-    member.objects.update_or_create(employee_no = request.session.get('login_No', None), \
+    member.objects.update_or_create(employee_no = request.session['login_No'], \
                                     defaults = {'pop_up_id5' : '',
                                                 'pop_up5' : ''})
 
 
   # ログイン者の情報再取得
-  data = member.objects.get(employee_no = request.session.get('login_No', None))
+  data = member.objects.get(employee_no = request.session['login_No'])
 
   # ポップアップ1が空の場合の処理
   if data.pop_up1 =='':
     #ポップアップ2の内容をポップアップ1へ移行
-    member.objects.update_or_create(employee_no = request.session.get('login_No', None), \
+    member.objects.update_or_create(employee_no = request.session['login_No'], \
                       defaults = {'pop_up_id1' : data.pop_up_id2,
                                   'pop_up1' : data.pop_up2,
                                   'pop_up_id2' : '',
                                   'pop_up2' : ''})
 
   # ログイン者の情報再取得
-  data = member.objects.get(employee_no = request.session.get('login_No', None))
+  data = member.objects.get(employee_no = request.session['login_No'])
 
   # ポップアップ2が空の場合の処理
   if data.pop_up2 =='':
     #ポップアップ3の内容をポップアップ2へ移行
-    member.objects.update_or_create(employee_no = request.session.get('login_No', None), \
+    member.objects.update_or_create(employee_no = request.session['login_No'], \
                       defaults = {'pop_up_id2' : data.pop_up_id3,
                                   'pop_up2' : data.pop_up3,
                                   'pop_up_id3' : '',
                                   'pop_up3' : ''})
 
   # ログイン者の情報再取得
-  data = member.objects.get(employee_no = request.session.get('login_No', None))
+  data = member.objects.get(employee_no = request.session['login_No'])
 
   # ポップアップ3が空の場合の処理
   if data.pop_up3 =='':
     #ポップアップ4の内容をポップアップ3へ移行
-    member.objects.update_or_create(employee_no = request.session.get('login_No', None), \
+    member.objects.update_or_create(employee_no = request.session['login_No'], \
                       defaults = {'pop_up_id3' : data.pop_up_id4,
                                   'pop_up3' : data.pop_up4,
                                   'pop_up_id4' : '',
                                   'pop_up4' : ''})
 
   # ログイン者の情報再取得
-  data = member.objects.get(employee_no = request.session.get('login_No', None))
+  data = member.objects.get(employee_no = request.session['login_No'])
 
   # ポップアップ4が空の場合の処理
   if data.pop_up4 =='':
     #ポップアップ5の内容をポップアップ4へ移行
-    member.objects.update_or_create(employee_no = request.session.get('login_No', None), \
+    member.objects.update_or_create(employee_no = request.session['login_No'], \
                       defaults = {'pop_up_id4' : data.pop_up_id5,
                                   'pop_up4' : data.pop_up5,
                                   'pop_up_id5' : '',
@@ -396,9 +396,9 @@ def inquiry_display(request, num):
 
 
   # ログイン者が問い合わせ担当者である場合の処理
-  if default_data.administrator_employee_no1 == request.session.get('login_No', None) or \
-     default_data.administrator_employee_no2 == request.session.get('login_No', None) or \
-     default_data.administrator_employee_no3 == request.session.get('login_No', None):
+  if default_data.administrator_employee_no1 == request.session['login_No'] or \
+     default_data.administrator_employee_no2 == request.session['login_No'] or \
+     default_data.administrator_employee_no3 == request.session['login_No']:
     
     # ポップアップのデータと一致する場合の処理
     if default_data.pop_up_id1 == str(num):
@@ -496,7 +496,7 @@ def inquiry_display(request, num):
 
 
   # HTMLに渡す辞書
-  library_m = {
+  context = {
     'title' : '問い合わせ詳細',
     'id' : num,
     'obj' : obj_get,
@@ -507,7 +507,7 @@ def inquiry_display(request, num):
 
 
   # 指定したHTMLに辞書を渡して表示を完成させる
-  return render(request, 'kosu/inquiry_display.html', library_m)
+  return render(request, 'kosu/inquiry_display.html', context)
 
 
 
@@ -531,7 +531,7 @@ def inquiry_edit(request, num):
   obj_get = inquiry_data.objects.get(id = num)
 
   # ログイン者情報取得
-  member_obj_get = member.objects.get(employee_no = request.session.get('login_No', None))
+  member_obj_get = member.objects.get(employee_no = request.session['login_No'])
 
   # フォーム初期値定義
   form_default = {'content_choice' : obj_get.content_choice, 
@@ -842,7 +842,7 @@ def inquiry_edit(request, num):
 
 
   # HTMLに渡す辞書
-  library_m = {
+  context = {
     'title' : '問い合わせ編集',
     'id' : num,
     'obj' : obj_get,
@@ -853,7 +853,7 @@ def inquiry_edit(request, num):
 
 
   # 指定したHTMLに辞書を渡して表示を完成させる
-  return render(request, 'kosu/inquiry_edit.html', library_m)
+  return render(request, 'kosu/inquiry_edit.html', context)
 
 
 

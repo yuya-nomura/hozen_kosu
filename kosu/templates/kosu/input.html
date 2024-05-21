@@ -90,9 +90,17 @@
           <input type="submit" value="残業のみ修正"  name="over_time_correction" class="btn btn-blue2 mt-2">
         </td>
       </tr>
+      <tr>
+        <th>
+          休憩変更
+        </th>
+        <td>
+          {{form.break_change}}
+        </td>
+      </tr>
       <tr><th><td>
         <input type="submit" value="工数登録"  name="Registration" class="btn btn-blue1 mt-2">　
-        <input type="submit" value="休憩変更"  name="change_display" class="btn btn-blue2 mt-2">
+        <input type="submit" value="休憩変更登録"  name="change_display" class="btn btn-blue2 mt-2">
       </td></th></tr>
       {% if obj_link != '' %}
       <tr>

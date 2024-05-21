@@ -68,6 +68,7 @@ class Business_Time_graph(models.Model):
     breaktime_over3 = models.CharField('残業休憩時間3', max_length = 8, blank = True, null=True)
     work_time = models.CharField('就業形態', max_length = 100, blank = True, null=True)
     judgement = models.BooleanField('工数入力OK_NG', null = True)
+    break_change = models.BooleanField('工数入力OK_NG', null = True)
 
     def __str__(self):
         return str(self.id) + '__' + str(self.work_day2) + ':' + str(self.employee_no3)
