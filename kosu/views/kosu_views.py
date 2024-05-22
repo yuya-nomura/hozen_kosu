@@ -1732,10 +1732,124 @@ def input(request):
     
     # 工数データがある場合の処理
     if obj_filter.count() != 0:
+      # 工数データ取得
+      obj_get = Business_Time_graph.objects.get(employee_no3 = request.session.get('login_No', None), \
+                                                work_day2 = request.POST['work_day'])
+      # 工数の合計値取得
+      kosu_total = 1440 - (obj_get.time_work.count('#')*5)
+
+      # 工数入力OK_NGリセット
+      judgement = False
+
+      # 出勤、休出時、工数合計と残業に整合性がある場合の処理
+      if (request.POST['work'] == '出勤' or request.POST['work'] == 'シフト出') and \
+        kosu_total - int(request.POST['over_work']) == 470:
+        # 工数入力OK_NGをOKに切り替え
+        judgement = True
+
+      # 休出時、工数合計と残業に整合性がある場合の処理
+      if request.POST['work'] == '休出' and kosu_total == int(request.POST['over_work']):
+        # 工数入力OK_NGをOKに切り替え
+        judgement = True
+
+      # 早退・遅刻時、工数合計と残業に整合性がある場合の処理
+      if request.POST['work'] == '早退・遅刻' and kosu_total != 0:
+        # 工数入力OK_NGをOKに切り替え
+        judgement = True
+
+      # ログイン者の登録ショップが三組三交替Ⅱ甲乙丙番Cで1直の場合の処理
+      if (member_obj.shop == 'W1' or member_obj.shop == 'W2' or \
+        member_obj.shop == 'A1' or member_obj.shop == 'A2') and \
+          request.POST['tyoku2'] == '1':
+        # 半前年休時、工数合計と残業に整合性がある場合の処理
+        if request.POST['work'] == '半前年休' and kosu_total - int(request.POST['over_work']) == 230:
+          # 工数入力OK_NGをOKに切り替え
+          judgement = True
+
+        # 半後年休時、工数合計と残業に整合性がある場合の処理
+        if request.POST['work'] == '半後年休' and kosu_total - int(request.POST['over_work']) == 240:
+          # 工数入力OK_NGをOKに切り替え
+          judgement = True
+
+      # ログイン者の登録ショップが三組三交替Ⅱ甲乙丙番Cで2直の場合の処理
+      if (member_obj.shop == 'W1' or member_obj.shop == 'W2' or \
+        member_obj.shop == 'A1' or member_obj.shop == 'A2') and \
+          request.POST['tyoku2'] == '2':
+        # 半前年休時、工数合計と残業に整合性がある場合の処理
+        if request.POST['work'] == '半前年休' and kosu_total - int(request.POST['over_work']) == 290:
+          # 工数入力OK_NGをOKに切り替え
+          judgement = True
+
+        # 半後年休時、工数合計と残業に整合性がある場合の処理
+        if request.POST['work'] == '半後年休' and kosu_total - int(request.POST['over_work']) == 180:
+          # 工数入力OK_NGをOKに切り替え
+          judgement = True
+
+      # ログイン者の登録ショップが三組三交替Ⅱ甲乙丙番Cで3直の場合の処理
+      if (member_obj.shop == 'W1' or member_obj.shop == 'W2' or \
+        member_obj.shop == 'A1' or member_obj.shop == 'A2') and \
+          request.POST['tyoku2'] == '3':
+        # 半前年休時、工数合計と残業に整合性がある場合の処理
+        if request.POST['work'] == '半前年休' and kosu_total - int(request.POST['over_work']) == 230:
+          # 工数入力OK_NGをOKに切り替え
+          judgement = True
+
+        # 半後年休時、工数合計と残業に整合性がある場合の処理
+        if request.POST['work'] == '半後年休' and kosu_total - int(request.POST['over_work']) == 240:
+          # 工数入力OK_NGをOKに切り替え
+          judgement = True
+
+      # ログイン者の登録ショップが三組三交替Ⅱ甲乙丙番Bで1直の場合の処理
+      if (member_obj.shop == 'P' or member_obj.shop == 'R' or \
+        member_obj.shop == 'T1' or member_obj.shop == 'T2' or \
+          member_obj.shop == 'その他' or member_obj.shop == '組長以上') and \
+          request.POST['tyoku2'] == '1':
+        # 半前年休時、工数合計と残業に整合性がある場合の処理
+        if request.POST['work'] == '半前年休' and kosu_total - int(request.POST['over_work']) == 220:
+          # 工数入力OK_NGをOKに切り替え
+          judgement = True
+
+        # 半後年休時、工数合計と残業に整合性がある場合の処理
+        if request.POST['work'] == '半後年休' and kosu_total - int(request.POST['over_work']) == 250:
+          # 工数入力OK_NGをOKに切り替え
+          judgement = True
+
+      # ログイン者の登録ショップが三組三交替Ⅱ甲乙丙番Bで2直の場合の処理
+      if (member_obj.shop == 'P' or member_obj.shop == 'R' or \
+        member_obj.shop == 'T1' or member_obj.shop == 'T2' or \
+          member_obj.shop == 'その他' or member_obj.shop == '組長以上') and \
+          request.POST['tyoku2'] == '2':
+        # 半前年休時、工数合計と残業に整合性がある場合の処理
+        if request.POST['work'] == '半前年休' and kosu_total - int(request.POST['over_work']) == 230:
+          # 工数入力OK_NGをOKに切り替え
+          judgement = True
+
+        # 半後年休時、工数合計と残業に整合性がある場合の処理
+        if request.POST['work'] == '半後年休' and kosu_total - int(request.POST['over_work']) == 240:
+          # 工数入力OK_NGをOKに切り替え
+          judgement = True
+
+      # ログイン者の登録ショップが三組三交替Ⅱ甲乙丙番Bで3直の場合の処理
+      if (member_obj.shop == 'P' or member_obj.shop == 'R' or \
+        member_obj.shop == 'T1' or member_obj.shop == 'T2' or \
+          member_obj.shop == 'その他' or member_obj.shop == '組長以上') and \
+          request.POST['tyoku2'] == '3':
+        # 半前年休時、工数合計と残業に整合性がある場合の処理
+        if request.POST['work'] == '半前年休' and kosu_total - int(request.POST['over_work']) == 275:
+          # 工数入力OK_NGをOKに切り替え
+          judgement = True
+
+        # 半後年休時、工数合計と残業に整合性がある場合の処理
+        if work == '半後年休' and kosu_total - int(request.POST['over_work']) == 195:
+          # 工数入力OK_NGをOKに切り替え
+          judgement = True
+
+
       # 残業を上書きして更新
       Business_Time_graph.objects.update_or_create(employee_no3 = request.session.get('login_No', None), \
                                                    work_day2 = request.POST['work_day'], \
-                                                   defaults = {'over_time' : request.POST['over_work']})
+                                                   defaults = {'over_time' : request.POST['over_work'], \
+                                                               'judgement' : judgement})
       
     # 工数データがない場合の処理
     else:
@@ -3740,7 +3854,6 @@ def detail(request, num):
 
   # POST時の処理
   if (request.method == 'POST'):
-    
     # 作業内容と作業詳細を取得しリストに解凍
     work_list = list(obj_get.time_work)
     detail_list = obj_get.detail_work.split('$')
