@@ -735,23 +735,21 @@ def team_detail(request, num):
   # リストの長さを工数区分の登録数に応じて調整
   del str_list[n:]
 
-  # 作業無し記号追加
-  str_list.append('#')
-
   # 工数区分の選択リスト作成
   for i, m in enumerate(str_list):
-
-    # 最終ループでない場合の処置
-    if i != len(str_list) - 1:
-
       # 工数区分定義要素を追加
       def_list.append(eval('kosu_obj.kosu_title_{}'.format(i + 1)))
 
-    # 最終ループの場合の処置
-    else:
   
-      # 作業なし追加
-      def_list.append('-')
+  # 作業なし追加
+  def_list.append('-')
+  # 作業なし追加
+  def_list.append('休憩')
+  # 作業無し記号追加
+  str_list.append('#')
+  # 作業無し記号追加
+  str_list.append('$')
+
 
   # 工数区分辞書作成
   def_library = dict(zip(str_list, def_list))
@@ -2268,23 +2266,20 @@ def class_detail(request, num):
   # リストの長さを工数区分の登録数に応じて調整
   del str_list[n:]
 
-  # 作業無し記号追加
-  str_list.append('#')
-
   # 工数区分の選択リスト作成
   for i, m in enumerate(str_list):
-
-    # 最終ループでない場合の処置
-    if i != len(str_list) - 1:
-
       # 工数区分定義要素を追加
       def_list.append(eval('kosu_obj.kosu_title_{}'.format(i + 1)))
-
-    # 最終ループの場合の処置
-    else:
   
-      # 作業なし追加
-      def_list.append('-')
+  
+  # 作業なし追加
+  def_list.append('-')
+  # 休憩追加
+  def_list.append('$')
+  # 作業無し記号追加
+  str_list.append('#')
+  # 休憩記号追加
+  str_list.append('休憩')
 
   # 工数区分辞書作成
   def_library = dict(zip(str_list, def_list))
