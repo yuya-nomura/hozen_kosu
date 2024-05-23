@@ -5,7 +5,6 @@ from django.core.paginator import Paginator
 from django.http import JsonResponse
 import datetime
 import itertools
-from .. import forms
 from ..models import member
 from ..models import Business_Time_graph
 from ..models import kosu_division

@@ -2,7 +2,6 @@ from django.shortcuts import render
 from django.shortcuts import redirect
 from django.core.paginator import Paginator
 from django.contrib import messages
-from .. import forms
 from ..models import member
 from ..models import administrator_data
 from ..forms import memberForm
