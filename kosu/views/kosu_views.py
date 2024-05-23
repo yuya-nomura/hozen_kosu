@@ -677,13 +677,6 @@ def input(request):
       # このページをリダイレクト
       return redirect(to = '/input')
 
-    # 作業時間が長い場合の処理
-    if (int(start_hour) - int(end_hour)) <= 2 and check == 1:
-      # エラーメッセージ出力
-      messages.error(request, '作業時間が長すぎます。作業時間が誤ってませんか？ERROR005')
-      # このページをリダイレクト
-      return redirect(to = '/input')
-
 
     # 指定日に工数データが既にあるか確認
     obj_filter = Business_Time_graph.objects.filter(employee_no3 = request.session.get('login_No', None), \
