@@ -38,12 +38,12 @@
     <tr>
      <td>{{form.inquiry}}</td>
     </tr>
-    {% if member_obj_get.administrator == False %}
+    {% if login_obj_get.administrator == False %}
     <tr>
       <th>回答の編集は問い合わせ担当者従業員番号に登録のあるユーザーのみ可能です。</th>
     </tr>
     {% endif %}
-    {% if member_obj_get.administrator == True %}
+    {% if login_obj_get.administrator == True %}
     <tr>
       <th><p class="h5 text-pink">●回答</p></th>
     </tr>

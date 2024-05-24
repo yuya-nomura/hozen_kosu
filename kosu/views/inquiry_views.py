@@ -862,7 +862,7 @@ def inquiry_edit(request, num):
     'id' : num,
     'obj' : obj_get,
     'form' : form,
-    'member_obj_get' : member_obj_get,
+    'login_obj_get' : login_obj_get,
     }
   
 
