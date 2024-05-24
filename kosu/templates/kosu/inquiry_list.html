@@ -44,7 +44,11 @@
         <td><a class="text-pink" href="{% url 'inquiry_display' i.id %}">{{i.name}}</a></td>
         <td>{{i.content_choice}}</td>
         <td>{{i.inquiry|truncatechars:4}}</td>
+        {% if i.answer != None %}
         <td>{{i.answer|truncatechars:4}}</td>
+        {% else %}
+        <td>　</td>
+        {% endif %}
       </tr>
     {% endfor %}
   </table>

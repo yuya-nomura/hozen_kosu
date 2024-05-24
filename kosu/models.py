@@ -56,7 +56,7 @@ class member(models.Model):
 class Business_Time_graph(models.Model):
     employee_no3 = models.IntegerField('従業員番号')
     name = models.ForeignKey(member, verbose_name = '氏名', on_delete = models.CASCADE)
-    def_ver2 = models.CharField('工数区分定義Ver', max_length = 100, blank = True)
+    def_ver2 = models.CharField('工数区分定義Ver', max_length = 100, blank = True, null=True)
     work_day2 = models.DateField('就業日')
     tyoku2 = models.CharField('直', max_length = 2, blank = True, null=True)
     time_work = models.CharField('作業内容', max_length = 288, blank = True, null=True)
@@ -283,7 +283,7 @@ class inquiry_data(models.Model):
     name = models.ForeignKey(member, verbose_name = '氏名', on_delete = models.CASCADE)
     content_choice = models.CharField('内容選択', choices = content_list, max_length = 5)
     inquiry = models.TextField('問い合わせ')
-    answer = models.TextField('回答', blank = True)
+    answer = models.TextField('回答', null = True, blank = True)
 
     def __str__(self):
         return str(self.id) + str(self.name)
