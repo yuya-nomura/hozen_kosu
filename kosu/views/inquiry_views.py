@@ -631,12 +631,19 @@ def inquiry_edit(request, num):
                                           defaults = {'pop_up5' : 'ID{}の問い合わせに回答が来ています。'.format(num), \
                                                       'pop_up_id5' : num})
 
+        # 工数データ作成し残業書き込み
+        inquiry_data.objects.update_or_create(id = num, \
+                                              defaults = {'content_choice' : request.POST['content_choice'], \
+                                                          'inquiry' : request.POST['inquiry'], \
+                                                          'answer' : request.POST['answer']})
+        
+      # ログイン者に回答権限がない場合の処理
+      else:
+        # 工数データ作成し残業書き込み
+        inquiry_data.objects.update_or_create(id = num, \
+                                              defaults = {'content_choice' : request.POST['content_choice'], \
+                                                          'inquiry' : request.POST['inquiry']})
 
-    # 工数データ作成し残業書き込み
-    inquiry_data.objects.update_or_create(id = num, \
-                                          defaults = {'content_choice' : request.POST['content_choice'], \
-                                                      'inquiry' : request.POST['inquiry'], \
-                                                      'answer' : request.POST['answer']})
 
     # お問い合わせ一覧ページをリダイレクトする
     return redirect(to = '/inquiry_list/1')
