@@ -592,42 +592,44 @@ def inquiry_edit(request, num):
                                                'pop_up_id5' : num})
 
 
-    # 回答が編集前後で変更がある場合の処理
-    if obj_get.answer != request.POST['answer']:
-      # ポップアップ1が空の場合の処理
-      if member_obj_get.pop_up1 == '':
-        # ポップアップにコメント書き込み
-        member.objects.update_or_create(employee_no = obj_get.employee_no2, \
-                                        defaults = {'pop_up1' : 'ID{}の問い合わせに回答が来ています。'.format(num), \
-                                                    'pop_up_id1' : num})
+    # ログイン者に回答権限がある場合の処理
+    if member_obj_get.administrator == True:
+      # 回答が編集前後で変更がある場合の処理
+      if obj_get.answer != request.POST['answer']:
+        # ポップアップ1が空の場合の処理
+        if member_obj_get.pop_up1 == '':
+          # ポップアップにコメント書き込み
+          member.objects.update_or_create(employee_no = obj_get.employee_no2, \
+                                          defaults = {'pop_up1' : 'ID{}の問い合わせに回答が来ています。'.format(num), \
+                                                      'pop_up_id1' : num})
 
-      # ポップアップ2が空の場合の処理
-      elif member_obj_get.pop_up2 == '':
-        # ポップアップにコメント書き込み
-        member.objects.update_or_create(employee_no = obj_get.employee_no2, \
-                                        defaults = {'pop_up2' : 'ID{}の問い合わせに回答が来ています。'.format(num), \
-                                                    'pop_up_id2' : num})
+        # ポップアップ2が空の場合の処理
+        elif member_obj_get.pop_up2 == '':
+          # ポップアップにコメント書き込み
+          member.objects.update_or_create(employee_no = obj_get.employee_no2, \
+                                          defaults = {'pop_up2' : 'ID{}の問い合わせに回答が来ています。'.format(num), \
+                                                      'pop_up_id2' : num})
 
-      # ポップアップ3が空の場合の処理
-      elif member_obj_get.pop_up3 == '':
-        # ポップアップにコメント書き込み
-        member.objects.update_or_create(employee_no = obj_get.employee_no2, \
-                                        defaults = {'pop_up3' : 'ID{}の問い合わせに回答が来ています。'.format(num), \
-                                                    'pop_up_id3' : num})
-        
-      # ポップアップ4が空の場合の処理
-      elif member_obj_get.pop_up2 == '':
-        # ポップアップにコメント書き込み
-        member.objects.update_or_create(employee_no = obj_get.employee_no2, \
-                                        defaults = {'pop_up4' : 'ID{}の問い合わせに回答が来ています。'.format(num), \
-                                                    'pop_up_id4' : num})
+        # ポップアップ3が空の場合の処理
+        elif member_obj_get.pop_up3 == '':
+          # ポップアップにコメント書き込み
+          member.objects.update_or_create(employee_no = obj_get.employee_no2, \
+                                          defaults = {'pop_up3' : 'ID{}の問い合わせに回答が来ています。'.format(num), \
+                                                      'pop_up_id3' : num})
+          
+        # ポップアップ4が空の場合の処理
+        elif member_obj_get.pop_up2 == '':
+          # ポップアップにコメント書き込み
+          member.objects.update_or_create(employee_no = obj_get.employee_no2, \
+                                          defaults = {'pop_up4' : 'ID{}の問い合わせに回答が来ています。'.format(num), \
+                                                      'pop_up_id4' : num})
 
-      # ポップアップ5が空の場合の処理
-      elif member_obj_get.pop_up3 == '':
-        # ポップアップにコメント書き込み
-        member.objects.update_or_create(employee_no = obj_get.employee_no2, \
-                                        defaults = {'pop_up5' : 'ID{}の問い合わせに回答が来ています。'.format(num), \
-                                                    'pop_up_id5' : num})
+        # ポップアップ5が空の場合の処理
+        elif member_obj_get.pop_up3 == '':
+          # ポップアップにコメント書き込み
+          member.objects.update_or_create(employee_no = obj_get.employee_no2, \
+                                          defaults = {'pop_up5' : 'ID{}の問い合わせに回答が来ています。'.format(num), \
+                                                      'pop_up_id5' : num})
 
 
     # 工数データ作成し残業書き込み
