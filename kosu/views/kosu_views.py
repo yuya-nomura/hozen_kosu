@@ -2261,7 +2261,9 @@ def input(request):
       POST_check =False
 
     # 翌日チェック、工数区分の初期値の定義
-    def_default = {'kosu_def_list' : request.POST['kosu_def_list'],
+    def_default = {'work' : request.POST['work'],
+                   'tyoku2' : request.POST['tyoku2'],
+                   'kosu_def_list' : request.POST['kosu_def_list'],
                    'tomorrow_check' : POST_check,
                    'break_change' : 'break_change' in request.POST}
 
