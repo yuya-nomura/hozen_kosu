@@ -1691,10 +1691,12 @@ def administrator_menu(request):
 
     # Excelからデータを読み込むループ
     for i in range(1, data_num):
-
+      
+      # 人員データインスタンス取得
+      member_instance = member.objects.get(name = ws.cell(row = i + 1, column = 2).value)
       # Excelからデータを読み込む
       new_data = inquiry_data(employee_no2 = ws.cell(row = i + 1, column = 1).value, \
-                              name = ws.cell(row = i + 1, column = 2).value, \
+                              name = member_instance, \
                               content_choice = ws.cell(row = i + 1, column = 3).value, \
                               inquiry = ws.cell(row = i + 1, column = 4).value, \
                               answer = ws.cell(row = i + 1, column = 5).value)
