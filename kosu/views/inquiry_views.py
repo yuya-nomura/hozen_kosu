@@ -185,7 +185,7 @@ def inquiry_list(request, num):
   # 検索時の処理
   if 'find' in request.POST:
 
-    # お問い合わせデータ取得(氏名とカテゴリーで絞り込み)
+    # 問い合わせデータ取得(氏名とカテゴリーで絞り込み)
     data = inquiry_data.objects.filter(content_choice__contains = request.POST['category'], 
                                        employee_no2__contains = request.POST['name_list']).order_by('id').reverse()
 
@@ -206,7 +206,7 @@ def inquiry_list(request, num):
   # 検索時以外の時の処理
   else:
 
-    # お問い合わせデータ取得
+    # 問い合わせデータ取得
     data = inquiry_data.objects.all().order_by('id').reverse()
 
     # 設定データ取得
@@ -488,9 +488,9 @@ def inquiry_display(request, num):
                                     'pop_up5' : ''})
 
 
-  # お問い合わせ編集処理
+  # 問い合わせ編集処理
   if "Registration" in request.POST:
-    # お問い合わせ編集ページへ飛ぶ
+    # 問い合わせ編集ページへ飛ぶ
     return redirect(to = '/inquiry_edit/{}'.format(num))
 
 
@@ -651,12 +651,12 @@ def inquiry_edit(request, num):
                                                         'inquiry' : request.POST['inquiry']})
 
 
-    # お問い合わせ一覧ページをリダイレクトする
+    # 問い合わせ一覧ページをリダイレクトする
     return redirect(to = '/inquiry_list/1')
 
 
 
-  # お問い合わせ削除処理
+  # 問い合わせ削除処理
   if "delete" in request.POST:
 
     # 問い合わせ者の情報取得
@@ -851,7 +851,7 @@ def inquiry_edit(request, num):
     # 取得したレコード削除
     obj_get.delete()
 
-    # お問い合わせ一覧ページをリダイレクトする
+    # 問い合わせ一覧ページをリダイレクトする
     return redirect(to = '/inquiry_list/1')
 
 
