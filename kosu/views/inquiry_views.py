@@ -531,7 +531,7 @@ def inquiry_edit(request, num):
   obj_get = inquiry_data.objects.get(id = num)
 
   # ログイン者情報取得
-  member_obj_get = member.objects.get(employee_no = request.session['login_No'])
+  login_obj_get = member.objects.get(employee_no = request.session['login_No'])
 
   # フォーム初期値定義
   form_default = {'content_choice' : obj_get.content_choice, 
@@ -593,7 +593,7 @@ def inquiry_edit(request, num):
 
 
     # ログイン者に回答権限がある場合の処理
-    if member_obj_get.administrator == True:
+    if login_obj_get.administrator == True:
       # 回答が編集前後で変更がある場合の処理
       if obj_get.answer != request.POST['answer']:
         # ポップアップ1が空の場合の処理
