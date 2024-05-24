@@ -55,18 +55,18 @@ class member(models.Model):
 
 class Business_Time_graph(models.Model):
     employee_no3 = models.IntegerField('従業員番号')
-    name = models.ForeignKey(member, verbose_name = '氏名', on_delete = models.DO_NOTHING)
+    name = models.ForeignKey(member, verbose_name = '氏名', null = True, on_delete = models.SET_NULL)
     def_ver2 = models.CharField('工数区分定義Ver', max_length = 100, blank = True, null=True)
     work_day2 = models.DateField('就業日')
-    tyoku2 = models.CharField('直', max_length = 2, blank = True, null=True)
-    time_work = models.CharField('作業内容', max_length = 288, blank = True, null=True)
-    detail_work = models.CharField('作業詳細', max_length = 32676, blank = True, null=True)
-    over_time = models.IntegerField('残業時間', blank = True, null=True)
-    breaktime = models.CharField('昼休憩時間', max_length = 9, blank = True, null=True)
-    breaktime_over1 = models.CharField('残業休憩時間1', max_length = 9, blank = True, null=True)
-    breaktime_over2 = models.CharField('残業休憩時間2', max_length = 9, blank = True, null=True)
-    breaktime_over3 = models.CharField('残業休憩時間3', max_length = 9, blank = True, null=True)
-    work_time = models.CharField('就業形態', max_length = 100, blank = True, null=True)
+    tyoku2 = models.CharField('直', max_length = 2, blank = True, null = True)
+    time_work = models.CharField('作業内容', max_length = 288, blank = True, null = True)
+    detail_work = models.CharField('作業詳細', max_length = 32676, blank = True, null = True)
+    over_time = models.IntegerField('残業時間', blank = True, null = True)
+    breaktime = models.CharField('昼休憩時間', max_length = 9, blank = True, null = True)
+    breaktime_over1 = models.CharField('残業休憩時間1', max_length = 9, blank = True, null = True)
+    breaktime_over2 = models.CharField('残業休憩時間2', max_length = 9, blank = True, null = True)
+    breaktime_over3 = models.CharField('残業休憩時間3', max_length = 9, blank = True, null = True)
+    work_time = models.CharField('就業形態', max_length = 100, blank = True, null = True)
     judgement = models.BooleanField('工数入力OK_NG', null = True)
     break_change = models.BooleanField('工数入力OK_NG', null = True)
 
@@ -280,7 +280,7 @@ class inquiry_data(models.Model):
         ]
 
     employee_no2 = models.IntegerField('従業員番号')
-    name = models.ForeignKey(member, verbose_name = '氏名', on_delete = models.DO_NOTHING)
+    name = models.ForeignKey(member, verbose_name = '氏名', null = True, on_delete = models.SET_NULL)
     content_choice = models.CharField('内容選択', choices = content_list, max_length = 5)
     inquiry = models.TextField('問い合わせ')
     answer = models.TextField('回答', null = True, blank = True)

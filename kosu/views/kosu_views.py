@@ -2917,6 +2917,7 @@ def input(request):
     'OK_NG' : ok_ng,
     'obj_link' : obj_link,
     'time_display_list' : time_display_list,
+    'member_obj' : member_obj
     }
 
 
