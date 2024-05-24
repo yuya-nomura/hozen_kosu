@@ -542,7 +542,7 @@ def inquiry_edit(request, num):
 
 
 
-  # お問い合わせ編集処理
+  # 問い合わせ編集処理
   if "Registration" in request.POST:
     # 指定IDの工数履歴のレコードのオブジェクト取得
     obj_get = inquiry_data.objects.get(id = num)
@@ -618,14 +618,14 @@ def inquiry_edit(request, num):
                                                       'pop_up_id3' : num})
           
         # ポップアップ4が空の場合の処理
-        elif member_obj_get.pop_up2 == '':
+        elif member_obj_get.pop_up4 == '':
           # ポップアップにコメント書き込み
           member.objects.update_or_create(employee_no = obj_get.employee_no2, \
                                           defaults = {'pop_up4' : 'ID{}の問い合わせに回答が来ています。'.format(num), \
                                                       'pop_up_id4' : num})
 
         # ポップアップ5が空の場合の処理
-        elif member_obj_get.pop_up3 == '':
+        elif member_obj_get.pop_up5 == '':
           # ポップアップにコメント書き込み
           member.objects.update_or_create(employee_no = obj_get.employee_no2, \
                                           defaults = {'pop_up5' : 'ID{}の問い合わせに回答が来ています。'.format(num), \
