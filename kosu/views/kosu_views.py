@@ -750,9 +750,9 @@ def input(request):
         breaktime_over3 = obj_get.breaktime_over3
 
       # 休憩1開始時間のインデント取得
-      break_start1 = int(breaktime[0 : 2])*12 + int(breaktime[2 : 4])/5
+      break_start1 = int(breaktime[1 : 3])*12 + int(breaktime[3 : 5])/5
       # 休憩1終了時間のインデント取得
-      break_end1 = int(breaktime[4 : 6])*12 + int(breaktime[6 :])/5
+      break_end1 = int(breaktime[5 : 7])*12 + int(breaktime[7 :])/5
 
       # 休憩1の日またぎ変数リセット
       break_next_day1 = 0
@@ -769,9 +769,9 @@ def input(request):
 
 
       # 休憩2開始時間のインデント取得
-      break_start2 = int(breaktime_over1[0 : 2])*12 + int(breaktime_over1[2 : 4])/5
+      break_start2 = int(breaktime_over1[1 : 3])*12 + int(breaktime_over1[3 : 5])/5
       # 休憩2終了時間のインデント取得
-      break_end2 = int(breaktime_over1[4 : 6])*12 + int(breaktime_over1[6 :])/5
+      break_end2 = int(breaktime_over1[5 : 7])*12 + int(breaktime_over1[7 :])/5
 
       # 休憩2の日またぎ変数リセット
       break_next_day2 = 0
@@ -788,9 +788,9 @@ def input(request):
 
 
       # 休憩3開始時間のインデント取得
-      break_start3 = int(breaktime_over2[0 : 2])*12 + int(breaktime_over2[2 : 4])/5
+      break_start3 = int(breaktime_over2[1 : 3])*12 + int(breaktime_over2[3 : 5])/5
       # 休憩3終了時間のインデント取得
-      break_end3 = int(breaktime_over2[4 : 6])*12 + int(breaktime_over2[6 :])/5
+      break_end3 = int(breaktime_over2[5 : 7])*12 + int(breaktime_over2[7 :])/5
 
       # 休憩3の日またぎ変数リセット
       break_next_day3 = 0
@@ -807,9 +807,9 @@ def input(request):
 
 
       # 休憩4開始時間のインデント取得
-      break_start4 = int(breaktime_over3[0 : 2])*12 + int(breaktime_over3[2 : 4])/5
+      break_start4 = int(breaktime_over3[1 : 3])*12 + int(breaktime_over3[3 : 5])/5
       # 休憩4終了時間のインデント取得
-      break_end4 = int(breaktime_over3[4 : 6])*12 + int(breaktime_over3[6 :])/5
+      break_end4 = int(breaktime_over3[5 : 7])*12 + int(breaktime_over3[7 :])/5
 
       # 休憩4の日またぎ変数リセット
       break_next_day4 = 0
@@ -1471,9 +1471,9 @@ def input(request):
         breaktime_over3 = break_time_obj.break_time4_over3
 
       # 休憩1開始時間のインデント取得
-      break_start1 = int(breaktime[0 : 2])*12 + int(breaktime[2 : 4])/5
+      break_start1 = int(breaktime[1 : 3])*12 + int(breaktime[3 : 5])/5
       # 休憩1終了時間のインデント取得
-      break_end1 = int(breaktime[4 : 6])*12 + int(breaktime[6 :])/5
+      break_end1 = int(breaktime[5 : 7])*12 + int(breaktime[7 :])/5
 
       # 休憩1が日をまたいでいないか確認
       break_next_day1 = 0
@@ -1485,9 +1485,9 @@ def input(request):
         break_next_day1 = 0
 
       # 休憩2開始時間のインデント取得
-      break_start2 = int(breaktime_over1[0 : 2])*12 + int(breaktime_over1[2 : 4])/5
+      break_start2 = int(breaktime_over1[1 : 3])*12 + int(breaktime_over1[3 : 5])/5
       # 休憩2終了時間のインデント取得
-      break_end2 = int(breaktime_over1[4 : 6])*12 + int(breaktime_over1[6 :])/5
+      break_end2 = int(breaktime_over1[5 : 7])*12 + int(breaktime_over1[7 :])/5
 
       # 休憩2が日をまたいでいないか確認
       break_next_day2 = 0
@@ -1499,9 +1499,9 @@ def input(request):
         break_next_day2 = 0
 
       # 休憩3開始時間のインデント取得
-      break_start3 = int(breaktime_over2[0 : 2])*12 + int(breaktime_over2[2 : 4])/5
+      break_start3 = int(breaktime_over2[1 : 3])*12 + int(breaktime_over2[3 : 5])/5
       # 休憩3終了時間のインデント取得
-      break_end3 = int(breaktime_over2[4 : 6])*12 + int(breaktime_over2[6 :])/5
+      break_end3 = int(breaktime_over2[5 : 7])*12 + int(breaktime_over2[7 :])/5
 
       # 休憩3が日をまたいでいないか確認
       break_next_day3 = 0
@@ -1511,11 +1511,11 @@ def input(request):
 
       else:
         break_next_day3 = 0
-
+      print(breaktime_over1)
       # 休憩4開始時間のインデント取得
-      break_start4 = int(breaktime_over3[0 : 2])*12 + int(breaktime_over3[2 : 4])/5
+      break_start4 = int(breaktime_over3[1 : 3])*12 + int(breaktime_over3[3 : 5])/5
       # 休憩4終了時間のインデント取得
-      break_end4 = int(breaktime_over3[4 : 6])*12 + int(breaktime_over3[6 :])/5
+      break_end4 = int(breaktime_over3[5 : 7])*12 + int(breaktime_over3[7 :])/5
 
       # 休憩4が日をまたいでいないか確認
       break_next_day4 = 0
@@ -3271,22 +3271,22 @@ def break_time(request):
 
     # POST送信された休憩時間を上書きする 
     member.objects.update_or_create(employee_no = request.session['login_No'], \
-                                    defaults = {'break_time1' : break_time1, \
-                                    'break_time1_over1' : break_time1_over1, \
-                                    'break_time1_over2' : break_time1_over2, \
-                                    'break_time1_over3' : break_time1_over3, \
-                                    'break_time2' : break_time2, \
-                                    'break_time2_over1' : break_time2_over1, \
-                                    'break_time2_over2' : break_time2_over2, \
-                                    'break_time2_over3' : break_time2_over3, \
-                                    'break_time3' : break_time3, \
-                                    'break_time3_over1' : break_time3_over1, \
-                                    'break_time3_over2' : break_time3_over2, \
-                                    'break_time3_over3' : break_time3_over3, \
-                                    'break_time4' : break_time4, \
-                                    'break_time4_over1' : break_time4_over1, \
-                                    'break_time4_over2' : break_time4_over2, \
-                                    'break_time4_over3' : break_time4_over3})
+                                    defaults = {'break_time1' : '#' + break_time1, \
+                                    'break_time1_over1' : '#' + break_time1_over1, \
+                                    'break_time1_over2' : '#' + break_time1_over2, \
+                                    'break_time1_over3' : '#' + break_time1_over3, \
+                                    'break_time2' : '#' + break_time2, \
+                                    'break_time2_over1' : '#' + break_time2_over1, \
+                                    'break_time2_over2' : '#' + break_time2_over2, \
+                                    'break_time2_over3' : '#' + break_time2_over3, \
+                                    'break_time3' : '#' + break_time3, \
+                                    'break_time3_over1' : '#' + break_time3_over1, \
+                                    'break_time3_over2' : '#' + break_time3_over2, \
+                                    'break_time3_over3' : '#' + break_time3_over3, \
+                                    'break_time4' : '#' + break_time4, \
+                                    'break_time4_over1' : '#' + break_time4_over1, \
+                                    'break_time4_over2' : '#' + break_time4_over2, \
+                                    'break_time4_over3' : '#' + break_time4_over3})
 
 
   # 休憩データ取得
@@ -3310,70 +3310,70 @@ def break_time(request):
 
   # フォーム初期値定義
   default_list = {
-    'break_time1_start_hour' :  break1[0 : 2],
-    'break_time1_start_min' :  break1[2 : 4],
-    'break_time1_end_hour' :  break1[4 : 6],
-    'break_time1_end_min' :  break1[6 :],
-    'break_time1_over1_start_hour' : break1_1[0 : 2],
-    'break_time1_over1_start_min' : break1_1[2 : 4],
-    'break_time1_over1_end_hour' : break1_1[4 : 6],
-    'break_time1_over1_end_min' : break1_1[6 :],
-    'break_time1_over2_start_hour' : break1_2[0 : 2],
-    'break_time1_over2_start_min' : break1_2[2 : 4],
-    'break_time1_over2_end_hour' : break1_2[4 : 6],
-    'break_time1_over2_end_min' : break1_2[6 :],
-    'break_time1_over3_start_hour' : break1_3[0 : 2],
-    'break_time1_over3_start_min' : break1_3[2 : 4],
-    'break_time1_over3_end_hour' : break1_3[4 : 6],
-    'break_time1_over3_end_min' : break1_3[6 :],
-    'break_time2_start_hour' :  break2[0 : 2],
-    'break_time2_start_min' :  break2[2 : 4],
-    'break_time2_end_hour' :  break2[4 : 6],
-    'break_time2_end_min' :  break2[6 :],
-    'break_time2_over1_start_hour' : break2_1[0 : 2],
-    'break_time2_over1_start_min' : break2_1[2 : 4],
-    'break_time2_over1_end_hour' : break2_1[4 : 6],
-    'break_time2_over1_end_min' : break2_1[6 :],
-    'break_time2_over2_start_hour' : break2_2[0 : 2],
-    'break_time2_over2_start_min' : break2_2[2 : 4],
-    'break_time2_over2_end_hour' : break2_2[4 : 6],
-    'break_time2_over2_end_min' : break2_2[6 :],
-    'break_time2_over3_start_hour' : break2_3[0 : 2],
-    'break_time2_over3_start_min' : break2_3[2 : 4],
-    'break_time2_over3_end_hour' : break2_3[4 : 6],
-    'break_time2_over3_end_min' : break2_3[6 :],
-    'break_time3_start_hour' :  break3[0 : 2],
-    'break_time3_start_min' :  break3[2 : 4],
-    'break_time3_end_hour' :  break3[4 : 6],
-    'break_time3_end_min' :  break3[6 :],
-    'break_time3_over1_start_hour' : break3_1[0 : 2],
-    'break_time3_over1_start_min' : break3_1[2 : 4],
-    'break_time3_over1_end_hour' : break3_1[4 : 6],
-    'break_time3_over1_end_min' : break3_1[6 :],
-    'break_time3_over2_start_hour' : break3_2[0 : 2],
-    'break_time3_over2_start_min' : break3_2[2 : 4],
-    'break_time3_over2_end_hour' : break3_2[4 : 6],
-    'break_time3_over2_end_min' : break3_2[6 :],
-    'break_time3_over3_start_hour' : break3_3[0 : 2],
-    'break_time3_over3_start_min' : break3_3[2 : 4],
-    'break_time3_over3_end_hour' : break3_3[4 : 6],
-    'break_time3_over3_end_min' : break3_3[6 :],
-    'break_time4_start_hour' :  break4[0 : 2],
-    'break_time4_start_min' :  break4[2 : 4],
-    'break_time4_end_hour' :  break4[4 : 6],
-    'break_time4_end_min' :  break4[6 :],
-    'break_time4_over1_start_hour' : break4_1[0 : 2],
-    'break_time4_over1_start_min' : break4_1[2 : 4],
-    'break_time4_over1_end_hour' : break4_1[4 : 6],
-    'break_time4_over1_end_min' : break4_1[6 :],
-    'break_time4_over2_start_hour' : break4_2[0 : 2],
-    'break_time4_over2_start_min' : break4_2[2 : 4],
-    'break_time4_over2_end_hour' : break4_2[4 : 6],
-    'break_time4_over2_end_min' : break4_2[6 :],
-    'break_time4_over3_start_hour' : break4_3[0 : 2],
-    'break_time4_over3_start_min' : break4_3[2 : 4],
-    'break_time4_over3_end_hour' : break4_3[4 : 6],
-    'break_time4_over3_end_min' : break4_3[6 :],
+    'break_time1_start_hour' :  break1[1 : 3],
+    'break_time1_start_min' :  break1[3 : 5],
+    'break_time1_end_hour' :  break1[5 : 7],
+    'break_time1_end_min' :  break1[7 :],
+    'break_time1_over1_start_hour' : break1_1[1 : 3],
+    'break_time1_over1_start_min' : break1_1[3 : 5],
+    'break_time1_over1_end_hour' : break1_1[5 : 7],
+    'break_time1_over1_end_min' : break1_1[7 :],
+    'break_time1_over2_start_hour' : break1_2[1 : 3],
+    'break_time1_over2_start_min' : break1_2[3 : 5],
+    'break_time1_over2_end_hour' : break1_2[5 : 7],
+    'break_time1_over2_end_min' : break1_2[7 :],
+    'break_time1_over3_start_hour' : break1_3[1 : 3],
+    'break_time1_over3_start_min' : break1_3[3 : 5],
+    'break_time1_over3_end_hour' : break1_3[5 : 7],
+    'break_time1_over3_end_min' : break1_3[7 :],
+    'break_time2_start_hour' :  break2[1 : 3],
+    'break_time2_start_min' :  break2[3 : 5],
+    'break_time2_end_hour' :  break2[5 : 7],
+    'break_time2_end_min' :  break2[7 :],
+    'break_time2_over1_start_hour' : break2_1[1 : 3],
+    'break_time2_over1_start_min' : break2_1[3 : 5],
+    'break_time2_over1_end_hour' : break2_1[5 : 7],
+    'break_time2_over1_end_min' : break2_1[7 :],
+    'break_time2_over2_start_hour' : break2_2[1 : 3],
+    'break_time2_over2_start_min' : break2_2[3 : 5],
+    'break_time2_over2_end_hour' : break2_2[5 : 7],
+    'break_time2_over2_end_min' : break2_2[7 :],
+    'break_time2_over3_start_hour' : break2_3[1 : 3],
+    'break_time2_over3_start_min' : break2_3[3 : 5],
+    'break_time2_over3_end_hour' : break2_3[5 : 7],
+    'break_time2_over3_end_min' : break2_3[7 :],
+    'break_time3_start_hour' :  break3[1 : 3],
+    'break_time3_start_min' :  break3[3 : 5],
+    'break_time3_end_hour' :  break3[5 : 7],
+    'break_time3_end_min' :  break3[7 :],
+    'break_time3_over1_start_hour' : break3_1[1 : 3],
+    'break_time3_over1_start_min' : break3_1[3 : 5],
+    'break_time3_over1_end_hour' : break3_1[5 : 7],
+    'break_time3_over1_end_min' : break3_1[7 :],
+    'break_time3_over2_start_hour' : break3_2[1 : 3],
+    'break_time3_over2_start_min' : break3_2[3 : 5],
+    'break_time3_over2_end_hour' : break3_2[5 : 7],
+    'break_time3_over2_end_min' : break3_2[7 :],
+    'break_time3_over3_start_hour' : break3_3[1 : 3],
+    'break_time3_over3_start_min' : break3_3[3 : 5],
+    'break_time3_over3_end_hour' : break3_3[5 : 7],
+    'break_time3_over3_end_min' : break3_3[7 :],
+    'break_time4_start_hour' :  break4[1 : 3],
+    'break_time4_start_min' :  break4[3 : 5],
+    'break_time4_end_hour' :  break4[5 : 7],
+    'break_time4_end_min' :  break4[7 :],
+    'break_time4_over1_start_hour' : break4_1[1 : 3],
+    'break_time4_over1_start_min' : break4_1[3 : 5],
+    'break_time4_over1_end_hour' : break4_1[5 : 7],
+    'break_time4_over1_end_min' : break4_1[7 :],
+    'break_time4_over2_start_hour' : break4_2[1 : 3],
+    'break_time4_over2_start_min' : break4_2[3 : 5],
+    'break_time4_over2_end_hour' : break4_2[5 : 7],
+    'break_time4_over2_end_min' : break4_2[7 :],
+    'break_time4_over3_start_hour' : break4_3[1 : 3],
+    'break_time4_over3_start_min' : break4_3[3 : 5],
+    'break_time4_over3_end_hour' : break4_3[5 : 7],
+    'break_time4_over3_end_min' : break4_3[7 :],
   }
 
   # フォーム定義
@@ -3863,10 +3863,10 @@ def today_break_time(request):
                                                   work_day2 = request.session.get('break_today', None), \
                                                   defaults = {'time_work' : ''.join(kosu_def), \
                                                               'detail_work' : detail_list_str, \
-                                                              'breaktime' : break_time1, \
-                                                              'breaktime_over1' : break_time1_over1, \
-                                                              'breaktime_over2' : break_time1_over2, \
-                                                              'breaktime_over3' : break_time1_over3})
+                                                              'breaktime' : '#' + break_time1, \
+                                                              'breaktime_over1' : '#' + break_time1_over1, \
+                                                              'breaktime_over2' : '#' + break_time1_over2, \
+                                                              'breaktime_over3' : '#' + break_time1_over3})
 
 
     # 工数データない場合の処理
@@ -3881,10 +3881,10 @@ def today_break_time(request):
                                                   defaults = {'name' : member_instance, \
                                                               'time_work' : '#'*288, \
                                                               'detail_work' : '$'*288, \
-                                                              'breaktime' : break_time1, \
-                                                              'breaktime_over1' : break_time1_over1, \
-                                                              'breaktime_over2' : break_time1_over2, \
-                                                              'breaktime_over3' : break_time1_over3})
+                                                              'breaktime' : '#' + break_time1, \
+                                                              'breaktime_over1' : '#' + break_time1_over1, \
+                                                              'breaktime_over2' : '#' + break_time1_over2, \
+                                                              'breaktime_over3' : '#' + break_time1_over3})
     
     # 工数入力ページへ飛ぶ
     return redirect(to = '/input')
@@ -3908,22 +3908,22 @@ def today_break_time(request):
 
     # フォーム初期値定義
     default_list = {
-      'break_time1_start_hour' :  break1[0 : 2],
-      'break_time1_start_min' :  break1[2 : 4],
-      'break_time1_end_hour' :  break1[4 : 6],
-      'break_time1_end_min' :  break1[6 :],
-      'break_time1_over1_start_hour' : break1_1[0 : 2],
-      'break_time1_over1_start_min' : break1_1[2 : 4],
-      'break_time1_over1_end_hour' : break1_1[4 : 6],
-      'break_time1_over1_end_min' : break1_1[6 :],
-      'break_time1_over2_start_hour' : break1_2[0 : 2],
-      'break_time1_over2_start_min' : break1_2[2 : 4],
-      'break_time1_over2_end_hour' : break1_2[4 : 6],
-      'break_time1_over2_end_min' : break1_2[6 :],
-      'break_time1_over3_start_hour' : break1_3[0 : 2],
-      'break_time1_over3_start_min' : break1_3[2 : 4],
-      'break_time1_over3_end_hour' : break1_3[4 : 6],
-      'break_time1_over3_end_min' : break1_3[6 :],
+      'break_time1_start_hour' :  break1[1 : 3],
+      'break_time1_start_min' :  break1[3 : 5],
+      'break_time1_end_hour' :  break1[5 : 7],
+      'break_time1_end_min' :  break1[7 :],
+      'break_time1_over1_start_hour' : break1_1[1 : 3],
+      'break_time1_over1_start_min' : break1_1[3 : 5],
+      'break_time1_over1_end_hour' : break1_1[5 : 7],
+      'break_time1_over1_end_min' : break1_1[7 :],
+      'break_time1_over2_start_hour' : break1_2[1 : 3],
+      'break_time1_over2_start_min' : break1_2[3 : 5],
+      'break_time1_over2_end_hour' : break1_2[5 : 7],
+      'break_time1_over2_end_min' : break1_2[7 :],
+      'break_time1_over3_start_hour' : break1_3[1 : 3],
+      'break_time1_over3_start_min' : break1_3[3 : 5],
+      'break_time1_over3_end_hour' : break1_3[5 : 7],
+      'break_time1_over3_end_min' : break1_3[7 :],
       }
 
   # 工数データがない場合の処理
