@@ -606,6 +606,19 @@ def input(request):
     work = request.POST['work']
 
 
+    # 直初期値設定(エラー保持)
+    request.session['error_tyoku'] = tyoku
+    # 勤務初期値設定(エラー保持)
+    request.session['error_work'] = work
+    # 工数区分定義初期値設定(エラー保持)
+    request.session['error_def'] = def_work
+    # 作業詳細初期値設定(エラー保持)
+    request.session['error_detail'] = detail_work
+    # 残業初期値設定(エラー保持)
+    request.session['error_over_work'] = request.POST['over_work']
+    
+
+
     # 翌日チェック状態リセット
     check = 0
 
@@ -2260,12 +2273,14 @@ def input(request):
     else:
       POST_check =False
 
-    # 翌日チェック、工数区分の初期値の定義
+    # 時刻取得時の初期値の定義
     def_default = {'work' : request.POST['work'],
                    'tyoku2' : request.POST['tyoku2'],
                    'kosu_def_list' : request.POST['kosu_def_list'],
+                   'work_detail' : request.POST['work_detail'],
                    'tomorrow_check' : POST_check,
-                   'break_change' : 'break_change' in request.POST}
+                   'break_change' : 'break_change' in request.POST,
+                   'over_work' : request.POST['over_work']}
 
 
     # グラフデータ確認用データ取得
@@ -2486,14 +2501,46 @@ def input(request):
   else:
     # 残業に0を入れる
     over_work_default = 0
-    # 直表示に空を入れる
-    tyoku_default = ''
-    # 勤務表示に空を入れる
-    work_default = ''
     # 工数入力状況に空を入れる
     ok_ng = False
     # 休憩時間変更に空を入れる
     break_change_default = False
+
+    # エラー時の直保持がセッションにある場合の処理
+    if 'error_tyoku' in request.session:
+      # 直初期値にエラー時の直保持を入れる
+      tyoku_default = request.session['error_tyoku']
+      # セッション削除
+      del request.session['error_tyoku']
+    
+    # エラー時の直保持がセッションにない場合の処理
+    else:
+      # 直初期値に空を入れる
+      tyoku_default = ''
+
+    # エラー時の勤務保持がセッションにある場合の処理
+    if 'error_work' in request.session:
+      # 勤務初期値にエラー時の直保持を入れる
+      work_default = request.session['error_work']
+      # セッション削除
+      del request.session['error_work']
+    
+    # エラー時の勤務保持がセッションにない場合の処理
+    else:
+      # 勤務初期値に空を入れる
+      work_default = ''
+
+    # エラー時の残業保持がセッションにある場合の処理
+    if 'error_over_work' in request.session:
+      # 残業初期値にエラー時の直保持を入れる
+      over_work_default = request.session['error_over_work']
+      # セッション削除
+      del request.session['error_over_work']
+    
+    # エラー時の残業保持がセッションにない場合の処理
+    else:
+      # 勤務初期値に空を入れる
+      over_work_default = ''
 
 
   # 初期値を設定するリスト作成
@@ -2503,18 +2550,26 @@ def input(request):
                'start_min' : request.session.get('end_min', ''), 
                'end_hour' : hour_default, 
                'end_min' : min_default,
+               'kosu_def_list': request.session.get('error_def', ''),
+               'work_detail' : request.session.get('error_detail', ''),
                'over_work' : over_work_default,
                'break_change' : break_change_default,}
   
-  # 翌日チェック、工数区分の初期値の定義
+  # エラー時の工数定義区分保持がセッションにある場合の処理
+  if 'error_def' in request.session:
+    # セッション削除
+    del request.session['error_def']
+
+  # エラー時の作業詳細保持保持がセッションにある場合の処理
+  if 'error_detail' in request.session:
+    # セッション削除
+    del request.session['error_detail']
+  
+
+  # 時刻取得時の初期値の定義追加あれば追加
   if 'def_default' in locals():
     kosu_list.update(def_default)
 
-  else:
-    def_default = {'kosu_def_list' : '', \
-                   'tomorrow_check' : ''}
-
-    kosu_list.update(def_default)
 
   # 現在使用している工数区分のオブジェクトを取得
   kosu_obj = kosu_division.objects.get(kosu_name = request.session.get('input_def', None))
