@@ -42,7 +42,11 @@
       <th><p class="h5 text-pink">●回答</p></th>
     </tr>
     <tr>
+      {% if obj.answer != None %}
       <td>{{ obj.answer | linebreaksbr }}</td>
+      {% else %}
+      <td>　</td>
+      {% endif %}
     </tr>
     {% if data.administrator == True %}
     <tr>
