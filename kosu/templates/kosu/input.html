@@ -65,6 +65,7 @@
           {{form.end_hour}}：{{form.end_min}}　翌日{{form.tomorrow_check}}
         </td>
       </tr>
+      {% if member_obj.employee_no != 49337 %}
       <tr>
         <th>
           業務区分
@@ -81,6 +82,24 @@
           {{form.work_detail}}
         </td>
       </tr>
+      {% else %}
+      <tr>
+        <th>
+          作業詳細
+        </th>
+        <td>
+          {{form.work_detail}}
+        </td>
+      </tr>
+      <tr>
+        <th>
+          業務区分
+        </th>
+        <td>
+          {{form.kosu_def_list}}
+        </td>
+      </tr>
+      {% endif %}
       <tr>
         <th>
           残業
