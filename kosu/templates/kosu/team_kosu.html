@@ -58,21 +58,21 @@
     {% if data2.has_previous %}
     <li class="page-item">
       <a class="page-link text-danger" href="{% url 'team_kosu' 1 %}">
-        &laquo; 最初のページへ</a>
+        &laquo; 最初</a>
     </li>
     <li class="page-item">
       <a class="page-link text-danger" 
       href="{% url 'team_kosu' data2.previous_page_number %}">
-        &laquo; 前のページへ</a>
+        &laquo; 前</a>
     </li>
     {% else %}
     <li class="page-item">
       <a class="page-link text-danger">
-        &laquo; 最初のページへ</a>
+        &laquo; 最初</a>
     </li>
     <li class="page-item">
       <a class="page-link text-danger">
-        &laquo; 前のページへ</a>
+        &laquo; 前</a>
     </li>
     {% endif %}
     <li class="page-item">
@@ -83,21 +83,21 @@
     <li class="page-item">
       <a class="page-link text-danger" 
         href="{% url 'team_kosu' data2.next_page_number %}">
-          次のページへ &raquo;</a>
+          次 &raquo;</a>
     </li>
     <li class="page-item">
       <a class="page-link text-danger" 
         href="{% url 'team_kosu' data2.paginator.num_pages %}">
-          最後のページへ &raquo;</a>
+          最後 &raquo;</a>
     </li>
     {% else %}
     <li class="page-item">
       <a class="page-link text-danger">
-        次のページへ &raquo;</a>
+        次 &raquo;</a>
     </li>
     <li class="page-item">
       <a class="page-link text-danger">
-        最後のページへ &raquo;</a>
+        最後 &raquo;</a>
     </li>
     {% endif %}
   </ul>
