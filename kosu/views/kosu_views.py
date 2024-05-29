@@ -4343,7 +4343,6 @@ def detail(request, num):
 
   # HTML表示用リスト作成
   time_display_list = []
-  # HTML表示用リスト作成
   for k in range(len(time_list_start)):
     for_list = []
     for_list.append(str(time_list_start[k]) + '～' + str(time_list_end[k]))
@@ -4759,6 +4758,8 @@ def total(request):
   # ログイン者の情報取得
   data = member.objects.get(employee_no = request.session['login_No'])
 
+
+
   # GET時の処理
   if (request.method == 'GET'):
     # 今日の日時を変数に格納
@@ -4842,6 +4843,7 @@ def total(request):
                   'forestgreen', 'darkkhaki', 'crimson', 'rosybrown', 'dimgray', 'midnightblue', 'darkblue', 
                   'darkslategray', 'darkgreen', 'olivedrab', 'darkgoldenrod', 'sienna', 'firebrick', 'maroon', 
                   'darkmagenta', 'indigo', 'black'] 
+
 
 
   # POST時の処理
@@ -5099,6 +5101,7 @@ def total(request):
       graph_list = graph_library.values()
 
 
+
   # HTMLに渡す辞書
   context = {
     'title' : '工数集計',
@@ -5109,6 +5112,8 @@ def total(request):
     'color_list' : color_list,
     'graph_library' : dict(zip(graph_item, graph_list))
   }
+
+
 
   # 指定したHTMLに辞書を渡して表示を完成させる
   return render(request, 'kosu/total.html', context)
@@ -6095,49 +6100,8 @@ def kosu_transition(request):
     # 未ログインならログインページに飛ぶ
     return redirect(to = '/login')
 
-
-  # 指定期間開始日に今日の日付を定義
-  default_start_day = datetime.date.today()
-  # 指定期間終了日に1週間後の日付を定義
-  default_end_day = datetime.date.today() + datetime.timedelta(weeks = 1)
-
-
   # ログイン者の情報取得
   data = member.objects.get(employee_no = request.session['login_No'])
-
-
-  # 現在使用している工数区分のオブジェクトを取得
-  kosu_obj = kosu_division.objects.get(kosu_name = request.session['input_def'])
-
-  # 工数区分登録カウンターリセット
-  n = 0
-
-  # 工数区分登録数カウント
-  for kosu_num in range(1, 50):
-    if eval('kosu_obj.kosu_title_{}'.format(kosu_num)) != None:
-      n = kosu_num
-
-
-  # 工数区分処理用記号リスト用意
-  str_list = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', \
-              'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', \
-                'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', \
-                    'q', 'r', 's', 't', 'u', 'v', 'w', 'x',]
-
-  # リストの長さを工数区分の登録数に応じて調整
-  del str_list[n:]
-
-  # 工数区分の選択リスト作成
-  choices_list = [('残業', '残業')]
-  for i, m in enumerate(str_list):
-    choices_list.append((m,eval('kosu_obj.kosu_title_{}'.format(i + 1))))
-
-
-  # グラフ用データリスト
-  label_list = []
-  member1_list = []
-  member2_list = []
-  member3_list = []
 
 
 
@@ -6145,170 +6109,18 @@ def kosu_transition(request):
   if request.method == 'POST':
     # 人員指定フォーム定義
     form = ShopNameForm(request.POST)
-    form.fields['kosu_def'].choices = choices_list
-
-    # POSTされた日付をdate型に変換
-    start_day = datetime.datetime.strptime(request.POST['start_day'], "%Y-%m-%d").date()
-    end_day = datetime.datetime.strptime(request.POST['end_day'], "%Y-%m-%d").date()
-
-    # 指定期間の日数取得
-    days_passed = (end_day - start_day).days
-    
-    # グラフデータを作成するループ
-    for day in range(days_passed + 1):
-      # 日付指定
-      for_day = start_day + datetime.timedelta(days = day)
-
-      # 指定日をグラフのラベルデータに入れる
-      label_list.append(for_day)
-
-      # 1人目人員選択されている場合
-      if request.POST['shop_choice1'] != '選択無し':
-        # 指定日に工数データがあるか確認
-        obj_filter1 = Business_Time_graph.objects.filter(employee_no3 = request.POST['name_choice1'], \
-                                                        work_day2 = str(for_day))
-        
-        # 工数データがある場合の処理
-        if obj_filter1.count() != 0:
-          # 工数データ取得
-          obj_get1 = Business_Time_graph.objects.get(employee_no3 = request.POST['name_choice1'], \
-                                                    work_day2 = str(for_day))
-          # 作業データ取得
-          kosu_count = obj_get1.time_work.count(request.POST['kosu_def_list'])
-
-          # 表示数量を実工数選択の場合の処理
-          if request.POST['display_choice'] == '実工数':
-            # 選択項目の累積工数をグラフデータに入れる
-            member1_list.append(kosu_count*5)
-
-          # 表示数量を割合選択の場合の処理
-          else:
-            # 1日の工数を総量取得
-            kosu_total = 1440 - (obj_get1.time_work.count('#')*5) - (obj_get1.time_work.count('$')*5)
-
-            # 工数の入力がある場合の処理
-            if kosu_total != 0:
-              # 選択項目の工数割合をリストに追加
-              kosu_ratio = round(((kosu_count*5)/kosu_total)*100, -1)
-              member1_list.append(kosu_ratio)
-            
-            # 工数データはあるが工数の入力がない場合の処理
-            else:
-              # リストに0追加
-              member1_list.append(0)
-
-        # 工数データがない場合の処理
-        else:
-          # リストに0追加
-          member1_list.append(0)
-
-
-      # 2人目人員選択されている場合
-      if request.POST['shop_choice2'] != '選択無し':
-        # 指定日に工数データがあるか確認
-        obj_filter2 = Business_Time_graph.objects.filter(employee_no3 = request.POST['name_choice2'], \
-                                                        work_day2 = str(for_day))
-        
-        # 工数データがある場合の処理
-        if obj_filter2.count() != 0:
-          # 工数データ取得
-          obj_get2 = Business_Time_graph.objects.get(employee_no3 = request.POST['name_choice2'], \
-                                                    work_day2 = str(for_day))
-          # 作業データ取得
-          kosu_count = obj_get2.time_work.count(request.POST['kosu_def_list'])
-
-          # 表示数量を実工数選択の場合の処理
-          if request.POST['display_choice'] == '実工数':
-            # 選択項目の累積工数をグラフデータに入れる
-            member2_list.append(kosu_count*5)
-
-          # 表示数量を割合選択の場合の処理
-          else:
-            # 1日の工数を総量取得
-            kosu_total = 1440 - (obj_get2.time_work.count('#')*5) - (obj_get2.time_work.count('$')*5)
-
-            # 工数の入力がある場合の処理
-            if kosu_total != 0:
-              # 選択項目の工数割合をリストに追加
-              kosu_ratio = round(((kosu_count*5)/kosu_total)*100, -1)
-              member2_list.append(kosu_ratio)
-            
-            # 工数データはあるが工数の入力がない場合の処理
-            else:
-              # リストに0追加
-              member2_list.append(0)
-
-        # 工数データがない場合の処理
-        else:
-          # リストに0追加
-          member2_list.append(0)
-
-
-      # 3人目人員選択されている場合
-      if request.POST['shop_choice3'] != '選択無し':
-        # 指定日に工数データがあるか確認
-        obj_filter3 = Business_Time_graph.objects.filter(employee_no3 = request.POST['name_choice3'], \
-                                                        work_day2 = str(for_day))
-        # 工数データがある場合の処理
-        if obj_filter3.count() != 0:
-          # 工数データ取得
-          obj_get3 = Business_Time_graph.objects.get(employee_no3 = request.POST['name_choice3'], \
-                                                    work_day2 = str(for_day))
-          # 作業データ取得
-          kosu_count = obj_get3.time_work.count(request.POST['kosu_def_list'])
-
-          # 表示数量を実工数選択の場合の処理
-          if request.POST['display_choice'] == '実工数':
-            # 選択項目の累積工数をグラフデータに入れる
-            member3_list.append(kosu_count*5)
-
-          # 表示数量を割合選択の場合の処理
-          else:
-            # 1日の工数を総量取得
-            kosu_total = 1440 - (obj_get3.time_work.count('#')*5) - (obj_get2.time_work.count('$')*5)
-
-            # 工数の入力がある場合の処理
-            if kosu_total != 0:
-              # 選択項目の工数割合をリストに追加
-              kosu_ratio = round(((kosu_count*5)/kosu_total)*100, -1)
-              member3_list.append(kosu_ratio)
-            
-            # 工数データはあるが工数の入力がない場合の処理
-            else:
-              # リストに0追加
-              member3_list.append(0)
-
-        # 工数データがない場合の処理
-        else:
-          # リストに0追加
-          member3_list.append(0)
-
 
 
   # GETリクエストの処理
   else:
     # 人員指定フォーム定義(初期値にログイン者のショップ指定)
-    form = ShopNameForm(initial={
-      'shop_choice1': data.shop,
-      'shop_choice2': data.shop,
-      'shop_choice3': data.shop,
-      'start_day' : default_start_day,
-      'end_day' : default_end_day,
-      })
-    form.fields['kosu_def'].choices = choices_list
+    form = ShopNameForm()
 
 
 
-
-  print(label_list)
-  print(member1_list)
   context = {
       'title': '工数推移',
       'form': form,
-      'label_list' : label_list,
-      'member1_list' : member1_list,
-      'member2_list' : member2_list,
-      'member3_list' : member3_list,
   }
 
 

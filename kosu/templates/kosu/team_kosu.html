@@ -31,6 +31,7 @@
         <th>氏名</th>
         <th>就業日</th>
         <th>直</th>
+        <th>整合性</th>
         <th>詳細リンク</th>
       </tr>
     {% for i in data2 %}
@@ -42,6 +43,10 @@
           {% if i.tyoku2 == "2" %}2直{% endif %}
           {% if i.tyoku2 == "3" %}3直{% endif %}
           {% if i.tyoku2 == "4" %}常昼{% endif %}
+        </td>
+        <td>
+          {% if i.judgement == True %}<b  class="text-primary">OK</b>{% endif %}
+          {% if i.judgement == False %}<b  class="text-danger">NG</b>{% endif %}
         </td>
         <td><a href="{% url 'team_detail' i.id %}">詳細</a></td>
       <tr>

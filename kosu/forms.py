@@ -486,11 +486,6 @@ shop_list = [
   ('組長以上', '組長以上')
   ]
 
-display_list = [
-  ('実工数', '実工数'),
-  ('割合', '割合'),
-  ]
-
 class ShopNameForm(forms.Form):
   shop_choice1 = forms.ChoiceField(choices = shop_list)
   name_choice1 = forms.ChoiceField(choices = [])
@@ -498,12 +493,6 @@ class ShopNameForm(forms.Form):
   name_choice2 = forms.ChoiceField(choices = [])
   shop_choice3 = forms.ChoiceField(choices = shop_list)
   name_choice3 = forms.ChoiceField(choices = [])
-  display_choice = forms.ChoiceField(choices = display_list)
-  kosu_def = forms.ChoiceField(required = False)
-  start_day = forms.DateTimeField(label = '開始日付', required = False, \
-                                  widget = DatePickerInput(format = '%Y-%m-%d'))
-  end_day = forms.DateTimeField(label = '開始日付', required = False, \
-                                widget = DatePickerInput(format = '%Y-%m-%d'))
 
   def __init__(self, *args, **kwargs):
     super().__init__(*args, **kwargs)

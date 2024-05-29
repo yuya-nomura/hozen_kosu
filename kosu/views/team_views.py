@@ -230,7 +230,7 @@ def team_graph(request):
       exec('obj_member{}=0'.format(i))
     else:
       exec('obj_member{}=obj.member{}'.format(i, i))
-    
+
   # 班員数、班員の名前リスト取得
   n = 0
   name_list = []
@@ -268,116 +268,138 @@ def team_graph(request):
                 t = '05'
               graph_item.append('{}:{}'.format(i, t))
 
+    # グラフデータある場合の処理
     else:
       # グラフデータ取得
       graph_data = Business_Time_graph.objects.get(employee_no3 = employee_no_data, work_day2 = kosu_today)
-      graph_list = list(graph_data.time_work)
 
-      # グラフラベルデータ
-      graph_item = []
-      for i in range(24):
-          for k in range(0, 60, 5):
-              if k == 0:
-                t = '00'
-              if k == 5:
-                t = '05'
+      # 工数が入力されている場合の処理
+      if list(graph_data.time_work) != list(itertools.repeat('#', 288)):
+        # グラフデータ解凍
+        graph_list = list(graph_data.time_work)
+
+        # グラフラベルデータ
+        graph_item = []
+        for i in range(24):
+            for k in range(0, 60, 5):
+                if k == 0:
+                  t = '00'
+                if k == 5:
+                  t = '05'
+                else:
+                  t = k
+                graph_item.append('{}:{}'.format(i, t))
+
+        # グラフデータリスト内の各文字を数値に変更
+        str_list = ['#', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', \
+                      'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', \
+                        'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', \
+                            'q', 'r', 's', 't', 'u', 'v', 'w', 'x',]
+
+        for i in range(288):
+          for k, m in enumerate(str_list):
+            if graph_list[i]  == m:
+              graph_list[i] = k
+              break
+
+        # 工数が入力されていない部分を切り捨てデータを見やすく
+        if graph_data.tyoku2 != '3':
+          for i in range(288):
+            if graph_list[i] != 0:
+              if i == 0:
+                graph_start_index = i
               else:
-                t = k
-              graph_item.append('{}:{}'.format(i, t))
+                graph_start_index = i-1
+                break
+          
+          for i in range(1, 289):
+            if graph_list[-i] != 0:
+              if i == 1:
+                graph_end_index = 289 - i
+              else:
+                graph_end_index = 290 - i
+                break
 
-      # グラフデータリスト内の各文字を数値に変更
-      str_list = ['#', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', \
-                    'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', \
-                      'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', \
-                          'q', 'r', 's', 't', 'u', 'v', 'w', 'x',]
+          if graph_data.tyoku2 == '1':
+            if graph_end_index <= 184:
+              graph_end_index = 184
 
-      for i in range(288):
-        for k, m in enumerate(str_list):
-          if graph_list[i]  == m:
-            graph_list[i] = k
-            break
+          if graph_data.tyoku2 == '2' and (member_obj.shop == 'W1' or member_obj.shop == 'W2' or \
+                                          member_obj.shop == 'A1' or member_obj.shop == 'A2'):
+            if graph_end_index <= 240:
+              graph_end_index = 240
 
-      # 工数が入力されていない部分を切り捨てデータを見やすく
-      if graph_data.tyoku2 != '3':
-        for i in range(288):
-          if graph_list[i] != 0:
-            if i == 0:
-              graph_start_index = i
-            else:
-              graph_start_index = i-1
-              break
-        
-        for i in range(1, 289):
-          if graph_list[-i] != 0:
-            if i == 1:
-              graph_end_index = 289 - i
-            else:
-              graph_end_index = 290 - i
-              break
+          if graph_data.tyoku2 == '2' and (member_obj.shop == 'P' or member_obj.shop == 'R' or \
+                                          member_obj.shop == 'T1' or member_obj.shop == 'T2' or \
+                                            member_obj.shop == 'その他' or member_obj.shop == '組長以上'):
+            if graph_end_index <= 270:
+              graph_end_index = 270
 
-        if graph_data.tyoku2 == '1':
-          if graph_end_index <= 184:
-            graph_end_index = 184
+          if graph_data.tyoku2 == '4':
+            if graph_end_index <= 204:
+              graph_end_index = 204
 
-        if graph_data.tyoku2 == '2' and (member_obj.shop == 'W1' or member_obj.shop == 'W2' or \
-                                        member_obj.shop == 'A1' or member_obj.shop == 'A2'):
-          if graph_end_index <= 240:
-            graph_end_index = 240
-
-        if graph_data.tyoku2 == '2' and (member_obj.shop == 'P' or member_obj.shop == 'R' or \
-                                        member_obj.shop == 'T1' or member_obj.shop == 'T2' or \
-                                          member_obj.shop == 'その他' or member_obj.shop == '組長以上'):
-          if graph_end_index <= 270:
-            graph_end_index = 270
-
-        if graph_data.tyoku2 == '4':
-          if graph_end_index <= 204:
-            graph_end_index = 204
-
-        del graph_list[graph_end_index:]
-        del graph_list[:graph_start_index]
-        del graph_item[graph_end_index:]
-        del graph_item[:graph_start_index]
-
-      else:
-        graph_list = graph_list*2
-        graph_item = graph_item*2
-
-        del graph_list[:204]
-        del graph_list[288:]
-        del graph_item[:204]
-        del graph_item[288:]
-
-        for i in range(288):
-          if graph_list[i] != 0:
-            if i == 0:
-              graph_start_index = i
-            else:
-              graph_start_index = i-1
-              break
-
-        for i in range(1, 289):
-          if graph_list[-i] != 0:
-            if i == 1:
-              graph_end_index = 289 - i
-            else:
-              graph_end_index = 290 - i
-              break
-
-        if member_obj.shop == 'W1' or member_obj.shop == 'W2' or \
-          member_obj.shop == 'A1' or member_obj.shop == 'A2':
-
-          if graph_end_index <= 140:
-            graph_end_index = 140
+          del graph_list[graph_end_index:]
+          del graph_list[:graph_start_index]
+          del graph_item[graph_end_index:]
+          del graph_item[:graph_start_index]
 
         else:
-          if graph_end_index <= 169:
-            graph_end_index = 169
+          graph_list = graph_list*2
+          graph_item = graph_item*2
 
-        del graph_list[graph_end_index:]
-        del graph_list[:graph_start_index]
-        del graph_item[graph_end_index:]
-        del graph_item[:graph_start_index]
+          del graph_list[:204]
+          del graph_list[288:]
+          del graph_item[:204]
+          del graph_item[288:]
+
+          for i in range(288):
+            if graph_list[i] != 0:
+              if i == 0:
+                graph_start_index = i
+              else:
+                graph_start_index = i-1
+                break
+
+          for i in range(1, 289):
+            if graph_list[-i] != 0:
+              if i == 1:
+                graph_end_index = 289 - i
+              else:
+                graph_end_index = 290 - i
+                break
+
+          if member_obj.shop == 'W1' or member_obj.shop == 'W2' or \
+            member_obj.shop == 'A1' or member_obj.shop == 'A2':
+
+            if graph_end_index <= 140:
+              graph_end_index = 140
+
+          else:
+            if graph_end_index <= 169:
+              graph_end_index = 169
+
+          del graph_list[graph_end_index:]
+          del graph_list[:graph_start_index]
+          del graph_item[graph_end_index:]
+          del graph_item[:graph_start_index]
+
+      # 工数が入力されていない場合の処理
+      else:
+        # 0が288個入ったリスト作成
+        graph_list = list(itertools.repeat(0,288))
+
+        # グラフラベルデータ
+        graph_item = []
+        for i in range(24):
+            for k in range(0, 60, 5):
+                t = k
+                if k == 0:
+                  t = '00'
+                if k == 5:
+                  t = '05'
+                graph_item.append('{}:{}'.format(i, t))
+
 
     return graph_list, graph_item
   
@@ -486,7 +508,7 @@ def team_kosu(request, num):
   # 日付のみを変数に入れる
   kosu_today = dt.date()
 
-  # フォームの初期値に定義する辞書作成
+  # フォームの初期値に定義
   if request.session.get('find_employee_no', '') != '' or \
     request.session.get('find_team_day', '') != '':
 
@@ -494,7 +516,6 @@ def team_kosu(request, num):
                   'employee_no6' : request.session.get('find_employee_no', '')}
     
   else:
-
     start_list = {'team_day' : kosu_today}
 
 
@@ -536,7 +557,6 @@ def team_kosu(request, num):
 
   # 班員リスト作成
   for i in range(n):
-
     # 班員の選択肢リセット
     choices_element = []
 
@@ -547,7 +567,6 @@ def team_kosu(request, num):
     obj_filter = member.objects.filter(employee_no__contains = employee_no_list[i])
     # 班員の従業員番号が人員データにある場合の処理
     if obj_filter.count() == 1:
-
       # 班員の従業員番号から人員データ取得
       obj_get = member.objects.get(employee_no = employee_no_list[i])
       # 班員の名前リスト作成
@@ -555,9 +574,10 @@ def team_kosu(request, num):
 
     # 班員の従業員番号が人員データにない場合の処理
     else:
-
       # 班員の名前リストに空を入れる
       name_list.append('')
+      # 従業員番号リストから追加要素削除
+      employee_no_list[-1] = ''
 
     # 従業員番号と名前の選択肢作成
     choices_element = choices_element + [employee_no_list[i], name_list[i]]
@@ -567,6 +587,8 @@ def team_kosu(request, num):
 
   # 設定データ取得
   page_num = administrator_data.objects.order_by("id").last()
+  # 従業員番号リスト空欄削除
+  filtered_list = [item for item in employee_no_list if item != '']
 
 
   # POST時の処理
@@ -586,13 +608,12 @@ def team_kosu(request, num):
 
     # 就業日と班員の従業員番号でフィルターをかけて一致したものをHTML表示用変数に入れる
     data2 = Business_Time_graph.objects.filter(employee_no3__icontains = find, \
-      work_day__contains = find2).order_by('work_day', 'start_hour', 'start_min').reverse()
+      work_day2__contains = find2).order_by('work_day2').reverse()
 
     page = Paginator(data2, page_num.menu_row)
 
   # POSTしていない時の処理
   else:
-
     # POST送信していない時のフォームの状態(今日の日付が入ったフォーム)
     form = team_kosuForm(start_list)
 
@@ -600,21 +621,11 @@ def team_kosu(request, num):
     form.fields['employee_no6'].choices = choices_list
 
     # 班員の従業員番号でフィルターをかけて一致したものをHTML表示用変数に入れる
-    data2 = Business_Time_graph.objects.filter(Q(employee_no3__icontains = form_choices.member1)|\
-      Q(employee_no3__icontains = form_choices.member2)|\
-      Q(employee_no3__icontains = form_choices.member3)|\
-      Q(employee_no3__icontains = form_choices.member4)|\
-      Q(employee_no3__icontains = form_choices.member5)|\
-      Q(employee_no3__icontains = form_choices.member6)|\
-      Q(employee_no3__icontains = form_choices.member7)|\
-      Q(employee_no3__icontains = form_choices.member8)|\
-      Q(employee_no3__icontains = form_choices.member9)|\
-      Q(employee_no3__icontains = form_choices.member10), \
-      employee_no3__icontains = request.session.get('find_employee_no', ''), \
-      work_day2__contains = request.session.get('find_team_day', ''))\
-      .order_by('work_day2').reverse()
+    data2 = Business_Time_graph.objects.filter(employee_no3__in = filtered_list).order_by('work_day2').reverse()
     
     page = Paginator(data2, page_num.menu_row)
+  print(data2)
+  print(form_choices.member1)
 
 
   # HTMLに渡す辞書
@@ -2267,18 +2278,18 @@ def class_detail(request, num):
 
   # 工数区分の選択リスト作成
   for i, m in enumerate(str_list):
-      # 工数区分定義要素を追加
-      def_list.append(eval('kosu_obj.kosu_title_{}'.format(i + 1)))
-  
+    # 工数区分定義要素を追加
+    def_list.append(eval('kosu_obj.kosu_title_{}'.format(i + 1)))
   
   # 作業なし追加
   def_list.append('-')
   # 休憩追加
-  def_list.append('$')
+  def_list.append('休憩')
+
   # 作業無し記号追加
   str_list.append('#')
   # 休憩記号追加
-  str_list.append('休憩')
+  str_list.append('$')
 
   # 工数区分辞書作成
   def_library = dict(zip(str_list, def_list))
