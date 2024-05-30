@@ -336,19 +336,19 @@ def team_main(request):
               # 昨日の工数データが3直以外で整合性NGの場合の処理
               if kosu_get.tyoku2 != '3' and ind == 0 and kosu_get.judgement != True:
                 # 班員フォーローリストにコメント追加
-                team_list.append('{}氏の過去1週間の工数で未入力があります。'.format(member_name_get.name))
+                team_list.append('{}氏の工数未入力があります。'.format(member_name_get.name))
                 break
 
               # 2日以前の工数データが整合性NGの場合の処理
               if kosu_get.judgement != True and ind != 0:
                 # 班員フォーローリストにコメント追加
-                team_list.append('{}氏の過去1週間の工数で未入力があります。'.format(member_name_get.name))
+                team_list.append('{}氏の工数未入力があります。'.format(member_name_get.name))
                 break
 
             # 班員の工数データが該当日にない場合の処理
             else:
               # 班員フォーローリストにコメント追加
-              team_list.append('{}氏の過去1週間の工数で未入力があります。'.format(member_name_get.name))
+              team_list.append('{}氏の工数未入力があります。'.format(member_name_get.name))
               break
 
   # ログイン者の班員登録がない場合の処理
