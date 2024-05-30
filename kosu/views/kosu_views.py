@@ -1524,7 +1524,7 @@ def input(request):
 
       else:
         break_next_day3 = 0
-      print(breaktime_over1)
+
       # 休憩4開始時間のインデント取得
       break_start4 = int(breaktime_over3[1 : 3])*12 + int(breaktime_over3[3 : 5])/5
       # 休憩4終了時間のインデント取得
@@ -4389,17 +4389,8 @@ def detail(request, num):
         detail_list_str = detail_list_str + detail_list[i] + '$'
 
 
-    # 変数リセット
-    kosu_total = 0
-
-    # 工数の合計を計算
-    for k in work_list:
-
-      # 作業内容が入っている場合の処理
-      if k != '#':
-
-        # 工数の合計に5分加算
-        kosu_total += 5
+    # 工数合計取得
+    kosu_total = 1440 - (obj_get.time_work.count('#')*5) - (obj_get.time_work.count('$')*5)
 
     # 工数入力OK_NGリセット
     judgement = False
@@ -5527,45 +5518,36 @@ def schedule(request):
           # ログイン者の情報取得
           member_obj = member.objects.get(employee_no = request.session['login_No'])
 
-
-          # 工数データをリストに解凍
-          kosu_def = list(work_get.time_work)
-
-          # 変数リセット
-          kosu_total = 0
-
-          # 工数の合計を計算
-          for k in kosu_def:
-
-            # 作業内容が入っている場合の処理
-            if k != '#':
-
-              # 工数の合計に5分加算
-              kosu_total += 5
-
+          # 工数合計取得
+          kosu_total = 1440 - (work_get.time_work.count('#')*5) - (work_get.time_work.count('$')*5)
 
           # 工数入力OK_NGリセット
           judgement = False
+
+          if (eval('request.POST["day{}"]'.format(i + 1)) == '休日' or \
+            eval('request.POST["day{}"]'.format(i + 1)) == '年休' or \
+            eval('request.POST["day{}"]'.format(i + 1)) == '代休' or \
+            eval('request.POST["day{}"]'.format(i + 1)) == 'シフト休' or \
+            eval('request.POST["day{}"]'.format(i + 1)) == '公休') and kosu_total == 0:
+            # 工数入力OK_NGをOKに切り替え
+            judgement = True
 
           # 出勤、休出時、工数合計と残業に整合性がある場合の処理
           if (eval('request.POST["day{}"]'.format(i + 1)) == '出勤' or \
               eval('request.POST["day{}"]'.format(i + 1)) == 'シフト出') and \
               kosu_total - int(work_get.over_time) == 470:
-
             # 工数入力OK_NGをOKに切り替え
             judgement = True
 
 
           # 休出時、工数合計と残業に整合性がある場合の処理
           if eval('request.POST["day{}"]'.format(i + 1)) == '休出' and kosu_total == int(work_get.over_time):
-
             # 工数入力OK_NGをOKに切り替え
             judgement = True
 
 
           # 早退・遅刻時、工数合計と残業に整合性がある場合の処理
           if eval('request.POST["day{}"]'.format(i + 1)) == '早退・遅刻' and kosu_total != 0:
-
             # 工数入力OK_NGをOKに切り替え
             judgement = True
 
@@ -5574,11 +5556,9 @@ def schedule(request):
           if (member_obj.shop == 'W1' or member_obj.shop == 'W2' or \
             member_obj.shop == 'A1' or member_obj.shop == 'A2') and \
               work_get.tyoku2 == '1':
-
             # 半前年休時、工数合計と残業に整合性がある場合の処理
             if eval('request.POST["day{}"]'.format(i + 1)) == '半前年休' and \
               kosu_total - int(work_get.over_time) == 230:
-
               # 工数入力OK_NGをOKに切り替え
               judgement = True
 
@@ -5730,6 +5710,19 @@ def schedule(request):
 
         # 工数データがなくPOSTした値が空欄でない場合の処理
         if eval('request.POST["day{}"]'.format(i + 1)) != '' and work_filter.count() == 0:
+          # POST値が休日の場合の処理
+          if eval('request.POST["day{}"]'.format(i + 1)) != '年休' or \
+            eval('request.POST["day{}"]'.format(i + 1)) != '休日' or \
+              eval('request.POST["day{}"]'.format(i + 1)) != '公休' or \
+                eval('request.POST["day{}"]'.format(i + 1)) != 'シフト休' or \
+                  eval('request.POST["day{}"]'.format(i + 1)) != '代休':
+            # 整合性OK
+            judgement = True
+
+          # POST値が休日以外の場合の処理
+          else:
+            # 整合性NG
+            judgement = False
 
           # 従業員番号に該当するmemberインスタンスを取得
           member_instance = member.objects.get(employee_no = request.session['login_No'])
@@ -5741,7 +5734,8 @@ def schedule(request):
                           'work_time' : eval('request.POST["day{}"]'.format(i + 1)), \
                           'time_work' : '#'*288, \
                           'detail_work' : '$'*288, \
-                          'over_time' : 0})
+                          'over_time' : 0, \
+                          'judgement' : judgement})
 
 
     # 勤務フォーム初期値リセット

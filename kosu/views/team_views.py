@@ -59,10 +59,8 @@ def team(request):
     choices_list = [('','')]
     for i in member_obj:
       choices_list.append((i.employee_no, str(i.name)))
-    # フォーム初期値を用意
-    employee_no_list = {'employee_no5' : request.session.get('login_No', None)}
     # フォームを用意
-    form = teamForm(employee_no_list)
+    form = teamForm()
     # フォームの選択肢定義
     form.fields['member1'].choices = choices_list
     form.fields['member2'].choices = choices_list
@@ -104,7 +102,7 @@ def team(request):
 
 
   # ログイン者の班員登録がある場合の処理
-  if data2.count() >= 1:
+  if data2.count() != 0:
     # ログイン者の班員登録のオブジェクトを取得
     obj = team_member.objects.get(employee_no5 = request.session['login_No'])
 
@@ -121,7 +119,7 @@ def team(request):
     for i in member_obj:
       choices_list.append((i.employee_no, str(i.name)))
     # フォーム初期値を用意
-    form_list = {'employee_no5' : request.session.get('login_No', None), \
+    form_list = {'follow' : obj.follow, \
                  'member1' : obj.member1, \
                  'member2' : obj.member2, \
                  'member3' : obj.member3, \
@@ -151,11 +149,17 @@ def team(request):
 
       # 指定IDのレコードにPOST送信された値を上書きする
       team_member.objects.update_or_create(employee_no5 = request.session['login_No'], \
-          defaults = {'member1' : request.POST['member1'], 'member2' : request.POST['member2'], \
-                      'member3' : request.POST['member3'], 'member4' : request.POST['member4'], \
-                      'member5' : request.POST['member5'], 'member6' : request.POST['member6'], \
-                      'member7' : request.POST['member7'], 'member8' : request.POST['member8'], \
-                      'member9' : request.POST['member9'], 'member10' : request.POST['member10']})
+          defaults = {'follow' : 'follow' in request.POST, \
+                      'member1' : request.POST['member1'], \
+                      'member2' : request.POST['member2'], \
+                      'member3' : request.POST['member3'], \
+                      'member4' : request.POST['member4'], \
+                      'member5' : request.POST['member5'], \
+                      'member6' : request.POST['member6'], \
+                      'member7' : request.POST['member7'], \
+                      'member8' : request.POST['member8'], \
+                      'member9' : request.POST['member9'], \
+                      'member10' : request.POST['member10']})
 
       # 班員メイン画面をリダイレクトする
       return redirect(to = '/team_main')
@@ -624,8 +628,7 @@ def team_kosu(request, num):
     data2 = Business_Time_graph.objects.filter(employee_no3__in = filtered_list).order_by('work_day2').reverse()
     
     page = Paginator(data2, page_num.menu_row)
-  print(data2)
-  print(form_choices.member1)
+
 
 
   # HTMLに渡す辞書
@@ -1691,7 +1694,7 @@ def team_calendar(request):
 
 
 
-# 班員設定画面定義
+# 工数入力可否(ショップ単位)画面定義
 def class_list(request):
 
   # 未ログインならログインページに飛ぶ
@@ -1802,8 +1805,6 @@ def class_list(request):
 
     # 曜日リスト作成するループ
     for d in range(1, last_day_of_month.day + 1):
-      print(d)
-
       # 曜日を取得する日を作成
       week_day = datetime.date(int(request.POST['year']), int(request.POST['month']), d)
 
@@ -1854,15 +1855,12 @@ def class_list(request):
 
     # 前回のショップ検索履歴がある場合の処理
     if request.session.get('find_shop', '') != '':
-
       # 検索履歴ショップの人員取得
-      member_obj_filter = member.objects.filter(shop__contains = request.session.get('find_shop', ''))\
+      member_obj_filter = member.objects.filter(shop__contains = request.session['find_shop'])\
                                         .order_by('employee_no')
-      
 
     # 前回のショップ検索履歴がない場合の処理
     else:
-
       # ログイン者と同じショップの人員取得
       member_obj_filter = member.objects.filter(shop__contains = data.shop).order_by('employee_no')
 
@@ -1892,10 +1890,8 @@ def class_list(request):
     last_day_of_month = next_month - datetime.timedelta(days = 1)
 
 
-
     # 指定ショップの人員毎に工数入力可否をリストにするループ
     for name in name_list:
-
       # 仮リストを空で定義
       provisional_list = []
       # 仮リストに人員名を入れる

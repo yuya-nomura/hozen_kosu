@@ -15,7 +15,7 @@
   <form action="{% url 'team' %}" method="post">
   {% csrf_token %}
     <table class="table table-custom">
-      <td hidden>{{form.employee_no5}}</td>
+      <tr><th>フォローメッセージON/OFF</th><td>{{form.follow}}</td></tr>
       <tr><th>メンバー1</th><td>{{form.member1}}</td></tr>
       <tr><th>メンバー2</th><td>{{form.member2}}</td></tr>
       <tr><th>メンバー3</th><td>{{form.member3}}</td></tr>

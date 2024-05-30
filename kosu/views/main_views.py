@@ -278,11 +278,83 @@ def team_main(request):
   # ログイン者の情報取得
   data = member.objects.get(employee_no = request.session['login_No'])
 
-
   # ログイン者に権限がなければメインページに戻る
   if data.authority == False:
 
     return redirect(to = '/')
+
+  # 今日の日時を変数に格納
+  today = datetime.date.today()
+
+  # フォロー表示変数定義
+  follow_display = False
+
+  # 日付リスト初期状態定義
+  day_list = []
+  # 日付リスト作成ループ
+  for d in range(1, 8):
+    # 日付リストに今日から1週間前までの日付を入れる
+    day_list.append(today - datetime.timedelta(days=d))
+
+  # ログイン者の班員登録あるか確認
+  team_filter = team_member.objects.filter(employee_no5 = request.session['login_No'])
+
+  # ログイン者の班員登録がある場合の処理
+  if team_filter.count() != 0:
+    # ログイン者の班員情報取得
+    team_get = team_member.objects.get(employee_no5 = request.session['login_No'])
+
+    # フォロー表示
+    follow_display = team_get.follow
+
+    # 班員フォロー用リスト定義
+    team_list = []
+    # 班員フォロー用リスト作成するループ
+    for t in range(1, 11):
+      # ログイン者の班員情報がある場合の処理
+      if eval('team_get.member{}'.format(t)) != '':
+        # 班員が人員情報にいるか確認
+        member_name_filter = member.objects.filter(employee_no =  eval('team_get.member{}'.format(t)))
+
+        # 人員登録がある場合の処理
+        if member_name_filter.count() != 0:
+          # 班員の人員情報取得
+          member_name_get = member.objects.get(employee_no =  eval('team_get.member{}'.format(t)))
+
+          # 班員の過去1週間の工数データが正しく入力されているか確認するループ
+          for ind, dd in enumerate(day_list):
+            # 班員の工数データが該当日にあるか確認
+            kosu_filter = Business_Time_graph.objects.filter(employee_no3 = eval('team_get.member{}'.format(t)), \
+                                                             work_day2 = dd)
+            
+            # 班員の工数データが該当日にあった場合の処理
+            if kosu_filter.count() != 0:
+              # 班員の該当日の工数データ取得
+              kosu_get = Business_Time_graph.objects.get(employee_no3 = eval('team_get.member{}'.format(t)), \
+                                                         work_day2 = dd)
+              
+              # 昨日の工数データが3直以外で整合性NGの場合の処理
+              if kosu_get.tyoku2 != '3' and ind == 0 and kosu_get.judgement != True:
+                # 班員フォーローリストにコメント追加
+                team_list.append('{}さんの過去1週間の工数データで未入力箇所があります。'.format(member_name_get.name))
+                break
+
+              # 2日以前の工数データが整合性NGの場合の処理
+              if kosu_get.judgement != True and ind != 0:
+                # 班員フォーローリストにコメント追加
+                team_list.append('{}さんの過去1週間の工数データで未入力箇所があります。'.format(member_name_get.name))
+                break
+
+            # 班員の工数データが該当日にない場合の処理
+            else:
+              # 班員フォーローリストにコメント追加
+              team_list.append('{}さんの過去1週間の工数データで未入力箇所があります。'.format(member_name_get.name))
+              break
+
+  # ログイン者の班員登録がない場合の処理
+  else:
+    # 班員情報に空を入れる
+    team_list = []
 
 
 
@@ -290,6 +362,8 @@ def team_main(request):
   context = {
     'title' : '班員MENU',
     'data' : data,
+    'team' : team_list,
+    'follow_display' : follow_display,
     }
 
 

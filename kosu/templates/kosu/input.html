@@ -23,7 +23,7 @@
     {% csrf_token %}
     {% for message in messages %}
     <div {% if message.tags %}class="{{ message.tags }}"{% endif %}>
-      <p  class="text-danger">
+      <p class="text-danger">
         {{ message }}
       </p>
     </div>

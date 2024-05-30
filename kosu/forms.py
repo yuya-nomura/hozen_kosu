@@ -254,7 +254,6 @@ class inputdayForm(forms.Form):
 
 
 class teamForm(forms.Form):
-  employee_no5 = forms.IntegerField(label = '従業員番号')
   member1 = forms.ChoiceField(label = 'メンバー従業員番号1', required = False)
   member2 = forms.ChoiceField(label = 'メンバー従業員番号2', required = False)
   member3 = forms.ChoiceField(label = 'メンバー従業員番号3', required = False)
@@ -265,6 +264,7 @@ class teamForm(forms.Form):
   member8 = forms.ChoiceField(label = 'メンバー従業員番号8', required = False)
   member9 = forms.ChoiceField(label = 'メンバー従業員番号9', required = False)
   member10 = forms.ChoiceField(label = 'メンバー従業員番号10', required = False)
+  follow = forms.BooleanField(label = 'フォローON/OFF', required = False)
 
 
 

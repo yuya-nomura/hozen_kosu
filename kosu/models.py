@@ -68,7 +68,7 @@ class Business_Time_graph(models.Model):
     breaktime_over3 = models.CharField('残業休憩時間3', max_length = 9, blank = True, null = True)
     work_time = models.CharField('就業形態', max_length = 100, blank = True, null = True)
     judgement = models.BooleanField('工数入力OK_NG', null = True)
-    break_change = models.BooleanField('工数入力OK_NG', null = True)
+    break_change = models.BooleanField('休憩変更チェック', null = True)
 
     def __str__(self):
         return str(self.id) + '__' + str(self.work_day2) + ':' + str(self.employee_no3)
@@ -87,6 +87,7 @@ class team_member(models.Model):
     member8 = models.CharField('メンバー従業員番号8', max_length = 6, blank = True, null = True)
     member9 = models.CharField('メンバー従業員番号9', max_length = 6, blank = True, null = True)
     member10 = models.CharField('メンバー従業員番号10', max_length = 6, blank = True, null = True)
+    follow = models.BooleanField('フォローON/OFF', null = True)
 
     def __str__(self):
         return str(self.employee_no5)
