@@ -471,6 +471,12 @@ class inquiry_findForm(forms.Form):
   name_list = forms.ChoiceField(label = '氏名', required = False)
 
 
+class CustomTimeInput(forms.TimeInput):
+    input_type = 'time'
+    def __init__(self, *args, **kwargs):
+        kwargs['attrs'] = {'step': '300'}  # 5分間隔（300秒）
+        super().__init__(*args, **kwargs)
+
 
 shop_list = [
   ('選択無し', '選択無し'),
@@ -493,7 +499,8 @@ class ShopNameForm(forms.Form):
   name_choice2 = forms.ChoiceField(choices = [])
   shop_choice3 = forms.ChoiceField(choices = shop_list)
   name_choice3 = forms.ChoiceField(choices = [])
-
+  time = forms.TimeField(widget=CustomTimeInput())
+  
   def __init__(self, *args, **kwargs):
     super().__init__(*args, **kwargs)
     for i in range(1, 4):
