@@ -2947,7 +2947,8 @@ def input(request):
       for_list.append(def_time[k])
       for_list.append(detail_time[k])
       time_display_list.append(for_list)
-
+  else:
+    def_n = 0
 
 
   # HTMLに渡す辞書
