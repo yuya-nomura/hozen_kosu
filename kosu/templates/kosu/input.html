@@ -61,8 +61,9 @@
           <input type="submit" value="現在時刻"  name="now_time" class="btn btn-blue2 mt-2 btn-sm">
         </th>
         <td>
-          {{form.start_hour}}：{{form.start_min}}<br>～<br>
-          {{form.end_hour}}：{{form.end_min}}　翌日{{form.tomorrow_check}}
+          <input type="time" id="start_time" name="start_time" value={{default_start_time}} required>～
+          <input type="time" id="end_time" name="end_time" value={{default_end_time}} required>
+          翌日{{form.tomorrow_check}}
         </td>
       </tr>
       {% if member_obj.employee_no != 49337 %}
@@ -146,6 +147,28 @@
   <div style="width:100%">
     <canvas id="chart" height="160pt"></canvas>
   </div>
+
+  <script>
+    function roundTimeValue(timeValue, interval) {
+      const [hours, minutes] = timeValue.split(':').map(Number);
+      const roundedMinutes = interval * Math.round(minutes / interval);
+      const newHours = roundedMinutes >= 60 ? (hours + 1) % 24 : hours;
+      const newMinutes = roundedMinutes >= 60 ? roundedMinutes - 60 : roundedMinutes;
+      return `${newHours.toString().padStart(2, '0')}:${newMinutes.toString().padStart(2, '0')}`;
+    }
+    function updateTimeInput(input, interval) {
+      if (input.value) {
+        input.value = roundTimeValue(input.value, interval);
+      }
+    }
+    document.addEventListener('DOMContentLoaded', () => {
+      const timeFields = document.querySelectorAll('input[type="time"]');
+      timeFields.forEach((field) => {
+        field.addEventListener('change', () => updateTimeInput(field, 5));
+      });
+    });
+  </script>
+
   <script>
     var label_list = [];
     var data_list = [];

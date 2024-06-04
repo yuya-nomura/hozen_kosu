@@ -36,7 +36,8 @@
       <p class="h4">履歴を削除する時間を指定</p>
     </tr>
     <tr>
-      {{form.start_hour}}：{{form.start_min}}　～　{{form.end_hour}}：{{form.end_min}}　　　
+      <input type="time" id="start_time" name="start_time" value={{default_start_time}} required>　～　
+      <input type="time" id="end_time" name="end_time" value={{default_end_time}} required>　　　
       <input type="submit" value="工数削除" class="btn btn-blue2 mt-2">
     </tr>
     <tr>
@@ -58,5 +59,26 @@
     {% endfor %}
   </table>
   </form>
+
+  <script>
+    function roundTimeValue(timeValue, interval) {
+      const [hours, minutes] = timeValue.split(':').map(Number);
+      const roundedMinutes = interval * Math.round(minutes / interval);
+      const newHours = roundedMinutes >= 60 ? (hours + 1) % 24 : hours;
+      const newMinutes = roundedMinutes >= 60 ? roundedMinutes - 60 : roundedMinutes;
+      return `${newHours.toString().padStart(2, '0')}:${newMinutes.toString().padStart(2, '0')}`;
+    }
+    function updateTimeInput(input, interval) {
+      if (input.value) {
+        input.value = roundTimeValue(input.value, interval);
+      }
+    }
+    document.addEventListener('DOMContentLoaded', () => {
+      const timeFields = document.querySelectorAll('input[type="time"]');
+      timeFields.forEach((field) => {
+        field.addEventListener('change', () => updateTimeInput(field, 5));
+      });
+    });
+  </script>
 </body>
 </html>

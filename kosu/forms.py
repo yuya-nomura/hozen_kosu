@@ -28,46 +28,6 @@ class input_kosuForm(forms.Form):
     ('3', '3直'), 
     ('4', '常昼')]
 
-  hour_list = [
-    ('00', '00'),
-    ('01', '01'),
-    ('02', '02'),
-    ('03', '03'),
-    ('04', '04'),
-    ('05', '05'),
-    ('06', '06'),
-    ('07', '07'),
-    ('08', '08'),
-    ('09', '09'),
-    ('10', '10'),
-    ('11', '11'),
-    ('12', '12'),
-    ('13', '13'),
-    ('14', '14'),
-    ('15', '15'),
-    ('16', '16'),
-    ('17', '17'),
-    ('18', '18'),
-    ('19', '19'),
-    ('20', '20'),
-    ('21', '21'),
-    ('22', '22'),
-    ('23', '23')]
-
-  min_list = [
-    ('00', '00'),
-    ('05', '05'),
-    ('10', '10'),
-    ('15', '15'),
-    ('20', '20'),
-    ('25', '25'),
-    ('30', '30'),
-    ('35', '35'),
-    ('40', '40'),
-    ('45', '45'),
-    ('50', '50'),
-    ('55', '55')]
-
   employment_list = [
     ('', ''),
     ('出勤', '出勤'),
@@ -79,10 +39,6 @@ class input_kosuForm(forms.Form):
     ]
 
   tyoku2 = forms.ChoiceField(label = '直', choices = tyoku_list, required = False)
-  start_hour = forms.ChoiceField(label = '作業開始時', choices = hour_list)
-  start_min = forms.ChoiceField(label = '作業開始分', choices = min_list)
-  end_hour = forms.ChoiceField(label = '作業終了時', choices = hour_list)
-  end_min = forms.ChoiceField(label = '作業終了分', choices = min_list)
   tomorrow_check = forms.BooleanField(label = '日跨ぎ', required = False)
   kosu_def_list = forms.ChoiceField(label = '工数区分', required = False)
   work_detail = forms.CharField(label='作業詳細', required = False, \
@@ -90,116 +46,6 @@ class input_kosuForm(forms.Form):
   over_work = forms.IntegerField(label = '残業', required = False)
   work = forms.ChoiceField(label = '勤務', choices=employment_list, required = False)
   break_change = forms.BooleanField(label = '休憩変更', required = False)
-
-
-
-class timeForm(forms.Form):
-  hour_list = [
-    ('00', '00'),
-    ('01', '01'),
-    ('02', '02'),
-    ('03', '03'),
-    ('04', '04'),
-    ('05', '05'),
-    ('06', '06'),
-    ('07', '07'),
-    ('08', '08'),
-    ('09', '09'),
-    ('10', '10'),
-    ('11', '11'),
-    ('12', '12'),
-    ('13', '13'),
-    ('14', '14'),
-    ('15', '15'),
-    ('16', '16'),
-    ('17', '17'),
-    ('18', '18'),
-    ('19', '19'),
-    ('20', '20'),
-    ('21', '21'),
-    ('22', '22'),
-    ('23', '23'),
-  ]
-
-  min_list = [
-    ('00', '00'),
-    ('05', '05'),
-    ('10', '10'),
-    ('15', '15'),
-    ('20', '20'),
-    ('25', '25'),
-    ('30', '30'),
-    ('35', '35'),
-    ('40', '40'),
-    ('45', '45'),
-    ('50', '50'),
-    ('55', '55'),
-  ]
-
-  break_time1_start_hour = forms.ChoiceField(label = '1直昼休憩開始時', choices = hour_list)
-  break_time1_start_min = forms.ChoiceField(label = '1直昼休憩開始分', choices = min_list)
-  break_time1_end_hour = forms.ChoiceField(label = '1直昼休憩終了時', choices = hour_list)
-  break_time1_end_min = forms.ChoiceField(label = '1直昼休憩終了分', choices = min_list)
-  break_time1_over1_start_hour = forms.ChoiceField(label = '1直残業休憩1開始時', choices = hour_list)
-  break_time1_over1_start_min = forms.ChoiceField(label = '1直残業休憩1開始分', choices = min_list)
-  break_time1_over1_end_hour = forms.ChoiceField(label = '1直残業休憩1終了時', choices = hour_list)
-  break_time1_over1_end_min = forms.ChoiceField(label = '1直残業休憩1終了分', choices = min_list)
-  break_time1_over2_start_hour = forms.ChoiceField(label = '1直残業休憩2開始時', choices = hour_list)
-  break_time1_over2_start_min = forms.ChoiceField(label = '1直残業休憩2開始分', choices = min_list)
-  break_time1_over2_end_hour = forms.ChoiceField(label = '1直残業休憩2終了時', choices = hour_list)
-  break_time1_over2_end_min = forms.ChoiceField(label = '1直残業休憩2終了分', choices = min_list)
-  break_time1_over3_start_hour = forms.ChoiceField(label = '1直残業休憩3開始時', choices = hour_list)
-  break_time1_over3_start_min = forms.ChoiceField(label = '1直残業休憩3開始分', choices = min_list)
-  break_time1_over3_end_hour = forms.ChoiceField(label = '1直残業休憩3終了時', choices = hour_list)
-  break_time1_over3_end_min = forms.ChoiceField(label = '1直残業休憩3終了分', choices = min_list)
-  break_time2_start_hour = forms.ChoiceField(label = '2直昼休憩開始時', choices = hour_list)
-  break_time2_start_min = forms.ChoiceField(label = '2直昼休憩開始分', choices = min_list)
-  break_time2_end_hour = forms.ChoiceField(label = '2直昼休憩終了時', choices = hour_list)
-  break_time2_end_min = forms.ChoiceField(label = '2直昼休憩終了分', choices = min_list)
-  break_time2_over1_start_hour = forms.ChoiceField(label = '2直残業休憩1開始時', choices = hour_list)
-  break_time2_over1_start_min = forms.ChoiceField(label = '2直残業休憩1開始分', choices = min_list)
-  break_time2_over1_end_hour = forms.ChoiceField(label = '2直残業休憩1終了時', choices = hour_list)
-  break_time2_over1_end_min = forms.ChoiceField(label = '2直残業休憩1終了分', choices = min_list)
-  break_time2_over2_start_hour = forms.ChoiceField(label = '2直残業休憩2開始時', choices = hour_list)
-  break_time2_over2_start_min = forms.ChoiceField(label = '2直残業休憩2開始分', choices = min_list)
-  break_time2_over2_end_hour = forms.ChoiceField(label = '2直残業休憩2終了時', choices = hour_list)
-  break_time2_over2_end_min = forms.ChoiceField(label = '2直残業休憩2終了分', choices = min_list)
-  break_time2_over3_start_hour = forms.ChoiceField(label = '2直残業休憩3開始時', choices = hour_list)
-  break_time2_over3_start_min = forms.ChoiceField(label = '2直残業休憩3開始分', choices = min_list)
-  break_time2_over3_end_hour = forms.ChoiceField(label = '2直残業休憩3終了時', choices = hour_list)
-  break_time2_over3_end_min = forms.ChoiceField(label = '2直残業休憩3終了分', choices = min_list)
-  break_time3_start_hour = forms.ChoiceField(label = '3直昼休憩開始時', choices = hour_list)
-  break_time3_start_min = forms.ChoiceField(label = '3直昼休憩開始分', choices = min_list)
-  break_time3_end_hour = forms.ChoiceField(label = '3直昼休憩終了時', choices = hour_list)
-  break_time3_end_min = forms.ChoiceField(label = '3直昼休憩終了分', choices = min_list)
-  break_time3_over1_start_hour = forms.ChoiceField(label = '3直残業休憩1開始時', choices = hour_list)
-  break_time3_over1_start_min = forms.ChoiceField(label = '3直残業休憩1開始分', choices = min_list)
-  break_time3_over1_end_hour = forms.ChoiceField(label = '3直残業休憩1終了時', choices = hour_list)
-  break_time3_over1_end_min = forms.ChoiceField(label = '3直残業休憩1終了分', choices = min_list)
-  break_time3_over2_start_hour = forms.ChoiceField(label = '3直残業休憩2開始時', choices = hour_list)
-  break_time3_over2_start_min = forms.ChoiceField(label = '3直残業休憩2開始分', choices = min_list)
-  break_time3_over2_end_hour = forms.ChoiceField(label = '3直残業休憩2終了時', choices = hour_list)
-  break_time3_over2_end_min = forms.ChoiceField(label = '3直残業休憩2終了分', choices = min_list)
-  break_time3_over3_start_hour = forms.ChoiceField(label = '3直残業休憩3開始時', choices = hour_list)
-  break_time3_over3_start_min = forms.ChoiceField(label = '3直残業休憩3開始分', choices = min_list)
-  break_time3_over3_end_hour = forms.ChoiceField(label = '3直残業休憩3終了時', choices = hour_list)
-  break_time3_over3_end_min = forms.ChoiceField(label = '3直残業休憩3終了分', choices = min_list)
-  break_time4_start_hour = forms.ChoiceField(label = '常昼昼休憩開始時', choices = hour_list)
-  break_time4_start_min = forms.ChoiceField(label = '常昼昼休憩開始分', choices = min_list)
-  break_time4_end_hour = forms.ChoiceField(label = '常昼昼休憩終了時', choices = hour_list)
-  break_time4_end_min = forms.ChoiceField(label = '常昼昼休憩終了分', choices = min_list)
-  break_time4_over1_start_hour = forms.ChoiceField(label = '常昼残業休憩1開始時', choices = hour_list)
-  break_time4_over1_start_min = forms.ChoiceField(label = '常昼残業休憩1開始分', choices = min_list)
-  break_time4_over1_end_hour = forms.ChoiceField(label = '常昼残業休憩1終了時', choices = hour_list)
-  break_time4_over1_end_min = forms.ChoiceField(label = '常昼残業休憩1終了分', choices = min_list)
-  break_time4_over2_start_hour = forms.ChoiceField(label = '常昼残業休憩2開始時', choices = hour_list)
-  break_time4_over2_start_min = forms.ChoiceField(label = '常昼残業休憩2開始分', choices = min_list)
-  break_time4_over2_end_hour = forms.ChoiceField(label = '常昼残業休憩2終了時', choices = hour_list)
-  break_time4_over2_end_min = forms.ChoiceField(label = '常昼残業休憩2終了分', choices = min_list)
-  break_time4_over3_start_hour = forms.ChoiceField(label = '常昼残業休憩3開始時', choices = hour_list)
-  break_time4_over3_start_min = forms.ChoiceField(label = '常昼残業休憩3開始分', choices = min_list)
-  break_time4_over3_end_hour = forms.ChoiceField(label = '常昼残業休憩3終了時', choices = hour_list)
-  break_time4_over3_end_min = forms.ChoiceField(label = '常昼残業休憩3終了分', choices = min_list)
 
 
 
