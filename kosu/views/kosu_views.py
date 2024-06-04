@@ -2895,12 +2895,12 @@ def input(request):
     kosu_obj = kosu_division.objects.get(kosu_name = request.session.get('input_def', None))
 
     # 工数区分登録カウンターリセット
-    n = 0
+    def_n = 0
 
     # 工数区分登録数カウント
     for kosu_num in range(1, 50):
       if eval('kosu_obj.kosu_title_{}'.format(kosu_num)) != '':
-        n = kosu_num
+        def_n = kosu_num
 
   
     # 工数区分処理用記号リスト用意
@@ -2910,7 +2910,7 @@ def input(request):
                       'q', 'r', 's', 't', 'u', 'v', 'w', 'x',]
 
     # リストの長さを工数区分の登録数に応じて調整
-    del str_list[n:]
+    del str_list[def_n : ]
     
     # 工数区分の選択リスト作成
     for i, m in enumerate(str_list):
@@ -2960,7 +2960,7 @@ def input(request):
     'graph_list' : graph_list,
     'graph_item' : graph_item,
     'graph_kosu_list' : graph_kosu_list,
-    'n' : n,
+    'def_n' : def_n,
     'OK_NG' : ok_ng,
     'obj_link' : obj_link,
     'time_display_list' : time_display_list,
