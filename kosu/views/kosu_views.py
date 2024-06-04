@@ -2531,7 +2531,7 @@ def input(request):
     # エラー時の残業保持がセッションにない場合の処理
     else:
       # 勤務初期値に空を入れる
-      over_work_default = ''
+      over_work_default = 0
 
 
   # 初期値を設定するリスト作成
@@ -2947,8 +2947,11 @@ def input(request):
       for_list.append(def_time[k])
       for_list.append(detail_time[k])
       time_display_list.append(for_list)
+  
+  # 工数データない場合の処理
   else:
     def_n = 0
+
 
 
   # HTMLに渡す辞書
