@@ -119,17 +119,17 @@
         </td>
       </tr>
       <tr>
-        <th>
+        <th style="text-align:center;">
           <input type="submit" value="休憩変更登録"  name="change_display" class="btn btn-blue2 mt-2">
         </th>
-        <td>
+        <td style="text-align:center;">
           <input type="submit" value="工数登録"  name="Registration" class="btn btn-blue1 mt-2">
         </td>
       </tr>
       {% if obj_link != '' %}
       <tr>
         <th style="text-align:center;">
-          工数詳細　　　　　　
+          工数詳細　　　　　
         </th>
         <th>
           工数区分
@@ -138,7 +138,7 @@
       {% for i in time_display_list %}
       <tr>
         {% for k in i %}
-        <td>
+        <td style="text-align:center;">
         {{k}}
         </td>
         {% endfor %}
