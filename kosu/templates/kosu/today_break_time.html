@@ -21,6 +21,7 @@
   {% endfor %}
   <form action="{% url 'today_break_time' %}" method="post">
     {% csrf_token %}
+    <div class="table-responsive">
     <table class="table table-custom">
       <tr>
         <th>昼休憩</th>
@@ -57,6 +58,7 @@
         <input type="submit" value="休憩時間登録" class="btn btn-blue2 mt-2">
       </td></th></tr>
     </table>
+    </div>
   </form>
 
   <script>
