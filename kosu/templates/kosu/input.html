@@ -29,7 +29,7 @@
     {% endfor %}
     <table class="table table-custom">
       <tr>
-        <th>
+        <th style="text-align:center;">
           就業日
         </th>
         <td>
@@ -39,7 +39,7 @@
         </td>
       </tr>
       <tr>
-        <th>
+        <th style="text-align:center;">
           勤務
         </th>
         <td>
@@ -47,7 +47,7 @@
         </td>
       </tr>
       <tr>
-        <th>
+        <th style="text-align:center;">
           勤務直
         </th>
         <td>
@@ -55,9 +55,9 @@
         </td>
       </tr>
       <tr>
-        <th>
+        <th style="text-align:center;">
           作業時間<br>
-          <input type="submit" value="現在時刻"  name="now_time" class="btn btn-blue2 mt-2 btn-sm">
+          <input type="submit" value="現在時刻"  name="now_time" class="btn btn-blue2 mt-2">
         </th>
         <td>
           <input type="time" id="start_time" name="start_time" value={{default_start_time}} required>
@@ -68,7 +68,7 @@
       </tr>
       {% if member_obj.employee_no != 49337 %}
       <tr>
-        <th>
+        <th style="text-align:center;">
           業務区分
         </th>
         <td>
@@ -76,7 +76,7 @@
         </td>
       </tr>
       <tr>
-        <th>
+        <th style="text-align:center;">
           作業詳細
         </th>
         <td>
@@ -85,7 +85,7 @@
       </tr>
       {% else %}
       <tr>
-        <th>
+        <th style="text-align:center;">
           作業詳細
         </th>
         <td>
@@ -93,7 +93,7 @@
         </td>
       </tr>
       <tr>
-        <th>
+        <th style="text-align:center;">
           業務区分
         </th>
         <td>
@@ -102,16 +102,16 @@
       </tr>
       {% endif %}
       <tr>
-        <th>
+        <th style="text-align:center;">
           残業
         </th>
         <td>
-          {{form.over_work}}　
+          {{form.over_work}}<br>
           <input type="submit" value="残業のみ修正"  name="over_time_correction" class="btn btn-blue2 mt-2">
         </td>
       </tr>
       <tr>
-        <th>
+        <th style="text-align:center;">
           休憩変更
         </th>
         <td>
@@ -120,20 +120,20 @@
       </tr>
       <tr>
         <th style="text-align:center;">
-          <input type="submit" value="休憩変更登録"  name="change_display" class="btn btn-blue2 mt-2">
+          <input type="submit" value="休憩変更登録"  name="change_display" class="btn btn-blue2 mt-2 btn-sm">
         </th>
-        <td style="text-align:center;">
+        <td>
           <input type="submit" value="工数登録"  name="Registration" class="btn btn-blue1 mt-2">
         </td>
       </tr>
       {% if obj_link != '' %}
       <tr>
         <th style="text-align:center;">
-          工数詳細　　　　　
+          工数詳細
         </th>
-        <th>
+        <th style="text-align:center;">
           工数区分
-        </th style="text-align:center;">
+        </th>
       </tr>
       {% for i in time_display_list %}
       <tr>
