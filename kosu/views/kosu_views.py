@@ -4220,6 +4220,14 @@ def detail(request, num):
     start_time = request.POST['start_time']
     end_time = request.POST['end_time']
 
+    # 時間指定を空でPOSTした場合の処理
+    if start_time == '' or end_time == '':
+      # エラーメッセージ出力
+      messages.error(request, '時間が指定されていません。ERROR005')
+      # このページをリダイレクト
+      return redirect(to = '/detail/{}'.format(num))
+    
+
     # 削除開始時間と終了時間のインデント取得
     start_indent = int(int(start_time[0 : 2])*12 + int(start_time[-2 : ])/5)
     end_indent = int(int(end_time[0 : 2])*12 + int(end_time[-2 : ])/5)
@@ -4227,7 +4235,6 @@ def detail(request, num):
 
     # 削除開始時間が削除終了時間より遅い時間の場合の処理
     if start_indent > end_indent:
-
       # エラーメッセージ出力
       messages.error(request, '削除の開始時間が終了時間よりも遅い時間を指定されましたので処理できません。ERROR011')
       # このページをリダイレクト

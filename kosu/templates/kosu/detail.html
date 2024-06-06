@@ -9,7 +9,7 @@
   <link rel="stylesheet" type="text/css" href="{% static 'kosu/css/bootstrap.css' %}">
 </head>
 <body class="container">
-  <h1 class="display-4 text-primary">{{title}}</h1>
+  <h1 class="display-6 text-primary">{{day}}の{{title}}</h1>
   <p class="h6">
     <a href="{% url 'kosu_list' 1 %}">履歴へ</a>　　　
     <a href="{% url 'input' %}">工数入力へ</a>
@@ -26,17 +26,11 @@
   <p>　</p>
   <table class="table">
     <tr>
-      <p class="h5">{{day}}の工数入力状況</p>
-    </tr>
-    <tr>
-      <p>　</p>
-    </tr>
-    <tr>
       <p class="h4">履歴を削除する時間を指定</p>
     </tr>
     <tr>
       <input type="time" id="start_time" name="start_time" value={{default_start_time}} required>　～　
-      <input type="time" id="end_time" name="end_time" value={{default_end_time}} required>　　　
+      <input type="time" id="end_time" name="end_time" value={{default_end_time}} required><br>
       <input type="submit" value="工数削除" class="btn btn-blue2 mt-2">
     </tr>
     <tr>
