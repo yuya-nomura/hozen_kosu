@@ -5928,28 +5928,6 @@ def schedule(request):
 
 
 
-# 工数推移氏名動的フォーム
-def load_names_for_shop(request):
-
-  shop = request.GET.get('shop')
-  # employee_no と name のペアを取得して返す
-  names = member.objects.filter(shop=shop).order_by('employee_no').values_list('employee_no', 'name')
-  # JsonResponseを使ってリストを返す (辞書リストに変換)
-  names = [{'employee_no': emp_no, 'name': name} for emp_no, name in names]
-
-
-
-  return JsonResponse(names, safe=False)
-
-
-
-
-
-#--------------------------------------------------------------------------------------------------------
-
-
-
-
 
 # 工数推移確認画面定義
 def kosu_transition(request):
@@ -5964,23 +5942,13 @@ def kosu_transition(request):
 
 
 
-  # POST時の処理
-  if request.method == 'POST':
-    # 人員指定フォーム定義
-    form = ShopNameForm(request.POST)
 
-
-  # GETリクエストの処理
-  else:
-    # 人員指定フォーム定義(初期値にログイン者のショップ指定)
-    form = ShopNameForm()
 
 
 
   context = {
-      'title': '工数推移',
-      'form': form,
-  }
+      'title': 'トライ',
+      }
 
 
 

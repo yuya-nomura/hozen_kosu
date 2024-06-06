@@ -49,5 +49,4 @@ urlpatterns = [
     path('inquiry_list/<int:num>',inquiry_views.inquiry_list, name = 'inquiry_list'),
     path('inquiry_display/<int:num>',inquiry_views.inquiry_display, name = 'inquiry_display'),
     path('inquiry_edit/<int:num>',inquiry_views.inquiry_edit, name = 'inquiry_edit'),
-    path('your-endpoint/', kosu_views.load_names_for_shop, name='load_names_for_shop'),
-]
+    ]
