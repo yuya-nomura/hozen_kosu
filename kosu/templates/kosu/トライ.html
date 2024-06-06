@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>ClockPicker Example</title>
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/clockpicker/0.0.7/bootstrap-clockpicker.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/clockpicker/0.0.7/bootstrap-clockpicker.min.js"></script>
+</head>
+<body>
+<table class="table table-custom">
+  <tr>
+    <th>
+      作業時間
+    </th>
+    <td>
+      <div class="container">
+        <div class="input-group clockpicker">
+          <input type="text" class="form-control" id="start_time" name="start_time" value={{default_start_time}} value="09:30">
+          <span class="input-group-addon">
+          <span class="glyphicon glyphicon-time"></span>
+          </span>
+        </div>
+      </div>
+      <br><div class="container">～</div><br>
+      <div class="container">
+        <div class="input-group clockpicker">
+          <input type="text" class="form-control" id="end_time" name="end_time" value={{default_end_time}} value="09:30">
+          <span class="input-group-addon">
+          <span class="glyphicon glyphicon-time"></span>
+          </span>
+        </div>
+      </div>
+    </td>
+  </tr>
+
+<script type="text/javascript">
+  $(document).ready(function() {
+    // ClockPickerの初期化
+    $('.clockpicker').clockpicker({
+      // 直接入力された値も変更イベントで検知して処理する
+      afterDone: function() {
+        var input = $('.clockpicker').find('input');
+        roundToFiveMinutes(input);
+      }
+    }).find('input').change(function() {
+      // ピッカーからの入力だけでなく、直接入力された場合にも丸める
+      roundToFiveMinutes($(this));
+    });
+
+    function roundToFiveMinutes(input) {
+      var timeValue = input.val();
+      if (!timeValue) {
+        return; // 時刻が未入力の場合は処理しない
+      }
+      var timeParts = timeValue.split(':');
+      var hours = parseInt(timeParts[0], 10);
+      var minutes = parseInt(timeParts[1], 10);
+
+      // 分を5分単位に丸める
+      minutes = 5 * Math.round(minutes / 5);
+      if (minutes === 60) {
+        // 丸めた結果が60分の場合は時を繰り上げ
+        hours = (hours + 1) % 24;
+        minutes = 0;
+      }
+
+      // 時間をHH:MM形式で再フォーマットして入力フィールドに設定
+      var roundedTime = ('0' + hours).slice(-2) + ':' + ('0' + minutes).slice(-2);
+      input.val(roundedTime);
+    }
+  });
+</script>
