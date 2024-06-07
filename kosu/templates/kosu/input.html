@@ -62,9 +62,9 @@
           <input type="submit" value="現在時刻"  name="now_time" class="btn btn-blue2 mt-2">
         </th>
         <td>
-          <input class="your-time-field" type="text" id="start_time" name="start_time" data-precision="5" value={{default_start_time}}>
-          <br>～<br>
-          <input class="your-time-field" type="text" id="end_time" name="end_time" data-precision="5" value={{default_end_time}}>　
+          <input class="your-time-field form-control" style="width: 65px;" type="text" id="start_time" name="start_time" data-precision="5" value={{default_start_time}}>
+          ～
+          <input class="your-time-field form-control" style="width: 65px;" type="text" id="end_time" name="end_time" data-precision="5" value={{default_end_time}}>　
           翌日{{form.tomorrow_check}}
         </td>
       </tr>
