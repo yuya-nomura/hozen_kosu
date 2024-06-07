@@ -690,11 +690,24 @@ def input(request):
     # 指定日に工数データが既にあるか確認
     obj_filter = Business_Time_graph.objects.filter(employee_no3 = request.session.get('login_No', None), \
                                                     work_day2 = work_day)
+    
+    # 作業開始時間の区切りのインデックス取得
+    start_time_index = start_time.index(':')
+    # 作業開始時取得
+    start_time_hour = start_time[ : start_time_index]
+    # 作業開始分取得
+    start_time_min = start_time[start_time_index + 1 : ]
+    # 作業終了時間の区切りのインデックス取得
+    end_time_index = end_time.index(':')
+    # 作業終了時取得
+    end_time_hour = end_time[ : end_time_index]
+    # 作業終了分取得
+    end_time_min = end_time[end_time_index + 1 : ]
 
     # 作業開始時間のインデント取得
-    start_time_ind = int(int(start_time[0 : 2])*12 + int(start_time[-2 : ])/5)
+    start_time_ind = int(int(start_time_hour)*12 + int(start_time_min)/5)
     # 作業終了時間のインデント取得
-    end_time_ind = int(int(end_time[0 : 2])*12 + int(end_time[-2 : ])/5)
+    end_time_ind = int(int(end_time_hour)*12 + int(end_time_min)/5)
 
 
     # 入力日が作業内容データに登録がある場合の処理
