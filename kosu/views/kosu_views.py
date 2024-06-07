@@ -2265,11 +2265,11 @@ def input(request):
     now_time = datetime.datetime.now().time()
 
     # 現在時刻を5分単位で丸め
-    about_time = now_time.replace(minute = now_time.minute - now_time.minute % 5, \
-                                  second = 0, microsecond = 0)
+    about_time = str(now_time.replace(minute = now_time.minute - now_time.minute % 5, \
+                                      second = 0, microsecond = 0))
 
     # 現在時刻を初期値に設定
-    default_end_time = str(about_time)
+    default_end_time = about_time[ : -3]
 
     # 更新された就業日取得
     new_work_day = request.session.get('day', kosu_today)
