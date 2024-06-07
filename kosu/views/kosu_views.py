@@ -1078,20 +1078,22 @@ def input(request):
         # 工数に被りがないかチェックするループ
         for kosu in range(start_time_ind, 288):
           # 作業内容の要素が空でない場合の処理
-          if kosu_def[kosu] != '#' or kosu_def[kosu] != '$':
-            # エラーメッセージ出力
-            messages.error(request, '入力された作業時間には既に工数が入力されているので入力できません。ERROR009')
-            # このページをリダイレクト
-            return redirect(to = '/input')
+          if kosu_def[kosu] != '#':
+            if kosu_def[kosu] != '$':
+              # エラーメッセージ出力
+              messages.error(request, '入力された作業時間には既に工数が入力されているので入力できません。ERROR009')
+              # このページをリダイレクト
+              return redirect(to = '/input')
           
         # 工数に被りがないかチェックするループ
         for kosu in range(0, end_time_ind):
           # 作業内容の要素が空でない場合の処理
-          if kosu_def[kosu] != '#' or kosu_def[kosu] != '$':
-            # エラーメッセージ出力
-            messages.error(request, '入力された作業時間には既に工数が入力されているので入力できません。ERROR010')
-            # このページをリダイレクト
-            return redirect(to = '/input')
+          if kosu_def[kosu] != '#':
+            if kosu_def[kosu] != '$':
+              # エラーメッセージ出力
+              messages.error(request, '入力された作業時間には既に工数が入力されているので入力できません。ERROR010')
+              # このページをリダイレクト
+              return redirect(to = '/input')
           
 
         # 作業内容と作業詳細を書き込むループ(作業開始時間から24時まで)
@@ -4241,23 +4243,60 @@ def detail(request, num):
       return redirect(to = '/detail/{}'.format(num))
     
 
-    # 削除開始時間と終了時間のインデント取得
-    start_indent = int(int(start_time[0 : 2])*12 + int(start_time[-2 : ])/5)
-    end_indent = int(int(end_time[0 : 2])*12 + int(end_time[-2 : ])/5)
+    # 作業開始時間の区切りのインデックス取得
+    start_time_index = start_time.index(':')
+    # 作業開始時取得
+    start_time_hour = start_time[ : start_time_index]
+    # 作業開始分取得
+    start_time_min = start_time[start_time_index + 1 : ]
+    # 作業終了時間の区切りのインデックス取得
+    end_time_index = end_time.index(':')
+    # 作業終了時取得
+    end_time_hour = end_time[ : end_time_index]
+    # 作業終了分取得
+    end_time_min = end_time[end_time_index + 1 : ]
 
+    # 作業開始時間のインデント取得
+    start_indent = int(int(start_time_hour)*12 + int(start_time_min)/5)
+    # 作業終了時間のインデント取得
+    end_indent = int(int(end_time_hour)*12 + int(end_time_min)/5)
+
+
+    # 翌日チェック状態リセット
+    check = 0
+    # 翌日チェックが入っている場合の処理
+    if ('tomorrow_check' in request.POST):
+      # 翌日チェック状態に1を入れる
+      check = 1
+
+    # 翌日チェックが入っていない場合の処理
+    else:
+      # 翌日チェック状態に0を入れる
+      check = 0
 
     # 削除開始時間が削除終了時間より遅い時間の場合の処理
-    if start_indent > end_indent:
+    if (start_indent > end_indent) and check == 0:
       # エラーメッセージ出力
       messages.error(request, '削除の開始時間が終了時間よりも遅い時間を指定されましたので処理できません。ERROR011')
       # このページをリダイレクト
       return redirect(to = '/detail/{}'.format(num))
 
+    # 日を超えていない場合の処理
+    if check == 0:
+      # 指定された時間の作業内容と作業詳細を消す
+      for i in range(start_indent, end_indent):
+        work_list[i] = '#'
+        detail_list[i] = ''
 
-    # 指定された時間の作業内容と作業詳細を消す
-    for i in range(int(start_indent), int(end_indent)):
-      work_list[i] = '#'
-      detail_list[i] = ''
+    # 日を超えている場合の処理
+    else:
+      # 指定された時間の作業内容と作業詳細を消す
+      for i in range(start_indent , 288):
+        work_list[i] = '#'
+        detail_list[i] = ''
+      for i in range(end_indent):
+        work_list[i] = '#'
+        detail_list[i] = ''
 
     # 作業詳細リストを文字列に変更
     detail_list_str = ''
