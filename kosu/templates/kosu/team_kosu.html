@@ -35,19 +35,25 @@
       </tr>
     {% for i in data2 %}
       <tr>
-        <td>{{i.name}}</td>
-        <td>{{i.work_day2|date:"Y-m-d"}}</td>
-        <td>
+        <td style="text-align:center;">
+          {{i.name}}
+        </td>
+        <td style="text-align:center;">
+          {{i.work_day2|date:"Y-m-d"}}
+        </td>
+        <td style="text-align:center;">
           {% if i.tyoku2 == "1" %}1直{% endif %}
           {% if i.tyoku2 == "2" %}2直{% endif %}
           {% if i.tyoku2 == "3" %}3直{% endif %}
           {% if i.tyoku2 == "4" %}常昼{% endif %}
         </td>
-        <td>
+        <td style="text-align:center;">
           {% if i.judgement == True %}<b  class="text-primary">OK</b>{% endif %}
           {% if i.judgement == False %}<b  class="text-danger">NG</b>{% endif %}
         </td>
-        <td><a href="{% url 'team_detail' i.id %}">詳細</a></td>
+        <td style="text-align:center;">
+          <a href="{% url 'team_detail' i.id %}">詳細</a>
+        </td>
       <tr>
     {% endfor %}
     </table>
