@@ -3045,228 +3045,423 @@ def break_time(request):
     break_time16_start = request.POST['start_time16']
     break_time16_end = request.POST['end_time16']
 
+    # 休憩1開始時間の区切りのインデックス取得
+    break_time1_start_index = break_time1_start.index(':')
+    # 休憩1開始時取得
+    break_time1_start_hour = break_time1_start[ : break_time1_start_index]
+    # 休憩1開始分取得
+    break_time1_start_min = break_time1_start[break_time1_start_index + 1 : ]
+    # 休憩1終了時間の区切りのインデックス取得
+    break_time1_end_index = break_time1_end.index(':')
+    # 休憩1終了時取得
+    break_time1_end_hour = break_time1_end[ : break_time1_end_index]
+    # 休憩1終了分取得
+    break_time1_end_min = break_time1_end[break_time1_end_index + 1 : ]
+    # 休憩2開始時間の区切りのインデックス取得
+    break_time2_start_index = break_time2_start.index(':')
+    # 休憩2開始時取得
+    break_time2_start_hour = break_time2_start[ : break_time2_start_index]
+    # 休憩2開始分取得
+    break_time2_start_min = break_time2_start[break_time2_start_index + 1 : ]
+    # 休憩2終了時間の区切りのインデックス取得
+    break_time2_end_index = break_time2_end.index(':')
+    # 休憩2終了時取得
+    break_time2_end_hour = break_time2_end[ : break_time2_end_index]
+    # 休憩2終了分取得
+    break_time2_end_min = break_time2_end[break_time2_end_index + 1 : ]
+    # 休憩3開始時間の区切りのインデックス取得
+    break_time3_start_index = break_time3_start.index(':')
+    # 休憩3開始時取得
+    break_time3_start_hour = break_time3_start[ : break_time3_start_index]
+    # 休憩3開始分取得
+    break_time3_start_min = break_time3_start[break_time3_start_index + 1 : ]
+    # 休憩3終了時間の区切りのインデックス取得
+    break_time3_end_index = break_time3_end.index(':')
+    # 休憩3終了時取得
+    break_time3_end_hour = break_time3_end[ : break_time3_end_index]
+    # 休憩3終了分取得
+    break_time3_end_min = break_time3_end[break_time3_end_index + 1 : ]
+    # 休憩4開始時間の区切りのインデックス取得
+    break_time4_start_index = break_time4_start.index(':')
+    # 休憩4開始時取得
+    break_time4_start_hour = break_time4_start[ : break_time4_start_index]
+    # 休憩4開始分取得
+    break_time4_start_min = break_time4_start[break_time4_start_index + 1 : ]
+    # 休憩4終了時間の区切りのインデックス取得
+    break_time4_end_index = break_time4_end.index(':')
+    # 休憩4終了時取得
+    break_time4_end_hour = break_time4_end[ : break_time4_end_index]
+    # 休憩4終了分取得
+    break_time4_end_min = break_time4_end[break_time4_end_index + 1 : ]
+    # 休憩5開始時間の区切りのインデックス取得
+    break_time5_start_index = break_time5_start.index(':')
+    # 休憩5開始時取得
+    break_time5_start_hour = break_time5_start[ : break_time5_start_index]
+    # 休憩5開始分取得
+    break_time5_start_min = break_time5_start[break_time5_start_index + 1 : ]
+    # 休憩5終了時間の区切りのインデックス取得
+    break_time5_end_index = break_time5_end.index(':')
+    # 休憩5終了時取得
+    break_time5_end_hour = break_time5_end[ : break_time5_end_index]
+    # 休憩5終了分取得
+    break_time5_end_min = break_time5_end[break_time5_end_index + 1 : ]
+    # 休憩6開始時間の区切りのインデックス取得
+    break_time6_start_index = break_time6_start.index(':')
+    # 休憩6開始時取得
+    break_time6_start_hour = break_time6_start[ : break_time6_start_index]
+    # 休憩6開始分取得
+    break_time6_start_min = break_time6_start[break_time6_start_index + 1 : ]
+    # 休憩6終了時間の区切りのインデックス取得
+    break_time6_end_index = break_time6_end.index(':')
+    # 休憩6終了時取得
+    break_time6_end_hour = break_time6_end[ : break_time6_end_index]
+    # 休憩6終了分取得
+    break_time6_end_min = break_time6_end[break_time6_end_index + 1 : ]
+    # 休憩7開始時間の区切りのインデックス取得
+    break_time7_start_index = break_time7_start.index(':')
+    # 休憩7開始時取得
+    break_time7_start_hour = break_time7_start[ : break_time7_start_index]
+    # 休憩7開始分取得
+    break_time7_start_min = break_time7_start[break_time7_start_index + 1 : ]
+    # 休憩7終了時間の区切りのインデックス取得
+    break_time7_end_index = break_time7_end.index(':')
+    # 休憩7終了時取得
+    break_time7_end_hour = break_time7_end[ : break_time7_end_index]
+    # 休憩7終了分取得
+    break_time7_end_min = break_time7_end[break_time7_end_index + 1 : ]
+    # 休憩8開始時間の区切りのインデックス取得
+    break_time8_start_index = break_time8_start.index(':')
+    # 休憩8開始時取得
+    break_time8_start_hour = break_time8_start[ : break_time8_start_index]
+    # 休憩8開始分取得
+    break_time8_start_min = break_time8_start[break_time8_start_index + 1 : ]
+    # 休憩8終了時間の区切りのインデックス取得
+    break_time8_end_index = break_time8_end.index(':')
+    # 休憩8終了時取得
+    break_time8_end_hour = break_time8_end[ : break_time8_end_index]
+    # 休憩8終了分取得
+    break_time8_end_min = break_time8_end[break_time8_end_index + 1 : ]
+    # 休憩9開始時間の区切りのインデックス取得
+    break_time9_start_index = break_time9_start.index(':')
+    # 休憩9開始時取得
+    break_time9_start_hour = break_time9_start[ : break_time9_start_index]
+    # 休憩9開始分取得
+    break_time9_start_min = break_time9_start[break_time9_start_index + 1 : ]
+    # 休憩9終了時間の区切りのインデックス取得
+    break_time9_end_index = break_time9_end.index(':')
+    # 休憩9終了時取得
+    break_time9_end_hour = break_time9_end[ : break_time9_end_index]
+    # 休憩9終了分取得
+    break_time9_end_min = break_time9_end[break_time9_end_index + 1 : ]
+    # 休憩10開始時間の区切りのインデックス取得
+    break_time10_start_index = break_time10_start.index(':')
+    # 休憩10開始時取得
+    break_time10_start_hour = break_time10_start[ : break_time10_start_index]
+    # 休憩10開始分取得
+    break_time10_start_min = break_time10_start[break_time10_start_index + 1 : ]
+    # 休憩10終了時間の区切りのインデックス取得
+    break_time10_end_index = break_time10_end.index(':')
+    # 休憩10終了時取得
+    break_time10_end_hour = break_time10_end[ : break_time10_end_index]
+    # 休憩10終了分取得
+    break_time10_end_min = break_time10_end[break_time10_end_index + 1 : ]
+    # 休憩11開始時間の区切りのインデックス取得
+    break_time11_start_index = break_time11_start.index(':')
+    # 休憩11開始時取得
+    break_time11_start_hour = break_time11_start[ : break_time11_start_index]
+    # 休憩11開始分取得
+    break_time11_start_min = break_time11_start[break_time11_start_index + 1 : ]
+    # 休憩11終了時間の区切りのインデックス取得
+    break_time11_end_index = break_time11_end.index(':')
+    # 休憩11終了時取得
+    break_time11_end_hour = break_time11_end[ : break_time11_end_index]
+    # 休憩11終了分取得
+    break_time11_end_min = break_time11_end[break_time11_end_index + 1 : ]
+    # 休憩12開始時間の区切りのインデックス取得
+    break_time12_start_index = break_time12_start.index(':')
+    # 休憩12開始時取得
+    break_time12_start_hour = break_time12_start[ : break_time12_start_index]
+    # 休憩12開始分取得
+    break_time12_start_min = break_time12_start[break_time12_start_index + 1 : ]
+    # 休憩12終了時間の区切りのインデックス取得
+    break_time12_end_index = break_time12_end.index(':')
+    # 休憩12終了時取得
+    break_time12_end_hour = break_time12_end[ : break_time12_end_index]
+    # 休憩12終了分取得
+    break_time12_end_min = break_time12_end[break_time12_end_index + 1 : ]
+    # 休憩13開始時間の区切りのインデックス取得
+    break_time13_start_index = break_time13_start.index(':')
+    # 休憩13開始時取得
+    break_time13_start_hour = break_time13_start[ : break_time13_start_index]
+    # 休憩13開始分取得
+    break_time13_start_min = break_time13_start[break_time13_start_index + 1 : ]
+    # 休憩13終了時間の区切りのインデックス取得
+    break_time13_end_index = break_time13_end.index(':')
+    # 休憩13終了時取得
+    break_time13_end_hour = break_time13_end[ : break_time13_end_index]
+    # 休憩13終了分取得
+    break_time13_end_min = break_time13_end[break_time13_end_index + 1 : ]
+    # 休憩14開始時間の区切りのインデックス取得
+    break_time14_start_index = break_time14_start.index(':')
+    # 休憩14開始時取得
+    break_time14_start_hour = break_time14_start[ : break_time14_start_index]
+    # 休憩14開始分取得
+    break_time14_start_min = break_time14_start[break_time14_start_index + 1 : ]
+    # 休憩14終了時間の区切りのインデックス取得
+    break_time14_end_index = break_time14_end.index(':')
+    # 休憩14終了時取得
+    break_time14_end_hour = break_time14_end[ : break_time14_end_index]
+    # 休憩14終了分取得
+    break_time14_end_min = break_time14_end[break_time14_end_index + 1 : ]
+    # 休憩15開始時間の区切りのインデックス取得
+    break_time15_start_index = break_time15_start.index(':')
+    # 休憩15開始時取得
+    break_time15_start_hour = break_time15_start[ : break_time15_start_index]
+    # 休憩15開始分取得
+    break_time15_start_min = break_time15_start[break_time15_start_index + 1 : ]
+    # 休憩15終了時間の区切りのインデックス取得
+    break_time15_end_index = break_time15_end.index(':')
+    # 休憩15終了時取得
+    break_time15_end_hour = break_time15_end[ : break_time15_end_index]
+    # 休憩15終了分取得
+    break_time15_end_min = break_time15_end[break_time15_end_index + 1 : ]
+    # 休憩16開始時間の区切りのインデックス取得
+    break_time16_start_index = break_time16_start.index(':')
+    # 休憩16開始時取得
+    break_time16_start_hour = break_time16_start[ : break_time16_start_index]
+    # 休憩16開始分取得
+    break_time16_start_min = break_time16_start[break_time16_start_index + 1 : ]
+    # 休憩16終了時間の区切りのインデックス取得
+    break_time16_end_index = break_time16_end.index(':')
+    # 休憩16終了時取得
+    break_time16_end_hour = break_time16_end[ : break_time16_end_index]
+    # 休憩16終了分取得
+    break_time16_end_min = break_time16_end[break_time16_end_index + 1 : ]
+
+
     # POSTされた値をまとめる
-    break_time1 = break_time1_start[0 : 2] + break_time1_start[-2 : ] + \
-                  break_time1_end[0 : 2] + break_time1_end[-2 : ]
-    break_time2 = break_time2_start[0 : 2] + break_time2_start[-2 : ] + \
-                  break_time2_end[0 : 2] + break_time2_end[-2 : ]    
-    break_time3 = break_time3_start[0 : 2] + break_time3_start[-2 : ] + \
-                  break_time3_end[0 : 2] + break_time3_end[-2 : ]
-    break_time4 = break_time4_start[0 : 2] + break_time4_start[-2 : ] + \
-                  break_time4_end[0 : 2] + break_time4_end[-2 : ]
-    break_time5 = break_time5_start[0 : 2] + break_time5_start[-2 : ] + \
-                  break_time5_end[0 : 2] + break_time5_end[-2 : ]
-    break_time6 = break_time6_start[0 : 2] + break_time6_start[-2 : ] + \
-                  break_time6_end[0 : 2] + break_time6_end[-2 : ]    
-    break_time7 = break_time7_start[0 : 2] + break_time7_start[-2 : ] + \
-                  break_time7_end[0 : 2] + break_time7_end[-2 : ]
-    break_time8 = break_time8_start[0 : 2] + break_time8_start[-2 : ] + \
-                  break_time8_end[0 : 2] + break_time8_end[-2 : ]
-    break_time9 = break_time9_start[0 : 2] + break_time9_start[-2 : ] + \
-                  break_time9_end[0 : 2] + break_time9_end[-2 : ]
-    break_time10 = break_time10_start[0 : 2] + break_time10_start[-2 : ] + \
-                   break_time10_end[0 : 2] + break_time10_end[-2 : ]
-    break_time11 = break_time11_start[0 : 2] + break_time11_start[-2 : ] + \
-                   break_time11_end[0 : 2] + break_time11_end[-2 : ]
-    break_time12 = break_time12_start[0 : 2] + break_time12_start[-2 : ] + \
-                   break_time12_end[0 : 2] + break_time12_end[-2 : ]
-    break_time13 = break_time13_start[0 : 2] + break_time13_start[-2 : ] + \
-                   break_time13_end[0 : 2] + break_time13_end[-2 : ]
-    break_time14 = break_time14_start[0 : 2] + break_time14_start[-2 : ] + \
-                   break_time14_end[0 : 2] + break_time14_end[-2 : ]
-    break_time15 = break_time15_start[0 : 2] + break_time15_start[-2 : ] + \
-                   break_time15_end[0 : 2] + break_time15_end[-2 : ]
-    break_time16 = break_time16_start[0 : 2] + break_time16_start[-2 : ] + \
-                   break_time16_end[0 : 2] + break_time16_end[-2 : ]
+    break_time1 = break_time1_start_hour.zfill(2) + break_time1_start_min + \
+                  break_time1_end_hour.zfill(2) + break_time1_end_min
+    break_time2 = break_time2_start_hour.zfill(2) + break_time2_start_min + \
+                  break_time2_end_hour.zfill(2) + break_time2_end_min
+    break_time3 = break_time3_start_hour.zfill(2) + break_time3_start_min + \
+                  break_time3_end_hour.zfill(2) + break_time3_end_min
+    break_time4 = break_time4_start_hour.zfill(2) + break_time4_start_min + \
+                  break_time4_end_hour.zfill(2) + break_time4_end_min
+    break_time5 = break_time5_start_hour.zfill(2) + break_time5_start_min + \
+                  break_time5_end_hour.zfill(2) + break_time5_end_min
+    break_time6 = break_time6_start_hour.zfill(2) + break_time6_start_min + \
+                  break_time6_end_hour.zfill(2) + break_time6_end_min
+    break_time7 = break_time7_start_hour.zfill(2) + break_time7_start_min + \
+                  break_time7_end_hour.zfill(2) + break_time7_end_min
+    break_time8 = break_time8_start_hour.zfill(2) + break_time8_start_min + \
+                  break_time8_end_hour.zfill(2) + break_time8_end_min
+    break_time9 = break_time9_start_hour.zfill(2) + break_time9_start_min + \
+                  break_time9_end_hour.zfill(2) + break_time9_end_min
+    break_time10 = break_time10_start_hour.zfill(2) + break_time10_start_min + \
+                   break_time10_end_hour.zfill(2) + break_time10_end_min
+    break_time11 = break_time11_start_hour.zfill(2) + break_time11_start_min + \
+                   break_time11_end_hour.zfill(2) + break_time11_end_min
+    break_time12 = break_time12_start_hour.zfill(2) + break_time12_start_min + \
+                   break_time12_end_hour.zfill(2) + break_time12_end_min
+    break_time13 = break_time13_start_hour.zfill(2) + break_time13_start_min + \
+                   break_time13_end_hour.zfill(2) + break_time13_end_min
+    break_time14 = break_time14_start_hour.zfill(2) + break_time14_start_min + \
+                   break_time14_end_hour.zfill(2) + break_time14_end_min
+    break_time15 = break_time15_start_hour.zfill(2) + break_time15_start_min + \
+                   break_time15_end_hour.zfill(2) + break_time15_end_min
+    break_time16 = break_time16_start_hour.zfill(2) + break_time16_start_min + \
+                   break_time16_end_hour.zfill(2) + break_time16_end_min
+
 
 
     # 1直昼休憩時間に長すぎる時間を登録しようとした時の処理
-    if (int(break_time1_end[0 : 2])*60 + int(break_time1_end[-2 : ])) - \
-      (int(break_time1_start[0 : 2])*60 + int(break_time1_start[-2 : ])) > 60 or \
-      (((int(break_time1_end[0 : 2])*60 + int(break_time1_end[-2 : ])) < \
-      (int(break_time1_start[0 : 2])*60 + int(break_time1_start[-2 : ]))) and \
-      (int(break_time1_end[0 : 2])*60 + int(break_time1_end[-2 : ]) + 1440) - \
-      (int(break_time1_start[0 : 2])*60 + int(break_time1_start[-2 : ])) > 60):
+    if (int(break_time1_end_hour)*60 + int(break_time1_end_min)) - \
+      (int(break_time1_start_hour)*60 + int(break_time1_start_min)) > 60 or \
+      (((int(break_time1_end_hour)*60 + int(break_time1_end_min)) < \
+      (int(break_time1_start_hour)*60 + int(break_time1_start_min))) and \
+      (int(break_time1_end_hour)*60 + int(break_time1_end_min) + 1440) - \
+      (int(break_time1_start_hour)*60 + int(break_time1_start_min)) > 60):
       # エラーメッセージ出力
       messages.error(request, '1直の昼休憩時間が60分を超えています。正しい休憩時間を登録して下さい。ERROR061')
       # このページをリダイレクト
       return redirect(to = '/break_time')
 
     # 2直昼休憩時間に長すぎる時間を登録しようとした時の処理
-    if (int(break_time5_end[0 : 2])*60 + int(break_time5_end[-2 : ])) - \
-      (int(break_time5_start[0 : 2])*60 + int(break_time5_start[-2 : ])) > 60 or \
-      (((int(break_time5_end[0 : 2])*60 + int(break_time5_end[-2 : ])) < \
-      (int(break_time5_start[0 : 2])*60 + int(break_time5_start[-2 : ]))) and \
-      (int(break_time5_end[0 : 2])*60 + int(break_time5_end[-2 : ]) + 1440) - \
-      (int(break_time5_start[0 : 2])*60 + int(break_time5_start[-2 : ])) > 60):
+    if (int(break_time5_end_hour)*60 + int(break_time5_end_min)) - \
+      (int(break_time5_start_hour)*60 + int(break_time5_start_min)) > 60 or \
+      (((int(break_time5_end_hour)*60 + int(break_time5_end_min)) < \
+      (int(break_time5_start_hour)*60 + int(break_time5_start_min))) and \
+      (int(break_time5_end_hour)*60 + int(break_time5_end_min) + 1440) - \
+      (int(break_time5_start_hour)*60 + int(break_time5_start_min)) > 60):
       # エラーメッセージ出力
       messages.error(request, '2直の昼休憩時間が60分を超えています。正しい休憩時間を登録して下さい。ERROR062')
       # このページをリダイレクト
       return redirect(to = '/break_time')
 
     # 3直昼休憩時間に長すぎる時間を登録しようとした時の処理
-    if (int(break_time9_end[0 : 2])*60 + int(break_time9_end[-2 : ])) - \
-      (int(break_time9_start[0 : 2])*60 + int(break_time9_start[-2 : ])) > 60 or \
-      (((int(break_time9_end[0 : 2])*60 + int(break_time9_end[-2 : ])) < \
-      (int(break_time9_start[0 : 2])*60 + int(break_time9_start[-2 : ]))) and \
-      (int(break_time9_end[0 : 2])*60 + int(break_time9_end[-2 : ]) + 1440) - \
-      (int(break_time9_start[0 : 2])*60 + int(break_time9_start[-2 : ])) > 60):
+    if (int(break_time9_end_hour)*60 + int(break_time9_end_min)) - \
+      (int(break_time9_start_hour)*60 + int(break_time9_start_min)) > 60 or \
+      (((int(break_time9_end_hour)*60 + int(break_time9_end_min)) < \
+      (int(break_time9_start_hour)*60 + int(break_time9_start_min))) and \
+      (int(break_time9_end_hour)*60 + int(break_time9_end_min) + 1440) - \
+      (int(break_time9_start_hour)*60 + int(break_time9_start_min)) > 60):
       # エラーメッセージ出力
       messages.error(request, '3直の昼休憩時間が60分を超えています。正しい休憩時間を登録して下さい。ERROR063')
       # このページをリダイレクト
       return redirect(to = '/break_time')
 
     # 常昼昼休憩時間に長すぎる時間を登録しようとした時の処理
-    if (int(break_time13_end[0 : 2])*60 + int(break_time13_end[-2 : ])) - \
-      (int(break_time13_start[0 : 2])*60 + int(break_time13_start[-2 : ])) > 60 or \
-      (((int(break_time13_end[0 : 2])*60 + int(break_time13_end[-2 : ])) < \
-      (int(break_time13_start[0 : 2])*60 + int(break_time13_start[-2 : ]))) and \
-      (int(break_time13_end[0 : 2])*60 + int(break_time13_end[-2 : ]) + 1440) - \
-      (int(break_time13_start[0 : 2])*60 + int(break_time13_start[-2 : ])) > 60):
+    if (int(break_time13_end_hour)*60 + int(break_time13_end_min)) - \
+      (int(break_time13_start_hour)*60 + int(break_time13_start_min)) > 60 or \
+      (((int(break_time13_end_hour)*60 + int(break_time13_end_min)) < \
+      (int(break_time13_start_hour)*60 + int(break_time13_start_min))) and \
+      (int(break_time13_end_hour)*60 + int(break_time13_end_min) + 1440) - \
+      (int(break_time13_start_hour)*60 + int(break_time13_start_min)) > 60):
       # エラーメッセージ出力
       messages.error(request, '常昼の昼休憩時間が60分を超えています。正しい休憩時間を登録して下さい。ERROR064')
       # このページをリダイレクト
       return redirect(to = '/break_time')
 
     # 1直残業休憩時間1に長すぎる時間を登録しようとした時の処理
-    if (int(break_time2_end[0 : 2])*60 + int(break_time2_end[-2 : ])) - \
-      (int(break_time2_start[0 : 2])*60 + int(break_time2_start[-2 : ])) > 15 or \
-      (((int(break_time2_end[0 : 2])*60 + int(break_time2_end[-2 : ])) < \
-      (int(break_time2_start[0 : 2])*60 + int(break_time2_start[-2 : ]))) and \
-      (int(break_time2_end[0 : 2])*60 + int(break_time2_end[-2 : ]) + 1440) - \
-      (int(break_time2_start[0 : 2])*60 + int(break_time2_start[-2 : ])) > 15):
+    if (int(break_time2_end_hour)*60 + int(break_time2_end_min)) - \
+      (int(break_time2_start_hour)*60 + int(break_time2_start_min)) > 15 or \
+      (((int(break_time2_end_hour)*60 + int(break_time2_end_min)) < \
+      (int(break_time2_start_hour)*60 + int(break_time2_start_min))) and \
+      (int(break_time2_end_hour)*60 + int(break_time2_end_min) + 1440) - \
+      (int(break_time2_start_hour)*60 + int(break_time2_start_min)) > 15):
       # エラーメッセージ出力
       messages.error(request, '1直残業時間中の休憩時間1が15分を超えています。正しい休憩時間を登録して下さい。ERROR065')
       # このページをリダイレクト
       return redirect(to = '/break_time')
 
     # 1直残業休憩時間2に長すぎる時間を登録しようとした時の処理
-    if (int(break_time3_end[0 : 2])*60 + int(break_time3_end[-2 : ])) - \
-      (int(break_time3_start[0 : 2])*60 + int(break_time3_start[-2 : ])) > 60 or \
-      (((int(break_time3_end[0 : 2])*60 + int(break_time3_end[-2 : ])) < \
-      (int(break_time3_start[0 : 2])*60 + int(break_time3_start[-2 : ]))) and \
-      (int(break_time3_end[0 : 2])*60 + int(break_time3_end[-2 : ]) + 1440) - \
-      (int(break_time3_start[0 : 2])*60 + int(break_time3_start[-2 : ])) > 60):
+    if (int(break_time3_end_hour)*60 + int(break_time3_end_min)) - \
+      (int(break_time3_start_hour)*60 + int(break_time3_start_min)) > 60 or \
+      (((int(break_time3_end_hour)*60 + int(break_time3_end_min)) < \
+      (int(break_time3_start_hour)*60 + int(break_time3_start_min))) and \
+      (int(break_time3_end_hour)*60 + int(break_time3_end_min) + 1440) - \
+      (int(break_time3_start_hour)*60 + int(break_time3_start_min)) > 60):
       # エラーメッセージ出力
       messages.error(request, '1直残業時間中の休憩時間2が60分を超えています。正しい休憩時間を登録して下さい。ERROR066')
       # このページをリダイレクト
       return redirect(to = '/break_time')
 
     # 1直残業休憩時間3に長すぎる時間を登録しようとした時の処理
-    if (int(break_time4_end[0 : 2])*60 + int(break_time4_end[-2 : ])) - \
-      (int(break_time4_start[0 : 2])*60 + int(break_time4_start[-2 : ])) > 15 or \
-      (((int(break_time4_end[0 : 2])*60 + int(break_time4_end[-2 : ])) < \
-      (int(break_time4_start[0 : 2])*60 + int(break_time4_start[-2 : ]))) and \
-      (int(break_time4_end[0 : 2])*60 + int(break_time4_end[-2 : ]) + 1440) - \
-      (int(break_time4_start[0 : 2])*60 + int(break_time4_start[-2 : ])) > 15):
+    if (int(break_time4_end_hour)*60 + int(break_time4_end_min)) - \
+      (int(break_time4_start_hour)*60 + int(break_time4_start_min)) > 15 or \
+      (((int(break_time4_end_hour)*60 + int(break_time4_end_min)) < \
+      (int(break_time4_start_hour)*60 + int(break_time4_start_min))) and \
+      (int(break_time4_end_hour)*60 + int(break_time4_end_min) + 1440) - \
+      (int(break_time4_start_hour)*60 + int(break_time4_start_min)) > 15):
       # エラーメッセージ出力
       messages.error(request, '1直残業時間中の休憩時間3が15分を超えています。正しい休憩時間を登録して下さい。ERROR067')
       # このページをリダイレクト
       return redirect(to = '/break_time')
 
     # 2直残業休憩時間1に長すぎる時間を登録しようとした時の処理
-    if (int(break_time6_end[0 : 2])*60 + int(break_time6_end[-2 : ])) - \
-      (int(break_time6_start[0 : 2])*60 + int(break_time6_start[-2 : ])) > 15 or \
-      (((int(break_time6_end[0 : 2])*60 + int(break_time6_end[-2 : ])) < \
-      (int(break_time6_start[0 : 2])*60 + int(break_time6_start[-2 : ]))) and \
-      (int(break_time6_end[0 : 2])*60 + int(break_time6_end[-2 : ]) + 1440) - \
-      (int(break_time6_start[0 : 2])*60 + int(break_time6_start[-2 : ])) > 15):
+    if (int(break_time6_end_hour)*60 + int(break_time6_end_min)) - \
+      (int(break_time6_start_hour)*60 + int(break_time6_start_min)) > 15 or \
+      (((int(break_time6_end_hour)*60 + int(break_time6_end_min)) < \
+      (int(break_time6_start_hour)*60 + int(break_time6_start_min))) and \
+      (int(break_time6_end_hour)*60 + int(break_time6_end_min) + 1440) - \
+      (int(break_time6_start_hour)*60 + int(break_time6_start_min)) > 15):
       # エラーメッセージ出力
       messages.error(request, '2直残業時間中の休憩時間1が15分を超えています。正しい休憩時間を登録して下さい。ERROR068')
       # このページをリダイレクト
       return redirect(to = '/break_time')
 
     # 2直残業休憩時間2に長すぎる時間を登録しようとした時の処理
-    if (int(break_time7_end[0 : 2])*60 + int(break_time7_end[-2 : ])) - \
-      (int(break_time7_start[0 : 2])*60 + int(break_time7_start[-2 : ])) > 60 or \
-      (((int(break_time7_end[0 : 2])*60 + int(break_time7_end[-2 : ])) < \
-      (int(break_time7_start[0 : 2])*60 + int(break_time7_start[-2 : ]))) and \
-      (int(break_time7_end[0 : 2])*60 + int(break_time7_end[-2 : ]) + 1440) - \
-      (int(break_time7_start[0 : 2])*60 + int(break_time7_start[-2 : ])) > 60):
+    if (int(break_time7_end_hour)*60 + int(break_time7_end_min)) - \
+      (int(break_time7_start_hour)*60 + int(break_time7_start_min)) > 60 or \
+      (((int(break_time7_end_hour)*60 + int(break_time7_end_min)) < \
+      (int(break_time7_start_hour)*60 + int(break_time7_start_min))) and \
+      (int(break_time7_end_hour)*60 + int(break_time7_end_min) + 1440) - \
+      (int(break_time7_start_hour)*60 + int(break_time7_start_min)) > 60):
       # エラーメッセージ出力
       messages.error(request, '2直残業時間中の休憩時間2が60分を超えています。正しい休憩時間を登録して下さい。ERROR069')
       # このページをリダイレクト
       return redirect(to = '/break_time')
 
     # 2直残業休憩時間3に長すぎる時間を登録しようとした時の処理
-    if (int(break_time8_end[0 : 2])*60 + int(break_time8_end[-2 : ])) - \
-      (int(break_time8_start[0 : 2])*60 + int(break_time8_start[-2 : ])) > 15 or \
-      (((int(break_time8_end[0 : 2])*60 + int(break_time8_end[-2 : ])) < \
-      (int(break_time8_start[0 : 2])*60 + int(break_time8_start[-2 : ]))) and \
-      (int(break_time8_end[0 : 2])*60 + int(break_time8_end[-2 : ]) + 1440) - \
-      (int(break_time8_start[0 : 2])*60 + int(break_time8_start[-2 : ])) > 15):
+    if (int(break_time8_end_hour)*60 + int(break_time8_end_min)) - \
+      (int(break_time8_start_hour)*60 + int(break_time8_start_min)) > 15 or \
+      (((int(break_time8_end_hour)*60 + int(break_time8_end_min)) < \
+      (int(break_time8_start_hour)*60 + int(break_time8_start_min))) and \
+      (int(break_time8_end_hour)*60 + int(break_time8_end_min) + 1440) - \
+      (int(break_time8_start_hour)*60 + int(break_time8_start_min)) > 15):
       # エラーメッセージ出力
       messages.error(request, '2直残業時間中の休憩時間3が15分を超えています。正しい休憩時間を登録して下さい。ERROR070')
       # このページをリダイレクト
       return redirect(to = '/break_time')
 
     # 3直残業休憩時間1に長すぎる時間を登録しようとした時の処理
-    if (int(break_time10_end[0 : 2])*60 + int(break_time10_end[-2 : ])) - \
-      (int(break_time10_start[0 : 2])*60 + int(break_time10_start[-2 : ])) > 15 or \
-      (((int(break_time10_end[0 : 2])*60 + int(break_time10_end[-2 : ])) < \
-      (int(break_time10_start[0 : 2])*60 + int(break_time10_start[-2 : ]))) and \
-      (int(break_time10_end[0 : 2])*60 + int(break_time10_end[-2 : ]) + 1440) - \
-      (int(break_time10_start[0 : 2])*60 + int(break_time10_start[-2 : ])) > 15):
+    if (int(break_time10_end_hour)*60 + int(break_time10_end_min)) - \
+      (int(break_time10_start_hour)*60 + int(break_time10_start_min)) > 15 or \
+      (((int(break_time10_end_hour)*60 + int(break_time10_end_min)) < \
+      (int(break_time10_start_hour)*60 + int(break_time10_start_min))) and \
+      (int(break_time10_end_hour)*60 + int(break_time10_end_min) + 1440) - \
+      (int(break_time10_start_hour)*60 + int(break_time10_start_min)) > 15):
       # エラーメッセージ出力
       messages.error(request, '3直残業時間中の休憩時間1が15分を超えています。正しい休憩時間を登録して下さい。ERROR071')
       # このページをリダイレクト
       return redirect(to = '/break_time')
 
     # 3直残業休憩時間2に長すぎる時間を登録しようとした時の処理
-    if (int(break_time11_end[0 : 2])*60 + int(break_time11_end[-2 : ])) - \
-      (int(break_time11_start[0 : 2])*60 + int(break_time11_start[-2 : ])) > 60 or \
-      (((int(break_time11_end[0 : 2])*60 + int(break_time11_end[-2 : ])) < \
-      (int(break_time11_start[0 : 2])*60 + int(break_time11_start[-2 : ]))) and \
-      (int(break_time11_end[0 : 2])*60 + int(break_time11_end[-2 : ]) + 1440) - \
-      (int(break_time11_start[0 : 2])*60 + int(break_time11_start[-2 : ])) > 60):
+    if (int(break_time11_end_hour)*60 + int(break_time11_end_min)) - \
+      (int(break_time11_start_hour)*60 + int(break_time11_start_min)) > 60 or \
+      (((int(break_time11_end_hour)*60 + int(break_time11_end_min)) < \
+      (int(break_time11_start_hour)*60 + int(break_time11_start_min))) and \
+      (int(break_time11_end_hour)*60 + int(break_time11_end_min) + 1440) - \
+      (int(break_time11_start_hour)*60 + int(break_time11_start_min)) > 60):
       # エラーメッセージ出力
       messages.error(request, '3直残業時間中の休憩時間2が60分を超えています。正しい休憩時間を登録して下さい。ERROR072')
       # このページをリダイレクト
       return redirect(to = '/break_time')
 
     # 3直残業休憩時間3に長すぎる時間を登録しようとした時の処理
-    if (int(break_time12_end[0 : 2])*60 + int(break_time12_end[-2 : ])) - \
-      (int(break_time12_start[0 : 2])*60 + int(break_time12_start[-2 : ])) > 15 or \
-      (((int(break_time12_end[0 : 2])*60 + int(break_time12_end[-2 : ])) < \
-      (int(break_time12_start[0 : 2])*60 + int(break_time12_start[-2 : ]))) and \
-      (int(break_time12_end[0 : 2])*60 + int(break_time12_end[-2 : ]) + 1440) - \
-      (int(break_time12_start[0 : 2])*60 + int(break_time12_start[-2 : ])) > 15):
+    if (int(break_time12_end_hour)*60 + int(break_time12_end_min)) - \
+      (int(break_time12_start_hour)*60 + int(break_time12_start_min)) > 15 or \
+      (((int(break_time12_end_hour)*60 + int(break_time12_end_min)) < \
+      (int(break_time12_start_hour)*60 + int(break_time12_start_min))) and \
+      (int(break_time12_end_hour)*60 + int(break_time12_end_min) + 1440) - \
+      (int(break_time12_start_hour)*60 + int(break_time12_start_min)) > 15):
       # エラーメッセージ出力
       messages.error(request, '3直残業時間中の休憩時間3が15分を超えています。正しい休憩時間を登録して下さい。ERROR073')
       # このページをリダイレクト
       return redirect(to = '/break_time')
 
     # 常昼残業休憩時間1に長すぎる時間を登録しようとした時の処理
-    if (int(break_time14_end[0 : 2])*60 + int(break_time14_end[-2 : ])) - \
-      (int(break_time14_start[0 : 2])*60 + int(break_time14_start[-2 : ])) > 15 or \
-      (((int(break_time14_end[0 : 2])*60 + int(break_time14_end[-2 : ])) < \
-      (int(break_time14_start[0 : 2])*60 + int(break_time14_start[-2 : ]))) and \
-      (int(break_time14_end[0 : 2])*60 + int(break_time14_end[-2 : ]) + 1440) - \
-      (int(break_time14_start[0 : 2])*60 + int(break_time14_start[-2 : ])) > 15):
+    if (int(break_time14_end_hour)*60 + int(break_time14_end_min)) - \
+      (int(break_time14_start_hour)*60 + int(break_time14_start_min)) > 15 or \
+      (((int(break_time14_end_hour)*60 + int(break_time14_end_min)) < \
+      (int(break_time14_start_hour)*60 + int(break_time14_start_min))) and \
+      (int(break_time14_end_hour)*60 + int(break_time14_end_min) + 1440) - \
+      (int(break_time14_start_hour)*60 + int(break_time14_start_min)) > 15):
       # エラーメッセージ出力
       messages.error(request, '常昼残業時間中の休憩時間1が15分を超えています。正しい休憩時間を登録して下さい。ERROR074')
       # このページをリダイレクト
       return redirect(to = '/break_time')
 
     # 常昼残業休憩時間2に長すぎる時間を登録しようとした時の処理
-    if (int(break_time15_end[0 : 2])*60 + int(break_time15_end[-2 : ])) - \
-      (int(break_time15_start[0 : 2])*60 + int(break_time15_start[-2 : ])) > 60 or \
-      (((int(break_time15_end[0 : 2])*60 + int(break_time15_end[-2 : ])) < \
-      (int(break_time15_start[0 : 2])*60 + int(break_time15_start[-2 : ]))) and \
-      (int(break_time15_end[0 : 2])*60 + int(break_time15_end[-2 : ]) + 1440) - \
-      (int(break_time15_start[0 : 2])*60 + int(break_time15_start[-2 : ])) > 60):
+    if (int(break_time15_end_hour)*60 + int(break_time15_end_min)) - \
+      (int(break_time15_start_hour)*60 + int(break_time15_start_min)) > 60 or \
+      (((int(break_time15_end_hour)*60 + int(break_time15_end_min)) < \
+      (int(break_time15_start_hour)*60 + int(break_time15_start_min))) and \
+      (int(break_time15_end_hour)*60 + int(break_time15_end_min) + 1440) - \
+      (int(break_time15_start_hour)*60 + int(break_time15_start_min)) > 60):
       # エラーメッセージ出力
       messages.error(request, '常昼残業時間中の休憩時間2が60分を超えています。正しい休憩時間を登録して下さい。ERROR075')
       # このページをリダイレクト
       return redirect(to = '/break_time')
 
     # 常昼残業休憩時間3に長すぎる時間を登録しようとした時の処理
-    if (int(break_time16_end[0 : 2])*60 + int(break_time16_end[-2 : ])) - \
-      (int(break_time16_start[0 : 2])*60 + int(break_time16_start[-2 : ])) > 15 or \
-      (((int(break_time16_end[0 : 2])*60 + int(break_time16_end[-2 : ])) < \
-      (int(break_time16_start[0 : 2])*60 + int(break_time16_start[-2 : ]))) and \
-      (int(break_time16_end[0 : 2])*60 + int(break_time16_end[-2 : ]) + 1440) - \
-      (int(break_time16_start[0 : 2])*60 + int(break_time16_start[-2 : ])) > 15):
+    if (int(break_time16_end_hour)*60 + int(break_time16_end_min)) - \
+      (int(break_time16_start_hour)*60 + int(break_time16_start_min)) > 15 or \
+      (((int(break_time16_end_hour)*60 + int(break_time16_end_min)) < \
+      (int(break_time16_start_hour)*60 + int(break_time16_start_min))) and \
+      (int(break_time16_end_hour)*60 + int(break_time16_end_min) + 1440) - \
+      (int(break_time16_start_hour)*60 + int(break_time16_start_min)) > 15):
       # エラーメッセージ出力
       messages.error(request, '常昼残業時間中の休憩時間3が15分を超えています。正しい休憩時間を登録して下さい。ERROR076')
       # このページをリダイレクト
