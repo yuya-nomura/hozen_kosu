@@ -3617,60 +3617,109 @@ def today_break_time(request):
     break_time4_start = request.POST['start_time4']
     break_time4_end = request.POST['end_time4']
 
+    # 休憩1開始時間の区切りのインデックス取得
+    break_time1_start_index = break_time1_start.index(':')
+    # 休憩1開始時取得
+    break_time1_start_hour = break_time1_start[ : break_time1_start_index]
+    # 休憩1開始分取得
+    break_time1_start_min = break_time1_start[break_time1_start_index + 1 : ]
+    # 休憩1終了時間の区切りのインデックス取得
+    break_time1_end_index = break_time1_end.index(':')
+    # 休憩1終了時取得
+    break_time1_end_hour = break_time1_end[ : break_time1_end_index]
+    # 休憩1終了分取得
+    break_time1_end_min = break_time1_end[break_time1_end_index + 1 : ]
+    # 休憩2開始時間の区切りのインデックス取得
+    break_time2_start_index = break_time2_start.index(':')
+    # 休憩2開始時取得
+    break_time2_start_hour = break_time2_start[ : break_time2_start_index]
+    # 休憩2開始分取得
+    break_time2_start_min = break_time2_start[break_time2_start_index + 1 : ]
+    # 休憩2終了時間の区切りのインデックス取得
+    break_time2_end_index = break_time2_end.index(':')
+    # 休憩2終了時取得
+    break_time2_end_hour = break_time2_end[ : break_time2_end_index]
+    # 休憩2終了分取得
+    break_time2_end_min = break_time2_end[break_time2_end_index + 1 : ]
+    # 休憩3開始時間の区切りのインデックス取得
+    break_time3_start_index = break_time3_start.index(':')
+    # 休憩3開始時取得
+    break_time3_start_hour = break_time3_start[ : break_time3_start_index]
+    # 休憩3開始分取得
+    break_time3_start_min = break_time3_start[break_time3_start_index + 1 : ]
+    # 休憩3終了時間の区切りのインデックス取得
+    break_time3_end_index = break_time3_end.index(':')
+    # 休憩3終了時取得
+    break_time3_end_hour = break_time3_end[ : break_time3_end_index]
+    # 休憩3終了分取得
+    break_time3_end_min = break_time3_end[break_time3_end_index + 1 : ]
+    # 休憩4開始時間の区切りのインデックス取得
+    break_time4_start_index = break_time4_start.index(':')
+    # 休憩4開始時取得
+    break_time4_start_hour = break_time4_start[ : break_time4_start_index]
+    # 休憩4開始分取得
+    break_time4_start_min = break_time4_start[break_time4_start_index + 1 : ]
+    # 休憩4終了時間の区切りのインデックス取得
+    break_time4_end_index = break_time4_end.index(':')
+    # 休憩4終了時取得
+    break_time4_end_hour = break_time4_end[ : break_time4_end_index]
+    # 休憩4終了分取得
+    break_time4_end_min = break_time4_end[break_time4_end_index + 1 : ]
+
     # POSTされた値をまとめる
-    break_time1 = break_time1_start[0 : 2] + break_time1_start[-2 : ] + \
-                  break_time1_end[0 : 2] + break_time1_end[-2 : ]
-    break_time2 = break_time2_start[0 : 2] + break_time2_start[-2 : ] + \
-                  break_time2_end[0 : 2] + break_time2_end[-2 : ]    
-    break_time3 = break_time3_start[0 : 2] + break_time3_start[-2 : ] + \
-                  break_time3_end[0 : 2] + break_time3_end[-2 : ]
-    break_time4 = break_time4_start[0 : 2] + break_time4_start[-2 : ] + \
-                  break_time4_end[0 : 2] + break_time4_end[-2 : ]
+    break_time1 = break_time1_start_hour.zfill(2) + break_time1_start_min + \
+                  break_time1_end_hour.zfill(2) + break_time1_end_min
+    break_time2 = break_time2_start_hour.zfill(2) + break_time2_start_min + \
+                  break_time2_end_hour.zfill(2) + break_time2_end_min
+    break_time3 = break_time3_start_hour.zfill(2) + break_time3_start_min + \
+                  break_time3_end_hour.zfill(2) + break_time3_end_min
+    break_time4 = break_time4_start_hour.zfill(2) + break_time4_start_min + \
+                  break_time4_end_hour.zfill(2) + break_time4_end_min
 
 
     # 昼休憩時間に長すぎる時間を登録しようとした時の処理
-    if (int(break_time1_end[0 : 2])*60 + int(break_time1_end[-2 : ])) - \
-      (int(break_time1_start[0 : 2])*60 + int(break_time1_start[-2 : ])) > 60 or \
-      (((int(break_time1_end[0 : 2])*60 + int(break_time1_end[-2 : ])) < \
-      (int(break_time1_start[0 : 2])*60 + int(break_time1_start[-2 : ]))) and \
-      (int(break_time1_end[0 : 2])*60 + int(break_time1_end[-2 : ]) + 1440) - \
-      (int(break_time1_start[0 : 2])*60 + int(break_time1_start[-2 : ])) > 60):
+    if (int(break_time1_end_hour)*60 + int(break_time1_end_min)) - \
+      (int(break_time1_start_hour)*60 + int(break_time1_start_min)) > 60 or \
+      (((int(break_time1_end_hour)*60 + int(break_time1_end_min)) < \
+      (int(break_time1_start_hour)*60 + int(break_time1_start_min))) and \
+      (int(break_time1_end_hour)*60 + int(break_time1_end_min) + 1440) - \
+      (int(break_time1_start_hour)*60 + int(break_time1_start_min)) > 60):
       # エラーメッセージ出力
       messages.error(request, '昼休憩時間が60分を超えています。正しい休憩時間を登録して下さい。ERROR012')
       # このページをリダイレクト
       return redirect(to = '/today_break_time')
 
     # 残業休憩時間1に長すぎる時間を登録しようとした時の処理
-    if (int(break_time2_end[0 : 2])*60 + int(break_time2_end[-2 : ])) - \
-      (int(break_time2_start[0 : 2])*60 + int(break_time2_start[-2 : ])) > 15 or \
-      (((int(break_time2_end[0 : 2])*60 + int(break_time2_end[-2 : ])) < \
-      (int(break_time2_start[0 : 2])*60 + int(break_time2_start[-2 : ]))) and \
-      (int(break_time2_end[0 : 2])*60 + int(break_time2_end[-2 : ]) + 1440) - \
-      (int(break_time2_start[0 : 2])*60 + int(break_time2_start[-2 : ])) > 15):
+    if (int(break_time2_end_hour)*60 + int(break_time2_end_min)) - \
+      (int(break_time2_start_hour)*60 + int(break_time2_start_min)) > 15 or \
+      (((int(break_time2_end_hour)*60 + int(break_time2_end_min)) < \
+      (int(break_time2_start_hour)*60 + int(break_time2_start_min))) and \
+      (int(break_time2_end_hour)*60 + int(break_time2_end_min) + 1440) - \
+      (int(break_time2_start_hour)*60 + int(break_time2_start_min)) > 15):
       # エラーメッセージ出力
       messages.error(request, '残業時間中の休憩時間1が15分を超えています。正しい休憩時間を登録して下さい。ERROR013')
       # このページをリダイレクト
       return redirect(to = '/today_break_time')
 
     # 残業休憩時間2に長すぎる時間を登録しようとした時の処理
-    if (int(break_time3_end[0 : 2])*60 + int(break_time3_end[-2 : ])) - \
-      (int(break_time3_start[0 : 2])*60 + int(break_time3_start[-2 : ])) > 60 or \
-      (((int(break_time3_end[0 : 2])*60 + int(break_time3_end[-2 : ])) < \
-      (int(break_time3_start[0 : 2])*60 + int(break_time3_start[-2 : ]))) and \
-      (int(break_time3_end[0 : 2])*60 + int(break_time3_end[-2 : ]) + 1440) - \
-      (int(break_time3_start[0 : 2])*60 + int(break_time3_start[-2 : ])) > 60):
+    if (int(break_time3_end_hour)*60 + int(break_time3_end_min)) - \
+      (int(break_time3_start_hour)*60 + int(break_time3_start_min)) > 60 or \
+      (((int(break_time3_end_hour)*60 + int(break_time3_end_min)) < \
+      (int(break_time3_start_hour)*60 + int(break_time3_start_min))) and \
+      (int(break_time3_end_hour)*60 + int(break_time3_end_min) + 1440) - \
+      (int(break_time3_start_hour)*60 + int(break_time3_start_min)) > 60):
       # エラーメッセージ出力
       messages.error(request, '残業時間中の休憩時間2が60分を超えています。正しい休憩時間を登録して下さい。ERROR014')
       # このページをリダイレクト
       return redirect(to = '/today_break_time')
 
     # 残業休憩時間3に長すぎる時間を登録しようとした時の処理
-    if (int(break_time4_end[0 : 2])*60 + int(break_time4_end[-2 : ])) - \
-      (int(break_time4_start[0 : 2])*60 + int(break_time4_start[-2 : ])) > 15 or \
-      (((int(break_time4_end[0 : 2])*60 + int(break_time4_end[-2 : ])) < \
-      (int(break_time4_start[0 : 2])*60 + int(break_time4_start[-2 : ]))) and \
-      (int(break_time4_end[0 : 2])*60 + int(break_time4_end[-2 : ]) + 1440) - \
-      (int(break_time4_start[0 : 2])*60 + int(break_time4_start[-2 : ])) > 15):
+    if (int(break_time4_end_hour)*60 + int(break_time4_end_min)) - \
+      (int(break_time4_start_hour)*60 + int(break_time4_start_min)) > 15 or \
+      (((int(break_time4_end_hour)*60 + int(break_time4_end_min)) < \
+      (int(break_time4_start_hour)*60 + int(break_time4_start_min))) and \
+      (int(break_time4_end_hour)*60 + int(break_time4_end_min) + 1440) - \
+      (int(break_time4_start_hour)*60 + int(break_time4_start_min)) > 15):
       # エラーメッセージ出力
       messages.error(request, '残業時間中の休憩時間3が15分を超えています。正しい休憩時間を登録して下さい。ERROR015')
       # このページをリダイレクト
@@ -3692,10 +3741,10 @@ def today_break_time(request):
       detail_list = kosu_data_get.detail_work.split('$')
 
       # 休憩1開始時間のインデント取得
-      break_start1 = int(int(break_time1_start[0 : 2])*12 + int(break_time1_start[-2 : ])/5)
+      break_start1 = int(int(break_time1_start_hour)*12 + int(break_time1_start_min)/5)
 
       # 休憩1終了時間のインデント取得
-      break_end1 = int(int(break_time1_end[0 : 2])*12 + int(break_time1_end[-2 : ])/5)
+      break_end1 = int(int(break_time1_end_hour)*12 + int(break_time1_end_min)/5)
 
       # 休憩1の日またぎ変数リセット
       break_next_day1 = 0
@@ -3711,10 +3760,10 @@ def today_break_time(request):
         break_next_day1 = 0
 
       # 休憩2開始時間のインデント取得
-      break_start2 = int(int(break_time2_start[0 : 2])*12 + int(break_time2_start[-2 : ])/5)
+      break_start2 = int(int(break_time2_start_hour)*12 + int(break_time2_start_min)/5)
 
       # 休憩2終了時間のインデント取得
-      break_end2 = int(int(break_time2_end[0 : 2])*12 + int(break_time2_end[-2 : ])/5)
+      break_end2 = int(int(break_time2_end_hour)*12 + int(break_time2_end_min)/5)
 
       # 休憩2の日またぎ変数リセット
       break_next_day2 = 0
@@ -3730,10 +3779,10 @@ def today_break_time(request):
         break_next_day2 = 0
 
       # 休憩3開始時間のインデント取得
-      break_start3 = int(int(break_time3_start[0 : 2])*12 + int(break_time3_start[-2 : ])/5)
-  
+      break_start3 = int(int(break_time3_start_hour)*12 + int(break_time3_start_min)/5)
+
       # 休憩3終了時間のインデント取得
-      break_end3 = int(int(break_time3_end[0 : 2])*12 + int(break_time3_end[-2 : ])/5)
+      break_end3 = int(int(break_time3_end_hour)*12 + int(break_time3_end_min)/5)
 
       # 休憩3の日またぎ変数リセット
       break_next_day3 = 0
@@ -3749,10 +3798,10 @@ def today_break_time(request):
         break_next_day3 = 0
 
       # 休憩4開始時間のインデント取得
-      break_start4 = int(int(break_time4_start[0 : 2])*12 + int(break_time4_start[-2 : ])/5)
+      break_start4 = int(int(break_time4_start_hour)*12 + int(break_time4_start_min)/5)
 
       # 休憩4終了時間のインデント取得
-      break_end4 = int(int(break_time4_end[0 : 2])*12 + int(break_time4_end[-2 : ])/5)
+      break_end4 = int(int(break_time4_end_hour)*12 + int(break_time4_end_min)/5)
 
       # 休憩4の日またぎ変数リセット
       break_next_day4 = 0
@@ -3770,7 +3819,7 @@ def today_break_time(request):
       # 休憩1が日を超えている場合の処理
       if break_next_day1 == 1:
         # 休憩時間内の工数データと作業詳細を消すループ(休憩時間開始～24時まで)
-        for bt1 in range(int(break_start1), 288):
+        for bt1 in range(break_start1, 288):
           # 作業内容リストの要素を空にする
           kosu_def[bt1] = '#'
 
@@ -3779,7 +3828,7 @@ def today_break_time(request):
 
 
         # 休憩時間内の工数データと作業詳細を消すループ(0時～休憩時間終了まで)
-        for bt1 in range(0, int(break_end1)):
+        for bt1 in range(break_end1):
           # 作業内容リストの要素を空にする
           kosu_def[bt1] = '#'
 
@@ -3788,15 +3837,15 @@ def today_break_time(request):
 
 
         # 休憩時間直後の時間に工数入力がある場合の処理
-        if kosu_def[int(break_end1)] != '#':
+        if kosu_def[break_end1] != '#':
           # 休憩時間内の工数データを休憩に書き換えるループ(休憩時間開始～24時まで)
-          for bt1 in range(int(break_start1), 288):
+          for bt1 in range(break_start1, 288):
             # 作業内容リストの要素を休憩に書き換え
             kosu_def[bt1] = '$'
 
 
           # 休憩時間内の工数データを休憩に書き換えるループ(0時～休憩時間終了まで)
-          for bt1 in range(0, int(break_end1)):
+          for bt1 in range(break_end1):
             # 作業内容リストの要素を休憩に書き換え
             kosu_def[bt1] = '$'
 
@@ -3804,7 +3853,7 @@ def today_break_time(request):
       # 休憩1が日を超えていない場合の処理
       else:
         # 休憩時間内の工数データと作業詳細を消すループ
-        for bt1 in range(int(break_start1), int(break_end1)):
+        for bt1 in range(break_start1, break_end1):
           # 作業内容リストの要素を空にする
           kosu_def[bt1] = '#'
           # 作業詳細リストの要素を空にする
@@ -3812,9 +3861,9 @@ def today_break_time(request):
 
 
         # 休憩時間直後の時間に工数入力がある場合の処理
-        if kosu_def[int(break_end1)] != '#':
+        if kosu_def[break_end1] != '#':
           # 休憩時間内の工数データを休憩に書き換えるループ
-          for bt1 in range(int(break_start1), int(break_end1)):
+          for bt1 in range(break_start1, break_end1):
             # 作業内容リストの要素を休憩に書き換え
             kosu_def[bt1] = '$'
 
@@ -3822,7 +3871,7 @@ def today_break_time(request):
         # 休憩2が日を超えている場合の処理
         if break_next_day2 == 1:
           # 休憩時間内の工数データと作業詳細を消すループ(休憩時間開始～24時まで)
-          for bt2 in range(int(break_start2), 288):
+          for bt2 in range(break_start2, 288):
             # 作業内容リストの要素を空にする
             kosu_def[bt2] = '#'
             # 作業詳細リストの要素を空にする
@@ -3830,7 +3879,7 @@ def today_break_time(request):
 
 
           # 休憩時間内の工数データと作業詳細を消すループ(0時～休憩時間終了まで)
-          for bt2 in range(0, int(break_end2)):
+          for bt2 in range(break_end2):
             # 作業内容リストの要素を空にする
             kosu_def[bt2] = '#'
             # 作業詳細リストの要素を空にする
@@ -3838,15 +3887,15 @@ def today_break_time(request):
 
 
         # 休憩時間直後の時間に工数入力がある場合の処理
-        if kosu_def[int(break_end2)] != '#':
+        if kosu_def[break_end2] != '#':
           # 休憩時間内の工数データを休憩に書き換えるループ(休憩時間開始～24時まで)
-          for bt2 in range(int(break_start2), 288):
+          for bt2 in range(break_start2, 288):
             # 作業内容リストの要素を休憩に書き換え
             kosu_def[bt2] = '$'
 
 
           # 休憩時間内の工数データを休憩に書き換えるループ(0時～休憩時間終了まで)
-          for bt2 in range(0, int(break_end2)):
+          for bt2 in range(break_end2):
             # 作業内容リストの要素を休憩に書き換え
             kosu_def[bt2] = '$'
 
@@ -3854,7 +3903,7 @@ def today_break_time(request):
         # 休憩2が日を超えていない場合の処理
         else:
           # 休憩時間内の工数データと作業詳細を消すループ
-          for bt2 in range(int(break_start2), int(break_end2)):
+          for bt2 in range(break_start2, break_end2):
             # 作業内容リストの要素を空にする
             kosu_def[bt2] = '#'
             # 作業詳細リストの要素を空にする
@@ -3862,9 +3911,9 @@ def today_break_time(request):
 
 
         # 休憩時間直後の時間に工数入力がある場合の処理
-        if kosu_def[int(break_end2)] != '#':
+        if kosu_def[break_end2] != '#':
           # 休憩時間内の工数データを休憩に書き換えるループ
-          for bt2 in range(int(break_start2), int(break_end2)):
+          for bt2 in range(break_start2, break_end2):
             # 作業内容リストの要素を休憩に書き換え
             kosu_def[bt2] = '$'
 
@@ -3872,7 +3921,7 @@ def today_break_time(request):
         # 休憩3が日を超えている場合の処理
         if break_next_day3 == 1:
           # 休憩時間内の工数データと作業詳細を消すループ(休憩時間開始～24時まで)
-          for bt3 in range(int(break_start3), 288):
+          for bt3 in range(break_start3, 288):
             # 作業内容リストの要素を空にする
             kosu_def[bt3] = '#'
             # 作業詳細リストの要素を空にする
@@ -3880,7 +3929,7 @@ def today_break_time(request):
 
 
           # 休憩時間内の工数データと作業詳細を消すループ(0時～休憩時間終了まで)
-          for bt2 in range(0, int(break_end3)):
+          for bt2 in range(break_end3):
             # 作業内容リストの要素を空にする
             kosu_def[bt3] = '#'
             # 作業詳細リストの要素を空にする
@@ -3888,15 +3937,15 @@ def today_break_time(request):
 
 
         # 休憩時間直後の時間に工数入力がある場合の処理
-        if kosu_def[int(break_end3)] != '#':
+        if kosu_def[break_end3] != '#':
           # 休憩時間内の工数データを休憩に書き換えるループ(休憩時間開始～24時まで)
-          for bt3 in range(int(break_start3), 288):
+          for bt3 in range(break_start3, 288):
             # 作業内容リストの要素を休憩に書き換え
             kosu_def[bt3] = '$'
 
 
           # 休憩時間内の工数データを休憩に書き換えるループ(0時～休憩時間終了まで)
-          for bt3 in range(0, int(break_end3)):
+          for bt3 in range(break_end3):
             # 作業内容リストの要素を休憩に書き換え
             kosu_def[bt3] = '$'
 
@@ -3904,7 +3953,7 @@ def today_break_time(request):
         # 休憩3が日を超えていない場合の処理
         else:
           # 休憩時間内の工数データと作業詳細を消す
-          for bt3 in range(int(break_start3), int(break_end3)):
+          for bt3 in range(break_start3, break_end3):
             # 作業内容リストの要素を空にする
             kosu_def[bt3] = '#'
             # 作業詳細リストの要素を空にする
@@ -3912,9 +3961,9 @@ def today_break_time(request):
 
 
         # 休憩時間直後の時間に工数入力がある場合の処理
-        if kosu_def[int(break_end3)] != '#':
+        if kosu_def[break_end3] != '#':
           # 休憩時間内の工数データを休憩に書き換えるループ
-          for bt3 in range(int(break_start3), int(break_end3)):
+          for bt3 in range(break_start3, break_end3):
             # 作業内容リストの要素を休憩に書き換え
             kosu_def[bt3] = '$'
 
@@ -3922,7 +3971,7 @@ def today_break_time(request):
         # 休憩4が日を超えている場合の処理
         if break_next_day4 == 1:
           # 休憩時間内の工数データと作業詳細を消すループ(休憩時間開始～24時まで)
-          for bt4 in range(int(break_start4), 288):
+          for bt4 in range(break_start4, 288):
             # 作業内容リストの要素を空にする
             kosu_def[bt4] = '#'
             # 作業詳細リストの要素を空にする
@@ -3930,7 +3979,7 @@ def today_break_time(request):
 
 
           # 休憩時間内の工数データと作業詳細を消すループ(0時～休憩時間終了まで)
-          for bt4 in range(0, int(break_end4)):
+          for bt4 in range(break_end4):
             # 作業内容リストの要素を空にする
             kosu_def[bt4] = '#'
             # 作業詳細リストの要素を空にする
@@ -3938,15 +3987,15 @@ def today_break_time(request):
 
 
         # 休憩時間直後の時間に工数入力がある場合の処理
-        if kosu_def[int(break_end4)] != '#':
+        if kosu_def[break_end4] != '#':
           # 休憩時間内の工数データを休憩に書き換えるループ(休憩時間開始～24時まで)
-          for bt4 in range(int(break_start4), 288):
+          for bt4 in range(break_start4, 288):
             # 作業内容リストの要素を休憩に書き換え
             kosu_def[bt4] = '$'
 
 
           # 休憩時間内の工数データを休憩に書き換えるループ(0時～休憩時間終了まで)
-          for bt4 in range(0, int(break_end4)):
+          for bt4 in range(break_end4):
             # 作業内容リストの要素を休憩に書き換え
             kosu_def[bt4] = '$'
 
@@ -3954,7 +4003,7 @@ def today_break_time(request):
         # 休憩4が日を超えていない場合の処理
         else:
           # 休憩時間内の工数データと作業詳細を消すループ
-          for bt4 in range(int(break_start4), int(break_end4)):
+          for bt4 in range(break_start4, break_end4):
             # 作業内容リストの要素を空にする
             kosu_def[bt4] = '#'
             # 作業詳細リストの要素を空にする
@@ -3962,9 +4011,9 @@ def today_break_time(request):
 
 
         # 休憩時間直後の時間に工数入力がある場合の処理
-        if kosu_def[int(break_end4)] != '#':
+        if kosu_def[break_end4] != '#':
           # 休憩時間内の工数データを休憩に書き換えるループ
-          for bt4 in range(int(break_start4), int(break_end4)):
+          for bt4 in range(break_start4, break_end4):
             # 作業内容リストの要素を休憩に書き換え
             kosu_def[bt4] = '$'
 
