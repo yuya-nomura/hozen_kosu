@@ -2,7 +2,6 @@ from django.shortcuts import render
 from django.shortcuts import redirect
 from django.contrib import messages
 from django.core.paginator import Paginator
-from django.http import JsonResponse
 import datetime
 import itertools
 from ..models import member
@@ -14,7 +13,6 @@ from ..forms import kosu_dayForm
 from ..forms import team_kosuForm
 from ..forms import schedule_timeForm
 from ..forms import scheduleForm
-from ..forms import ShopNameForm
 
 
 
