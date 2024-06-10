@@ -4505,6 +4505,9 @@ def delete(request, num):
   if request.session.get('login_No', None) == None:
     return redirect(to = '/login')
   
+  # ログイン者情報取得
+  data = member.objects.get(employee_no = request.session['login_No'])
+
   # 指定IDの工数履歴のレコードのオブジェクトを変数に入れる
   obj_get = Business_Time_graph.objects.get(id = num)
 
