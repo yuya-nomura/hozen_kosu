@@ -677,13 +677,6 @@ def input(request):
       # このページをリダイレクト
       return redirect(to = '/input')
 
-    # 作業開始時間が作業終了時間より遅い場合の処理
-    if start_time > end_time and check == 0:
-      # エラーメッセージ出力
-      messages.error(request, '作業開始時間が終了時間を越えています。翌日チェックを忘れていませんか？ERROR004')
-      # このページをリダイレクト
-      return redirect(to = '/input')
-
 
     # 指定日に工数データが既にあるか確認
     obj_filter = Business_Time_graph.objects.filter(employee_no3 = request.session.get('login_No', None), \
@@ -707,6 +700,14 @@ def input(request):
     # 作業終了時間のインデント取得
     end_time_ind = int(int(end_time_hour)*12 + int(end_time_min)/5)
 
+
+    # 作業開始時間が作業終了時間より遅い場合の処理
+    if start_time_ind > end_time_ind and check == 0:
+      # エラーメッセージ出力
+      messages.error(request, '作業開始時間が終了時間を越えています。翌日チェックを忘れていませんか？ERROR004')
+      # このページをリダイレクト
+      return redirect(to = '/input')
+    
 
     # 入力日が作業内容データに登録がある場合の処理
     if obj_filter.count() != 0:

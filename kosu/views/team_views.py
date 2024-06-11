@@ -536,10 +536,10 @@ def team_kosu(request, num):
 
 
   # ログイン者の班員登録情報取得
-  data3 = team_member.objects.filter(employee_no5 = request.session['login_No'])
+  team_filter = team_member.objects.filter(employee_no5 = request.session['login_No'])
   # 班員登録がなければメインページに戻る
-  if data3.count() == 0:
-    return redirect(to = '/')
+  if team_filter.count() == 0:
+    return redirect(to = '/team_main')
   
 
   # フォームの選択肢に使用するログイン者の班員設定のオブジェクト取得
@@ -663,10 +663,10 @@ def team_detail(request, num):
     return redirect(to = '/')
 
   # ログイン者の班員登録情報取得
-  data3 = team_member.objects.filter(employee_no5 = request.session['login_No'])
+  team_filter = team_member.objects.filter(employee_no5 = request.session['login_No'])
   # 班員登録がなければメインページに戻る
-  if data3.count() == 0:
-    return redirect(to = '/')
+  if team_filter.count() == 0:
+    return redirect(to = '/team_main')
 
 
   # 指定IDの工数履歴のレコードのオブジェクトを変数に入れる
@@ -819,10 +819,10 @@ def team_calendar(request):
     return redirect(to = '/')
 
   # ログイン者の班員登録情報取得
-  data3 = team_member.objects.filter(employee_no5 = request.session['login_No'])
+  team_filter = team_member.objects.filter(employee_no5 = request.session['login_No'])
   # 班員登録がなければメインページに戻る
-  if data3.count() == 0:
-    return redirect(to = '/')
+  if team_filter.count() == 0:
+    return redirect(to = '/team_main')
 
 
   # 曜日指定フォーム初期値定義
@@ -1170,13 +1170,11 @@ def team_calendar(request):
   member1_obj_filter = member.objects.filter(employee_no__contains = obj_get.member1)
   # 班員1人目の従業員番号の人員がいる場合の処理
   if member1_obj_filter.count() == 1:
-
-     # 班員1人目の名前取得
+    # 班員1人目の名前取得
     member1_obj_get = member.objects.get(employee_no = obj_get.member1)
 
   # 班員1人目の従業員番号の人員がいない場合の処理
   else:
-
     # 班員1人目の名前に空を入れる
     member1_obj_get = ''
 
@@ -1185,13 +1183,11 @@ def team_calendar(request):
   member2_obj_filter = member.objects.filter(employee_no__contains = obj_get.member2)
   # 班員2人目の従業員番号の人員がいる場合の処理
   if member2_obj_filter.count() == 1:
-
     # 班員2人目の名前取得
     member2_obj_get = member.objects.get(employee_no = obj_get.member2)
 
   # 班員2人目の従業員番号の人員がいない場合の処理
   else:
-
     # 班員2人目の名前に空を入れる
     member2_obj_get = ''
 
@@ -1200,13 +1196,11 @@ def team_calendar(request):
   member3_obj_filter = member.objects.filter(employee_no__contains = obj_get.member3)
   # 班員3人目の従業員番号の人員がいる場合の処理
   if member3_obj_filter.count() == 1:
-
     # 班員3人目の名前取得
     member3_obj_get = member.objects.get(employee_no = obj_get.member3)
 
   # 班員3人目の従業員番号の人員がいない場合の処理
   else:
-
     # 班員3人目の名前に空を入れる
     member3_obj_get = ''
 
@@ -1215,13 +1209,11 @@ def team_calendar(request):
   member4_obj_filter = member.objects.filter(employee_no__contains = obj_get.member4)
   # 班員4人目の従業員番号の人員がいる場合の処理
   if member4_obj_filter.count() == 1:
-
     # 班員4人目の名前取得
     member4_obj_get = member.objects.get(employee_no = obj_get.member4)
 
   # 班員4人目の従業員番号の人員がいない場合の処理
   else:
-
     # 班員4人目の名前に空を入れる
     member4_obj_get = ''
 
@@ -1230,13 +1222,11 @@ def team_calendar(request):
   member5_obj_filter = member.objects.filter(employee_no__contains = obj_get.member5)
   # 班員5人目の従業員番号の人員がいる場合の処理
   if member5_obj_filter.count() == 1:
-
     # 班員5人目の名前取得
     member5_obj_get = member.objects.get(employee_no = obj_get.member5)
 
   # 班員5人目の従業員番号の人員がいない場合の処理
   else:
-
     # 班員5人目の名前に空を入れる
     member5_obj_get = ''
 
@@ -1245,13 +1235,11 @@ def team_calendar(request):
   member6_obj_filter = member.objects.filter(employee_no__contains = obj_get.member6)
   # 班員6人目の従業員番号の人員がいる場合の処理
   if member6_obj_filter.count() == 1:
-
     # 班員6人目の名前取得
     member6_obj_get = member.objects.get(employee_no = obj_get.member6)
 
   # 班員6人目の従業員番号の人員がいない場合の処理
   else:
-
     # 班員6人目の名前に空を入れる
     member6_obj_get = ''
 
@@ -1260,13 +1248,11 @@ def team_calendar(request):
   member7_obj_filter = member.objects.filter(employee_no__contains = obj_get.member7)
   # 班員7人目の従業員番号の人員がいる場合の処理
   if member7_obj_filter.count() == 1:
-
     # 班員7人目の名前取得
     member7_obj_get = member.objects.get(employee_no = obj_get.member7)
 
   # 班員7人目の従業員番号の人員がいない場合の処理
   else:
-
     # 班員7人目の名前に空を入れる
     member7_obj_get = ''
 
@@ -1275,13 +1261,11 @@ def team_calendar(request):
   member8_obj_filter = member.objects.filter(employee_no__contains = obj_get.member8)
   # 班員8人目の従業員番号の人員がいる場合の処理
   if member8_obj_filter.count() == 1:
-
     # 班員8人目の名前取得
     member8_obj_get = member.objects.get(employee_no = obj_get.member8)
 
   # 班員8人目の従業員番号の人員がいない場合の処理
   else:
-
     # 班員8人目の名前に空を入れる
     member8_obj_get = ''
 
@@ -1290,13 +1274,11 @@ def team_calendar(request):
   member9_obj_filter = member.objects.filter(employee_no__contains = obj_get.member9)
   # 班員9人目の従業員番号の人員がいる場合の処理
   if member9_obj_filter.count() == 1:
-
     # 班員9人目の名前取得
     member9_obj_get = member.objects.get(employee_no = obj_get.member9)
 
   # 班員9人目の従業員番号の人員がいない場合の処理
   else:
-
     # 班員9人目の名前に空を入れる
     member9_obj_get = ''
 
@@ -1305,13 +1287,11 @@ def team_calendar(request):
   member10_obj_filter = member.objects.filter(employee_no__contains = obj_get.member10)
   # 班員10人目の従業員番号の人員がいる場合の処理
   if member10_obj_filter.count() == 1:
-
     # 班員10人目の名前取得
     member10_obj_get = member.objects.get(employee_no = obj_get.member10)
 
   # 班員10人目の従業員番号の人員がいない場合の処理
   else:
-
     # 班員10人目の名前に空を入れる
     member10_obj_get = ''
 
@@ -1331,16 +1311,13 @@ def team_calendar(request):
 
   # 班員(従業員番号)リストリセット
   member_list = []
-
   # 選択肢の表示数検出&班員(従業員番号)リスト作成
   for i in range(1, 11):
-
     # 班員(従業員番号)リストに班員追加
     member_list.append(eval('obj_get.member{}'.format(i)))
 
     # 班員の登録がある場合の処理
     if eval('obj_get.member{}'.format(i)) != '':
-
       # インデックス記録
       member_num = i
 
@@ -1694,6 +1671,351 @@ def team_calendar(request):
 
 
 
+# 班員工数入力状況一覧画面定義
+def team_over_time(request):
+
+  # 未ログインならログインページに飛ぶ
+  if request.session.get('login_No', None) == None:
+    return redirect(to = '/login')
+  
+  # ログイン者の情報取得
+  data = member.objects.get(employee_no = request.session['login_No'])
+  # ログイン者に権限がなければメインページに戻る
+  if data.authority == False:
+    return redirect(to = '/')
+
+  # ログイン者の班員登録情報あるか確認
+  team_filter = team_member.objects.filter(employee_no5 = request.session['login_No'])
+  # 班員登録がなければメインページに戻る
+  if team_filter.count() == 0:
+    return redirect(to = '/team_main')
+
+
+  # ログイン者の班員登録情報取得
+  team_get = team_member.objects.get(employee_no5 = request.session['login_No'])
+
+  # 班員1人目の従業員番号の人員がいるか確認
+  member1_obj_filter = member.objects.filter(employee_no__contains = team_get.member1)
+  # 班員1人目の従業員番号の人員がいる場合の処理
+  if member1_obj_filter.count() == 1:
+     # 班員1人目の情報取得
+    member1_obj_get = member.objects.get(employee_no = team_get.member1)
+
+  # 班員1人目の従業員番号の人員がいない場合の処理
+  else:
+    # 班員1人目に空を入れる
+    member1_obj_get = ''
+
+
+  # 班員2人目の従業員番号の人員がいるか確認
+  member2_obj_filter = member.objects.filter(employee_no__contains = team_get.member2)
+  # 班員2人目の従業員番号の人員がいる場合の処理
+  if member2_obj_filter.count() == 1:
+     # 班員2人目の情報取得
+    member2_obj_get = member.objects.get(employee_no = team_get.member2)
+
+  # 班員2人目の従業員番号の人員がいない場合の処理
+  else:
+    # 班員2人目に空を入れる
+    member2_obj_get = ''
+
+
+  # 班員3人目の従業員番号の人員がいるか確認
+  member3_obj_filter = member.objects.filter(employee_no__contains = team_get.member3)
+  # 班員3人目の従業員番号の人員がいる場合の処理
+  if member3_obj_filter.count() == 1:
+     # 班員3人目の情報取得
+    member3_obj_get = member.objects.get(employee_no = team_get.member3)
+
+  # 班員3人目の従業員番号の人員がいない場合の処理
+  else:
+    # 班員3人目に空を入れる
+    member3_obj_get = ''
+
+
+  # 班員4人目の従業員番号の人員がいるか確認
+  member4_obj_filter = member.objects.filter(employee_no__contains = team_get.member4)
+  # 班員4人目の従業員番号の人員がいる場合の処理
+  if member4_obj_filter.count() == 1:
+     # 班員4人目の情報取得
+    member4_obj_get = member.objects.get(employee_no = team_get.member4)
+
+  # 班員4人目の従業員番号の人員がいない場合の処理
+  else:
+    # 班員4人目に空を入れる
+    member4_obj_get = ''
+
+
+  # 班員5人目の従業員番号の人員がいるか確認
+  member5_obj_filter = member.objects.filter(employee_no__contains = team_get.member5)
+  # 班員5人目の従業員番号の人員がいる場合の処理
+  if member5_obj_filter.count() == 1:
+     # 班員5人目の情報取得
+    member5_obj_get = member.objects.get(employee_no = team_get.member5)
+
+  # 班員5人目の従業員番号の人員がいない場合の処理
+  else:
+    # 班員5人目に空を入れる
+    member5_obj_get = ''
+
+
+  # 班員6人目の従業員番号の人員がいるか確認
+  member6_obj_filter = member.objects.filter(employee_no__contains = team_get.member6)
+  # 班員6人目の従業員番号の人員がいる場合の処理
+  if member6_obj_filter.count() == 1:
+     # 班員6人目の情報取得
+    member6_obj_get = member.objects.get(employee_no = team_get.member6)
+
+  # 班員6人目の従業員番号の人員がいない場合の処理
+  else:
+    # 班員6人目に空を入れる
+    member6_obj_get = ''
+
+
+  # 班員7人目の従業員番号の人員がいるか確認
+  member7_obj_filter = member.objects.filter(employee_no__contains = team_get.member7)
+  # 班員7人目の従業員番号の人員がいる場合の処理
+  if member7_obj_filter.count() == 1:
+     # 班員7人目の情報取得
+    member7_obj_get = member.objects.get(employee_no = team_get.member7)
+
+  # 班員7人目の従業員番号の人員がいない場合の処理
+  else:
+    # 班員7人目に空を入れる
+    member7_obj_get = ''
+
+
+  # 班員8人目の従業員番号の人員がいるか確認
+  member8_obj_filter = member.objects.filter(employee_no__contains = team_get.member8)
+  # 班員8人目の従業員番号の人員がいる場合の処理
+  if member8_obj_filter.count() == 1:
+     # 班員8人目の情報取得
+    member8_obj_get = member.objects.get(employee_no = team_get.member8)
+
+  # 班員8人目の従業員番号の人員がいない場合の処理
+  else:
+    # 班員8人目に空を入れる
+    member8_obj_get = ''
+
+
+  # 班員9人目の従業員番号の人員がいるか確認
+  member9_obj_filter = member.objects.filter(employee_no__contains = team_get.member9)
+  # 班員9人目の従業員番号の人員がいる場合の処理
+  if member9_obj_filter.count() == 1:
+     # 班員9人目の情報取得
+    member9_obj_get = member.objects.get(employee_no = team_get.member9)
+
+  # 班員9人目の従業員番号の人員がいない場合の処理
+  else:
+    # 班員9人目に空を入れる
+    member9_obj_get = ''
+
+
+  # 班員10人目の従業員番号の人員がいるか確認
+  member10_obj_filter = member.objects.filter(employee_no__contains = team_get.member10)
+  # 班員10人目の従業員番号の人員がいる場合の処理
+  if member10_obj_filter.count() == 1:
+     # 班員10人目の情報取得
+    member10_obj_get = member.objects.get(employee_no = team_get.member10)
+
+  # 班員10人目の従業員番号の人員がいない場合の処理
+  else:
+    # 班員10人目に空を入れる
+    member10_obj_get = ''
+
+
+  # 班員(従業員番号)リストリセット
+  member_list = []
+  # 選択肢の表示数検出&班員(従業員番号)リスト作成
+  for i in range(1, 11):
+    # 人員情報ある場合の処理
+    if eval('member{}_obj_get'.format(i)) != '':
+      # 班員リストに班員追加
+      member_list.append(eval('member{}_obj_get'.format(i)))
+    
+
+
+  # POST時の処理
+  if (request.method == 'POST'):
+    # 検索項目に空欄がある場合の処理
+    if request.POST['year'] == '' or request.POST['month'] == '':
+      # エラーメッセージ出力
+      messages.error(request, '表示年月に未入力箇所があります。ERROR082')
+      # このページをリダイレクト
+      return redirect(to = '/class_list')
+    
+
+    # フォームの初期値定義
+    schedule_default = {'year' : request.POST['year'], 
+                        'month' : request.POST['month']}
+    # フォーム定義
+    form = schedule_timeForm(schedule_default)
+    
+    # POSTした値をセッションに登録
+    request.session['over_time_year'] = request.POST['year']
+    request.session['over_time_month'] = request.POST['month']
+
+
+    # 次の月の最初の日を定義
+    if int(request.POST['month']) == 12:
+      next_month = datetime.date(int(request.POST['year']) + 1, 1, 1)
+
+    else:
+      next_month = datetime.date(int(request.POST['year']), int(request.POST['month']) + 1, 1)
+
+    # 次の月の最初の日から1を引くことで、指定した月の最後の日を取得
+    last_day_of_month = next_month - datetime.timedelta(days = 1)
+
+
+    # 残業リスト定期
+    over_time_list1 = {}
+    over_time_list2 = {}
+    over_time_list3 = {}
+    over_time_list4 = {}
+    over_time_list5 = {}
+    over_time_list6 = {}
+    over_time_list7 = {}
+    over_time_list8 = {}
+    over_time_list9 = {}
+    over_time_list10 = {}
+
+    # 残業リスト作成するループ
+    for ind, m in enumerate(member_list):
+      # 残業リストの先頭に人員の名前入れる
+      eval('over_time_list{}.append(m.name)'.format(ind + 1))
+
+      for d in range(last_day_of_month + 1):
+        obj_filter = Business_Time_graph.objects.filter(employee_no3 = request.session['login_No'], \
+                                                        work_day2 = datetime.date(int(request.POST['year']), int(request.POST['month']), d))
+        if obj_filter != 0:
+          obj_get = Business_Time_graph.objects.get(employee_no3 = request.session['login_No'], \
+                                                    work_day2 = datetime.date(int(request.POST['year']), int(request.POST['month']), d))
+          if obj_get.judgement == True or obj_get.judgement == False:
+            eval('over_time_list{}[obj_get.judgement]=obj_get.over_time)'.format(ind + 1))
+          else:
+            eval('over_time_list{}[False]=obj_get.over_time)'.format(ind + 1))
+        else:
+          eval('over_time_list{}[False]=0)'.format(ind + 1))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  # POST時以外の処理
+  else:
+    # セッション値に年月のデータがない場合の処理
+    if request.session.get('over_time_year', '') == '' or request.session.get('over_time_month', '') == '':
+      # 本日の年月取得
+      year = datetime.date.today().year
+      month = datetime.date.today().month
+
+    # セッション値に年月のデータがある場合の処理
+    else:
+      # セッション値から年月取得
+      year = int(request.session['over_time_year'])
+      month = int(request.session['over_time_month'])
+
+
+    # フォームの初期値定義
+    schedule_default = {'year' : str(year), 
+                        'month' : str(month)}
+    # フォーム定義
+    form = schedule_timeForm(schedule_default)
+
+
+    # 次の月の最初の日を定義
+    if month == 12:
+      next_month = datetime.date(year + 1, 1, 1)
+
+    else:
+      next_month = datetime.date(year, month + 1, 1)
+
+    # 次の月の最初の日から1を引くことで、指定した月の最後の日を取得
+    last_day_of_month = next_month - datetime.timedelta(days = 1)
+
+
+    # 残業リスト定期
+    over_time_list1 = []
+    over_time_list2 = []
+    over_time_list3 = []
+    over_time_list4 = []
+    over_time_list5 = []
+    over_time_list6 = []
+    over_time_list7 = []
+    over_time_list8 = []
+    over_time_list9 = []
+    over_time_list10 = []
+
+    # 残業リスト作成するループ
+    for ind, m in enumerate(member_list):
+      if ind ==0:
+        # 残業リストの先頭に人員の名前入れる
+        eval('over_time_list{}.append(m.name)'.format(ind + 1))
+
+      for d in range(1, int(last_day_of_month.day) + 1):
+        obj_filter = Business_Time_graph.objects.filter(employee_no3 = request.session['login_No'], \
+                                                        work_day2 = datetime.date(year, month, d))
+        tentative_list = []
+        if obj_filter.count() != 0:
+          obj_get = Business_Time_graph.objects.get(employee_no3 = request.session['login_No'], \
+                                                    work_day2 = datetime.date(year, month, d))
+          tentative_list.append(obj_get.judgement)
+          tentative_list.append(obj_get.over_time)
+
+          eval('over_time_list{}.append(tentative_list)'.format(ind + 1))
+
+        else:
+          tentative_list.append(False)
+          tentative_list.append(0)
+          eval('over_time_list{}.append(tentative_list)'.format(ind + 1))
+    print(over_time_list1)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  # HTMLに渡す辞書
+  context = {
+    'title' : '班員残業管理',
+    'form' : form,
+    }
+
+
+
+  # 指定したHTMLに辞書を渡して表示を完成させる
+  return render(request, 'kosu/team_over_time.html', context)
+
+
+
+
+
+#--------------------------------------------------------------------------------------------------------
+
+
+
+
+
 # 工数入力可否(ショップ単位)画面定義
 def class_list(request):
 
@@ -1709,7 +2031,6 @@ def class_list(request):
 
   # POST時の処理
   if (request.method == 'POST'):
-
     # 検索項目に空欄がある場合の処理
     if request.POST['year'] == '' or request.POST['month'] == '':
       # エラーメッセージ出力
@@ -1827,20 +2148,17 @@ def class_list(request):
 
   # POST時以外の処理
   else:
-
     # セッション値に年月のデータがない場合の処理
     if request.session.get('find_year', '') == '' or request.session.get('find_month', '') == '':
-
       # 本日の年月取得
       year = datetime.date.today().year
       month = datetime.date.today().month
 
     # セッション値に年月のデータがある場合の処理
     else:
-
       # セッション値から年月取得
-      year = request.session.get('find_year', '')
-      month = request.session.get('find_month', '')
+      year = request.session['find_year']
+      month = request.session['find_month']
 
 
     # フォームの初期値定義
@@ -1881,10 +2199,10 @@ def class_list(request):
 
     # 次の月の最初の日を定義
     if int(month) == 12:
-        next_month = datetime.date(int(year) + 1, 1, 1)
+      next_month = datetime.date(int(year) + 1, 1, 1)
 
     else:
-        next_month = datetime.date(int(year), int(month) + 1, 1)
+      next_month = datetime.date(int(year), int(month) + 1, 1)
 
     # 次の月の最初の日から1を引くことで、指定した月の最後の日を取得
     last_day_of_month = next_month - datetime.timedelta(days = 1)
