@@ -1855,60 +1855,8 @@ def team_over_time(request):
     request.session['over_time_year'] = request.POST['year']
     request.session['over_time_month'] = request.POST['month']
 
-
-    # 次の月の最初の日を定義
-    if int(request.POST['month']) == 12:
-      next_month = datetime.date(int(request.POST['year']) + 1, 1, 1)
-
-    else:
-      next_month = datetime.date(int(request.POST['year']), int(request.POST['month']) + 1, 1)
-
-    # 次の月の最初の日から1を引くことで、指定した月の最後の日を取得
-    last_day_of_month = next_month - datetime.timedelta(days = 1)
-
-
-    # 残業リスト定期
-    over_time_list1 = {}
-    over_time_list2 = {}
-    over_time_list3 = {}
-    over_time_list4 = {}
-    over_time_list5 = {}
-    over_time_list6 = {}
-    over_time_list7 = {}
-    over_time_list8 = {}
-    over_time_list9 = {}
-    over_time_list10 = {}
-
-    # 残業リスト作成するループ
-    for ind, m in enumerate(member_list):
-      # 残業リストの先頭に人員の名前入れる
-      eval('over_time_list{}.append(m.name)'.format(ind + 1))
-
-      for d in range(last_day_of_month + 1):
-        obj_filter = Business_Time_graph.objects.filter(employee_no3 = request.session['login_No'], \
-                                                        work_day2 = datetime.date(int(request.POST['year']), int(request.POST['month']), d))
-        if obj_filter != 0:
-          obj_get = Business_Time_graph.objects.get(employee_no3 = request.session['login_No'], \
-                                                    work_day2 = datetime.date(int(request.POST['year']), int(request.POST['month']), d))
-          if obj_get.judgement == True or obj_get.judgement == False:
-            eval('over_time_list{}[obj_get.judgement]=obj_get.over_time)'.format(ind + 1))
-          else:
-            eval('over_time_list{}[False]=obj_get.over_time)'.format(ind + 1))
-        else:
-          eval('over_time_list{}[False]=0)'.format(ind + 1))
-
-
-
-
-
-
-
-
-
-
-
-
-
+    year = int(request.POST['year'])
+    month = int(request.POST['month'])
 
 
 
@@ -1934,61 +1882,57 @@ def team_over_time(request):
     form = schedule_timeForm(schedule_default)
 
 
-    # 次の月の最初の日を定義
-    if month == 12:
-      next_month = datetime.date(year + 1, 1, 1)
 
-    else:
-      next_month = datetime.date(year, month + 1, 1)
+  # 次の月の最初の日を定義
+  if month == 12:
+    next_month = datetime.date(year + 1, 1, 1)
 
-    # 次の月の最初の日から1を引くことで、指定した月の最後の日を取得
-    last_day_of_month = next_month - datetime.timedelta(days = 1)
+  else:
+    next_month = datetime.date(year, month + 1, 1)
 
-
-    # 残業リスト定期
-    over_time_list1 = []
-    over_time_list2 = []
-    over_time_list3 = []
-    over_time_list4 = []
-    over_time_list5 = []
-    over_time_list6 = []
-    over_time_list7 = []
-    over_time_list8 = []
-    over_time_list9 = []
-    over_time_list10 = []
-
-    # 残業リスト作成するループ
-    for ind, m in enumerate(member_list):
-      if ind ==0:
-        # 残業リストの先頭に人員の名前入れる
-        eval('over_time_list{}.append(m.name)'.format(ind + 1))
-
-      for d in range(1, int(last_day_of_month.day) + 1):
-        obj_filter = Business_Time_graph.objects.filter(employee_no3 = request.session['login_No'], \
-                                                        work_day2 = datetime.date(year, month, d))
-        tentative_list = []
-        if obj_filter.count() != 0:
-          obj_get = Business_Time_graph.objects.get(employee_no3 = request.session['login_No'], \
-                                                    work_day2 = datetime.date(year, month, d))
-          tentative_list.append(obj_get.judgement)
-          tentative_list.append(obj_get.over_time)
-
-          eval('over_time_list{}.append(tentative_list)'.format(ind + 1))
-
-        else:
-          tentative_list.append(False)
-          tentative_list.append(0)
-          eval('over_time_list{}.append(tentative_list)'.format(ind + 1))
-    print(over_time_list1)
+  # 次の月の最初の日から1を引くことで、指定した月の最後の日を取得
+  last_day_of_month = next_month - datetime.timedelta(days = 1)
 
 
+  # 残業リスト定期
+  over_time_list1 = []
+  over_time_list2 = []
+  over_time_list3 = []
+  over_time_list4 = []
+  over_time_list5 = []
+  over_time_list6 = []
+  over_time_list7 = []
+  over_time_list8 = []
+  over_time_list9 = []
+  over_time_list10 = []
 
+  # 残業リスト作成するループ
+  for ind, m in enumerate(member_list):
+    # 最初のループの処理
+    if ind ==0:
+      # 残業リストの先頭に人員の名前入れる
+      eval('over_time_list{}.append(m.name)'.format(ind + 1))
 
+    # 日毎の残業と整合性をリストに追加するループ
+    for d in range(1, int(last_day_of_month.day) + 1):
+      # 該当日に工数データあるか確認
+      obj_filter = Business_Time_graph.objects.filter(employee_no3 = request.session['login_No'], \
+                                                      work_day2 = datetime.date(year, month, d))
+      # 仮リスト定義
+      tentative_list = []
+      # 該当日に工数データがある場合の処理
+      if obj_filter.count() != 0:
+        # 工数データ取得
+        obj_get = Business_Time_graph.objects.get(employee_no3 = request.session['login_No'], \
+                                                  work_day2 = datetime.date(year, month, d))
 
+        # 残業リストに残業を追加
+        eval('over_time_list{}.append(int(obj_get.over_time))'.format(ind + 1))
 
-
-
-
+      # 該当日に工数データがない場合の処理
+      else:
+        # 残業リストに仮リストの値を追加
+        eval('over_time_list{}.append(0)'.format(ind + 1))
 
 
 
@@ -1999,6 +1943,18 @@ def team_over_time(request):
   context = {
     'title' : '班員残業管理',
     'form' : form,
+    'day_list' : [str(day)+"日" for day in range(1, int(last_day_of_month.day) + 1)],
+    'over_time_list1' : over_time_list1,
+    'over_time_list2' : over_time_list2,
+    'over_time_list3' : over_time_list3,
+    'over_time_list4' : over_time_list4,
+    'over_time_list5' : over_time_list5,
+    'over_time_list6' : over_time_list6,
+    'over_time_list7' : over_time_list7,
+    'over_time_list8' : over_time_list8,
+    'over_time_list9' : over_time_list9,
+    'over_time_list10' : over_time_list10,
+    'team_n' : len(member_list),
     }
 
 

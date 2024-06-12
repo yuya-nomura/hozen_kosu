@@ -10,8 +10,36 @@
 </head>
 <body class="container">
   <h1 class="display-4 text-danger">{{title}}</h1>
+  <form action="{% url 'team_over_time' %}" method="post">
+    {% csrf_token %}
   {{form.year}}年　
   {{form.month}}月
   <input type="submit" value="切り替え" class="btn btn-orange1 mt-2">
+  <table class="table text-nowrap table-custom">
+    <tr>
+      <th style="text-align:center;">
+        氏名
+      </th>
+      {% for d in day_list %}
+      <th style="text-align:center;">
+        {{d}}
+      </th>
+      {% endfor %}
+      <th style="text-align:center;">
+        合計
+      </th>
+    </tr>
+    {% if team_n > 0 %}
+    {% for m in over_time_list1 %}
+    <td>
+      {{m}}
+    </td>
+    {% endfor %}
+    <td>
+        {{m}}
+    </td>
+    {% endif %}
+  </table>
+  </form>
 </body>
 </html>

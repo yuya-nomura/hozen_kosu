@@ -43,7 +43,8 @@ class input_kosuForm(forms.Form):
   kosu_def_list = forms.ChoiceField(label = '工数区分', required = False)
   work_detail = forms.CharField(label='作業詳細', required = False, \
                                 widget=forms.TextInput(attrs={'placeholder': '未入力可 メモで使用'}))
-  over_work = forms.IntegerField(label = '残業', required = False)
+  over_work = forms.IntegerField(label = '残業', widget=forms.NumberInput(attrs={'min': 0, 'step': 15}), \
+                                 required = False)
   work = forms.ChoiceField(label = '勤務', choices=employment_list, required = False)
   break_change = forms.BooleanField(label = '休憩変更', required = False)
 
