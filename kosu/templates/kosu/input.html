@@ -94,10 +94,12 @@
           <input type="submit" value="現在時刻"  name="now_time" class="btn btn-blue2 mt-2">
         </th>
         <td>
-          <input class="your-time-field form-control" style="width: 65px;" type="text" id="start_time" name="start_time" data-precision="5" value={{default_start_time}}>
-          ～
-          <input class="your-time-field form-control" style="width: 65px;" type="text" id="end_time" name="end_time" data-precision="5" value={{default_end_time}}>　
-          翌日{{form.tomorrow_check}}
+          <div class="number-input-group">
+            <input class="your-time-field form-control" style="width: 65px;" type="text" id="start_time" name="start_time" data-precision="5" value={{default_start_time}}>
+            ～
+            <input class="your-time-field form-control" style="width: 65px;" type="text" id="end_time" name="end_time" data-precision="5" value={{default_end_time}}>　
+            翌日{{form.tomorrow_check}}
+          </div>
         </td>
       </tr>
       {% if member_obj.employee_no != 49337 %}
@@ -157,13 +159,13 @@
         </td>
       </tr>
       <tr>
-        <th style="text-align:center;">
-          <input type="submit" value="休憩変更登録"  name="change_display" class="btn btn-blue2 mt-2 btn-sm">
-        </th>
-        <td>
-          <input type="submit" value="工数登録"  name="Registration" class="btn btn-blue1 mt-2">
-        </td>
-      </tr>
+        <div class="number-input-group">
+        <th><td>
+          <input type="submit" value="工数登録"  name="Registration" class="btn btn-blue1 mt-2">　　　
+          <input type="submit" value="休憩変更登録"  name="change_display" class="btn btn-blue2 mt-2">
+      </td></th>
+      </div>
+    </tr>
       {% if obj_link != '' %}
       <tr>
         <th style="text-align:center;">
