@@ -10,34 +10,309 @@
 </head>
 <body class="container">
   <h1 class="display-4 text-danger">{{title}}</h1>
+  <p class="h6"><a href="{% url 'team_main' %}" class="text-danger">班員MENUへ</a></p>
   <form action="{% url 'team_over_time' %}" method="post">
     {% csrf_token %}
   {{form.year}}年　
   {{form.month}}月
   <input type="submit" value="切り替え" class="btn btn-orange1 mt-2">
-  <table class="table text-nowrap table-custom">
+  <p>　</p>
+  <table class="table table-bordered border-dark table-custom">
     <tr>
-      <th style="text-align:center;">
-        氏名
-      </th>
-      {% for d in day_list %}
-      <th style="text-align:center;">
-        {{d}}
-      </th>
+      <td rowspan="2" style="text-align:center;">
+        氏名　　　　　
+      </td>
+      {% for d, w in day_list %}
+      {% if w == "土" %}
+        <td class="table-light_blue" style="text-align:center;">
+      {% else %}
+      {% if w == "日" %}
+        <td class="table-pink" style="text-align:center;">
+      {% else %}
+        <td style="text-align:center;">
+      {% endif %}
+      {% endif %}
+          {{d}}日　　
+        </td>
       {% endfor %}
-      <th style="text-align:center;">
-        合計
-      </th>
+      <td rowspan="2" style="text-align:center;">
+        合計　　
+      </td>
     </tr>
+    <tr>
+      {% for d in week_list %}
+      {% if d == "土" %}
+        <td class="table-light_blue" style="text-align:center;">
+      {% else %}
+      {% if d == "日" %}
+        <td class="table-pink" style="text-align:center;">
+      {% else %}
+        <td style="text-align:center;">
+      {% endif %}
+      {% endif %}
+          {{d}}
+        </td>
+      {% endfor %}
+    </tr>
+
     {% if team_n > 0 %}
+    <tr>
     {% for m in over_time_list1 %}
-    <td>
+    {% if forloop.first %}
+    <td style="text-align:center;">
       {{m}}
     </td>
-    {% endfor %}
-    <td>
-        {{m}}
+    {% else %}
+    {% if forloop.last %}
+    <td style="text-align:center;">
+      {{m}}
     </td>
+    {% else %}
+    <td style="text-align:center;">
+      {% if m.over_time == 0 %}
+        0
+      {% else %}
+        {{ m.over_time|floatformat:2 }}
+      {% endif %}
+    </td>
+    {% endif %}
+    {% endif %}
+    {% endfor %}
+    </tr>
+    {% endif %}
+
+    {% if team_n > 1 %}
+    <tr>
+    {% for m in over_time_list2 %}
+    {% if forloop.first %}
+    <td style="text-align:center;">
+      {{m}}
+    </td>
+    {% else %}
+    {% if forloop.last %}
+    <td style="text-align:center;">
+      {{m}}
+    </td>
+    {% else %}
+    <td style="text-align:center;">
+      {% if m.over_time == 0 %}
+        0
+      {% else %}
+        {{ m.over_time|floatformat:2 }}
+      {% endif %}
+    </td>
+    {% endif %}
+    {% endif %}
+    {% endfor %}
+    </tr>
+    {% endif %}
+
+    {% if team_n > 2 %}
+    <tr>
+    {% for m in over_time_list3 %}
+    {% if forloop.first %}
+    <td style="text-align:center;">
+      {{m}}
+    </td>
+    {% else %}
+    {% if forloop.last %}
+    <td style="text-align:center;">
+      {{m}}
+    </td>
+    {% else %}
+    <td style="text-align:center;">
+      {% if m.over_time == 0 %}
+        0
+      {% else %}
+        {{ m.over_time|floatformat:2 }}
+      {% endif %}
+    </td>
+    {% endif %}
+    {% endif %}
+    {% endfor %}
+    </tr>
+    {% endif %}
+
+    {% if team_n > 3 %}
+    <tr>
+    {% for m in over_time_list4 %}
+    {% if forloop.first %}
+    <td style="text-align:center;">
+      {{m}}
+    </td>
+    {% else %}
+    {% if forloop.last %}
+    <td style="text-align:center;">
+      {{m}}
+    </td>
+    {% else %}
+    <td style="text-align:center;">
+      {% if m.over_time == 0 %}
+        0
+      {% else %}
+        {{ m.over_time|floatformat:2 }}
+      {% endif %}
+    </td>
+    {% endif %}
+    {% endif %}
+    {% endfor %}
+    </tr>
+    {% endif %}
+
+    {% if team_n > 4 %}
+    <tr>
+    {% for m in over_time_list5 %}
+    {% if forloop.first %}
+    <td style="text-align:center;">
+      {{m}}
+    </td>
+    {% else %}
+    {% if forloop.last %}
+    <td style="text-align:center;">
+      {{m}}
+    </td>
+    {% else %}
+    <td style="text-align:center;">
+      {% if m.over_time == 0 %}
+        0
+      {% else %}
+        {{ m.over_time|floatformat:2 }}
+      {% endif %}
+    </td>
+    {% endif %}
+    {% endif %}
+    {% endfor %}
+    </tr>
+    {% endif %}
+
+    {% if team_n > 5 %}
+    <tr>
+    {% for m in over_time_list6 %}
+    {% if forloop.first %}
+    <td style="text-align:center;">
+      {{m}}
+    </td>
+    {% else %}
+    {% if forloop.last %}
+    <td style="text-align:center;">
+      {{m}}
+    </td>
+    {% else %}
+    <td style="text-align:center;">
+      {% if m.over_time == 0 %}
+        0
+      {% else %}
+        {{ m.over_time|floatformat:2 }}
+      {% endif %}
+    </td>
+    {% endif %}
+    {% endif %}
+    {% endfor %}
+    </tr>
+    {% endif %}
+
+    {% if team_n > 6 %}
+    <tr>
+    {% for m in over_time_list7 %}
+    {% if forloop.first %}
+    <td style="text-align:center;">
+      {{m}}
+    </td>
+    {% else %}
+    {% if forloop.last %}
+    <td style="text-align:center;">
+      {{m}}
+    </td>
+    {% else %}
+    <td style="text-align:center;">
+      {% if m.over_time == 0 %}
+        0
+      {% else %}
+        {{ m.over_time|floatformat:2 }}
+      {% endif %}
+    </td>
+    {% endif %}
+    {% endif %}
+    {% endfor %}
+    </tr>
+    {% endif %}
+
+    {% if team_n > 7 %}
+    <tr>
+    {% for m in over_time_list8 %}
+    {% if forloop.first %}
+    <td style="text-align:center;">
+      {{m}}
+    </td>
+    {% else %}
+    {% if forloop.last %}
+    <td style="text-align:center;">
+      {{m}}
+    </td>
+    {% else %}
+    <td style="text-align:center;">
+      {% if m.over_time == 0 %}
+        0
+      {% else %}
+        {{ m.over_time|floatformat:2 }}
+      {% endif %}
+    </td>
+    {% endif %}
+    {% endif %}
+    {% endfor %}
+    </tr>
+    {% endif %}
+
+    {% if team_n > 8 %}
+    <tr>
+    {% for m in over_time_list9 %}
+    {% if forloop.first %}
+    <td style="text-align:center;">
+      {{m}}
+    </td>
+    {% else %}
+    {% if forloop.last %}
+    <td style="text-align:center;">
+      {{m}}
+    </td>
+    {% else %}
+    <td style="text-align:center;">
+      {% if m.over_time == 0 %}
+        0
+      {% else %}
+        {{ m.over_time|floatformat:2 }}
+      {% endif %}
+    </td>
+    {% endif %}
+    {% endif %}
+    {% endfor %}
+    </tr>
+    {% endif %}
+
+    {% if team_n > 9 %}
+    <tr>
+    {% for m in over_time_list10 %}
+    {% if forloop.first %}
+    <td style="text-align:center;">
+      {{m}}
+    </td>
+    {% else %}
+    {% if forloop.last %}
+    <td style="text-align:center;">
+      {{m}}
+    </td>
+    {% else %}
+    <td style="text-align:center;">
+      {% if m.over_time == 0 %}
+        0
+      {% else %}
+        {{ m.over_time|floatformat:2 }}
+      {% endif %}
+    </td>
+    {% endif %}
+    {% endif %}
+    {% endfor %}
+    </tr>
     {% endif %}
   </table>
   </form>

@@ -1893,6 +1893,29 @@ def team_over_time(request):
   # 次の月の最初の日から1を引くことで、指定した月の最後の日を取得
   last_day_of_month = next_month - datetime.timedelta(days = 1)
 
+  # 曜日リスト定義
+  week_list = []
+  # 曜日リスト作成するループ
+  for d in range(1, last_day_of_month.day + 1):
+    # 曜日を取得する日を作成
+    week_day = datetime.date(year, month, d)
+
+    # 指定日の曜日をリストに挿入
+    if week_day.weekday() == 0:
+      week_list.append('月')
+    if week_day.weekday() == 1:
+      week_list.append('火')
+    if week_day.weekday() == 2:
+      week_list.append('水')
+    if week_day.weekday() == 3:
+      week_list.append('木')
+    if week_day.weekday() == 4:
+      week_list.append('金')
+    if week_day.weekday() == 5:
+      week_list.append('土')
+    if week_day.weekday() == 6:
+      week_list.append('日')
+
 
   # 残業リスト定期
   over_time_list1 = []
@@ -1908,32 +1931,41 @@ def team_over_time(request):
 
   # 残業リスト作成するループ
   for ind, m in enumerate(member_list):
-    # 最初のループの処理
-    if ind ==0:
-      # 残業リストの先頭に人員の名前入れる
-      eval('over_time_list{}.append(m.name)'.format(ind + 1))
+    # 残業リストの先頭に人員の名前入れる
+    eval('over_time_list{}.append(m.name)'.format(ind + 1))
+
+    # 残業合計リセット
+    over_time_total = 0
 
     # 日毎の残業と整合性をリストに追加するループ
     for d in range(1, int(last_day_of_month.day) + 1):
       # 該当日に工数データあるか確認
-      obj_filter = Business_Time_graph.objects.filter(employee_no3 = request.session['login_No'], \
+      obj_filter = Business_Time_graph.objects.filter(employee_no3 = m.employee_no, \
                                                       work_day2 = datetime.date(year, month, d))
-      # 仮リスト定義
-      tentative_list = []
+
       # 該当日に工数データがある場合の処理
       if obj_filter.count() != 0:
         # 工数データ取得
-        obj_get = Business_Time_graph.objects.get(employee_no3 = request.session['login_No'], \
+        obj_get = Business_Time_graph.objects.get(employee_no3 = m.employee_no, \
                                                   work_day2 = datetime.date(year, month, d))
+        
+        # 残業データを分→時に変換
+        over_time = int(obj_get.over_time)/60
+        obj_get = Business_Time_graph(over_time = over_time)
 
-        # 残業リストに残業を追加
-        eval('over_time_list{}.append(int(obj_get.over_time))'.format(ind + 1))
+        # 残業リストにレコードを追加
+        eval('over_time_list{}.append(obj_get)'.format(ind + 1))
+
+        # 残業を合計する
+        over_time_total += float(obj_get.over_time)
 
       # 該当日に工数データがない場合の処理
       else:
-        # 残業リストに仮リストの値を追加
-        eval('over_time_list{}.append(0)'.format(ind + 1))
+        # 残業リストに残業0と整合性否を追加
+        eval('over_time_list{}.append(Business_Time_graph(over_time = 0, judgement = False))'.format(ind + 1))
 
+    # リストに残業合計追加
+    eval('over_time_list{}.append(over_time_total)'.format(ind + 1))
 
 
 
@@ -1943,7 +1975,8 @@ def team_over_time(request):
   context = {
     'title' : '班員残業管理',
     'form' : form,
-    'day_list' : [str(day)+"日" for day in range(1, int(last_day_of_month.day) + 1)],
+    'day_list' : zip(range(1, last_day_of_month.day + 1), week_list), 
+    'week_list' : week_list,
     'over_time_list1' : over_time_list1,
     'over_time_list2' : over_time_list2,
     'over_time_list3' : over_time_list3,

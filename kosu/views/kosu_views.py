@@ -664,7 +664,7 @@ def input(request):
       return redirect(to = '/input')
 
     # 残業時間が15の倍数でない場合の処理
-    if int(request.POST['over_work'])%15 != 0:
+    if int(request.POST['over_work'])%15 != 0 and work != '休出':
       # エラーメッセージ出力
       messages.error(request, '残業時間が15分の倍数になっていません。工数登録できませんでした。ERROR058')
       # このページをリダイレクト
@@ -2110,7 +2110,7 @@ def input(request):
       return redirect(to = '/input')
     
     # 残業時間が15の倍数でない場合の処理
-    if int(request.POST['over_work'])%15 != 0:
+    if int(request.POST['over_work'])%15 != 0 and work != '休出':
       # エラーメッセージ出力
       messages.error(request, '残業時間が15分の倍数になっていません。工数登録できませんでした。ERROR018')
       # このページをリダイレクト
