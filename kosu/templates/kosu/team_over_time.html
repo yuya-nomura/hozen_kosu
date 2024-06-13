@@ -34,6 +34,9 @@
       <td rowspan="2" style="text-align:center;" class="no-wrap">
         氏名
       </td>
+      <td rowspan="2" class="no-wrap" style="text-align:center;">
+        合計
+      </td>
       {% for d, w in day_list %}
       {% if w == "土" %}
         <td class="table-light_blue no-wrap" style="text-align:center;">
@@ -82,6 +85,13 @@
       </p>
     </td>
     {% else %}
+    {% if forloop.counter == 2 %}
+    <td class="no-wrap" style="text-align:center;">
+      <p class="fs-5">
+      {{ m|floatformat:2 }}
+      </p>
+    </td>
+    {% else %}
     {% if m.judgement == true %}
     <td class="table-green no-wrap" style="text-align:center;">
     {% else %}
@@ -93,6 +103,7 @@
         {{ m.over_time|floatformat:2 }}
       {% endif %}
     </td>
+    {% endif %}
     {% endif %}
     {% endif %}
     {% endfor %}

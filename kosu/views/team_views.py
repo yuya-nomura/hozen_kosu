@@ -1966,6 +1966,7 @@ def team_over_time(request):
 
     # リストに残業合計追加
     eval('over_time_list{}.append(over_time_total)'.format(ind + 1))
+    eval('over_time_list{}.insert(1,{})'.format(ind + 1, over_time_total))
 
 
 
