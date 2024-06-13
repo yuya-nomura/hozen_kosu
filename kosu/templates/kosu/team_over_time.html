@@ -17,6 +17,13 @@
   {{form.month}}月
   <input type="submit" value="切り替え" class="btn btn-orange1 mt-2">
   <p>　</p>
+  <p>
+    <svg width="70" height="40">
+      <rect x="0" y="0" width="60" height="40" fill="#33ff00" />
+      <text x="15" y="25" font-weight="bold">残業</text>
+    </svg>
+    工数入力OK
+  </p>
   <table class="table table-bordered border-dark table-custom">
     <tr>
       <td rowspan="2" style="text-align:center;">
@@ -65,10 +72,14 @@
     {% else %}
     {% if forloop.last %}
     <td style="text-align:center;">
-      {{m}}
+      {{ m|floatformat:2 }}
     </td>
     {% else %}
+    {% if m.judgement == true %}
+    <td class="table-green" style="text-align:center;">
+    {% else %}
     <td style="text-align:center;">
+    {% endif %}
       {% if m.over_time == 0 %}
         0
       {% else %}
@@ -91,10 +102,14 @@
     {% else %}
     {% if forloop.last %}
     <td style="text-align:center;">
-      {{m}}
+      {{ m|floatformat:2 }}
     </td>
     {% else %}
+    {% if m.judgement == true %}
+    <td class="table-green" style="text-align:center;">
+    {% else %}
     <td style="text-align:center;">
+    {% endif %}
       {% if m.over_time == 0 %}
         0
       {% else %}
@@ -117,10 +132,14 @@
     {% else %}
     {% if forloop.last %}
     <td style="text-align:center;">
-      {{m}}
+      {{ m|floatformat:2 }}
     </td>
     {% else %}
+    {% if m.judgement == true %}
+    <td class="table-green" style="text-align:center;">
+    {% else %}
     <td style="text-align:center;">
+    {% endif %}
       {% if m.over_time == 0 %}
         0
       {% else %}
@@ -143,10 +162,14 @@
     {% else %}
     {% if forloop.last %}
     <td style="text-align:center;">
-      {{m}}
+      {{ m|floatformat:2 }}
     </td>
     {% else %}
+    {% if m.judgement == true %}
+    <td class="table-green" style="text-align:center;">
+    {% else %}
     <td style="text-align:center;">
+    {% endif %}
       {% if m.over_time == 0 %}
         0
       {% else %}
@@ -169,10 +192,14 @@
     {% else %}
     {% if forloop.last %}
     <td style="text-align:center;">
-      {{m}}
+      {{ m|floatformat:2 }}
     </td>
     {% else %}
+    {% if m.judgement == true %}
+    <td class="table-green" style="text-align:center;">
+    {% else %}
     <td style="text-align:center;">
+    {% endif %}
       {% if m.over_time == 0 %}
         0
       {% else %}
@@ -195,10 +222,14 @@
     {% else %}
     {% if forloop.last %}
     <td style="text-align:center;">
-      {{m}}
+      {{ m|floatformat:2 }}
     </td>
     {% else %}
+    {% if m.judgement == true %}
+    <td class="table-green" style="text-align:center;">
+    {% else %}
     <td style="text-align:center;">
+    {% endif %}
       {% if m.over_time == 0 %}
         0
       {% else %}
@@ -221,10 +252,14 @@
     {% else %}
     {% if forloop.last %}
     <td style="text-align:center;">
-      {{m}}
+      {{ m|floatformat:2 }}
     </td>
     {% else %}
+    {% if m.judgement == true %}
+    <td class="table-green" style="text-align:center;">
+    {% else %}
     <td style="text-align:center;">
+    {% endif %}
       {% if m.over_time == 0 %}
         0
       {% else %}
@@ -247,10 +282,14 @@
     {% else %}
     {% if forloop.last %}
     <td style="text-align:center;">
-      {{m}}
+      {{ m|floatformat:2 }}
     </td>
     {% else %}
+    {% if m.judgement == true %}
+    <td class="table-green" style="text-align:center;">
+    {% else %}
     <td style="text-align:center;">
+    {% endif %}
       {% if m.over_time == 0 %}
         0
       {% else %}
@@ -273,10 +312,14 @@
     {% else %}
     {% if forloop.last %}
     <td style="text-align:center;">
-      {{m}}
+      {{ m|floatformat:2 }}
     </td>
     {% else %}
+    {% if m.judgement == true %}
+    <td class="table-green" style="text-align:center;">
+    {% else %}
     <td style="text-align:center;">
+    {% endif %}
       {% if m.over_time == 0 %}
         0
       {% else %}
@@ -299,10 +342,14 @@
     {% else %}
     {% if forloop.last %}
     <td style="text-align:center;">
-      {{m}}
+      {{ m|floatformat:2 }}
     </td>
     {% else %}
+    {% if m.judgement == true %}
+    <td class="table-green" style="text-align:center;">
+    {% else %}
     <td style="text-align:center;">
+    {% endif %}
       {% if m.over_time == 0 %}
         0
       {% else %}
