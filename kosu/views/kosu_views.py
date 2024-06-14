@@ -4551,7 +4551,7 @@ def detail(request, num):
 
 
     # 工数合計取得
-    kosu_total = 1440 - (obj_get.time_work.count('#')*5) - (obj_get.time_work.count('$')*5)
+    kosu_total = 1440 - (work_list.count('#')*5) - (work_list.count('$')*5)
 
     # 工数入力OK_NGリセット
     judgement = False
@@ -4559,21 +4559,18 @@ def detail(request, num):
     # 出勤、休出時、工数合計と残業に整合性がある場合の処理
     if (obj_get.work_time == '出勤' or obj_get.work_time == 'シフト出') and \
       kosu_total - int(obj_get.over_time) == 470:
-
       # 工数入力OK_NGをOKに切り替え
       judgement = True
 
 
     # 休出時、工数合計と残業に整合性がある場合の処理
     if obj_get.work_time == '休出' and kosu_total == int(obj_get.over_time):
-
       # 工数入力OK_NGをOKに切り替え
       judgement = True
 
 
     # 早退・遅刻時、工数合計と残業に整合性がある場合の処理
     if obj_get.work_time == '早退・遅刻' and kosu_total != 0:
-
       # 工数入力OK_NGをOKに切り替え
       judgement = True
 
@@ -4586,16 +4583,13 @@ def detail(request, num):
     if (member_obj.shop == 'W1' or member_obj.shop == 'W2' or \
       member_obj.shop == 'A1' or member_obj.shop == 'A2') and \
         obj_get.tyoku2 == '1':
-
       # 半前年休時、工数合計と残業に整合性がある場合の処理
       if obj_get.work_time == '半前年休' and kosu_total - int(obj_get.over_time) == 230:
-
         # 工数入力OK_NGをOKに切り替え
         judgement = True
 
       # 半後年休時、工数合計と残業に整合性がある場合の処理
       if obj_get.work_time == '半後年休' and kosu_total - int(obj_get.over_time) == 240:
-
         # 工数入力OK_NGをOKに切り替え
         judgement = True
 
@@ -4604,16 +4598,13 @@ def detail(request, num):
     if (member_obj.shop == 'W1' or member_obj.shop == 'W2' or \
       member_obj.shop == 'A1' or member_obj.shop == 'A2') and \
         obj_get.tyoku2 == '2':
-
       # 半前年休時、工数合計と残業に整合性がある場合の処理
       if obj_get.work_time == '半前年休' and kosu_total - int(obj_get.over_time) == 290:
-
         # 工数入力OK_NGをOKに切り替え
         judgement = True
 
       # 半後年休時、工数合計と残業に整合性がある場合の処理
       if obj_get.work_time == '半後年休' and kosu_total - int(obj_get.over_time) == 180:
-
         # 工数入力OK_NGをOKに切り替え
         judgement = True
 
@@ -4622,16 +4613,13 @@ def detail(request, num):
     if (member_obj.shop == 'W1' or member_obj.shop == 'W2' or \
       member_obj.shop == 'A1' or member_obj.shop == 'A2') and \
         obj_get.tyoku2 == '3':
-
       # 半前年休時、工数合計と残業に整合性がある場合の処理
       if obj_get.work_time == '半前年休' and kosu_total - int(obj_get.over_time) == 230:
-
         # 工数入力OK_NGをOKに切り替え
         judgement = True
 
       # 半後年休時、工数合計と残業に整合性がある場合の処理
       if obj_get.work_time == '半後年休' and kosu_total - int(obj_get.over_time) == 240:
-
         # 工数入力OK_NGをOKに切り替え
         judgement = True
 
@@ -4641,16 +4629,13 @@ def detail(request, num):
       member_obj.shop == 'T1' or member_obj.shop == 'T2' or \
         member_obj.shop == 'その他' or member_obj.shop == '組長以上') and \
         obj_get.tyoku2 == '1':
-
       # 半前年休時、工数合計と残業に整合性がある場合の処理
       if obj_get.work_time == '半前年休' and kosu_total - int(obj_get.over_time) == 220:
-
         # 工数入力OK_NGをOKに切り替え
         judgement = True
 
       # 半後年休時、工数合計と残業に整合性がある場合の処理
       if obj_get.work_time == '半後年休' and kosu_total - int(obj_get.over_time) == 250:
-
         # 工数入力OK_NGをOKに切り替え
         judgement = True
 
@@ -4660,16 +4645,13 @@ def detail(request, num):
       member_obj.shop == 'T1' or member_obj.shop == 'T2' or \
         member_obj.shop == 'その他' or member_obj.shop == '組長以上') and \
         obj_get.tyoku2 == '2':
-
       # 半前年休時、工数合計と残業に整合性がある場合の処理
       if obj_get.work_time == '半前年休' and kosu_total - int(obj_get.over_time) == 230:
-
         # 工数入力OK_NGをOKに切り替え
         judgement = True
 
       # 半後年休時、工数合計と残業に整合性がある場合の処理
       if obj_get.work_time == '半後年休' and kosu_total - int(obj_get.over_time) == 240:
-
         # 工数入力OK_NGをOKに切り替え
         judgement = True
 
@@ -4679,32 +4661,26 @@ def detail(request, num):
       member_obj.shop == 'T1' or member_obj.shop == 'T2' or \
         member_obj.shop == 'その他' or member_obj.shop == '組長以上') and \
         obj_get.tyoku2 == '3':
-
       # 半前年休時、工数合計と残業に整合性がある場合の処理
       if obj_get.work_time == '半前年休' and kosu_total - int(obj_get.over_time) == 275:
-
         # 工数入力OK_NGをOKに切り替え
         judgement = True
 
       # 半後年休時、工数合計と残業に整合性がある場合の処理
       if obj_get.work_time == '半後年休' and kosu_total - int(obj_get.over_time) == 195:
-
         # 工数入力OK_NGをOKに切り替え
         judgement = True
 
 
     # 常昼の場合の処理
     if obj_get.tyoku2 == '4':
-
       # 半前年休時、工数合計と残業に整合性がある場合の処理
       if obj_get.work_time == '半前年休' and kosu_total - int(obj_get.over_time) == 230:
-
         # 工数入力OK_NGをOKに切り替え
         judgement = True
 
       # 半後年休時、工数合計と残業に整合性がある場合の処理
       if obj_get.work_time == '半後年休' and kosu_total - int(obj_get.over_time) == 240:
-
         # 工数入力OK_NGをOKに切り替え
         judgement = True
 
