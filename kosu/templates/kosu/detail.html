@@ -54,11 +54,13 @@
     </tr>
     {% for i in time_display_list %}
     <tr>
-      {% for k in i %}
-      <td style="text-align:center;">
-      {{k}}
-      </td>
-      {% endfor %}
+      <div class="number-input-group">
+        {% for k in i %}
+        <td style="text-align:center;">
+          {{k}}
+        </td>
+        {% endfor %}
+      </div>
     </tr>
     {% endfor %}
   </table>

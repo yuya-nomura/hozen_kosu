@@ -152,7 +152,7 @@
             {{ form.over_work }}
             <button type="button" class="custom-button" onclick="increment(this)">+</button>　　
             <input type="submit" value="残業のみ修正"  name="over_time_correction" class="btn btn-blue2 mt-2 btn-sm">
-        </div>
+          </div>
         </td>
       </tr>
       <tr>
@@ -165,13 +165,15 @@
       </tr>
       <tr>
         <div class="number-input-group">
-        <th><td>
-          <input type="submit" value="工数登録"  name="Registration" class="btn btn-blue1 mt-2">　　　
-          <input type="submit" value="休憩変更登録"  name="change_display" class="btn btn-blue2 mt-2">
-      </td></th>
-      </div>
-    </tr>
-      {% if obj_link != '' %}
+          <th><td>
+            <input type="submit" value="工数登録"  name="Registration" class="btn btn-blue1 mt-2">　　　
+            <input type="submit" value="休憩変更登録"  name="change_display" class="btn btn-blue2 mt-2">
+          </td></th>
+        </div>
+      </tr>
+    </table>
+    {% if obj_link != '' %}
+    <table class="table table-custom">
       <tr>
         <th style="text-align:center;">
           工数詳細
@@ -183,17 +185,17 @@
       {% for i in time_display_list %}
       <tr>
         {% for k in i %}
-        <td style="text-align:center;">
-          <div class="number-input-group">
-            {{k}}
+          <div class="number-input-group"></div>
+            <td style="text-align:center;">
+              {{k}}
+            </td>
           </div>
-        </td>
         {% endfor %}
       </tr>
       {% endfor %}
-      {% endif %}
       <button id="update" name="update" class="btn btn-link"></button>
     </table>
+    {% endif %}
   </form>
   <div style="width:100%">
     <canvas id="chart" height="160pt"></canvas>
