@@ -43,7 +43,7 @@ class input_kosuForm(forms.Form):
   tomorrow_check = forms.BooleanField(label = '日跨ぎ', required = False, widget = forms.CheckboxInput(attrs = {'class' : 'form-check-input'}))
   kosu_def_list = forms.ChoiceField(label = '工数区分', required = False, widget = forms.Select(attrs = {'class' : 'form-control custom-border', 'style' : 'width: 210px;'}))
   work_detail = forms.CharField(label = '作業詳細', required = False, widget = forms.TextInput(attrs = {'class' : 'form-control custom-border', 'placeholder' : '未入力可 メモで使用', 'style' : 'width: 210px;'}))
-  over_work = forms.IntegerField(label = '残業', widget=forms.NumberInput(attrs = {'class' : 'form-control custom-border', 'min' : 0, 'style' : 'width: 80px;'}), required = False)
+  over_work = forms.IntegerField(label = '残業', widget = forms.NumberInput(attrs = {'class' : 'form-control custom-border', 'min' : 0, 'style' : 'width: 80px;'}), required = False)
   work = forms.ChoiceField(label = '勤務', choices = employment_list, required = False, widget = forms.Select(attrs = {'class' : 'form-control custom-border', 'style' : 'width: 90px;'}))
   break_change = forms.BooleanField(label = '休憩変更', required = False, widget = forms.CheckboxInput(attrs = {'class' : 'form-check-input'}))
 
@@ -68,8 +68,8 @@ class kosu_dayForm(forms.Form):
 
   kosu_day = forms.DateTimeField(label = '就業日', required = False, \
                 widget = DatePickerInput(format = '%Y-%m-%d'))
-  kosu_order = forms.ChoiceField(label = '並び順', choices = order_list)
-  kosu_summarize = forms.ChoiceField(label = '期間指定', choices = summarize_list)
+  kosu_order = forms.ChoiceField(label = '並び順', choices = order_list, widget = forms.Select(attrs = {'class' : 'form-control custom-border', 'style' : 'width: 100px;'}))
+  kosu_summarize = forms.ChoiceField(label = '期間指定', choices = summarize_list, widget = forms.Select(attrs = {'class' : 'form-control custom-border', 'style' : 'width: 100px;'}))
 
 
 
@@ -269,8 +269,8 @@ class schedule_timeForm(forms.Form):
     (3, 3),
   ]
 
-  year = forms.ChoiceField(label = '年', choices=year_list)
-  month = forms.ChoiceField(label = '月', choices=month_list)
+  year = forms.ChoiceField(label = '年', choices=year_list, widget = forms.Select(attrs = {'class' : 'form-control custom-border', 'style' : 'width: 80px;'}))
+  month = forms.ChoiceField(label = '月', choices=month_list, widget = forms.Select(attrs = {'class' : 'form-control custom-border', 'style' : 'width: 50px;'}))
 
 
 

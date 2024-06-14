@@ -33,12 +33,12 @@ def kosu_list(request, num):
   # セッションに検索履歴がある場合の処理
   if request.session.get('find_day', '') != '':
     # フォームの初期値に検索履歴を入れる
-    start_list = {'kosu_day' : request.session.get('find_day', '')}
+    default_day = request.session['find_day']
 
   # セッションに検索履歴がない場合の処理
   else:
     # フォームの初期値に今日の日付を入れる
-    start_list = {'kosu_day' : str(kosu_today)}
+    default_day = str(kosu_today)
 
 
   # ログイン者の情報取得
@@ -56,12 +56,10 @@ def kosu_list(request, num):
 
   # POST時の処理
   if (request.method == 'POST'):
-    # POST送信時のフォームの状態(POSTした値は入ったまま)
-    form = kosu_dayForm(request.POST)
-
     # POSTした値をセッションに登録
     find = request.POST['kosu_day']
     request.session['find_day'] = find
+    default_day = find
   
     # 就業日とログイン者の従業員番号でフィルターをかけて一致した工数データを取得
     obj_filter = Business_Time_graph.objects.filter(work_day2__contains = find, \
@@ -74,9 +72,6 @@ def kosu_list(request, num):
 
   # POSTしていない時の処理
   else:
-    # POST送信していない時のフォームの状態(今日の日付が入ったフォーム)
-    form = kosu_dayForm(start_list)
-
     # ログイン者の従業員番号でフィルターをかけて一致した工数データを取得
     obj_filter = Business_Time_graph.objects.filter(employee_no3 = request.session.get('login_No', ''), \
                                                     work_day2__contains = request.session.get('find_day', '')).\
@@ -91,7 +86,7 @@ def kosu_list(request, num):
     'title' : '工数履歴',
     'member_data' : member_data,
     'data' : data.get_page(num),
-    'form' : form,
+    'default_day' : default_day,
     'num' : num,
     }
   
@@ -5103,10 +5098,10 @@ def total(request):
     today = datetime.date.today()
 
     # フォームの初期値に定義する辞書作成
-    start_list = {'kosu_day' : today}
+    default_day = str(today)
 
     # フォームに初期値設定し定義
-    form = kosu_dayForm(start_list)
+    form = kosu_dayForm()
 
     # ログイン者の工数集計データ取得
     kosu_total = Business_Time_graph.objects.filter(employee_no3 = request.session.get('login_No', None), \
@@ -5344,6 +5339,7 @@ def total(request):
 
     # フォームにPOSTした値を設定し定義
     form = kosu_dayForm(request.POST)
+    default_day = request.POST['kosu_day']
 
     # ログイン者の工数集計データ取得
     kosu_total = Business_Time_graph.objects.filter(employee_no3 = request.session.get('login_No', None), \
@@ -5444,6 +5440,7 @@ def total(request):
     'title' : '工数集計',
     'data' : data,
     'form' : form,
+    'default_day' : default_day,
     'graph_list' : graph_list,
     'graph_item' : graph_item,
     'color_list' : color_list,
