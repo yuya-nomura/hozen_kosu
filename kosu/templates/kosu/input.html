@@ -41,6 +41,10 @@
         width: 100px; /* 任意の幅 */
         text-align: center; /* テキストを中央に揃える */
     }
+
+    .form-control.custom-border {
+        border-color: #000000; /* 外形線の色を設定 */
+    }
   </style>
 </head>
 <body class="container">
@@ -68,7 +72,7 @@
         </th>
         <td>
           <div class="number-input-group">
-            <input type="date" name="work_day" id="work_day" value={{new_day}} class="form-control" style="width: 150px;">　
+            <input type="date" name="work_day" id="work_day" value={{new_day}} class="form-control custom-border" style="width: 150px;">　
             {% if OK_NG == True %}
               <b  class="text-primary h4">OK</b>
             {% else %}
@@ -100,9 +104,9 @@
         </th>
         <td>
           <div class="number-input-group">
-            <input class="your-time-field form-control" style="width : 90px;" type="text" id="start_time" name="start_time" data-precision="5" value={{default_start_time}}>
+            <input class="your-time-field form-control custom-border" style="width : 90px;" type="text" id="start_time" name="start_time" data-precision="5" value={{default_start_time}}>
             ～
-            <input class="your-time-field form-control" style="width : 90px;" type="text" id="end_time" name="end_time" data-precision="5" value={{default_end_time}}>　
+            <input class="your-time-field form-control custom-border" style="width : 90px;" type="text" id="end_time" name="end_time" data-precision="5" value={{default_end_time}}>　
             翌日{{form.tomorrow_check}}
           </div>
         </td>
