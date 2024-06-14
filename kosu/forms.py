@@ -38,15 +38,14 @@ class input_kosuForm(forms.Form):
     ('早退', '早退・遅刻'),
     ]
 
-  tyoku2 = forms.ChoiceField(label = '直', choices = tyoku_list, required = False)
-  tomorrow_check = forms.BooleanField(label = '日跨ぎ', required = False)
-  kosu_def_list = forms.ChoiceField(label = '工数区分', required = False)
-  work_detail = forms.CharField(label='作業詳細', required = False, \
-                                widget=forms.TextInput(attrs={'placeholder': '未入力可 メモで使用'}))
-  over_work = forms.IntegerField(label = '残業', widget=forms.NumberInput(attrs={'min' : 0, 'class' : 'form-control', 'style' : 'width: 80px;'}), \
-                                 required = False)
-  work = forms.ChoiceField(label = '勤務', choices=employment_list, required = False)
-  break_change = forms.BooleanField(label = '休憩変更', required = False)
+
+  tyoku2 = forms.ChoiceField(label = '直', choices = tyoku_list, required = False, widget = forms.Select(attrs ={'class' : 'form-control', 'style' : 'width: 90px;'}))
+  tomorrow_check = forms.BooleanField(label = '日跨ぎ', required = False, widget = forms.CheckboxInput(attrs = {'class' : 'form-check-input'}))
+  kosu_def_list = forms.ChoiceField(label = '工数区分', required = False, widget = forms.Select(attrs = {'class' : 'form-control', 'style' : 'width: 210px;'}))
+  work_detail = forms.CharField(label = '作業詳細', required = False, widget = forms.TextInput(attrs = {'class' : 'form-control', 'placeholder' : '未入力可 メモで使用', 'style' : 'width: 210px;'}))
+  over_work = forms.IntegerField(label = '残業', widget=forms.NumberInput(attrs = {'class' : 'form-control', 'min' : 0, 'style' : 'width: 80px;'}), required = False)
+  work = forms.ChoiceField(label = '勤務', choices = employment_list, required = False, widget = forms.Select(attrs = {'class' : 'form-control', 'style' : 'width: 90px;'}))
+  break_change = forms.BooleanField(label = '休憩変更', required = False, widget = forms.CheckboxInput(attrs = {'class' : 'form-check-input'}))
 
 
 

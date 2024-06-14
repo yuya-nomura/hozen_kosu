@@ -67,9 +67,14 @@
           就業日
         </th>
         <td>
-          <input type="date" name="work_day" id="work_day" value={{new_day}}>　
-          {% if OK_NG == True %}<b  class="text-primary h4">OK</b>{% endif %}
-          {% if OK_NG != True %}<b  class="text-danger h4">NG</b>{% endif %}
+          <div class="number-input-group">
+          <input type="date" name="work_day" id="work_day" value={{new_day}} class="form-control" style="width: 150px;">　
+          {% if OK_NG == True %}
+            <b  class="text-primary h4">OK</b>
+          {% else %}
+            <b  class="text-danger h4">NG</b>
+          {% endif %}
+          </div>
         </td>
       </tr>
       <tr>
@@ -95,9 +100,9 @@
         </th>
         <td>
           <div class="number-input-group">
-            <input class="your-time-field form-control" style="width: 65px;" type="text" id="start_time" name="start_time" data-precision="5" value={{default_start_time}}>
+            <input class="your-time-field form-control" style="width : 90px;" type="text" id="start_time" name="start_time" data-precision="5" value={{default_start_time}}>
             ～
-            <input class="your-time-field form-control" style="width: 65px;" type="text" id="end_time" name="end_time" data-precision="5" value={{default_end_time}}>　
+            <input class="your-time-field form-control" style="width : 90px;" type="text" id="end_time" name="end_time" data-precision="5" value={{default_end_time}}>　
             翌日{{form.tomorrow_check}}
           </div>
         </td>
