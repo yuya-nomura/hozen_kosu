@@ -17,7 +17,13 @@ class memberForm(forms.ModelForm):
               'break_time2_over1', 'break_time2_over2', 'break_time2_over3', 'break_time3', \
               'break_time3_over1', 'break_time3_over2', 'break_time3_over3', 'break_time4', \
               'break_time4_over1', 'break_time4_over2', 'break_time4_over3']
-    
+
+    widgets = {'employee_no': forms.NumberInput(attrs={'class' : 'form-control custom-border', 'style' : 'width : 200px;'}),
+               'name': forms.TextInput(attrs={'class' : 'form-control custom-border', 'style' : 'width : 200px;'}),
+               'shop': forms.Select(attrs={'class' : 'form-control custom-border', 'style' : 'width: 200px;'}),
+               'authority' : forms.CheckboxInput(attrs={'class' : 'form-check-input'}),
+               'administrator' : forms.CheckboxInput(attrs={'class' : 'form-check-input'}),
+               }
 
 
 class input_kosuForm(forms.Form):
@@ -88,8 +94,8 @@ class member_findForm(forms.Form):
     ('組長以上', '組長以上')
     ]
     
-  employee_no6 = forms.IntegerField(label = '従業員番号', required = False)
-  shop2 = forms.ChoiceField(label = 'ショップ', choices = shop_list, required = False)
+  employee_no6 = forms.IntegerField(label = '従業員番号', required = False, widget = forms.NumberInput(attrs = {'class' : 'form-control custom-border', 'min' : 0, 'style' : 'width : 200px;'}))
+  shop2 = forms.ChoiceField(label = 'ショップ', choices = shop_list, required = False, widget = forms.Select(attrs ={'class' : 'form-control custom-border', 'style' : 'width : 200px;'}))
 
 
 
