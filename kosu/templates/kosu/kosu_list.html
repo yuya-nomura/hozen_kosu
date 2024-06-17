@@ -22,7 +22,7 @@
   <form action="{% url 'kosu_list' num %}" method="post">
   {% csrf_token %}
   <div class="number-input-group">
-    <input type="date" name="kosu_day" id="kosu_day" value={{default_day}} class="form-control custom-border" style="width: 150px;">　
+    <input type="date" class="form-control custom-border" name="kosu_day" id="kosu_day" value={{default_day}} style="width: 150px;">　
     <input type="submit" value="検索" class="btn btn-blue2 mt-2">
   </div>
     <p>　</p>
