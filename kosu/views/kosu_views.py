@@ -2436,7 +2436,7 @@ def input(request):
 
     # 休憩変更したい日に休憩データがあるか確認
     obj_filter = Business_Time_graph.objects.filter(employee_no3 = request.session.get('login_No', None),\
-                                                    work_day2 = request.session.get('day', kosu_today))
+                                                    work_day2 = request.POST['work_day'])
 
     # 工数データがない場合の処理
     if obj_filter.count() == 0:
@@ -2446,7 +2446,7 @@ def input(request):
       return redirect(to = '/input')
 
     #工数データがある場合の処理
-    else:
+    if obj_filter.count() != 0:
       # 工数データ取得
       obj_get = Business_Time_graph.objects.get(employee_no3 = request.session.get('login_No', None),\
                                                 work_day2 = request.session.get('day', kosu_today))
