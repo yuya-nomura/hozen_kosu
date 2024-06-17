@@ -56,7 +56,7 @@ class input_kosuForm(forms.Form):
 
 
 class loginForm(forms.Form):
-  employee_no4 = forms.IntegerField(label = '従業員番号', required = False)
+  employee_no4 = forms.IntegerField(label = '従業員番号', widget = forms.NumberInput(attrs = {'class' : 'form-control custom-border', 'min' : 0, 'style' : 'width : 200px;'}), required = False)
 
 
 
@@ -72,8 +72,6 @@ class kosu_dayForm(forms.Form):
     (3, '年間工数'),
   ]
 
-  kosu_day = forms.DateTimeField(label = '就業日', required = False, \
-                widget = DatePickerInput(format = '%Y-%m-%d'))
   kosu_order = forms.ChoiceField(label = '並び順', choices = order_list, widget = forms.Select(attrs = {'class' : 'form-control custom-border', 'style' : 'width : 100px;'}))
   kosu_summarize = forms.ChoiceField(label = '期間指定', choices = summarize_list, widget = forms.Select(attrs = {'class' : 'form-control custom-border', 'style' : 'width : 100px;'}))
 
@@ -100,30 +98,28 @@ class member_findForm(forms.Form):
 
 
 class inputdayForm(forms.Form):
-  tomorrow_check = forms.BooleanField(label = '日跨ぎ', required = False)
+  tomorrow_check = forms.BooleanField(label = '日跨ぎ', required = False, widget = forms.CheckboxInput(attrs = {'class' : 'form-check-input'}))
   kosu_def_list = forms.ChoiceField(label = '工数区分', required = False, widget = forms.Select(attrs = {'class' : 'form-control custom-border', 'style' : 'width : 210px;'}))
 
 
 
 class teamForm(forms.Form):
-  member1 = forms.ChoiceField(label = 'メンバー従業員番号1', required = False)
-  member2 = forms.ChoiceField(label = 'メンバー従業員番号2', required = False)
-  member3 = forms.ChoiceField(label = 'メンバー従業員番号3', required = False)
-  member4 = forms.ChoiceField(label = 'メンバー従業員番号4', required = False)
-  member5 = forms.ChoiceField(label = 'メンバー従業員番号5', required = False)
-  member6 = forms.ChoiceField(label = 'メンバー従業員番号6', required = False)
-  member7 = forms.ChoiceField(label = 'メンバー従業員番号7', required = False)
-  member8 = forms.ChoiceField(label = 'メンバー従業員番号8', required = False)
-  member9 = forms.ChoiceField(label = 'メンバー従業員番号9', required = False)
-  member10 = forms.ChoiceField(label = 'メンバー従業員番号10', required = False)
-  follow = forms.BooleanField(label = 'フォローON/OFF', required = False)
+  member1 = forms.ChoiceField(label = 'メンバー従業員番号1', widget = forms.Select(attrs ={'class' : 'form-control custom-border', 'style' : 'width : 200px;'}), required = False)
+  member2 = forms.ChoiceField(label = 'メンバー従業員番号2', widget = forms.Select(attrs ={'class' : 'form-control custom-border', 'style' : 'width : 200px;'}), required = False)
+  member3 = forms.ChoiceField(label = 'メンバー従業員番号3', widget = forms.Select(attrs ={'class' : 'form-control custom-border', 'style' : 'width : 200px;'}), required = False)
+  member4 = forms.ChoiceField(label = 'メンバー従業員番号4', widget = forms.Select(attrs ={'class' : 'form-control custom-border', 'style' : 'width : 200px;'}), required = False)
+  member5 = forms.ChoiceField(label = 'メンバー従業員番号5', widget = forms.Select(attrs ={'class' : 'form-control custom-border', 'style' : 'width : 200px;'}), required = False)
+  member6 = forms.ChoiceField(label = 'メンバー従業員番号6', widget = forms.Select(attrs ={'class' : 'form-control custom-border', 'style' : 'width : 200px;'}), required = False)
+  member7 = forms.ChoiceField(label = 'メンバー従業員番号7', widget = forms.Select(attrs ={'class' : 'form-control custom-border', 'style' : 'width : 200px;'}), required = False)
+  member8 = forms.ChoiceField(label = 'メンバー従業員番号8', widget = forms.Select(attrs ={'class' : 'form-control custom-border', 'style' : 'width : 200px;'}), required = False)
+  member9 = forms.ChoiceField(label = 'メンバー従業員番号9', widget = forms.Select(attrs ={'class' : 'form-control custom-border', 'style' : 'width : 200px;'}), required = False)
+  member10 = forms.ChoiceField(label = 'メンバー従業員番号10', widget = forms.Select(attrs ={'class' : 'form-control custom-border', 'style' : 'width : 200px;'}), required = False)
+  follow = forms.BooleanField(label = 'フォローON/OFF', required = False, widget = forms.CheckboxInput(attrs = {'class' : 'form-check-input'}))
 
 
 
 class team_kosuForm(forms.Form):
-  employee_no6 = forms.ChoiceField(label = '従業員番号', required = False)
-  team_day = forms.DateTimeField(label = '日付', required = False, \
-                widget = DatePickerInput(format = '%Y-%m-%d'))
+  employee_no6 = forms.ChoiceField(label = '従業員番号', widget = forms.Select(attrs ={'class' : 'form-control custom-border', 'style' : 'width : 200px;'}), required = False)
 
 
 

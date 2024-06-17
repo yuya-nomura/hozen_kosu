@@ -202,13 +202,10 @@ def team_graph(request):
   # GET時の処理
   if (request.method == 'GET'):
     # 今日の日時を変数に格納
-    dt = datetime.datetime.today()
-    # 日付のみを変数に入れる
-    kosu_today = dt.date()
+    dt = datetime.date.today()
     # フォーム初期値設定
-    default_form = {'team_day' : kosu_today}
-    # GET時のフォーム状態設定
-    form = team_kosuForm(default_form)
+    default_day = str(dt)
+
 
 
   # POST時の処理
@@ -220,11 +217,16 @@ def team_graph(request):
       messages.error(request, '日付を指定してから検索して下さい。ERROR27')
       # このページをリダイレクト
       return redirect(to = '/team_graph')
-    
+
     # POSTされた日付を変数に入れる
-    kosu_today = request.POST['team_day']
-    # GET時のフォーム状態設定
-    form = team_kosuForm(request.POST)
+    dt = request.POST['team_day']
+    # フォーム初期値設定
+    default_day = str(dt)
+
+
+
+  # フォーム定義
+  form = team_kosuForm()
 
   # ログイン者の班員データ取得
   obj = team_member.objects.get(employee_no5 = request.session['login_No'])
@@ -251,7 +253,7 @@ def team_graph(request):
   # グラフデータ作成関数定義
   def graph_function(employee_no_data):
     # グラフデータ確認
-    graph_filter = Business_Time_graph.objects.filter(employee_no3 = employee_no_data, work_day2 = kosu_today)
+    graph_filter = Business_Time_graph.objects.filter(employee_no3 = employee_no_data, work_day2 = dt)
 
     # 指定した人員データ取得
     member_obj = member.objects.get(employee_no = employee_no_data)
@@ -275,7 +277,7 @@ def team_graph(request):
     # グラフデータある場合の処理
     else:
       # グラフデータ取得
-      graph_data = Business_Time_graph.objects.get(employee_no3 = employee_no_data, work_day2 = kosu_today)
+      graph_data = Business_Time_graph.objects.get(employee_no3 = employee_no_data, work_day2 = dt)
 
       # 工数が入力されている場合の処理
       if list(graph_data.time_work) != list(itertools.repeat('#', 288)):
@@ -469,6 +471,7 @@ def team_graph(request):
   context = {
     'title' : '班員工数グラフ',
     'form' : form,
+    'default_day' : default_day,
     'name_list' : name_list,
     'n' : n,
     'graph_kosu_list' : graph_kosu_list,
@@ -508,19 +511,20 @@ def team_graph(request):
 def team_kosu(request, num):
 
   # 今日の日時を変数に格納
-  dt = datetime.datetime.today()
-  # 日付のみを変数に入れる
-  kosu_today = dt.date()
+  dt = datetime.date.today()
 
   # フォームの初期値に定義
-  if request.session.get('find_employee_no', '') != '' or \
-    request.session.get('find_team_day', '') != '':
+  if request.session.get('find_employee_no', '') != '':
+    start_list = {'employee_no6' : request.session['find_employee_no']}
 
-    start_list = {'team_day' : request.session.get('find_team_day', ''), \
-                  'employee_no6' : request.session.get('find_employee_no', '')}
-    
   else:
-    start_list = {'team_day' : kosu_today}
+    start_list = {'team_day' : ''}
+
+  if request.session.get('find_team_day', '') != '':
+    default_day = request.session['find_team_day']
+
+  else:
+    default_day = str(dt)
 
 
   # 未ログインならログインページに飛ぶ
@@ -595,11 +599,13 @@ def team_kosu(request, num):
   filtered_list = [item for item in employee_no_list if item != '']
 
 
+
   # POST時の処理
   if (request.method == 'POST'):
 
     # POST送信時のフォームの状態(POSTした値は入ったまま)
     form = team_kosuForm(request.POST)
+    default_day = request.POST['team_day']
 
     # フォームの選択肢定義
     form.fields['employee_no6'].choices = choices_list
@@ -637,6 +643,7 @@ def team_kosu(request, num):
     'data' : data,
     'data2' : page.get_page(num),
     'form' : form,
+    'default_day' : default_day,
     'num' : num,
     }
 
