@@ -100,6 +100,41 @@
   </div>
   <p>　</p>
 {% endif %}
+{% if n >= 11 %}
+  <p>{{name_list.10}}</p>
+  <div style="width:100%">
+    <canvas id="chart11" height="100pt"></canvas>
+  </div>
+  <p>　</p>
+{% endif %}
+{% if n >= 12 %}
+<p>{{name_list.11}}</p>
+<div style="width:100%">
+  <canvas id="chart12" height="100pt"></canvas>
+</div>
+<p>　</p>
+{% endif %}
+{% if n >= 13 %}
+  <p>{{name_list.12}}</p>
+  <div style="width:100%">
+    <canvas id="chart13" height="100pt"></canvas>
+  </div>
+  <p>　</p>
+{% endif %}
+{% if n >= 14 %}
+  <p>{{name_list.13}}</p>
+  <div style="width:100%">
+    <canvas id="chart14" height="100pt"></canvas>
+  </div>
+  <p>　</p>
+{% endif %}
+{% if n >= 15 %}
+  <p>{{name_list.14}}</p>
+  <div style="width:100%">
+    <canvas id="chart15" height="100pt"></canvas>
+  </div>
+  <p>　</p>
+{% endif %}
 
   <script>
     var label_list1 = [];
@@ -122,6 +157,16 @@
     var data_list9 = [];
     var label_list10 = [];
     var data_list10 = [];
+    var label_list11 = [];
+    var data_list11 = [];
+    var label_list12 = [];
+    var data_list12 = [];
+    var label_list13 = [];
+    var data_list13 = [];
+    var label_list14 = [];
+    var data_list14 = [];
+    var label_list15 = [];
+    var data_list15 = [];
   </script>
   {% for i in graph_item1 %}
   <script>
@@ -223,6 +268,57 @@
     data_list10.push("{{ n }}");
   </script>
   {% endfor %}
+  {% for i in graph_item11 %}
+  <script>
+    label_list11.push("{{ i }}");
+  </script>
+  {% endfor %}
+  {% for n in graph_list11 %}
+  <script>
+    data_list11.push("{{ n }}");
+  </script>
+  {% endfor %}
+  {% for i in graph_item12 %}
+  <script>
+    label_list12.push("{{ i }}");
+  </script>
+  {% endfor %}
+  {% for n in graph_list12 %}
+  <script>
+    data_list12.push("{{ n }}");
+  </script>
+  {% endfor %}
+  {% for i in graph_item13 %}
+  <script>
+    label_list13.push("{{ i }}");
+  </script>
+  {% endfor %}
+  {% for n in graph_list13 %}
+  <script>
+    data_list13.push("{{ n }}");
+  </script>
+  {% endfor %}
+  {% for i in graph_item14 %}
+  <script>
+    label_list14.push("{{ i }}");
+  </script>
+  {% endfor %}
+  {% for n in graph_list14 %}
+  <script>
+    data_list14.push("{{ n }}");
+  </script>
+  {% endfor %}
+  {% for i in graph_item15 %}
+  <script>
+    label_list15.push("{{ i }}");
+  </script>
+  {% endfor %}
+  {% for n in graph_list15 %}
+  <script>
+    data_list15.push("{{ n }}");
+  </script>
+  {% endfor %}
+
   <script>
     var datasets = [
       {
@@ -2074,6 +2170,936 @@
       type: 'bar',
       data: {
         labels: label_list10,
+        datasets: datasets
+      },
+      
+      options: {
+        plugins: {
+          legend: {
+            display: false,
+          },
+        },
+        scales : {
+          y : {
+            display : false,
+            max : 1,
+            min : 0,
+          },
+        }
+      }})
+
+
+      var datasets = [
+      {
+        data : data_list11,
+        backgroundColor : ['#FFFFFF'],
+        barPercentage : 1,
+        categoryPercentage : 1,
+      }
+    ]
+
+    for (var i = 0; i < datasets[0].data.length; i++) {
+      if (datasets[0].data[i] == 1) {
+        datasets[0].backgroundColor[i] = 'plum'
+      } else {
+        if (datasets[0].data[i] == 2) {
+          datasets[0].backgroundColor[i] = 'darkgray'
+        } else {
+          if (datasets[0].data[i] == 3) {
+            datasets[0].backgroundColor[i] = 'slategray'
+          } else {
+            if (datasets[0].data[i] == 4) {
+              datasets[0].backgroundColor[i] = 'steelblue'
+            } else {
+              if (datasets[0].data[i] == 5) {
+                datasets[0].backgroundColor[i] = 'royalblue'
+              } else {
+                if (datasets[0].data[i] == 6) {
+                  datasets[0].backgroundColor[i] = 'dodgerblue'
+                } else {
+                  if (datasets[0].data[i] == 7) {
+                    datasets[0].backgroundColor[i] = 'deepskyblue'
+                  } else {
+                    if (datasets[0].data[i] == 8) {
+                      datasets[0].backgroundColor[i] = 'aqua'
+                    } else {
+                      if (datasets[0].data[i] == 9) {
+                        datasets[0].backgroundColor[i] = 'mediumturquoise'
+                      } else {
+                        if (datasets[0].data[i] == 10) {
+                          datasets[0].backgroundColor[i] = 'lightseagreen'
+                        } else {
+                          if (datasets[0].data[i] == 11) {
+                            datasets[0].backgroundColor[i] = 'springgreen'
+                          } else {
+                            if (datasets[0].data[i] == 12) {
+                              datasets[0].backgroundColor[i] = 'limegreen'
+                            } else {
+                              if (datasets[0].data[i] == 13) {
+                                datasets[0].backgroundColor[i] = 'lawngreen'
+                              } else {
+                                if (datasets[0].data[i] == 14) {
+                                  datasets[0].backgroundColor[i] = 'greenyellow'
+                                } else {
+                                  if (datasets[0].data[i] == 15) {
+                                    datasets[0].backgroundColor[i] = 'gold'
+                                  } else {
+                                    if (datasets[0].data[i] == 16) {
+                                      datasets[0].backgroundColor[i] = 'darkorange'
+                                    } else {
+                                      if (datasets[0].data[i] == 17) {
+                                        datasets[0].backgroundColor[i] = 'burlywood'
+                                      } else {
+                                        if (datasets[0].data[i] == 18) {
+                                          datasets[0].backgroundColor[i] = 'sandybrown'
+                                        } else {
+                                          if (datasets[0].data[i] == 19) {
+                                            datasets[0].backgroundColor[i] = 'lightcoral'
+                                          } else {
+                                            if (datasets[0].data[i] == 20) {
+                                              datasets[0].backgroundColor[i] = 'lightsalmon'
+                                            } else {
+                                              if (datasets[0].data[i] == 21) {
+                                                datasets[0].backgroundColor[i] = 'tomato'
+                                              } else {
+                                                if (datasets[0].data[i] == 22) {
+                                                  datasets[0].backgroundColor[i] = 'orangered'
+                                                } else {
+                                                  if (datasets[0].data[i] == 23) {
+                                                    datasets[0].backgroundColor[i] = 'red'
+                                                  } else {
+                                                    if (datasets[0].data[i] == 24) {
+                                                      datasets[0].backgroundColor[i] = 'deeppink'
+                                                    } else {
+                                                      if (datasets[0].data[i] == 25) {
+                                                        datasets[0].backgroundColor[i] = 'hotpink'
+                                                      } else {
+                                                        if (datasets[0].data[i] == 26) {
+                                                          datasets[0].backgroundColor[i] = 'violet'
+                                                        } else {
+                                                          if (datasets[0].data[i] == 27) {
+                                                            datasets[0].backgroundColor[i] = 'magenta'
+                                                          } else {
+                                                            if (datasets[0].data[i] == 28) {
+                                                              datasets[0].backgroundColor[i] = 'mediumorchid'
+                                                            } else {
+                                                              if (datasets[0].data[i] == 29) {
+                                                                datasets[0].backgroundColor[i] = 'darkviolet'
+                                                              } else {
+                                                                if (datasets[0].data[i] == 30) {
+                                                                  datasets[0].backgroundColor[i] = 'mediumpurple'
+                                                                } else {
+                                                                  if (datasets[0].data[i] == 31) {
+                                                                    datasets[0].backgroundColor[i] = 'mediumblue'
+                                                                  } else {
+                                                                    if (datasets[0].data[i] == 32) {
+                                                                      datasets[0].backgroundColor[i] = 'cadetblue'
+                                                                    } else {
+                                                                      if (datasets[0].data[i] == 33) {
+                                                                        datasets[0].backgroundColor[i] = 'mediumseagreen'
+                                                                      } else {
+                                                                        if (datasets[0].data[i] == 34) {
+                                                                          datasets[0].backgroundColor[i] = 'forestgreen'
+                                                                        } else {
+                                                                          if (datasets[0].data[i] == 35) {
+                                                                            datasets[0].backgroundColor[i] = 'darkkhaki'
+                                                                          } else {
+                                                                            if (datasets[0].data[i] == 36) {
+                                                                              datasets[0].backgroundColor[i] = 'crimson'
+                                                                            } else {
+                                                                              if (datasets[0].data[i] == 37) {
+                                                                                datasets[0].backgroundColor[i] = 'rosybrown'
+                                                                              } else {
+                                                                                if (datasets[0].data[i] == 38) {
+                                                                                  datasets[0].backgroundColor[i] = 'dimgray'
+                                                                                } else {
+                                                                                  if (datasets[0].data[i] == 39) {
+                                                                                    datasets[0].backgroundColor[i] = 'midnightblue'
+                                                                                  } else {
+                                                                                    if (datasets[0].data[i] == 40) {
+                                                                                      datasets[0].backgroundColor[i] = 'darkblue'
+                                                                                    } else {
+                                                                                      if (datasets[0].data[i] == 41) {
+                                                                                        datasets[0].backgroundColor[i] = 'darkslategray'
+                                                                                      } else {
+                                                                                        if (datasets[0].data[i] == 42) {
+                                                                                          datasets[0].backgroundColor[i] = 'darkgreen'
+                                                                                        } else {
+                                                                                          if (datasets[0].data[i] == 43) {
+                                                                                            datasets[0].backgroundColor[i] = 'olivedrab'
+                                                                                          } else {
+                                                                                            if (datasets[0].data[i] == 44) {
+                                                                                              datasets[0].backgroundColor[i] = 'darkgoldenrod'
+                                                                                            } else {
+                                                                                              if (datasets[0].data[i] == 45) {
+                                                                                                datasets[0].backgroundColor[i] = 'sienna'
+                                                                                              } else {
+                                                                                                if (datasets[0].data[i] == 46) {
+                                                                                                  datasets[0].backgroundColor[i] = 'firebrick'
+                                                                                                } else {
+                                                                                                  if (datasets[0].data[i] == 47) {
+                                                                                                    datasets[0].backgroundColor[i] = 'maroon'
+                                                                                                  } else {
+                                                                                                    if (datasets[0].data[i] == 48) {
+                                                                                                      datasets[0].backgroundColor[i] = 'darkmagenta'
+                                                                                                    } else {
+                                                                                                      if (datasets[0].data[i] == 49) {
+                                                                                                        datasets[0].backgroundColor[i] = 'indigo'
+                                                                                                      } else {
+                                                                                                        if (datasets[0].data[i] == 50) {
+                                                                                                          datasets[0].backgroundColor[i] = 'black'
+      }}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}
+    }
+
+    const ctx11 = document.querySelector('#chart11');
+    const chart11 = new Chart(ctx11, {
+      type: 'bar',
+      data: {
+        labels: label_list11,
+        datasets: datasets
+      },
+      
+      options: {
+        plugins: {
+          legend: {
+            display: false,
+          },
+        },
+        scales : {
+          y : {
+            display : false,
+            max : 1,
+            min : 0,
+          },
+        }
+      }})
+
+
+      var datasets = [
+      {
+        data : data_list12,
+        backgroundColor : ['#FFFFFF'],
+        barPercentage : 1,
+        categoryPercentage : 1,
+      }
+    ]
+
+    for (var i = 0; i < datasets[0].data.length; i++) {
+      if (datasets[0].data[i] == 1) {
+        datasets[0].backgroundColor[i] = 'plum'
+      } else {
+        if (datasets[0].data[i] == 2) {
+          datasets[0].backgroundColor[i] = 'darkgray'
+        } else {
+          if (datasets[0].data[i] == 3) {
+            datasets[0].backgroundColor[i] = 'slategray'
+          } else {
+            if (datasets[0].data[i] == 4) {
+              datasets[0].backgroundColor[i] = 'steelblue'
+            } else {
+              if (datasets[0].data[i] == 5) {
+                datasets[0].backgroundColor[i] = 'royalblue'
+              } else {
+                if (datasets[0].data[i] == 6) {
+                  datasets[0].backgroundColor[i] = 'dodgerblue'
+                } else {
+                  if (datasets[0].data[i] == 7) {
+                    datasets[0].backgroundColor[i] = 'deepskyblue'
+                  } else {
+                    if (datasets[0].data[i] == 8) {
+                      datasets[0].backgroundColor[i] = 'aqua'
+                    } else {
+                      if (datasets[0].data[i] == 9) {
+                        datasets[0].backgroundColor[i] = 'mediumturquoise'
+                      } else {
+                        if (datasets[0].data[i] == 10) {
+                          datasets[0].backgroundColor[i] = 'lightseagreen'
+                        } else {
+                          if (datasets[0].data[i] == 11) {
+                            datasets[0].backgroundColor[i] = 'springgreen'
+                          } else {
+                            if (datasets[0].data[i] == 12) {
+                              datasets[0].backgroundColor[i] = 'limegreen'
+                            } else {
+                              if (datasets[0].data[i] == 13) {
+                                datasets[0].backgroundColor[i] = 'lawngreen'
+                              } else {
+                                if (datasets[0].data[i] == 14) {
+                                  datasets[0].backgroundColor[i] = 'greenyellow'
+                                } else {
+                                  if (datasets[0].data[i] == 15) {
+                                    datasets[0].backgroundColor[i] = 'gold'
+                                  } else {
+                                    if (datasets[0].data[i] == 16) {
+                                      datasets[0].backgroundColor[i] = 'darkorange'
+                                    } else {
+                                      if (datasets[0].data[i] == 17) {
+                                        datasets[0].backgroundColor[i] = 'burlywood'
+                                      } else {
+                                        if (datasets[0].data[i] == 18) {
+                                          datasets[0].backgroundColor[i] = 'sandybrown'
+                                        } else {
+                                          if (datasets[0].data[i] == 19) {
+                                            datasets[0].backgroundColor[i] = 'lightcoral'
+                                          } else {
+                                            if (datasets[0].data[i] == 20) {
+                                              datasets[0].backgroundColor[i] = 'lightsalmon'
+                                            } else {
+                                              if (datasets[0].data[i] == 21) {
+                                                datasets[0].backgroundColor[i] = 'tomato'
+                                              } else {
+                                                if (datasets[0].data[i] == 22) {
+                                                  datasets[0].backgroundColor[i] = 'orangered'
+                                                } else {
+                                                  if (datasets[0].data[i] == 23) {
+                                                    datasets[0].backgroundColor[i] = 'red'
+                                                  } else {
+                                                    if (datasets[0].data[i] == 24) {
+                                                      datasets[0].backgroundColor[i] = 'deeppink'
+                                                    } else {
+                                                      if (datasets[0].data[i] == 25) {
+                                                        datasets[0].backgroundColor[i] = 'hotpink'
+                                                      } else {
+                                                        if (datasets[0].data[i] == 26) {
+                                                          datasets[0].backgroundColor[i] = 'violet'
+                                                        } else {
+                                                          if (datasets[0].data[i] == 27) {
+                                                            datasets[0].backgroundColor[i] = 'magenta'
+                                                          } else {
+                                                            if (datasets[0].data[i] == 28) {
+                                                              datasets[0].backgroundColor[i] = 'mediumorchid'
+                                                            } else {
+                                                              if (datasets[0].data[i] == 29) {
+                                                                datasets[0].backgroundColor[i] = 'darkviolet'
+                                                              } else {
+                                                                if (datasets[0].data[i] == 30) {
+                                                                  datasets[0].backgroundColor[i] = 'mediumpurple'
+                                                                } else {
+                                                                  if (datasets[0].data[i] == 31) {
+                                                                    datasets[0].backgroundColor[i] = 'mediumblue'
+                                                                  } else {
+                                                                    if (datasets[0].data[i] == 32) {
+                                                                      datasets[0].backgroundColor[i] = 'cadetblue'
+                                                                    } else {
+                                                                      if (datasets[0].data[i] == 33) {
+                                                                        datasets[0].backgroundColor[i] = 'mediumseagreen'
+                                                                      } else {
+                                                                        if (datasets[0].data[i] == 34) {
+                                                                          datasets[0].backgroundColor[i] = 'forestgreen'
+                                                                        } else {
+                                                                          if (datasets[0].data[i] == 35) {
+                                                                            datasets[0].backgroundColor[i] = 'darkkhaki'
+                                                                          } else {
+                                                                            if (datasets[0].data[i] == 36) {
+                                                                              datasets[0].backgroundColor[i] = 'crimson'
+                                                                            } else {
+                                                                              if (datasets[0].data[i] == 37) {
+                                                                                datasets[0].backgroundColor[i] = 'rosybrown'
+                                                                              } else {
+                                                                                if (datasets[0].data[i] == 38) {
+                                                                                  datasets[0].backgroundColor[i] = 'dimgray'
+                                                                                } else {
+                                                                                  if (datasets[0].data[i] == 39) {
+                                                                                    datasets[0].backgroundColor[i] = 'midnightblue'
+                                                                                  } else {
+                                                                                    if (datasets[0].data[i] == 40) {
+                                                                                      datasets[0].backgroundColor[i] = 'darkblue'
+                                                                                    } else {
+                                                                                      if (datasets[0].data[i] == 41) {
+                                                                                        datasets[0].backgroundColor[i] = 'darkslategray'
+                                                                                      } else {
+                                                                                        if (datasets[0].data[i] == 42) {
+                                                                                          datasets[0].backgroundColor[i] = 'darkgreen'
+                                                                                        } else {
+                                                                                          if (datasets[0].data[i] == 43) {
+                                                                                            datasets[0].backgroundColor[i] = 'olivedrab'
+                                                                                          } else {
+                                                                                            if (datasets[0].data[i] == 44) {
+                                                                                              datasets[0].backgroundColor[i] = 'darkgoldenrod'
+                                                                                            } else {
+                                                                                              if (datasets[0].data[i] == 45) {
+                                                                                                datasets[0].backgroundColor[i] = 'sienna'
+                                                                                              } else {
+                                                                                                if (datasets[0].data[i] == 46) {
+                                                                                                  datasets[0].backgroundColor[i] = 'firebrick'
+                                                                                                } else {
+                                                                                                  if (datasets[0].data[i] == 47) {
+                                                                                                    datasets[0].backgroundColor[i] = 'maroon'
+                                                                                                  } else {
+                                                                                                    if (datasets[0].data[i] == 48) {
+                                                                                                      datasets[0].backgroundColor[i] = 'darkmagenta'
+                                                                                                    } else {
+                                                                                                      if (datasets[0].data[i] == 49) {
+                                                                                                        datasets[0].backgroundColor[i] = 'indigo'
+                                                                                                      } else {
+                                                                                                        if (datasets[0].data[i] == 50) {
+                                                                                                          datasets[0].backgroundColor[i] = 'black'
+      }}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}
+    }
+
+    const ctx12 = document.querySelector('#chart12');
+    const chart12 = new Chart(ctx12, {
+      type: 'bar',
+      data: {
+        labels: label_list12,
+        datasets: datasets
+      },
+      
+      options: {
+        plugins: {
+          legend: {
+            display: false,
+          },
+        },
+        scales : {
+          y : {
+            display : false,
+            max : 1,
+            min : 0,
+          },
+        }
+      }})
+
+
+      var datasets = [
+      {
+        data : data_list13,
+        backgroundColor : ['#FFFFFF'],
+        barPercentage : 1,
+        categoryPercentage : 1,
+      }
+    ]
+
+    for (var i = 0; i < datasets[0].data.length; i++) {
+      if (datasets[0].data[i] == 1) {
+        datasets[0].backgroundColor[i] = 'plum'
+      } else {
+        if (datasets[0].data[i] == 2) {
+          datasets[0].backgroundColor[i] = 'darkgray'
+        } else {
+          if (datasets[0].data[i] == 3) {
+            datasets[0].backgroundColor[i] = 'slategray'
+          } else {
+            if (datasets[0].data[i] == 4) {
+              datasets[0].backgroundColor[i] = 'steelblue'
+            } else {
+              if (datasets[0].data[i] == 5) {
+                datasets[0].backgroundColor[i] = 'royalblue'
+              } else {
+                if (datasets[0].data[i] == 6) {
+                  datasets[0].backgroundColor[i] = 'dodgerblue'
+                } else {
+                  if (datasets[0].data[i] == 7) {
+                    datasets[0].backgroundColor[i] = 'deepskyblue'
+                  } else {
+                    if (datasets[0].data[i] == 8) {
+                      datasets[0].backgroundColor[i] = 'aqua'
+                    } else {
+                      if (datasets[0].data[i] == 9) {
+                        datasets[0].backgroundColor[i] = 'mediumturquoise'
+                      } else {
+                        if (datasets[0].data[i] == 10) {
+                          datasets[0].backgroundColor[i] = 'lightseagreen'
+                        } else {
+                          if (datasets[0].data[i] == 11) {
+                            datasets[0].backgroundColor[i] = 'springgreen'
+                          } else {
+                            if (datasets[0].data[i] == 12) {
+                              datasets[0].backgroundColor[i] = 'limegreen'
+                            } else {
+                              if (datasets[0].data[i] == 13) {
+                                datasets[0].backgroundColor[i] = 'lawngreen'
+                              } else {
+                                if (datasets[0].data[i] == 14) {
+                                  datasets[0].backgroundColor[i] = 'greenyellow'
+                                } else {
+                                  if (datasets[0].data[i] == 15) {
+                                    datasets[0].backgroundColor[i] = 'gold'
+                                  } else {
+                                    if (datasets[0].data[i] == 16) {
+                                      datasets[0].backgroundColor[i] = 'darkorange'
+                                    } else {
+                                      if (datasets[0].data[i] == 17) {
+                                        datasets[0].backgroundColor[i] = 'burlywood'
+                                      } else {
+                                        if (datasets[0].data[i] == 18) {
+                                          datasets[0].backgroundColor[i] = 'sandybrown'
+                                        } else {
+                                          if (datasets[0].data[i] == 19) {
+                                            datasets[0].backgroundColor[i] = 'lightcoral'
+                                          } else {
+                                            if (datasets[0].data[i] == 20) {
+                                              datasets[0].backgroundColor[i] = 'lightsalmon'
+                                            } else {
+                                              if (datasets[0].data[i] == 21) {
+                                                datasets[0].backgroundColor[i] = 'tomato'
+                                              } else {
+                                                if (datasets[0].data[i] == 22) {
+                                                  datasets[0].backgroundColor[i] = 'orangered'
+                                                } else {
+                                                  if (datasets[0].data[i] == 23) {
+                                                    datasets[0].backgroundColor[i] = 'red'
+                                                  } else {
+                                                    if (datasets[0].data[i] == 24) {
+                                                      datasets[0].backgroundColor[i] = 'deeppink'
+                                                    } else {
+                                                      if (datasets[0].data[i] == 25) {
+                                                        datasets[0].backgroundColor[i] = 'hotpink'
+                                                      } else {
+                                                        if (datasets[0].data[i] == 26) {
+                                                          datasets[0].backgroundColor[i] = 'violet'
+                                                        } else {
+                                                          if (datasets[0].data[i] == 27) {
+                                                            datasets[0].backgroundColor[i] = 'magenta'
+                                                          } else {
+                                                            if (datasets[0].data[i] == 28) {
+                                                              datasets[0].backgroundColor[i] = 'mediumorchid'
+                                                            } else {
+                                                              if (datasets[0].data[i] == 29) {
+                                                                datasets[0].backgroundColor[i] = 'darkviolet'
+                                                              } else {
+                                                                if (datasets[0].data[i] == 30) {
+                                                                  datasets[0].backgroundColor[i] = 'mediumpurple'
+                                                                } else {
+                                                                  if (datasets[0].data[i] == 31) {
+                                                                    datasets[0].backgroundColor[i] = 'mediumblue'
+                                                                  } else {
+                                                                    if (datasets[0].data[i] == 32) {
+                                                                      datasets[0].backgroundColor[i] = 'cadetblue'
+                                                                    } else {
+                                                                      if (datasets[0].data[i] == 33) {
+                                                                        datasets[0].backgroundColor[i] = 'mediumseagreen'
+                                                                      } else {
+                                                                        if (datasets[0].data[i] == 34) {
+                                                                          datasets[0].backgroundColor[i] = 'forestgreen'
+                                                                        } else {
+                                                                          if (datasets[0].data[i] == 35) {
+                                                                            datasets[0].backgroundColor[i] = 'darkkhaki'
+                                                                          } else {
+                                                                            if (datasets[0].data[i] == 36) {
+                                                                              datasets[0].backgroundColor[i] = 'crimson'
+                                                                            } else {
+                                                                              if (datasets[0].data[i] == 37) {
+                                                                                datasets[0].backgroundColor[i] = 'rosybrown'
+                                                                              } else {
+                                                                                if (datasets[0].data[i] == 38) {
+                                                                                  datasets[0].backgroundColor[i] = 'dimgray'
+                                                                                } else {
+                                                                                  if (datasets[0].data[i] == 39) {
+                                                                                    datasets[0].backgroundColor[i] = 'midnightblue'
+                                                                                  } else {
+                                                                                    if (datasets[0].data[i] == 40) {
+                                                                                      datasets[0].backgroundColor[i] = 'darkblue'
+                                                                                    } else {
+                                                                                      if (datasets[0].data[i] == 41) {
+                                                                                        datasets[0].backgroundColor[i] = 'darkslategray'
+                                                                                      } else {
+                                                                                        if (datasets[0].data[i] == 42) {
+                                                                                          datasets[0].backgroundColor[i] = 'darkgreen'
+                                                                                        } else {
+                                                                                          if (datasets[0].data[i] == 43) {
+                                                                                            datasets[0].backgroundColor[i] = 'olivedrab'
+                                                                                          } else {
+                                                                                            if (datasets[0].data[i] == 44) {
+                                                                                              datasets[0].backgroundColor[i] = 'darkgoldenrod'
+                                                                                            } else {
+                                                                                              if (datasets[0].data[i] == 45) {
+                                                                                                datasets[0].backgroundColor[i] = 'sienna'
+                                                                                              } else {
+                                                                                                if (datasets[0].data[i] == 46) {
+                                                                                                  datasets[0].backgroundColor[i] = 'firebrick'
+                                                                                                } else {
+                                                                                                  if (datasets[0].data[i] == 47) {
+                                                                                                    datasets[0].backgroundColor[i] = 'maroon'
+                                                                                                  } else {
+                                                                                                    if (datasets[0].data[i] == 48) {
+                                                                                                      datasets[0].backgroundColor[i] = 'darkmagenta'
+                                                                                                    } else {
+                                                                                                      if (datasets[0].data[i] == 49) {
+                                                                                                        datasets[0].backgroundColor[i] = 'indigo'
+                                                                                                      } else {
+                                                                                                        if (datasets[0].data[i] == 50) {
+                                                                                                          datasets[0].backgroundColor[i] = 'black'
+      }}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}
+    }
+
+    const ctx13 = document.querySelector('#chart13');
+    const chart13 = new Chart(ctx13, {
+      type: 'bar',
+      data: {
+        labels: label_list13,
+        datasets: datasets
+      },
+      
+      options: {
+        plugins: {
+          legend: {
+            display: false,
+          },
+        },
+        scales : {
+          y : {
+            display : false,
+            max : 1,
+            min : 0,
+          },
+        }
+      }})
+
+
+      var datasets = [
+      {
+        data : data_list14,
+        backgroundColor : ['#FFFFFF'],
+        barPercentage : 1,
+        categoryPercentage : 1,
+      }
+    ]
+
+    for (var i = 0; i < datasets[0].data.length; i++) {
+      if (datasets[0].data[i] == 1) {
+        datasets[0].backgroundColor[i] = 'plum'
+      } else {
+        if (datasets[0].data[i] == 2) {
+          datasets[0].backgroundColor[i] = 'darkgray'
+        } else {
+          if (datasets[0].data[i] == 3) {
+            datasets[0].backgroundColor[i] = 'slategray'
+          } else {
+            if (datasets[0].data[i] == 4) {
+              datasets[0].backgroundColor[i] = 'steelblue'
+            } else {
+              if (datasets[0].data[i] == 5) {
+                datasets[0].backgroundColor[i] = 'royalblue'
+              } else {
+                if (datasets[0].data[i] == 6) {
+                  datasets[0].backgroundColor[i] = 'dodgerblue'
+                } else {
+                  if (datasets[0].data[i] == 7) {
+                    datasets[0].backgroundColor[i] = 'deepskyblue'
+                  } else {
+                    if (datasets[0].data[i] == 8) {
+                      datasets[0].backgroundColor[i] = 'aqua'
+                    } else {
+                      if (datasets[0].data[i] == 9) {
+                        datasets[0].backgroundColor[i] = 'mediumturquoise'
+                      } else {
+                        if (datasets[0].data[i] == 10) {
+                          datasets[0].backgroundColor[i] = 'lightseagreen'
+                        } else {
+                          if (datasets[0].data[i] == 11) {
+                            datasets[0].backgroundColor[i] = 'springgreen'
+                          } else {
+                            if (datasets[0].data[i] == 12) {
+                              datasets[0].backgroundColor[i] = 'limegreen'
+                            } else {
+                              if (datasets[0].data[i] == 13) {
+                                datasets[0].backgroundColor[i] = 'lawngreen'
+                              } else {
+                                if (datasets[0].data[i] == 14) {
+                                  datasets[0].backgroundColor[i] = 'greenyellow'
+                                } else {
+                                  if (datasets[0].data[i] == 15) {
+                                    datasets[0].backgroundColor[i] = 'gold'
+                                  } else {
+                                    if (datasets[0].data[i] == 16) {
+                                      datasets[0].backgroundColor[i] = 'darkorange'
+                                    } else {
+                                      if (datasets[0].data[i] == 17) {
+                                        datasets[0].backgroundColor[i] = 'burlywood'
+                                      } else {
+                                        if (datasets[0].data[i] == 18) {
+                                          datasets[0].backgroundColor[i] = 'sandybrown'
+                                        } else {
+                                          if (datasets[0].data[i] == 19) {
+                                            datasets[0].backgroundColor[i] = 'lightcoral'
+                                          } else {
+                                            if (datasets[0].data[i] == 20) {
+                                              datasets[0].backgroundColor[i] = 'lightsalmon'
+                                            } else {
+                                              if (datasets[0].data[i] == 21) {
+                                                datasets[0].backgroundColor[i] = 'tomato'
+                                              } else {
+                                                if (datasets[0].data[i] == 22) {
+                                                  datasets[0].backgroundColor[i] = 'orangered'
+                                                } else {
+                                                  if (datasets[0].data[i] == 23) {
+                                                    datasets[0].backgroundColor[i] = 'red'
+                                                  } else {
+                                                    if (datasets[0].data[i] == 24) {
+                                                      datasets[0].backgroundColor[i] = 'deeppink'
+                                                    } else {
+                                                      if (datasets[0].data[i] == 25) {
+                                                        datasets[0].backgroundColor[i] = 'hotpink'
+                                                      } else {
+                                                        if (datasets[0].data[i] == 26) {
+                                                          datasets[0].backgroundColor[i] = 'violet'
+                                                        } else {
+                                                          if (datasets[0].data[i] == 27) {
+                                                            datasets[0].backgroundColor[i] = 'magenta'
+                                                          } else {
+                                                            if (datasets[0].data[i] == 28) {
+                                                              datasets[0].backgroundColor[i] = 'mediumorchid'
+                                                            } else {
+                                                              if (datasets[0].data[i] == 29) {
+                                                                datasets[0].backgroundColor[i] = 'darkviolet'
+                                                              } else {
+                                                                if (datasets[0].data[i] == 30) {
+                                                                  datasets[0].backgroundColor[i] = 'mediumpurple'
+                                                                } else {
+                                                                  if (datasets[0].data[i] == 31) {
+                                                                    datasets[0].backgroundColor[i] = 'mediumblue'
+                                                                  } else {
+                                                                    if (datasets[0].data[i] == 32) {
+                                                                      datasets[0].backgroundColor[i] = 'cadetblue'
+                                                                    } else {
+                                                                      if (datasets[0].data[i] == 33) {
+                                                                        datasets[0].backgroundColor[i] = 'mediumseagreen'
+                                                                      } else {
+                                                                        if (datasets[0].data[i] == 34) {
+                                                                          datasets[0].backgroundColor[i] = 'forestgreen'
+                                                                        } else {
+                                                                          if (datasets[0].data[i] == 35) {
+                                                                            datasets[0].backgroundColor[i] = 'darkkhaki'
+                                                                          } else {
+                                                                            if (datasets[0].data[i] == 36) {
+                                                                              datasets[0].backgroundColor[i] = 'crimson'
+                                                                            } else {
+                                                                              if (datasets[0].data[i] == 37) {
+                                                                                datasets[0].backgroundColor[i] = 'rosybrown'
+                                                                              } else {
+                                                                                if (datasets[0].data[i] == 38) {
+                                                                                  datasets[0].backgroundColor[i] = 'dimgray'
+                                                                                } else {
+                                                                                  if (datasets[0].data[i] == 39) {
+                                                                                    datasets[0].backgroundColor[i] = 'midnightblue'
+                                                                                  } else {
+                                                                                    if (datasets[0].data[i] == 40) {
+                                                                                      datasets[0].backgroundColor[i] = 'darkblue'
+                                                                                    } else {
+                                                                                      if (datasets[0].data[i] == 41) {
+                                                                                        datasets[0].backgroundColor[i] = 'darkslategray'
+                                                                                      } else {
+                                                                                        if (datasets[0].data[i] == 42) {
+                                                                                          datasets[0].backgroundColor[i] = 'darkgreen'
+                                                                                        } else {
+                                                                                          if (datasets[0].data[i] == 43) {
+                                                                                            datasets[0].backgroundColor[i] = 'olivedrab'
+                                                                                          } else {
+                                                                                            if (datasets[0].data[i] == 44) {
+                                                                                              datasets[0].backgroundColor[i] = 'darkgoldenrod'
+                                                                                            } else {
+                                                                                              if (datasets[0].data[i] == 45) {
+                                                                                                datasets[0].backgroundColor[i] = 'sienna'
+                                                                                              } else {
+                                                                                                if (datasets[0].data[i] == 46) {
+                                                                                                  datasets[0].backgroundColor[i] = 'firebrick'
+                                                                                                } else {
+                                                                                                  if (datasets[0].data[i] == 47) {
+                                                                                                    datasets[0].backgroundColor[i] = 'maroon'
+                                                                                                  } else {
+                                                                                                    if (datasets[0].data[i] == 48) {
+                                                                                                      datasets[0].backgroundColor[i] = 'darkmagenta'
+                                                                                                    } else {
+                                                                                                      if (datasets[0].data[i] == 49) {
+                                                                                                        datasets[0].backgroundColor[i] = 'indigo'
+                                                                                                      } else {
+                                                                                                        if (datasets[0].data[i] == 50) {
+                                                                                                          datasets[0].backgroundColor[i] = 'black'
+      }}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}
+    }
+
+    const ctx14 = document.querySelector('#chart14');
+    const chart14 = new Chart(ctx14, {
+      type: 'bar',
+      data: {
+        labels: label_list14,
+        datasets: datasets
+      },
+      
+      options: {
+        plugins: {
+          legend: {
+            display: false,
+          },
+        },
+        scales : {
+          y : {
+            display : false,
+            max : 1,
+            min : 0,
+          },
+        }
+      }})
+
+
+      var datasets = [
+      {
+        data : data_list15,
+        backgroundColor : ['#FFFFFF'],
+        barPercentage : 1,
+        categoryPercentage : 1,
+      }
+    ]
+
+    for (var i = 0; i < datasets[0].data.length; i++) {
+      if (datasets[0].data[i] == 1) {
+        datasets[0].backgroundColor[i] = 'plum'
+      } else {
+        if (datasets[0].data[i] == 2) {
+          datasets[0].backgroundColor[i] = 'darkgray'
+        } else {
+          if (datasets[0].data[i] == 3) {
+            datasets[0].backgroundColor[i] = 'slategray'
+          } else {
+            if (datasets[0].data[i] == 4) {
+              datasets[0].backgroundColor[i] = 'steelblue'
+            } else {
+              if (datasets[0].data[i] == 5) {
+                datasets[0].backgroundColor[i] = 'royalblue'
+              } else {
+                if (datasets[0].data[i] == 6) {
+                  datasets[0].backgroundColor[i] = 'dodgerblue'
+                } else {
+                  if (datasets[0].data[i] == 7) {
+                    datasets[0].backgroundColor[i] = 'deepskyblue'
+                  } else {
+                    if (datasets[0].data[i] == 8) {
+                      datasets[0].backgroundColor[i] = 'aqua'
+                    } else {
+                      if (datasets[0].data[i] == 9) {
+                        datasets[0].backgroundColor[i] = 'mediumturquoise'
+                      } else {
+                        if (datasets[0].data[i] == 10) {
+                          datasets[0].backgroundColor[i] = 'lightseagreen'
+                        } else {
+                          if (datasets[0].data[i] == 11) {
+                            datasets[0].backgroundColor[i] = 'springgreen'
+                          } else {
+                            if (datasets[0].data[i] == 12) {
+                              datasets[0].backgroundColor[i] = 'limegreen'
+                            } else {
+                              if (datasets[0].data[i] == 13) {
+                                datasets[0].backgroundColor[i] = 'lawngreen'
+                              } else {
+                                if (datasets[0].data[i] == 14) {
+                                  datasets[0].backgroundColor[i] = 'greenyellow'
+                                } else {
+                                  if (datasets[0].data[i] == 15) {
+                                    datasets[0].backgroundColor[i] = 'gold'
+                                  } else {
+                                    if (datasets[0].data[i] == 16) {
+                                      datasets[0].backgroundColor[i] = 'darkorange'
+                                    } else {
+                                      if (datasets[0].data[i] == 17) {
+                                        datasets[0].backgroundColor[i] = 'burlywood'
+                                      } else {
+                                        if (datasets[0].data[i] == 18) {
+                                          datasets[0].backgroundColor[i] = 'sandybrown'
+                                        } else {
+                                          if (datasets[0].data[i] == 19) {
+                                            datasets[0].backgroundColor[i] = 'lightcoral'
+                                          } else {
+                                            if (datasets[0].data[i] == 20) {
+                                              datasets[0].backgroundColor[i] = 'lightsalmon'
+                                            } else {
+                                              if (datasets[0].data[i] == 21) {
+                                                datasets[0].backgroundColor[i] = 'tomato'
+                                              } else {
+                                                if (datasets[0].data[i] == 22) {
+                                                  datasets[0].backgroundColor[i] = 'orangered'
+                                                } else {
+                                                  if (datasets[0].data[i] == 23) {
+                                                    datasets[0].backgroundColor[i] = 'red'
+                                                  } else {
+                                                    if (datasets[0].data[i] == 24) {
+                                                      datasets[0].backgroundColor[i] = 'deeppink'
+                                                    } else {
+                                                      if (datasets[0].data[i] == 25) {
+                                                        datasets[0].backgroundColor[i] = 'hotpink'
+                                                      } else {
+                                                        if (datasets[0].data[i] == 26) {
+                                                          datasets[0].backgroundColor[i] = 'violet'
+                                                        } else {
+                                                          if (datasets[0].data[i] == 27) {
+                                                            datasets[0].backgroundColor[i] = 'magenta'
+                                                          } else {
+                                                            if (datasets[0].data[i] == 28) {
+                                                              datasets[0].backgroundColor[i] = 'mediumorchid'
+                                                            } else {
+                                                              if (datasets[0].data[i] == 29) {
+                                                                datasets[0].backgroundColor[i] = 'darkviolet'
+                                                              } else {
+                                                                if (datasets[0].data[i] == 30) {
+                                                                  datasets[0].backgroundColor[i] = 'mediumpurple'
+                                                                } else {
+                                                                  if (datasets[0].data[i] == 31) {
+                                                                    datasets[0].backgroundColor[i] = 'mediumblue'
+                                                                  } else {
+                                                                    if (datasets[0].data[i] == 32) {
+                                                                      datasets[0].backgroundColor[i] = 'cadetblue'
+                                                                    } else {
+                                                                      if (datasets[0].data[i] == 33) {
+                                                                        datasets[0].backgroundColor[i] = 'mediumseagreen'
+                                                                      } else {
+                                                                        if (datasets[0].data[i] == 34) {
+                                                                          datasets[0].backgroundColor[i] = 'forestgreen'
+                                                                        } else {
+                                                                          if (datasets[0].data[i] == 35) {
+                                                                            datasets[0].backgroundColor[i] = 'darkkhaki'
+                                                                          } else {
+                                                                            if (datasets[0].data[i] == 36) {
+                                                                              datasets[0].backgroundColor[i] = 'crimson'
+                                                                            } else {
+                                                                              if (datasets[0].data[i] == 37) {
+                                                                                datasets[0].backgroundColor[i] = 'rosybrown'
+                                                                              } else {
+                                                                                if (datasets[0].data[i] == 38) {
+                                                                                  datasets[0].backgroundColor[i] = 'dimgray'
+                                                                                } else {
+                                                                                  if (datasets[0].data[i] == 39) {
+                                                                                    datasets[0].backgroundColor[i] = 'midnightblue'
+                                                                                  } else {
+                                                                                    if (datasets[0].data[i] == 40) {
+                                                                                      datasets[0].backgroundColor[i] = 'darkblue'
+                                                                                    } else {
+                                                                                      if (datasets[0].data[i] == 41) {
+                                                                                        datasets[0].backgroundColor[i] = 'darkslategray'
+                                                                                      } else {
+                                                                                        if (datasets[0].data[i] == 42) {
+                                                                                          datasets[0].backgroundColor[i] = 'darkgreen'
+                                                                                        } else {
+                                                                                          if (datasets[0].data[i] == 43) {
+                                                                                            datasets[0].backgroundColor[i] = 'olivedrab'
+                                                                                          } else {
+                                                                                            if (datasets[0].data[i] == 44) {
+                                                                                              datasets[0].backgroundColor[i] = 'darkgoldenrod'
+                                                                                            } else {
+                                                                                              if (datasets[0].data[i] == 45) {
+                                                                                                datasets[0].backgroundColor[i] = 'sienna'
+                                                                                              } else {
+                                                                                                if (datasets[0].data[i] == 46) {
+                                                                                                  datasets[0].backgroundColor[i] = 'firebrick'
+                                                                                                } else {
+                                                                                                  if (datasets[0].data[i] == 47) {
+                                                                                                    datasets[0].backgroundColor[i] = 'maroon'
+                                                                                                  } else {
+                                                                                                    if (datasets[0].data[i] == 48) {
+                                                                                                      datasets[0].backgroundColor[i] = 'darkmagenta'
+                                                                                                    } else {
+                                                                                                      if (datasets[0].data[i] == 49) {
+                                                                                                        datasets[0].backgroundColor[i] = 'indigo'
+                                                                                                      } else {
+                                                                                                        if (datasets[0].data[i] == 50) {
+                                                                                                          datasets[0].backgroundColor[i] = 'black'
+      }}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}
+    }
+
+    const ctx15 = document.querySelector('#chart15');
+    const chart15 = new Chart(ctx15, {
+      type: 'bar',
+      data: {
+        labels: label_list15,
         datasets: datasets
       },
       

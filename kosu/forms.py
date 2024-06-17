@@ -114,6 +114,12 @@ class teamForm(forms.Form):
   member8 = forms.ChoiceField(label = 'メンバー従業員番号8', widget = forms.Select(attrs ={'class' : 'form-control custom-border', 'style' : 'width : 200px;'}), required = False)
   member9 = forms.ChoiceField(label = 'メンバー従業員番号9', widget = forms.Select(attrs ={'class' : 'form-control custom-border', 'style' : 'width : 200px;'}), required = False)
   member10 = forms.ChoiceField(label = 'メンバー従業員番号10', widget = forms.Select(attrs ={'class' : 'form-control custom-border', 'style' : 'width : 200px;'}), required = False)
+  member11 = forms.ChoiceField(label = 'メンバー従業員番号11', widget = forms.Select(attrs ={'class' : 'form-control custom-border', 'style' : 'width : 200px;'}), required = False)
+  member12 = forms.ChoiceField(label = 'メンバー従業員番号12', widget = forms.Select(attrs ={'class' : 'form-control custom-border', 'style' : 'width : 200px;'}), required = False)
+  member13 = forms.ChoiceField(label = 'メンバー従業員番号13', widget = forms.Select(attrs ={'class' : 'form-control custom-border', 'style' : 'width : 200px;'}), required = False)
+  member14 = forms.ChoiceField(label = 'メンバー従業員番号14', widget = forms.Select(attrs ={'class' : 'form-control custom-border', 'style' : 'width : 200px;'}), required = False)
+  member15 = forms.ChoiceField(label = 'メンバー従業員番号15', widget = forms.Select(attrs ={'class' : 'form-control custom-border', 'style' : 'width : 200px;'}), required = False)
+
   follow = forms.BooleanField(label = 'フォローON/OFF', required = False, widget = forms.CheckboxInput(attrs = {'class' : 'form-check-input'}))
 
 

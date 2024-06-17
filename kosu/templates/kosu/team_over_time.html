@@ -473,16 +473,205 @@
     </tr>
     {% endif %}
 
+    {% if team_n > 10 %}
+    <tr>
+    {% for m in over_time_list11 %}
+    {% if forloop.first %}
+    <td class="no-wrap" style="text-align:center;">
+      {{m}}
+    </td>
+    {% else %}
+    {% if forloop.last %}
+    <td class="no-wrap" style="text-align:center;">
+      <p class="fs-5">
+      {{ m|floatformat:2 }}
+      </p>
+    </td>
+    {% else %}
+    {% if forloop.counter == 2 %}
+    <td class="no-wrap" style="text-align:center;">
+      <p class="fs-5">
+      {{ m|floatformat:2 }}
+      </p>
+    </td>
+    {% else %}
+    {% if m.judgement == true %}
+    <td class="table-green no-wrap" style="text-align:center;">
+    {% else %}
+    <td class="no-wrap" style="text-align:center;">
+    {% endif %}
+      {% if m.over_time == 0 %}
+        0
+      {% else %}
+        {{ m.over_time|floatformat:2 }}
+      {% endif %}
+    </td>
+    {% endif %}
+    {% endif %}
+    {% endif %}
+    {% endfor %}
+    </tr>
+    {% endif %}
 
+    {% if team_n > 11 %}
+    <tr>
+    {% for m in over_time_list12 %}
+    {% if forloop.first %}
+    <td class="no-wrap" style="text-align:center;">
+      {{m}}
+    </td>
+    {% else %}
+    {% if forloop.last %}
+    <td class="no-wrap" style="text-align:center;">
+      <p class="fs-5">
+      {{ m|floatformat:2 }}
+      </p>
+    </td>
+    {% else %}
+    {% if forloop.counter == 2 %}
+    <td class="no-wrap" style="text-align:center;">
+      <p class="fs-5">
+      {{ m|floatformat:2 }}
+      </p>
+    </td>
+    {% else %}
+    {% if m.judgement == true %}
+    <td class="table-green no-wrap" style="text-align:center;">
+    {% else %}
+    <td class="no-wrap" style="text-align:center;">
+    {% endif %}
+      {% if m.over_time == 0 %}
+        0
+      {% else %}
+        {{ m.over_time|floatformat:2 }}
+      {% endif %}
+    </td>
+    {% endif %}
+    {% endif %}
+    {% endif %}
+    {% endfor %}
+    </tr>
+    {% endif %}
 
+    {% if team_n > 12 %}
+    <tr>
+    {% for m in over_time_list13 %}
+    {% if forloop.first %}
+    <td class="no-wrap" style="text-align:center;">
+      {{m}}
+    </td>
+    {% else %}
+    {% if forloop.last %}
+    <td class="no-wrap" style="text-align:center;">
+      <p class="fs-5">
+      {{ m|floatformat:2 }}
+      </p>
+    </td>
+    {% else %}
+    {% if forloop.counter == 2 %}
+    <td class="no-wrap" style="text-align:center;">
+      <p class="fs-5">
+      {{ m|floatformat:2 }}
+      </p>
+    </td>
+    {% else %}
+    {% if m.judgement == true %}
+    <td class="table-green no-wrap" style="text-align:center;">
+    {% else %}
+    <td class="no-wrap" style="text-align:center;">
+    {% endif %}
+      {% if m.over_time == 0 %}
+        0
+      {% else %}
+        {{ m.over_time|floatformat:2 }}
+      {% endif %}
+    </td>
+    {% endif %}
+    {% endif %}
+    {% endif %}
+    {% endfor %}
+    </tr>
+    {% endif %}
 
+    {% if team_n > 13 %}
+    <tr>
+    {% for m in over_time_list14 %}
+    {% if forloop.first %}
+    <td class="no-wrap" style="text-align:center;">
+      {{m}}
+    </td>
+    {% else %}
+    {% if forloop.last %}
+    <td class="no-wrap" style="text-align:center;">
+      <p class="fs-5">
+      {{ m|floatformat:2 }}
+      </p>
+    </td>
+    {% else %}
+    {% if forloop.counter == 2 %}
+    <td class="no-wrap" style="text-align:center;">
+      <p class="fs-5">
+      {{ m|floatformat:2 }}
+      </p>
+    </td>
+    {% else %}
+    {% if m.judgement == true %}
+    <td class="table-green no-wrap" style="text-align:center;">
+    {% else %}
+    <td class="no-wrap" style="text-align:center;">
+    {% endif %}
+      {% if m.over_time == 0 %}
+        0
+      {% else %}
+        {{ m.over_time|floatformat:2 }}
+      {% endif %}
+    </td>
+    {% endif %}
+    {% endif %}
+    {% endif %}
+    {% endfor %}
+    </tr>
+    {% endif %}
 
-
-
-
-
-
-
+    {% if team_n > 14 %}
+    <tr>
+    {% for m in over_time_list15 %}
+    {% if forloop.first %}
+    <td class="no-wrap" style="text-align:center;">
+      {{m}}
+    </td>
+    {% else %}
+    {% if forloop.last %}
+    <td class="no-wrap" style="text-align:center;">
+      <p class="fs-5">
+      {{ m|floatformat:2 }}
+      </p>
+    </td>
+    {% else %}
+    {% if forloop.counter == 2 %}
+    <td class="no-wrap" style="text-align:center;">
+      <p class="fs-5">
+      {{ m|floatformat:2 }}
+      </p>
+    </td>
+    {% else %}
+    {% if m.judgement == true %}
+    <td class="table-green no-wrap" style="text-align:center;">
+    {% else %}
+    <td class="no-wrap" style="text-align:center;">
+    {% endif %}
+      {% if m.over_time == 0 %}
+        0
+      {% else %}
+        {{ m.over_time|floatformat:2 }}
+      {% endif %}
+    </td>
+    {% endif %}
+    {% endif %}
+    {% endif %}
+    {% endfor %}
+    </tr>
+    {% endif %}
   </table>
   </form>
 </body>

@@ -72,6 +72,11 @@ def team(request):
     form.fields['member8'].choices = choices_list
     form.fields['member9'].choices = choices_list
     form.fields['member10'].choices = choices_list
+    form.fields['member11'].choices = choices_list
+    form.fields['member12'].choices = choices_list
+    form.fields['member13'].choices = choices_list
+    form.fields['member14'].choices = choices_list
+    form.fields['member15'].choices = choices_list
 
 
     # POST時の処理
@@ -87,13 +92,20 @@ def team(request):
       member8 = request.POST['member8']
       member9 = request.POST['member9']
       member10 = request.POST['member10']
+      member11 = request.POST['member11']
+      member12 = request.POST['member12']
+      member13 = request.POST['member13']
+      member14 = request.POST['member14']
+      member15 = request.POST['member15']
 
       # POSTされた値をモデルのそれぞれのフィールドに入れる
       new = team_member(employee_no5 = request.session['login_No'], \
                         member1 = member1, member2 = member2, member3 = member3, \
                         member4 = member4, member5 = member5, member6 = member6, \
                         member7 = member7, member8 = member8, member9 = member9, \
-                        member10 = member10)
+                        member10 = member10, member11 = member11, member12 = member12, \
+                        member13 = member13, member14 = member14, member15 = member15, \
+                        follow = 'follow' in request.POST)
       # 新しいレコードを作成しセーブする
       new.save()
 
@@ -129,7 +141,12 @@ def team(request):
                  'member7' : obj.member7, \
                  'member8' : obj.member8, \
                  'member9' : obj.member9, \
-                 'member10' : obj.member10}
+                 'member10' : obj.member10, \
+                 'member11' : obj.member11, \
+                 'member12' : obj.member12, \
+                 'member13' : obj.member13, \
+                 'member14' : obj.member14, \
+                 'member15' : obj.member15}
     # フォームを用意
     form = teamForm(form_list)
     # フォームの選択肢定義
@@ -143,6 +160,11 @@ def team(request):
     form.fields['member8'].choices = choices_list
     form.fields['member9'].choices = choices_list
     form.fields['member10'].choices = choices_list
+    form.fields['member11'].choices = choices_list
+    form.fields['member12'].choices = choices_list
+    form.fields['member13'].choices = choices_list
+    form.fields['member14'].choices = choices_list
+    form.fields['member15'].choices = choices_list
 
     # POST時の処理
     if (request.method == 'POST'):
@@ -159,7 +181,13 @@ def team(request):
                       'member7' : request.POST['member7'], \
                       'member8' : request.POST['member8'], \
                       'member9' : request.POST['member9'], \
-                      'member10' : request.POST['member10']})
+                      'member10' : request.POST['member10'], \
+                      'member11' : request.POST['member11'], \
+                      'member12' : request.POST['member12'], \
+                      'member13' : request.POST['member13'], \
+                      'member14' : request.POST['member14'], \
+                      'member15' : request.POST['member15'], \
+                        })
 
       # 班員メイン画面をリダイレクトする
       return redirect(to = '/team_main')
@@ -231,7 +259,7 @@ def team_graph(request):
   # ログイン者の班員データ取得
   obj = team_member.objects.get(employee_no5 = request.session['login_No'])
   # 班員データに空があった場合0を定義
-  for i in range(1, 11):
+  for i in range(1, 16):
     if eval('obj.member{}'.format(i)) == '':
       exec('obj_member{}=0'.format(i))
     else:
@@ -240,7 +268,7 @@ def team_graph(request):
   # 班員数、班員の名前リスト取得
   n = 0
   name_list = []
-  for i in range(1, 11):
+  for i in range(1, 16):
     member_filter =  member.objects.filter(employee_no = eval('obj_member{}'.format(i)))
     if member_filter.count() != 0:
       member_data = member.objects.get(employee_no = eval('obj_member{}'.format(i)))
@@ -430,6 +458,16 @@ def team_graph(request):
   graph_item9 = []
   graph_list10 = []
   graph_item10 = []
+  graph_list11 = []
+  graph_item11 = []
+  graph_list12 = []
+  graph_item12 = []
+  graph_list13 = []
+  graph_item13 = []
+  graph_list14 = []
+  graph_item14 = []
+  graph_list15 = []
+  graph_item15 = []
   
   if n >= 1 and obj.member1 != '':
     graph_list1, graph_item1 = graph_function(obj.member1)
@@ -451,6 +489,16 @@ def team_graph(request):
     graph_list9, graph_item9 = graph_function(obj.member9)
   if n >= 10 and obj.member10 != '':
     graph_list10, graph_item10 = graph_function(obj.member10)
+  if n >= 11 and obj.member11 != '':
+    graph_list11, graph_item11 = graph_function(obj.member11)
+  if n >= 12 and obj.member12 != '':
+    graph_list12, graph_item12 = graph_function(obj.member12)
+  if n >= 13 and obj.member13 != '':
+    graph_list13, graph_item13 = graph_function(obj.member13)
+  if n >= 14 and obj.member14 != '':
+    graph_list14, graph_item14 = graph_function(obj.member14)
+  if n >= 15 and obj.member15 != '':
+    graph_list15, graph_item15 = graph_function(obj.member15)
 
   # 現在使用している工数区分のオブジェクトを取得
   kosu_obj = kosu_division.objects.get(kosu_name = request.session.get('input_def', None))
@@ -466,7 +514,8 @@ def team_graph(request):
   for i in range(1, def_n + 1):
     graph_kosu_list.append(eval('kosu_obj.kosu_title_{}'.format(i)))
 
-
+  print(graph_list11)
+  print(graph_item11)
   # HTMLに渡す辞書
   context = {
     'title' : '班員工数グラフ',
@@ -496,6 +545,16 @@ def team_graph(request):
     'graph_item9' : graph_item9,
     'graph_list10' : graph_list10,
     'graph_item10' : graph_item10,
+    'graph_list11' : graph_list11,
+    'graph_item11' : graph_item11,
+    'graph_list12' : graph_list12,
+    'graph_item12' : graph_item12,
+    'graph_list13' : graph_list13,
+    'graph_item13' : graph_item13,
+    'graph_list14' : graph_list14,
+    'graph_item14' : graph_item14,
+    'graph_list15' : graph_list15,
+    'graph_item15' : graph_item15,
     }
  
   # 指定したHTMLに辞書を渡して表示を完成させる
@@ -550,11 +609,9 @@ def team_kosu(request, num):
   form_choices = team_member.objects.get(employee_no5 = request.session['login_No'])
 
   # 選択肢の表示数検出
-  for i in range(1, 11):
-
+  for i in range(1, 16):
     # 班員の登録がある場合の処理
     if eval('form_choices.member{}'.format(i)) != '':
-
       # インデックス記録
       n = i
 
@@ -851,13 +908,17 @@ def team_calendar(request):
                     'member7_check' : True, \
                     'member8_check' : True, \
                     'member9_check' : True, \
-                    'member10_check' : True}
+                    'member10_check' : True, \
+                    'member11_check' : True, \
+                    'member12_check' : True, \
+                    'member13_check' : True, \
+                    'member14_check' : True, \
+                    'member15_check' : True}
 
 
 
   # 日付指定時の処理
   if "display_day" in request.POST:
-
     # POSTされた値を日付に設定
     today = datetime.datetime.strptime(request.POST['work_day'], '%Y-%m-%d')
 
@@ -867,10 +928,8 @@ def team_calendar(request):
 
   # POSTしていない時の処理
   else:
-
     # セッションに表示日の指定がない場合の処理
     if request.session.get('display_day', None) == None:
-
       # 今日の日付取得
       today = datetime.date.today()
 
@@ -880,7 +939,6 @@ def team_calendar(request):
 
     # セッションに表示日の指定がある場合の処理
     else:
-
       # 表示日にセッションの値を入れる
       today = datetime.datetime.strptime(request.session.get('display_day', None), '%Y-%m-%d')
 
@@ -888,66 +946,48 @@ def team_calendar(request):
 
   # 前週指定時の処理
   if "back_week" in request.POST:
-
     # 曜日取得
     week_day_back = today.weekday()
 
-
     # 曜日が日曜の場合の処理
     if week_day_back == 6:
-
       # 1日前の日付を指定日に入れる
       today = today - datetime.timedelta(days=1)
 
-
     # 曜日が月曜の場合の処理
     if week_day_back == 0:
-
       # 2日前の日付を指定日に入れる
       today = today - datetime.timedelta(days=2)
 
-
     # 曜日が火曜の場合の処理
     if week_day_back == 1:
-
       # 3日前の日付を指定日に入れる
       today = today - datetime.timedelta(days=3)
 
-
     # 曜日が水曜の場合の処理
     if week_day_back == 2:
-
       # 4日前の日付を指定日に入れる
       today = today - datetime.timedelta(days=4)
 
-
     # 曜日が木曜の場合の処理
     if week_day_back == 3:
-
       # 5日前の日付を指定日に入れる
       today = today - datetime.timedelta(days=5)
 
-
     # 曜日が金曜の場合の処理
     if week_day_back == 4:
-
       # 6日前の日付を指定日に入れる
       today = today - datetime.timedelta(days=6)
 
-
     # 曜日が土曜の場合の処理
     if week_day_back == 5:
-
       # 7日前の日付を指定日に入れる
       today = today - datetime.timedelta(days=7)
 
-
     # 前の週が月をまたぐ場合の処理
     if today.month != datetime.datetime.strptime(request.session.get('display_day', None), '%Y-%m-%d').month:
-
       # 前月の最終日取得
       today = datetime.datetime(today.year, today.month, 1) + relativedelta(months=1) - relativedelta(days=1) 
-
 
     # 取得した値をセッションに登録
     request.session['display_day'] = str(today)[0:10]
@@ -956,66 +996,48 @@ def team_calendar(request):
 
   # 次週指定時の処理
   if "next_week" in request.POST:
-
     # 曜日取得
     week_day_back = today.weekday()
 
-
     # 曜日が日曜の場合の処理
     if week_day_back == 6:
-
       # 7日後の日付を指定日に入れる
       today = today + datetime.timedelta(days=7)
 
-
     # 曜日が月曜の場合の処理
     if week_day_back == 0:
-
       # 6日後の日付を指定日に入れる
       today = today + datetime.timedelta(days=6)
 
-
     # 曜日が火曜の場合の処理
     if week_day_back == 1:
-
       # 5日後の日付を指定日に入れる
       today = today + datetime.timedelta(days=5)
 
-
     # 曜日が水曜の場合の処理
     if week_day_back == 2:
-
       # 4日後の日付を指定日に入れる
       today = today + datetime.timedelta(days=4)
 
-
     # 曜日が木曜の場合の処理
     if week_day_back == 3:
-
       # 3日後の日付を指定日に入れる
       today = today + datetime.timedelta(days=3)
 
-
     # 曜日が金曜の場合の処理
     if week_day_back == 4:
-
       # 2日後の日付を指定日に入れる
       today = today + datetime.timedelta(days=2)
 
-
     # 曜日が土曜の場合の処理
     if week_day_back == 5:
-
       # 1日後の日付を指定日に入れる
       today = today + datetime.timedelta(days=1)
 
-
     # 次の週が月をまたぐ場合の処理
     if today.month != datetime.datetime.strptime(request.session.get('display_day', None), '%Y-%m-%d').month:
-
       # 次月の初日取得
       today = datetime.datetime(today.year, today.month, 1)
-
 
     # 取得した値をセッションに登録
     request.session['display_day'] = str(today)[0:10]
@@ -1037,134 +1059,106 @@ def team_calendar(request):
 
   # 曜日が日曜の場合の処理
   if week_day == 6:
-
     # 日付リスト作成
     for d in range(7):
-
       # リストに日付追加
       day_list.append(today + datetime.timedelta(days = d))
 
 
   # 曜日が月曜の場合の処理
   if week_day == 0:
-
     # 日付リスト作成
     for d in range(7):
-
       # 設定日より前の日付の処理
       if d == 0:
-
         # リストに日付追加
         day_list.append(today - datetime.timedelta(days = 1 - d))
 
       # 設定日以降の日付の処理  
       else:
-
         # リストに日付追加
         day_list.append(today + datetime.timedelta(days = d - 1))
 
 
   # 曜日が火曜の場合の処理
   if week_day == 1:
-
     # 日付リスト作成
     for d in range(7):
-
       # 設定日より前の日付の処理
       if d >= 1:
-
         # リストに日付追加
         day_list.append(today - datetime.timedelta(days = 2 - d))
 
       # 設定日以降の日付の処理
       else:
-
         # リストに日付追加
         day_list.append(today + datetime.timedelta(days = d - 2))
 
 
   # 曜日が水曜の場合の処理
   if week_day == 2:
-
     # 日付リスト作成
     for d in range(7):
-
       # 設定日より前の日付の処理
       if d >= 2:
-
         # リストに日付追加
         day_list.append(today - datetime.timedelta(days = 3 - d))
 
       # 設定日以降の日付の処理
       else:
-
         # リストに日付追加
         day_list.append(today + datetime.timedelta(days = d - 3))
 
 
   # 曜日が木曜の場合の処理
   if week_day == 3:
-
     # 日付リスト作成
     for d in range(7):
-
       # 設定日より前の日付の処理
       if d >= 3:
-
         # リストに日付追加
         day_list.append(today - datetime.timedelta(days = 4 - d))
 
       # 設定日以降の日付の処理
       else:
-
         # リストに日付追加
         day_list.append(today + datetime.timedelta(days = d - 4))
 
 
   # 曜日が金曜の場合の処理
   if week_day == 4:
-
     # 日付リスト作成
     for d in range(7):
-
       # 設定日より前の日付の処理
       if d >= 4:
-
         # リストに日付追加
         day_list.append(today - datetime.timedelta(days = 5 - d))
 
       # 設定日以降の日付の処理
       else:
-
         # リストに日付追加
         day_list.append(today + datetime.timedelta(days = d - 5))
 
 
   # 曜日が土曜の場合の処理
   if week_day == 5:
-
     # 日付リスト作成
     for d in range(7):
-
       # 設定日より前の日付の処理
       if d >= 5:
-
         # リストに日付追加
         day_list.append(today - datetime.timedelta(days = 6 - d))
 
       # 設定日以降の日付の処理
       else:
-
         # リストに日付追加
         day_list.append(today + datetime.timedelta(days = d - 6))
 
 
   # 日付リスト整形
   for ind, dd in enumerate(day_list):
-
     # 指定月と表示月が違う要素の処理
     if month != dd.month:
-
       # 要素を空にする
       day_list[ind] = ''
 
@@ -1303,6 +1297,71 @@ def team_calendar(request):
     member10_obj_get = ''
 
 
+  # 班員11人目の従業員番号の人員がいるか確認
+  member11_obj_filter = member.objects.filter(employee_no__contains = obj_get.member11)
+  # 班員11人目の従業員番号の人員がいる場合の処理
+  if member11_obj_filter.count() == 1:
+    # 班員11人目の名前取得
+    member11_obj_get = member.objects.get(employee_no = obj_get.member11)
+
+  # 班員11人目の従業員番号の人員がいない場合の処理
+  else:
+    # 班員11人目の名前に空を入れる
+    member11_obj_get = ''
+
+
+  # 班員12人目の従業員番号の人員がいるか確認
+  member12_obj_filter = member.objects.filter(employee_no__contains = obj_get.member12)
+  # 班員12人目の従業員番号の人員がいる場合の処理
+  if member12_obj_filter.count() == 1:
+    # 班員12人目の名前取得
+    member12_obj_get = member.objects.get(employee_no = obj_get.member12)
+
+  # 班員12人目の従業員番号の人員がいない場合の処理
+  else:
+    # 班員12人目の名前に空を入れる
+    member12_obj_get = ''
+
+
+  # 班員13人目の従業員番号の人員がいるか確認
+  member13_obj_filter = member.objects.filter(employee_no__contains = obj_get.member13)
+  # 班員13人目の従業員番号の人員がいる場合の処理
+  if member13_obj_filter.count() == 1:
+    # 班員13人目の名前取得
+    member13_obj_get = member.objects.get(employee_no = obj_get.member13)
+
+  # 班員13人目の従業員番号の人員がいない場合の処理
+  else:
+    # 班員13人目の名前に空を入れる
+    member13_obj_get = ''
+
+
+  # 班員14人目の従業員番号の人員がいるか確認
+  member14_obj_filter = member.objects.filter(employee_no__contains = obj_get.member14)
+  # 班員14人目の従業員番号の人員がいる場合の処理
+  if member14_obj_filter.count() == 1:
+    # 班員14人目の名前取得
+    member14_obj_get = member.objects.get(employee_no = obj_get.member14)
+
+  # 班員14人目の従業員番号の人員がいない場合の処理
+  else:
+    # 班員14人目の名前に空を入れる
+    member14_obj_get = ''
+
+
+  # 班員15人目の従業員番号の人員がいるか確認
+  member15_obj_filter = member.objects.filter(employee_no__contains = obj_get.member15)
+  # 班員15人目の従業員番号の人員がいる場合の処理
+  if member15_obj_filter.count() == 1:
+    # 班員15人目の名前取得
+    member15_obj_get = member.objects.get(employee_no = obj_get.member15)
+
+  # 班員15人目の従業員番号の人員がいない場合の処理
+  else:
+    # 班員15人目の名前に空を入れる
+    member15_obj_get = ''
+
+
   # 取得した班員の名前をHTML送信用の変数に入れる
   member_name1 = member1_obj_get
   member_name2 = member2_obj_get
@@ -1314,12 +1373,17 @@ def team_calendar(request):
   member_name8 = member8_obj_get
   member_name9 = member9_obj_get
   member_name10 = member10_obj_get
+  member_name11 = member11_obj_get
+  member_name12 = member12_obj_get
+  member_name13 = member13_obj_get
+  member_name14 = member14_obj_get
+  member_name15 = member15_obj_get
 
 
   # 班員(従業員番号)リストリセット
   member_list = []
   # 選択肢の表示数検出&班員(従業員番号)リスト作成
-  for i in range(1, 11):
+  for i in range(1, 16):
     # 班員(従業員番号)リストに班員追加
     member_list.append(eval('obj_get.member{}'.format(i)))
 
@@ -1340,6 +1404,11 @@ def team_calendar(request):
   work_list8 = []
   work_list9 = []
   work_list10 = []
+  work_list11 = []
+  work_list12 = []
+  work_list13 = []
+  work_list14 = []
+  work_list15 = []
 
   # 残業リストリセット
   over_time_list1 = []
@@ -1352,6 +1421,11 @@ def team_calendar(request):
   over_time_list8 = []
   over_time_list9 = []
   over_time_list10 = []
+  over_time_list11 = []
+  over_time_list12 = []
+  over_time_list13 = []
+  over_time_list14 = []
+  over_time_list15 = []
 
   # 工数入力リストリセット
   kosu_list1 = []
@@ -1364,6 +1438,11 @@ def team_calendar(request):
   kosu_list8 = []
   kosu_list9 = []
   kosu_list10 = []
+  kosu_list11 = []
+  kosu_list12 = []
+  kosu_list13 = []
+  kosu_list14 = []
+  kosu_list15 = []
 
   # 工数入力OK_NGリストリセット
   ok_ng_list1 = [False, False, False, False, False, False, False]
@@ -1376,6 +1455,11 @@ def team_calendar(request):
   ok_ng_list8 = [False, False, False, False, False, False, False]
   ok_ng_list9 = [False, False, False, False, False, False, False]
   ok_ng_list10 = [False, False, False, False, False, False, False]
+  ok_ng_list11 = [False, False, False, False, False, False, False]
+  ok_ng_list12 = [False, False, False, False, False, False, False]
+  ok_ng_list13 = [False, False, False, False, False, False, False]
+  ok_ng_list14 = [False, False, False, False, False, False, False]
+  ok_ng_list15 = [False, False, False, False, False, False, False]
 
 
 
@@ -1604,6 +1688,11 @@ def team_calendar(request):
   ok_ng_list8.reverse()
   ok_ng_list9.reverse()
   ok_ng_list10.reverse()
+  ok_ng_list11.reverse()
+  ok_ng_list12.reverse()
+  ok_ng_list13.reverse()
+  ok_ng_list14.reverse()
+  ok_ng_list15.reverse()
 
  
 
@@ -1663,6 +1752,31 @@ def team_calendar(request):
     'over_time_list10' : over_time_list10,
     'kosu_list10' : kosu_list10,
     'ok_ng_list10' : ok_ng_list10,
+    'member_name11' : member_name11,
+    'work_list11' : work_list11,
+    'over_time_list11' : over_time_list11,
+    'kosu_list11' : kosu_list11,
+    'ok_ng_list11' : ok_ng_list11,
+    'member_name12' : member_name12,
+    'work_list12' : work_list12,
+    'over_time_list12' : over_time_list12,
+    'kosu_list12' : kosu_list12,
+    'ok_ng_list12' : ok_ng_list12,
+    'member_name13' : member_name13,
+    'work_list13' : work_list13,
+    'over_time_list13' : over_time_list13,
+    'kosu_list13' : kosu_list13,
+    'ok_ng_list13' : ok_ng_list13,
+    'member_name14' : member_name14,
+    'work_list14' : work_list14,
+    'over_time_list14' : over_time_list14,
+    'kosu_list14' : kosu_list14,
+    'ok_ng_list14' : ok_ng_list14,
+    'member_name15' : member_name15,
+    'work_list15' : work_list15,
+    'over_time_list15' : over_time_list15,
+    'kosu_list15' : kosu_list15,
+    'ok_ng_list15' : ok_ng_list15,
     }
 
   # 指定したHTMLに辞書を渡して表示を完成させる
@@ -1831,10 +1945,75 @@ def team_over_time(request):
     member10_obj_get = ''
 
 
+  # 班員11人目の従業員番号の人員がいるか確認
+  member11_obj_filter = member.objects.filter(employee_no__contains = team_get.member11)
+  # 班員11人目の従業員番号の人員がいる場合の処理
+  if member11_obj_filter.count() == 1:
+     # 班員11人目の情報取得
+    member11_obj_get = member.objects.get(employee_no = team_get.member11)
+
+  # 班員11人目の従業員番号の人員がいない場合の処理
+  else:
+    # 班員11人目に空を入れる
+    member11_obj_get = ''
+
+
+  # 班員12人目の従業員番号の人員がいるか確認
+  member12_obj_filter = member.objects.filter(employee_no__contains = team_get.member12)
+  # 班員12人目の従業員番号の人員がいる場合の処理
+  if member12_obj_filter.count() == 1:
+     # 班員12人目の情報取得
+    member12_obj_get = member.objects.get(employee_no = team_get.member12)
+
+  # 班員12人目の従業員番号の人員がいない場合の処理
+  else:
+    # 班員12人目に空を入れる
+    member12_obj_get = ''
+
+
+  # 班員13人目の従業員番号の人員がいるか確認
+  member13_obj_filter = member.objects.filter(employee_no__contains = team_get.member13)
+  # 班員13人目の従業員番号の人員がいる場合の処理
+  if member13_obj_filter.count() == 1:
+     # 班員13人目の情報取得
+    member13_obj_get = member.objects.get(employee_no = team_get.member13)
+
+  # 班員13人目の従業員番号の人員がいない場合の処理
+  else:
+    # 班員13人目に空を入れる
+    member13_obj_get = ''
+
+
+  # 班員14人目の従業員番号の人員がいるか確認
+  member14_obj_filter = member.objects.filter(employee_no__contains = team_get.member14)
+  # 班員14人目の従業員番号の人員がいる場合の処理
+  if member14_obj_filter.count() == 1:
+     # 班員14人目の情報取得
+    member14_obj_get = member.objects.get(employee_no = team_get.member14)
+
+  # 班員14人目の従業員番号の人員がいない場合の処理
+  else:
+    # 班員14人目に空を入れる
+    member14_obj_get = ''
+
+
+  # 班員15人目の従業員番号の人員がいるか確認
+  member15_obj_filter = member.objects.filter(employee_no__contains = team_get.member15)
+  # 班員15人目の従業員番号の人員がいる場合の処理
+  if member15_obj_filter.count() == 1:
+     # 班員15人目の情報取得
+    member15_obj_get = member.objects.get(employee_no = team_get.member15)
+
+  # 班員15人目の従業員番号の人員がいない場合の処理
+  else:
+    # 班員15人目に空を入れる
+    member15_obj_get = ''
+
+
   # 班員(従業員番号)リストリセット
   member_list = []
   # 選択肢の表示数検出&班員(従業員番号)リスト作成
-  for i in range(1, 11):
+  for i in range(1, 16):
     # 人員情報ある場合の処理
     if eval('member{}_obj_get'.format(i)) != '':
       # 班員リストに班員追加
@@ -1935,6 +2114,11 @@ def team_over_time(request):
   over_time_list8 = []
   over_time_list9 = []
   over_time_list10 = []
+  over_time_list11 = []
+  over_time_list12 = []
+  over_time_list13 = []
+  over_time_list14 = []
+  over_time_list15 = []
 
   # 残業リスト作成するループ
   for ind, m in enumerate(member_list):
@@ -1995,6 +2179,11 @@ def team_over_time(request):
     'over_time_list8' : over_time_list8,
     'over_time_list9' : over_time_list9,
     'over_time_list10' : over_time_list10,
+    'over_time_list11' : over_time_list11,
+    'over_time_list12' : over_time_list12,
+    'over_time_list13' : over_time_list13,
+    'over_time_list14' : over_time_list14,
+    'over_time_list15' : over_time_list15,
     'team_n' : len(member_list),
     }
 

@@ -87,6 +87,11 @@ class team_member(models.Model):
     member8 = models.CharField('メンバー従業員番号8', max_length = 6, blank = True, null = True)
     member9 = models.CharField('メンバー従業員番号9', max_length = 6, blank = True, null = True)
     member10 = models.CharField('メンバー従業員番号10', max_length = 6, blank = True, null = True)
+    member11 = models.CharField('メンバー従業員番号11', max_length = 6, blank = True, null = True)
+    member12 = models.CharField('メンバー従業員番号12', max_length = 6, blank = True, null = True)
+    member13 = models.CharField('メンバー従業員番号13', max_length = 6, blank = True, null = True)
+    member14 = models.CharField('メンバー従業員番号14', max_length = 6, blank = True, null = True)
+    member15 = models.CharField('メンバー従業員番号15', max_length = 6, blank = True, null = True)
     follow = models.BooleanField('フォローON/OFF', null = True)
 
     def __str__(self):
