@@ -73,7 +73,7 @@
             ～
             <input class="your-time-field form-control custom-border" style="width : 90px;" type="text" id="end_time" name="end_time" data-precision="5" value={{default_end_time}}>　
             <div class="form-check form-check-inline custom-checkbox">
-              翌日{{form.tomorrow_check}}
+              {{form.tomorrow_check.label}}{{form.tomorrow_check}}
             </div>
           </div>
         </td>
