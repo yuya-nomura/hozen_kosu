@@ -463,8 +463,12 @@ class administrator_data_Form(forms.ModelForm):
       'menu_row', 
       'administrator_employee_no1', 
       'administrator_employee_no2', 
-      'administrator_employee_no3',
-      ]
+      'administrator_employee_no3']
+
+    widgets = {'menu_row' : forms.NumberInput(attrs={'class' : 'form-control custom-border', 'style' : 'width : 200px;'}),
+               'administrator_employee_no1' : forms.NumberInput(attrs={'class' : 'form-control custom-border', 'style' : 'width : 200px;'}),
+               'administrator_employee_no2' : forms.NumberInput(attrs={'class' : 'form-control custom-border', 'style' : 'width : 200px;'}),
+               'administrator_employee_no3' : forms.NumberInput(attrs={'class' : 'form-control custom-border', 'style' : 'width : 200px;'})}
 
 
 
@@ -483,7 +487,11 @@ class inquiryForm(forms.ModelForm):
     model = inquiry_data
     fields = ['employee_no2', 'content_choice', 'inquiry', 'answer']
     
-    widgets = {'inquiry': forms.Textarea(attrs={'placeholder': '可能限り具体的に記入下さい。'})}
+    widgets = {'content_choice' : forms.Select(attrs={'class' : 'form-control custom-border', 'style' : 'width : 200px;'}),
+               'inquiry' : forms.Textarea(attrs={'placeholder': '可能限り具体的に記入下さい。', 'class' : 'form-control custom-border', 'style' : 'width : 350px;'}),
+               'answer' : forms.Textarea(attrs={'class' : 'form-control custom-border', 'style' : 'width : 350px;'})}
+
+
 
 
 
@@ -495,6 +503,6 @@ class inquiry_findForm(forms.Form):
     ('問い合わせ' ,'問い合わせ'),
     ]
 
-  category = forms.ChoiceField(label = 'カテゴリー', choices = category_list, required = False)
-  name_list = forms.ChoiceField(label = '氏名', required = False)
+  category = forms.ChoiceField(label = 'カテゴリー', widget = forms.Select(attrs = {'class' : 'form-control custom-border', 'style' : 'width : 200px;'}), choices = category_list, required = False)
+  name_list = forms.ChoiceField(label = '氏名', widget = forms.Select(attrs = {'class' : 'form-control custom-border', 'style' : 'width : 200px;'}), required = False)
 
