@@ -56,12 +56,12 @@
     <ul class="pagination justify-content-center">
       {% if data.has_previous %}
       <li class="page-item">
-        <a class="page-link text-pink" href="{% url 'member' 1 %}">
+        <a class="page-link text-pink" href="{% url 'inquiry_list' 1 %}">
           &laquo; 最初</a>
       </li>
       <li class="page-item">
         <a class="page-link text-pink" 
-        href="{% url 'member' data.previous_page_number %}">
+        href="{% url 'inquiry_list' data.previous_page_number %}">
           &laquo; 前</a>
       </li>
       {% else %}
@@ -81,12 +81,12 @@
       {% if data.has_next %}
       <li class="page-item">
         <a class="page-link text-pink" 
-          href="{% url 'member' data.next_page_number %}">
+          href="{% url 'inquiry_list' data.next_page_number %}">
             次 &raquo;</a>
       </li>
       <li class="page-item">
         <a class="page-link text-pink" 
-          href="{% url 'member' data.paginator.num_pages %}">
+          href="{% url 'inquiry_list' data.paginator.num_pages %}">
             最後&raquo;</a>
       </li>
       {% else %}

@@ -177,9 +177,7 @@
 
   <script>
     function increment(element) {
-        // ボタンの親要素から、type=numberのinput要素を見つける
         var input = element.parentNode.querySelector('input[type=number]');
-        // 数値を取得して15足す。値が無い場合は0を使用
         input.value = parseInt(input.value) + 15 || 0; 
     }
     

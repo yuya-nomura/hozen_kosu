@@ -5463,7 +5463,7 @@ def total(request):
 
 
 # グラフデータ画面定義
-def graph(request): 
+def graph(request, num): 
 
   # 未ログインならログインページに飛ぶ
   if request.session.get('login_No', None) == None:
@@ -5475,23 +5475,20 @@ def graph(request):
   if data.administrator == False:
     return redirect(to = '/')
   
-  # グラフデータ一覧用オブジェクト取得
-  obj = Business_Time_graph.objects.all().order_by('work_day2').reverse()
+  # 設定データ取得
+  page_num = administrator_data.objects.order_by("id").last()
 
 
   # 工数データのある従業員番号リストを作成
   employee_no_list = Business_Time_graph.objects.values_list('employee_no3', flat=True)\
                                                 .order_by('employee_no3').distinct()
-  
   # 名前リスト定義
   name_list = [['', '']]
 
   # 従業員番号を名前に変更するループ
   for No in list(employee_no_list):
-
     # 指定従業員番号で人員情報取得
     name = member.objects.get(employee_no = No)
-
     # 名前リスト作成
     name_list.append([No, name])
 
@@ -5513,13 +5510,25 @@ def graph(request):
     # グラフデータ一覧用オブジェクト取得
     obj = Business_Time_graph.objects.filter(employee_no3__contains = request.POST['employee_no6'], \
                                              work_day2__contains = request.POST['team_day'])
+    
+
+  
+  # POST時以外の処理
+  else:
+    # グラフデータ一覧用オブジェクト取得
+    obj = Business_Time_graph.objects.all().order_by('work_day2').reverse()
+
+
+
+  # 取得した工数データを1ページあたりの件数分取得
+  data = Paginator(obj, page_num.menu_row)
 
 
 
   # HTMLに渡す辞書
   context = {
     'title' : '工数データ',
-    'obj' : obj,
+    'data' : data.get_page(num),
     'form' : form
   }
 
@@ -6407,8 +6416,8 @@ def schedule(request):
 
 
 
-# 工数推移確認画面定義
-def kosu_transition(request):
+# 残業管理画面定義
+def over_time(request):
 
   # セッションにログインした従業員番号がない場合の処理
   if request.session.get('login_No', None) == None:
@@ -6420,23 +6429,164 @@ def kosu_transition(request):
 
 
 
+  # POST時の処理
+  if (request.method == 'POST'):
+    # 検索項目に空欄がある場合の処理
+    if request.POST['year'] == '' or request.POST['month'] == '':
+      # エラーメッセージ出力
+      messages.error(request, '表示年月に未入力箇所があります。ERROR083')
+      # このページをリダイレクト
+      return redirect(to = '/over_time')
+    
+
+    # フォームの初期値定義
+    schedule_default = {'year' : request.POST['year'], 
+                        'month' : request.POST['month']}
+    # フォーム定義
+    form = schedule_timeForm(schedule_default)
+    
+    # POSTした値をセッションに登録
+    request.session['over_time_year'] = request.POST['year']
+    request.session['over_time_month'] = request.POST['month']
+
+    year = int(request.POST['year'])
+    month = int(request.POST['month'])
 
 
 
+  # POST時以外の処理
+  else:
+    # セッション値に年月のデータがない場合の処理
+    if request.session.get('over_time_year', '') == '' or request.session.get('over_time_month', '') == '':
+      # 本日の年月取得
+      year = datetime.date.today().year
+      month = datetime.date.today().month
 
+    # セッション値に年月のデータがある場合の処理
+    else:
+      # セッション値から年月取得
+      year = int(request.session['over_time_year'])
+      month = int(request.session['over_time_month'])
+
+    # フォームの初期値定義
+    schedule_default = {'year' : str(year), 
+                        'month' : str(month)}
+    # フォーム定義
+    form = schedule_timeForm(schedule_default)
+
+
+
+  # 次の月の最初の日を定義
+  if month == 12:
+    next_month = datetime.date(year + 1, 1, 1)
+
+  else:
+    next_month = datetime.date(year, month + 1, 1)
+
+  # 次の月の最初の日から1を引くことで、指定した月の最後の日を取得
+  last_day_of_month = next_month - datetime.timedelta(days = 1)
+
+  # 曜日リスト定義
+  week_list = []
+  # 曜日リスト作成するループ
+  for d in range(1, last_day_of_month.day + 1):
+    # 曜日を取得する日を作成
+    week_day = datetime.date(year, month, d)
+
+    # 指定日の曜日をリストに挿入
+    if week_day.weekday() == 0:
+      week_list.append('月')
+    if week_day.weekday() == 1:
+      week_list.append('火')
+    if week_day.weekday() == 2:
+      week_list.append('水')
+    if week_day.weekday() == 3:
+      week_list.append('木')
+    if week_day.weekday() == 4:
+      week_list.append('金')
+    if week_day.weekday() == 5:
+      week_list.append('土')
+    if week_day.weekday() == 6:
+      week_list.append('日')
+
+  # 残業リスト定義
+  over_time_list = []
+
+  # 残業合計リセット
+  over_time_total = 0
+
+  # 残業リストに名前追加
+  over_time_list.append(data.name)
+
+  # 日毎の残業と整合性をリストに追加するループ
+  for d in range(1, int(last_day_of_month.day) + 1):
+    # 該当日に工数データあるか確認
+    obj_filter = Business_Time_graph.objects.filter(employee_no3 = request.session['login_No'], \
+                                                    work_day2 = datetime.date(year, month, d))
+
+    # 該当日に工数データがある場合の処理
+    if obj_filter.count() != 0:
+      # 工数データ取得
+      obj_get = Business_Time_graph.objects.get(employee_no3 = request.session['login_No'], \
+                                                work_day2 = datetime.date(year, month, d))
+      
+      # 残業データを分から時に変換
+      over_time = int(obj_get.over_time)/60
+      obj_get = Business_Time_graph(over_time = over_time)
+
+      # 残業リストにレコードを追加
+      over_time_list.append(obj_get)
+
+      # 残業を合計する
+      over_time_total += float(obj_get.over_time)
+
+    # 該当日に工数データがない場合の処理
+    else:
+      # 残業リストに残業0と整合性否を追加
+      over_time_list.append(Business_Time_graph(over_time = 0, judgement = False))
+
+  # リストに残業合計追加
+  over_time_list.append(over_time_total)
+  over_time_list.insert(1, over_time_total)
+
+
+
+  # HTMLに渡す辞書
   context = {
-      'title': 'トライ',
-      }
+    'title' : '残業管理',
+    'form' : form,
+    'day_list' : zip(range(1, last_day_of_month.day + 1), week_list), 
+    'week_list' : week_list,
+    'over_time_list' : over_time_list
+    }
+  
 
 
-
-  return render(request, 'kosu/kosu_transition.html', context)
+  # 指定したHTMLに辞書を渡して表示を完成させる
+  return render(request, 'kosu/over_time.html', context)
 
 
 
 
 
 #--------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -2103,7 +2103,7 @@ def team_over_time(request):
       week_list.append('日')
 
 
-  # 残業リスト定期
+  # 残業リスト定義
   over_time_list1 = []
   over_time_list2 = []
   over_time_list3 = []

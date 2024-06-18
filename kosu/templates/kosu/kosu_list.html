@@ -15,7 +15,7 @@
     <a href="{% url 'kosu_main' %}">工数MENUへ</a>　　　
     <a href="{% url 'input' %}">工数入力へ</a>　　　
     {% if member_data.administrator == True %}
-    <a href="{% url 'graph' %}">データ確認</a>
+    <a href="{% url 'graph' 1 %}">データ確認</a>
     {% endif %}
   </p>
   <p>　</p>
@@ -63,12 +63,12 @@
     <ul class="pagination justify-content-center">
       {% if data.has_previous %}
       <li class="page-item">
-        <a class="page-link" href="{% url 'member' 1 %}">
+        <a class="page-link" href="{% url 'kosu_list' 1 %}">
           &laquo; 最初</a>
       </li>
       <li class="page-item">
         <a class="page-link" 
-        href="{% url 'member' data.previous_page_number %}">
+        href="{% url 'kosu_list' data.previous_page_number %}">
           &laquo; 前</a>
       </li>
       {% else %}
@@ -88,12 +88,12 @@
       {% if data.has_next %}
       <li class="page-item">
         <a class="page-link" 
-          href="{% url 'member' data.next_page_number %}">
+          href="{% url 'kosu_list' data.next_page_number %}">
             次&raquo;</a>
       </li>
       <li class="page-item">
         <a class="page-link" 
-          href="{% url 'member' data.paginator.num_pages %}">
+          href="{% url 'kosu_list' data.paginator.num_pages %}">
             最後&raquo;</a>
       </li>
       {% else %}
