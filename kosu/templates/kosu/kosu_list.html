@@ -20,45 +20,45 @@
   </p>
   <p>　</p>
   <form action="{% url 'kosu_list' num %}" method="post">
-  {% csrf_token %}
-  <div class="number-input-group">
-    <input type="date" class="form-control custom-border" name="kosu_day" id="kosu_day" value={{default_day}} style="width: 150px;">　
-    <input type="submit" value="検索" class="btn btn-blue2 mt-2">
-  </div>
+    {% csrf_token %}
+    <div class="number-input-group">
+      <input type="date" class="form-control custom-border" name="kosu_day" id="kosu_day" value={{default_day}} style="width: 150px;">　
+      <input type="submit" value="検索" class="btn btn-blue2 mt-2">
+    </div>
     <p>　</p>
     <div class="table-responsive">
-    <table class="table text-nowrap table-custom">
-      <tr>
-        <th style="text-align:center;">就業日</th>
-        <th style="text-align:center;">直</th>
-        <th style="text-align:center;">整合性</th>
-        <th style="text-align:center;">詳細リンク</th>
-        <th style="text-align:center;">削除リンク</th>
-      </tr>
-      {% for i in data %}
-      <tr>
-        <td style="text-align:center;">
-          {{i.work_day2|date:"Y-m-d"}}
-        </td>
-        <td style="text-align:center;">
-          {% if i.tyoku2 == "1" %}1直{% endif %}
-          {% if i.tyoku2 == "2" %}2直{% endif %}
-          {% if i.tyoku2 == "3" %}3直{% endif %}
-          {% if i.tyoku2 == "4" %}常昼{% endif %}
-        </td>
-        <td style="text-align:center;">
-          {% if i.judgement == True %}<b  class="text-primary">OK</b>{% endif %}
-          {% if i.judgement == False %}<b  class="text-danger">NG</b>{% endif %}
-        </td>
-        <td style="text-align:center;">
-          <a href="{% url 'detail' i.id %}">詳細</a>
-        </td>
-        <td style="text-align:center;">
-          <a href="{% url 'delete' i.id %}">削除</a>
-        </td>
-      <tr>
-      {% endfor %}
-    </table>
+      <table class="table text-nowrap table-custom">
+        <tr>
+          <th style="text-align:center;">就業日</th>
+          <th style="text-align:center;">直</th>
+          <th style="text-align:center;">整合性</th>
+          <th style="text-align:center;">詳細リンク</th>
+          <th style="text-align:center;">削除リンク</th>
+        </tr>
+        {% for i in data %}
+        <tr>
+          <td style="text-align:center;">
+            {{i.work_day2|date:"Y-m-d"}}
+          </td>
+          <td style="text-align:center;">
+            {% if i.tyoku2 == "1" %}1直{% endif %}
+            {% if i.tyoku2 == "2" %}2直{% endif %}
+            {% if i.tyoku2 == "3" %}3直{% endif %}
+            {% if i.tyoku2 == "4" %}常昼{% endif %}
+          </td>
+          <td style="text-align:center;">
+            {% if i.judgement == True %}<b  class="text-primary">OK</b>{% endif %}
+            {% if i.judgement == False %}<b  class="text-danger">NG</b>{% endif %}
+          </td>
+          <td style="text-align:center;">
+            <a href="{% url 'detail' i.id %}">詳細</a>
+          </td>
+          <td style="text-align:center;">
+            <a href="{% url 'delete' i.id %}">削除</a>
+          </td>
+        </tr>
+        {% endfor %}
+      </table>
     </div>
     <ul class="pagination justify-content-center">
       {% if data.has_previous %}
@@ -68,7 +68,7 @@
       </li>
       <li class="page-item">
         <a class="page-link" 
-        href="{% url 'kosu_list' data.previous_page_number %}">
+          href="{% url 'kosu_list' data.previous_page_number %}">
           &laquo; 前</a>
       </li>
       {% else %}
@@ -107,5 +107,6 @@
       </li>
       {% endif %}
     </ul>
-  </body>
+  </form>
+</body>
 </html>

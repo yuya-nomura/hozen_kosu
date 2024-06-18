@@ -53,52 +53,52 @@
     {% endfor %}
   </table>
 
-    <ul class="pagination justify-content-center">
-      {% if data.has_previous %}
-      <li class="page-item">
-        <a class="page-link text-pink" href="{% url 'inquiry_list' 1 %}">
-          &laquo; 最初</a>
-      </li>
-      <li class="page-item">
-        <a class="page-link text-pink" 
-        href="{% url 'inquiry_list' data.previous_page_number %}">
-          &laquo; 前</a>
-      </li>
-      {% else %}
-      <li class="page-item">
-        <a class="page-link text-pink">
-          &laquo; 最初</a>
-      </li>
-      <li class="page-item">
-        <a class="page-link text-pink">
-          &laquo; 前</a>
-      </li>
-      {% endif %}
-      <li class="page-item">
-        <a class="page-link text-pink">
-          {{data.number}}/{{data.paginator.num_pages}}</a>
-      </li>
-      {% if data.has_next %}
-      <li class="page-item">
-        <a class="page-link text-pink" 
-          href="{% url 'inquiry_list' data.next_page_number %}">
-            次 &raquo;</a>
-      </li>
-      <li class="page-item">
-        <a class="page-link text-pink" 
-          href="{% url 'inquiry_list' data.paginator.num_pages %}">
-            最後&raquo;</a>
-      </li>
-      {% else %}
-      <li class="page-item">
-        <a class="page-link text-pink">
-          次&raquo;</a>
-      </li>
-      <li class="page-item">
-        <a class="page-link text-pink">
+  <ul class="pagination justify-content-center">
+    {% if data.has_previous %}
+    <li class="page-item">
+      <a class="page-link text-pink" href="{% url 'inquiry_list' 1 %}">
+        &laquo; 最初</a>
+    </li>
+    <li class="page-item">
+      <a class="page-link text-pink" 
+      href="{% url 'inquiry_list' data.previous_page_number %}">
+        &laquo; 前</a>
+    </li>
+    {% else %}
+    <li class="page-item">
+      <a class="page-link text-pink">
+        &laquo; 最初</a>
+    </li>
+    <li class="page-item">
+      <a class="page-link text-pink">
+        &laquo; 前</a>
+    </li>
+    {% endif %}
+    <li class="page-item">
+      <a class="page-link text-pink">
+        {{data.number}}/{{data.paginator.num_pages}}</a>
+    </li>
+    {% if data.has_next %}
+    <li class="page-item">
+      <a class="page-link text-pink" 
+        href="{% url 'inquiry_list' data.next_page_number %}">
+          次 &raquo;</a>
+    </li>
+    <li class="page-item">
+      <a class="page-link text-pink" 
+        href="{% url 'inquiry_list' data.paginator.num_pages %}">
           最後&raquo;</a>
-      </li>
-      {% endif %}
-    </ul>
-  </body>
+    </li>
+    {% else %}
+    <li class="page-item">
+      <a class="page-link text-pink">
+        次&raquo;</a>
+    </li>
+    <li class="page-item">
+      <a class="page-link text-pink">
+        最後&raquo;</a>
+    </li>
+    {% endif %}
+  </ul>
+</body>
 </html>
