@@ -514,8 +514,8 @@ def team_graph(request):
   for i in range(1, def_n + 1):
     graph_kosu_list.append(eval('kosu_obj.kosu_title_{}'.format(i)))
 
-  print(graph_list11)
-  print(graph_item11)
+
+
   # HTMLに渡す辞書
   context = {
     'title' : '班員工数グラフ',
@@ -569,6 +569,23 @@ def team_graph(request):
 # 班員工数確認画面定義
 def team_kosu(request, num):
 
+  # 未ログインならログインページに飛ぶ
+  if request.session.get('login_No', None) == None:
+    return redirect(to = '/login')
+
+  # ログイン者の情報取得
+  data = member.objects.get(employee_no = request.session['login_No'])
+  # ログイン者に権限がなければメインページに戻る
+  if data.authority == False:
+    return redirect(to = '/')
+
+  # ログイン者の班員登録情報取得
+  team_filter = team_member.objects.filter(employee_no5 = request.session['login_No'])
+  # 班員登録がなければメインページに戻る
+  if team_filter.count() == 0:
+    return redirect(to = '/team_main')
+
+
   # 今日の日時を変数に格納
   dt = datetime.date.today()
 
@@ -577,32 +594,13 @@ def team_kosu(request, num):
     start_list = {'employee_no6' : request.session['find_employee_no']}
 
   else:
-    start_list = {'team_day' : ''}
+    start_list = {'employee_no6' : ''}
 
   if request.session.get('find_team_day', '') != '':
     default_day = request.session['find_team_day']
 
   else:
     default_day = str(dt)
-
-
-  # 未ログインならログインページに飛ぶ
-  if request.session.get('login_No', None) == None:
-    return redirect(to = '/login')
-  
-
-  # ログイン者の情報取得
-  data = member.objects.get(employee_no = request.session['login_No'])
-  # ログイン者に権限がなければメインページに戻る
-  if data.authority == False:
-    return redirect(to = '/')
-
-
-  # ログイン者の班員登録情報取得
-  team_filter = team_member.objects.filter(employee_no5 = request.session['login_No'])
-  # 班員登録がなければメインページに戻る
-  if team_filter.count() == 0:
-    return redirect(to = '/team_main')
   
 
   # フォームの選択肢に使用するログイン者の班員設定のオブジェクト取得
@@ -617,43 +615,33 @@ def team_kosu(request, num):
 
   # 班員リストリセット
   choices_list = [['','']]
-  employee_no_list = []
-  name_list =[]
+  filtered_list = []
 
   # 班員リスト作成
   for i in range(n):
     # 班員の選択肢リセット
     choices_element = []
 
-    # 班員の従業員番号リスト作成
-    employee_no_list.append(eval('form_choices.member{}'.format(i + 1)))
+    # 班員が空欄でない場合
+    if eval('form_choices.member{}'.format(i + 1)) != '':
+      # 班員の従業員番号が人員データにあるか確認
+      obj_filter = member.objects.filter(employee_no = eval('form_choices.member{}'.format(i + 1)))
+      
+      # 班員の従業員番号が人員データにある場合の処理
+      if obj_filter.count() != 0:
+        # 班員の従業員番号から人員データ取得
+        obj_get = member.objects.get(employee_no = eval('form_choices.member{}'.format(i + 1)))
 
-    # 班員の従業員番号が人員データにあるか確認
-    obj_filter = member.objects.filter(employee_no__contains = employee_no_list[i])
-    # 班員の従業員番号が人員データにある場合の処理
-    if obj_filter.count() == 1:
-      # 班員の従業員番号から人員データ取得
-      obj_get = member.objects.get(employee_no = employee_no_list[i])
-      # 班員の名前リスト作成
-      name_list.append(obj_get.name)
+        # 従業員番号と名前の選択肢作成
+        choices_element = choices_element + [obj_get.employee_no, obj_get.name]
+        filtered_list.append(obj_get.employee_no)
 
-    # 班員の従業員番号が人員データにない場合の処理
-    else:
-      # 班員の名前リストに空を入れる
-      name_list.append('')
-      # 従業員番号リストから追加要素削除
-      employee_no_list[-1] = ''
-
-    # 従業員番号と名前の選択肢作成
-    choices_element = choices_element + [employee_no_list[i], name_list[i]]
-    # 選択肢を選択肢リストに追加
-    choices_list.append(choices_element)
+        # 選択肢を選択肢リストに追加
+        choices_list.append(choices_element)
 
 
   # 設定データ取得
   page_num = administrator_data.objects.order_by("id").last()
-  # 従業員番号リスト空欄削除
-  filtered_list = [item for item in employee_no_list if item != '']
 
 
 
@@ -663,9 +651,6 @@ def team_kosu(request, num):
     # POST送信時のフォームの状態(POSTした値は入ったまま)
     form = team_kosuForm(request.POST)
     default_day = request.POST['team_day']
-
-    # フォームの選択肢定義
-    form.fields['employee_no6'].choices = choices_list
 
     # POSTした値を変数に入れる
     find = request.POST['employee_no6']
@@ -684,13 +669,15 @@ def team_kosu(request, num):
     # POST送信していない時のフォームの状態(今日の日付が入ったフォーム)
     form = team_kosuForm(start_list)
 
-    # フォームの選択肢定義
-    form.fields['employee_no6'].choices = choices_list
-
     # 班員の従業員番号でフィルターをかけて一致したものをHTML表示用変数に入れる
     data2 = Business_Time_graph.objects.filter(employee_no3__in = filtered_list).order_by('work_day2').reverse()
     
     page = Paginator(data2, page_num.menu_row)
+
+
+
+  # フォームの選択肢定義
+  form.fields['employee_no6'].choices = choices_list
 
 
 

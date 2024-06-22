@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.shortcuts import redirect
 from django.core.paginator import Paginator
 from django.contrib import messages
+from ..models import member
 from ..models import kosu_division
 from ..models import administrator_data
 from ..forms import inputdayForm
@@ -173,8 +174,11 @@ def def_list(request, num):
   if request.session.get('login_No', None) == None:
     return redirect(to = '/login')
   
+  # ログイン者情報取得
+  data = member.objects.get(employee_no = request.session['login_No'])
+
   # ログイン者が管理者でなければメニュー画面に飛ぶ
-  if request.session.get('login_No', None) != '54414':
+  if data.administrator != True:
     return redirect(to = '/')
 
   # 設定データ取得
@@ -205,8 +209,11 @@ def def_edit(request, num):
   if request.session.get('login_No', None) == None:
     return redirect(to = '/login')
   
+  # ログイン者情報取得
+  data = member.objects.get(employee_no = request.session['login_No'])
+
   # ログイン者が管理者でなければメニュー画面に飛ぶ
-  if request.session.get('login_No', None) != '54414':
+  if data.administrator != True:
     return redirect(to = '/')
 
   # 指定IDの工数区分定義のレコードのオブジェクトを変数に入れる
@@ -413,8 +420,11 @@ def def_delete(request, num):
   if request.session.get('login_No', None) == None:
     return redirect(to = '/login')
   
+  # ログイン者情報取得
+  data = member.objects.get(employee_no = request.session['login_No'])
+
   # ログイン者が管理者でなければメニュー画面に飛ぶ
-  if request.session.get('login_No', None) != '54414':
+  if data.administrator != True:
     return redirect(to = '/')
 
   # 指定従業員番号のレコードのオブジェクトを変数に入れる
@@ -453,8 +463,11 @@ def def_new(request):
   if request.session.get('login_No', None) == None:
     return redirect(to = '/login')
 
+  # ログイン者情報取得
+  data = member.objects.get(employee_no = request.session['login_No'])
+
   # ログイン者が管理者でなければメニュー画面に飛ぶ
-  if request.session.get('login_No', None) != '54414':
+  if data.administrator != True:
     return redirect(to = '/')
 
   # POST時の処理
