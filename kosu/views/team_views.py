@@ -1153,197 +1153,316 @@ def team_calendar(request):
   # ログイン者の班員取得
   obj_get = team_member.objects.get(employee_no5 = request.session['login_No'])
 
+  # 班員1人目の従業員番号の人員が空でない場合の処理
+  if  obj_get.member1 != '':
+    # 班員1人目の従業員番号の人員がいるか確認
+    member1_obj_filter = member.objects.filter(employee_no__contains = obj_get.member1)
 
-  # 班員1人目の従業員番号の人員がいるか確認
-  member1_obj_filter = member.objects.filter(employee_no__contains = obj_get.member1)
-  # 班員1人目の従業員番号の人員がいる場合の処理
-  if member1_obj_filter.count() == 1:
-    # 班員1人目の名前取得
-    member1_obj_get = member.objects.get(employee_no = obj_get.member1)
+    # 班員1人目の従業員番号の人員がいる場合の処理
+    if member1_obj_filter.count() == 1:
+      # 班員1人目の名前取得
+      member1_obj_get = member.objects.get(employee_no = obj_get.member1)
 
-  # 班員1人目の従業員番号の人員がいない場合の処理
+    # 班員1人目の従業員番号の人員がいない場合の処理
+    else:
+      # 班員1人目の名前に空を入れる
+      member1_obj_get = ''
+
+  # 班員1人目の従業員番号の人員が空の場合の処理
   else:
     # 班員1人目の名前に空を入れる
     member1_obj_get = ''
 
 
-  # 班員2人目の従業員番号の人員がいるか確認
-  member2_obj_filter = member.objects.filter(employee_no__contains = obj_get.member2)
-  # 班員2人目の従業員番号の人員がいる場合の処理
-  if member2_obj_filter.count() == 1:
-    # 班員2人目の名前取得
-    member2_obj_get = member.objects.get(employee_no = obj_get.member2)
+  # 班員2人目の従業員番号の人員が空でない場合の処理
+  if  obj_get.member2 != '':
+    # 班員2人目の従業員番号の人員がいるか確認
+    member2_obj_filter = member.objects.filter(employee_no__contains = obj_get.member2)
 
-  # 班員2人目の従業員番号の人員がいない場合の処理
+    # 班員2人目の従業員番号の人員がいる場合の処理
+    if member2_obj_filter.count() == 1:
+      # 班員2人目の名前取得
+      member2_obj_get = member.objects.get(employee_no = obj_get.member2)
+
+    # 班員2人目の従業員番号の人員がいない場合の処理
+    else:
+      # 班員2人目の名前に空を入れる
+      member2_obj_get = ''
+
+  # 班員2人目の従業員番号の人員が空の場合の処理
   else:
     # 班員2人目の名前に空を入れる
     member2_obj_get = ''
 
 
-  # 班員3人目の従業員番号の人員がいるか確認
-  member3_obj_filter = member.objects.filter(employee_no__contains = obj_get.member3)
-  # 班員3人目の従業員番号の人員がいる場合の処理
-  if member3_obj_filter.count() == 1:
-    # 班員3人目の名前取得
-    member3_obj_get = member.objects.get(employee_no = obj_get.member3)
+  # 班員3人目の従業員番号の人員が空でない場合の処理
+  if  obj_get.member3 != '':
+    # 班員3人目の従業員番号の人員がいるか確認
+    member3_obj_filter = member.objects.filter(employee_no__contains = obj_get.member3)
 
-  # 班員3人目の従業員番号の人員がいない場合の処理
+    # 班員3人目の従業員番号の人員がいる場合の処理
+    if member3_obj_filter.count() == 1:
+      # 班員3人目の名前取得
+      member3_obj_get = member.objects.get(employee_no = obj_get.member3)
+
+    # 班員3人目の従業員番号の人員がいない場合の処理
+    else:
+      # 班員3人目の名前に空を入れる
+      member3_obj_get = ''
+
+  # 班員3人目の従業員番号の人員が空の場合の処理
   else:
     # 班員3人目の名前に空を入れる
     member3_obj_get = ''
 
 
-  # 班員4人目の従業員番号の人員がいるか確認
-  member4_obj_filter = member.objects.filter(employee_no__contains = obj_get.member4)
-  # 班員4人目の従業員番号の人員がいる場合の処理
-  if member4_obj_filter.count() == 1:
-    # 班員4人目の名前取得
-    member4_obj_get = member.objects.get(employee_no = obj_get.member4)
+  # 班員4人目の従業員番号の人員が空でない場合の処理
+  if  obj_get.member4 != '':
+    # 班員4人目の従業員番号の人員がいるか確認
+    member4_obj_filter = member.objects.filter(employee_no__contains = obj_get.member4)
 
-  # 班員4人目の従業員番号の人員がいない場合の処理
+    # 班員4人目の従業員番号の人員がいる場合の処理
+    if member4_obj_filter.count() == 1:
+      # 班員4人目の名前取得
+      member4_obj_get = member.objects.get(employee_no = obj_get.member4)
+
+    # 班員4人目の従業員番号の人員がいない場合の処理
+    else:
+      # 班員4人目の名前に空を入れる
+      member4_obj_get = ''
+
+  # 班員4人目の従業員番号の人員が空の場合の処理
   else:
     # 班員4人目の名前に空を入れる
     member4_obj_get = ''
 
 
-  # 班員5人目の従業員番号の人員がいるか確認
-  member5_obj_filter = member.objects.filter(employee_no__contains = obj_get.member5)
-  # 班員5人目の従業員番号の人員がいる場合の処理
-  if member5_obj_filter.count() == 1:
-    # 班員5人目の名前取得
-    member5_obj_get = member.objects.get(employee_no = obj_get.member5)
+  # 班員5人目の従業員番号の人員が空でない場合の処理
+  if  obj_get.member5 != '':
+    # 班員5人目の従業員番号の人員がいるか確認
+    member5_obj_filter = member.objects.filter(employee_no__contains = obj_get.member5)
 
-  # 班員5人目の従業員番号の人員がいない場合の処理
+    # 班員5人目の従業員番号の人員がいる場合の処理
+    if member5_obj_filter.count() == 1:
+      # 班員5人目の名前取得
+      member5_obj_get = member.objects.get(employee_no = obj_get.member5)
+
+    # 班員5人目の従業員番号の人員がいない場合の処理
+    else:
+      # 班員5人目の名前に空を入れる
+      member5_obj_get = ''
+
+  # 班員5人目の従業員番号の人員が空の場合の処理
   else:
     # 班員5人目の名前に空を入れる
     member5_obj_get = ''
 
 
-  # 班員6人目の従業員番号の人員がいるか確認
-  member6_obj_filter = member.objects.filter(employee_no__contains = obj_get.member6)
-  # 班員6人目の従業員番号の人員がいる場合の処理
-  if member6_obj_filter.count() == 1:
-    # 班員6人目の名前取得
-    member6_obj_get = member.objects.get(employee_no = obj_get.member6)
+  # 班員6人目の従業員番号の人員が空でない場合の処理
+  if  obj_get.member6 != '':
+    # 班員6人目の従業員番号の人員がいるか確認
+    member6_obj_filter = member.objects.filter(employee_no__contains = obj_get.member6)
 
-  # 班員6人目の従業員番号の人員がいない場合の処理
+    # 班員6人目の従業員番号の人員がいる場合の処理
+    if member6_obj_filter.count() == 1:
+      # 班員6人目の名前取得
+      member6_obj_get = member.objects.get(employee_no = obj_get.member6)
+
+    # 班員6人目の従業員番号の人員がいない場合の処理
+    else:
+      # 班員6人目の名前に空を入れる
+      member6_obj_get = ''
+
+  # 班員6人目の従業員番号の人員が空の場合の処理
   else:
     # 班員6人目の名前に空を入れる
     member6_obj_get = ''
 
 
-  # 班員7人目の従業員番号の人員がいるか確認
-  member7_obj_filter = member.objects.filter(employee_no__contains = obj_get.member7)
-  # 班員7人目の従業員番号の人員がいる場合の処理
-  if member7_obj_filter.count() == 1:
-    # 班員7人目の名前取得
-    member7_obj_get = member.objects.get(employee_no = obj_get.member7)
+  # 班員7人目の従業員番号の人員が空でない場合の処理
+  if  obj_get.member7 != '':
+    # 班員7人目の従業員番号の人員がいるか確認
+    member7_obj_filter = member.objects.filter(employee_no__contains = obj_get.member7)
 
-  # 班員7人目の従業員番号の人員がいない場合の処理
+    # 班員7人目の従業員番号の人員がいる場合の処理
+    if member7_obj_filter.count() == 1:
+      # 班員7人目の名前取得
+      member7_obj_get = member.objects.get(employee_no = obj_get.member7)
+
+    # 班員7人目の従業員番号の人員がいない場合の処理
+    else:
+      # 班員7人目の名前に空を入れる
+      member7_obj_get = ''
+
+  # 班員7人目の従業員番号の人員が空の場合の処理
   else:
     # 班員7人目の名前に空を入れる
     member7_obj_get = ''
 
 
-  # 班員8人目の従業員番号の人員がいるか確認
-  member8_obj_filter = member.objects.filter(employee_no__contains = obj_get.member8)
-  # 班員8人目の従業員番号の人員がいる場合の処理
-  if member8_obj_filter.count() == 1:
-    # 班員8人目の名前取得
-    member8_obj_get = member.objects.get(employee_no = obj_get.member8)
+  # 班員8人目の従業員番号の人員が空でない場合の処理
+  if  obj_get.member8 != '':
+    # 班員8人目の従業員番号の人員がいるか確認
+    member8_obj_filter = member.objects.filter(employee_no__contains = obj_get.member8)
 
-  # 班員8人目の従業員番号の人員がいない場合の処理
+    # 班員8人目の従業員番号の人員がいる場合の処理
+    if member8_obj_filter.count() == 1:
+      # 班員8人目の名前取得
+      member8_obj_get = member.objects.get(employee_no = obj_get.member8)
+
+    # 班員8人目の従業員番号の人員がいない場合の処理
+    else:
+      # 班員8人目の名前に空を入れる
+      member8_obj_get = ''
+
+  # 班員8人目の従業員番号の人員が空の場合の処理
   else:
     # 班員8人目の名前に空を入れる
     member8_obj_get = ''
 
 
-  # 班員9人目の従業員番号の人員がいるか確認
-  member9_obj_filter = member.objects.filter(employee_no__contains = obj_get.member9)
-  # 班員9人目の従業員番号の人員がいる場合の処理
-  if member9_obj_filter.count() == 1:
-    # 班員9人目の名前取得
-    member9_obj_get = member.objects.get(employee_no = obj_get.member9)
+  # 班員9人目の従業員番号の人員が空でない場合の処理
+  if  obj_get.member9 != '':
+    # 班員9人目の従業員番号の人員がいるか確認
+    member9_obj_filter = member.objects.filter(employee_no__contains = obj_get.member9)
 
-  # 班員9人目の従業員番号の人員がいない場合の処理
+    # 班員9人目の従業員番号の人員がいる場合の処理
+    if member9_obj_filter.count() == 1:
+      # 班員9人目の名前取得
+      member9_obj_get = member.objects.get(employee_no = obj_get.member9)
+
+    # 班員9人目の従業員番号の人員がいない場合の処理
+    else:
+      # 班員9人目の名前に空を入れる
+      member9_obj_get = ''
+
+  # 班員9人目の従業員番号の人員が空の場合の処理
   else:
     # 班員9人目の名前に空を入れる
     member9_obj_get = ''
 
 
-  # 班員10人目の従業員番号の人員がいるか確認
-  member10_obj_filter = member.objects.filter(employee_no__contains = obj_get.member10)
-  # 班員10人目の従業員番号の人員がいる場合の処理
-  if member10_obj_filter.count() == 1:
-    # 班員10人目の名前取得
-    member10_obj_get = member.objects.get(employee_no = obj_get.member10)
+  # 班員10人目の従業員番号の人員が空でない場合の処理
+  if  obj_get.member10 != '':
+    # 班員10人目の従業員番号の人員がいるか確認
+    member10_obj_filter = member.objects.filter(employee_no__contains = obj_get.member10)
 
-  # 班員10人目の従業員番号の人員がいない場合の処理
+    # 班員10人目の従業員番号の人員がいる場合の処理
+    if member10_obj_filter.count() == 1:
+      # 班員10人目の名前取得
+      member10_obj_get = member.objects.get(employee_no = obj_get.member10)
+
+    # 班員10人目の従業員番号の人員がいない場合の処理
+    else:
+      # 班員10人目の名前に空を入れる
+      member10_obj_get = ''
+
+  # 班員10人目の従業員番号の人員が空の場合の処理
   else:
     # 班員10人目の名前に空を入れる
     member10_obj_get = ''
 
 
-  # 班員11人目の従業員番号の人員がいるか確認
-  member11_obj_filter = member.objects.filter(employee_no__contains = obj_get.member11)
-  # 班員11人目の従業員番号の人員がいる場合の処理
-  if member11_obj_filter.count() == 1:
-    # 班員11人目の名前取得
-    member11_obj_get = member.objects.get(employee_no = obj_get.member11)
+  # 班員11人目の従業員番号の人員が空でない場合の処理
+  if  obj_get.member11 != '':
+    # 班員11人目の従業員番号の人員がいるか確認
+    member11_obj_filter = member.objects.filter(employee_no__contains = obj_get.member11)
 
-  # 班員11人目の従業員番号の人員がいない場合の処理
+    # 班員11人目の従業員番号の人員がいる場合の処理
+    if member11_obj_filter.count() == 1:
+      # 班員11人目の名前取得
+      member11_obj_get = member.objects.get(employee_no = obj_get.member11)
+
+    # 班員11人目の従業員番号の人員がいない場合の処理
+    else:
+      # 班員11人目の名前に空を入れる
+      member11_obj_get = ''
+
+  # 班員11人目の従業員番号の人員が空の場合の処理
   else:
     # 班員11人目の名前に空を入れる
     member11_obj_get = ''
 
 
-  # 班員12人目の従業員番号の人員がいるか確認
-  member12_obj_filter = member.objects.filter(employee_no__contains = obj_get.member12)
-  # 班員12人目の従業員番号の人員がいる場合の処理
-  if member12_obj_filter.count() == 1:
-    # 班員12人目の名前取得
-    member12_obj_get = member.objects.get(employee_no = obj_get.member12)
+  # 班員12人目の従業員番号の人員が空でない場合の処理
+  if  obj_get.member12 != '':
+    # 班員12人目の従業員番号の人員がいるか確認
+    member12_obj_filter = member.objects.filter(employee_no__contains = obj_get.member12)
 
-  # 班員12人目の従業員番号の人員がいない場合の処理
+    # 班員12人目の従業員番号の人員がいる場合の処理
+    if member12_obj_filter.count() == 1:
+      # 班員12人目の名前取得
+      member12_obj_get = member.objects.get(employee_no = obj_get.member12)
+
+    # 班員12人目の従業員番号の人員がいない場合の処理
+    else:
+      # 班員12人目の名前に空を入れる
+      member12_obj_get = ''
+
+  # 班員12人目の従業員番号の人員が空の場合の処理
   else:
     # 班員12人目の名前に空を入れる
     member12_obj_get = ''
 
 
-  # 班員13人目の従業員番号の人員がいるか確認
-  member13_obj_filter = member.objects.filter(employee_no__contains = obj_get.member13)
-  # 班員13人目の従業員番号の人員がいる場合の処理
-  if member13_obj_filter.count() == 1:
-    # 班員13人目の名前取得
-    member13_obj_get = member.objects.get(employee_no = obj_get.member13)
+  # 班員13人目の従業員番号の人員が空でない場合の処理
+  if  obj_get.member13 != '':
+    # 班員13人目の従業員番号の人員がいるか確認
+    member13_obj_filter = member.objects.filter(employee_no__contains = obj_get.member13)
 
-  # 班員13人目の従業員番号の人員がいない場合の処理
+    # 班員13人目の従業員番号の人員がいる場合の処理
+    if member13_obj_filter.count() == 1:
+      # 班員13人目の名前取得
+      member13_obj_get = member.objects.get(employee_no = obj_get.member13)
+
+    # 班員13人目の従業員番号の人員がいない場合の処理
+    else:
+      # 班員13人目の名前に空を入れる
+      member13_obj_get = ''
+
+  # 班員13人目の従業員番号の人員が空の場合の処理
   else:
     # 班員13人目の名前に空を入れる
     member13_obj_get = ''
 
 
-  # 班員14人目の従業員番号の人員がいるか確認
-  member14_obj_filter = member.objects.filter(employee_no__contains = obj_get.member14)
-  # 班員14人目の従業員番号の人員がいる場合の処理
-  if member14_obj_filter.count() == 1:
-    # 班員14人目の名前取得
-    member14_obj_get = member.objects.get(employee_no = obj_get.member14)
+  # 班員14人目の従業員番号の人員が空でない場合の処理
+  if  obj_get.member14 != '':
+    # 班員14人目の従業員番号の人員がいるか確認
+    member14_obj_filter = member.objects.filter(employee_no__contains = obj_get.member14)
 
-  # 班員14人目の従業員番号の人員がいない場合の処理
+    # 班員14人目の従業員番号の人員がいる場合の処理
+    if member14_obj_filter.count() == 1:
+      # 班員14人目の名前取得
+      member14_obj_get = member.objects.get(employee_no = obj_get.member14)
+
+    # 班員14人目の従業員番号の人員がいない場合の処理
+    else:
+      # 班員14人目の名前に空を入れる
+      member14_obj_get = ''
+
+  # 班員14人目の従業員番号の人員が空の場合の処理
   else:
     # 班員14人目の名前に空を入れる
     member14_obj_get = ''
 
 
-  # 班員15人目の従業員番号の人員がいるか確認
-  member15_obj_filter = member.objects.filter(employee_no__contains = obj_get.member15)
-  # 班員15人目の従業員番号の人員がいる場合の処理
-  if member15_obj_filter.count() == 1:
-    # 班員15人目の名前取得
-    member15_obj_get = member.objects.get(employee_no = obj_get.member15)
+  # 班員15人目の従業員番号の人員が空でない場合の処理
+  if  obj_get.member15 != '':
+    # 班員15人目の従業員番号の人員がいるか確認
+    member15_obj_filter = member.objects.filter(employee_no__contains = obj_get.member15)
 
-  # 班員15人目の従業員番号の人員がいない場合の処理
+    # 班員15人目の従業員番号の人員がいる場合の処理
+    if member15_obj_filter.count() == 1:
+      # 班員15人目の名前取得
+      member15_obj_get = member.objects.get(employee_no = obj_get.member15)
+
+    # 班員15人目の従業員番号の人員がいない場合の処理
+    else:
+      # 班員15人目の名前に空を入れる
+      member15_obj_get = ''
+
+  # 班員15人目の従業員番号の人員が空の場合の処理
   else:
     # 班員15人目の名前に空を入れる
     member15_obj_get = ''
@@ -1802,196 +1921,316 @@ def team_over_time(request):
   # ログイン者の班員登録情報取得
   team_get = team_member.objects.get(employee_no5 = request.session['login_No'])
 
-  # 班員1人目の従業員番号の人員がいるか確認
-  member1_obj_filter = member.objects.filter(employee_no__contains = team_get.member1)
-  # 班員1人目の従業員番号の人員がいる場合の処理
-  if member1_obj_filter.count() == 1:
-     # 班員1人目の情報取得
-    member1_obj_get = member.objects.get(employee_no = team_get.member1)
+  # 班員1人目の従業員番号の人員が空でない場合の処理
+  if  team_get.member1 != '':
+    # 班員1人目の従業員番号の人員がいるか確認
+    member1_obj_filter = member.objects.filter(employee_no = team_get.member1)
 
-  # 班員1人目の従業員番号の人員がいない場合の処理
+    # 班員1人目の従業員番号の人員がいる場合の処理
+    if member1_obj_filter.count() != 0:
+      # 班員1人目の情報取得
+      member1_obj_get = member.objects.get(employee_no = team_get.member1)
+
+    # 班員1人目の従業員番号の人員がいない場合の処理
+    else:
+      # 班員1人目に空を入れる
+      member1_obj_get = ''
+
+  # 班員1人目の従業員番号の人員が空の場合の処理
   else:
     # 班員1人目に空を入れる
     member1_obj_get = ''
 
 
-  # 班員2人目の従業員番号の人員がいるか確認
-  member2_obj_filter = member.objects.filter(employee_no__contains = team_get.member2)
-  # 班員2人目の従業員番号の人員がいる場合の処理
-  if member2_obj_filter.count() == 1:
-     # 班員2人目の情報取得
-    member2_obj_get = member.objects.get(employee_no = team_get.member2)
+  # 班員2人目の従業員番号の人員が空でない場合の処理
+  if  team_get.member2 != '':
+    # 班員2人目の従業員番号の人員がいるか確認
+    member2_obj_filter = member.objects.filter(employee_no = team_get.member2)
 
-  # 班員2人目の従業員番号の人員がいない場合の処理
+    # 班員2人目の従業員番号の人員がいる場合の処理
+    if member2_obj_filter.count() != 0:
+      # 班員2人目の情報取得
+      member2_obj_get = member.objects.get(employee_no = team_get.member2)
+
+    # 班員2人目の従業員番号の人員がいない場合の処理
+    else:
+      # 班員2人目に空を入れる
+      member2_obj_get = ''
+
+  # 班員2人目の従業員番号の人員が空の場合の処理
   else:
     # 班員2人目に空を入れる
     member2_obj_get = ''
 
 
-  # 班員3人目の従業員番号の人員がいるか確認
-  member3_obj_filter = member.objects.filter(employee_no__contains = team_get.member3)
-  # 班員3人目の従業員番号の人員がいる場合の処理
-  if member3_obj_filter.count() == 1:
-     # 班員3人目の情報取得
-    member3_obj_get = member.objects.get(employee_no = team_get.member3)
+  # 班員3人目の従業員番号の人員が空でない場合の処理
+  if  team_get.member3 != '':
+    # 班員3人目の従業員番号の人員がいるか確認
+    member3_obj_filter = member.objects.filter(employee_no = team_get.member3)
 
-  # 班員3人目の従業員番号の人員がいない場合の処理
+    # 班員3人目の従業員番号の人員がいる場合の処理
+    if member3_obj_filter.count() != 0:
+      # 班員3人目の情報取得
+      member3_obj_get = member.objects.get(employee_no = team_get.member3)
+
+    # 班員3人目の従業員番号の人員がいない場合の処理
+    else:
+      # 班員3人目に空を入れる
+      member3_obj_get = ''
+
+  # 班員3人目の従業員番号の人員が空の場合の処理
   else:
     # 班員3人目に空を入れる
     member3_obj_get = ''
 
 
-  # 班員4人目の従業員番号の人員がいるか確認
-  member4_obj_filter = member.objects.filter(employee_no__contains = team_get.member4)
-  # 班員4人目の従業員番号の人員がいる場合の処理
-  if member4_obj_filter.count() == 1:
-     # 班員4人目の情報取得
-    member4_obj_get = member.objects.get(employee_no = team_get.member4)
+  # 班員4人目の従業員番号の人員が空でない場合の処理
+  if  team_get.member4 != '':
+    # 班員4人目の従業員番号の人員がいるか確認
+    member4_obj_filter = member.objects.filter(employee_no = team_get.member4)
+    
+    # 班員4人目の従業員番号の人員がいる場合の処理
+    if member4_obj_filter.count() != 0:
+      # 班員4人目の情報取得
+      member4_obj_get = member.objects.get(employee_no = team_get.member4)
 
-  # 班員4人目の従業員番号の人員がいない場合の処理
+    # 班員4人目の従業員番号の人員がいない場合の処理
+    else:
+      # 班員4人目に空を入れる
+      member4_obj_get = ''
+
+  # 班員4人目の従業員番号の人員が空の場合の処理
   else:
     # 班員4人目に空を入れる
     member4_obj_get = ''
 
 
-  # 班員5人目の従業員番号の人員がいるか確認
-  member5_obj_filter = member.objects.filter(employee_no__contains = team_get.member5)
-  # 班員5人目の従業員番号の人員がいる場合の処理
-  if member5_obj_filter.count() == 1:
-     # 班員5人目の情報取得
-    member5_obj_get = member.objects.get(employee_no = team_get.member5)
+  # 班員5人目の従業員番号の人員が空でない場合の処理
+  if  team_get.member5 != '':
+    # 班員5人目の従業員番号の人員がいるか確認
+    member5_obj_filter = member.objects.filter(employee_no = team_get.member5)
 
-  # 班員5人目の従業員番号の人員がいない場合の処理
+    # 班員5人目の従業員番号の人員がいる場合の処理
+    if member5_obj_filter.count() != 0:
+      # 班員5人目の情報取得
+      member5_obj_get = member.objects.get(employee_no = team_get.member5)
+
+    # 班員5人目の従業員番号の人員がいない場合の処理
+    else:
+      # 班員5人目に空を入れる
+      member5_obj_get = ''
+
+  # 班員5人目の従業員番号の人員が空の場合の処理
   else:
     # 班員5人目に空を入れる
     member5_obj_get = ''
 
 
-  # 班員6人目の従業員番号の人員がいるか確認
-  member6_obj_filter = member.objects.filter(employee_no__contains = team_get.member6)
-  # 班員6人目の従業員番号の人員がいる場合の処理
-  if member6_obj_filter.count() == 1:
-     # 班員6人目の情報取得
-    member6_obj_get = member.objects.get(employee_no = team_get.member6)
+  # 班員6人目の従業員番号の人員が空でない場合の処理
+  if  team_get.member6 != '':
+    # 班員6人目の従業員番号の人員がいるか確認
+    member6_obj_filter = member.objects.filter(employee_no = team_get.member6)
 
-  # 班員6人目の従業員番号の人員がいない場合の処理
+    # 班員6人目の従業員番号の人員がいる場合の処理
+    if member6_obj_filter.count() != 0:
+      # 班員6人目の情報取得
+      member6_obj_get = member.objects.get(employee_no = team_get.member6)
+
+    # 班員6人目の従業員番号の人員がいない場合の処理
+    else:
+      # 班員6人目に空を入れる
+      member6_obj_get = ''
+
+  # 班員6人目の従業員番号の人員が空の場合の処理
   else:
     # 班員6人目に空を入れる
     member6_obj_get = ''
 
 
-  # 班員7人目の従業員番号の人員がいるか確認
-  member7_obj_filter = member.objects.filter(employee_no__contains = team_get.member7)
-  # 班員7人目の従業員番号の人員がいる場合の処理
-  if member7_obj_filter.count() == 1:
-     # 班員7人目の情報取得
-    member7_obj_get = member.objects.get(employee_no = team_get.member7)
+  # 班員7人目の従業員番号の人員が空でない場合の処理
+  if  team_get.member7 != '':
+    # 班員7人目の従業員番号の人員がいるか確認
+    member7_obj_filter = member.objects.filter(employee_no = team_get.member7)
 
-  # 班員7人目の従業員番号の人員がいない場合の処理
+    # 班員7人目の従業員番号の人員がいる場合の処理
+    if member7_obj_filter.count() != 0:
+      # 班員7人目の情報取得
+      member7_obj_get = member.objects.get(employee_no = team_get.member7)
+
+    # 班員7人目の従業員番号の人員がいない場合の処理
+    else:
+      # 班員7人目に空を入れる
+      member7_obj_get = ''
+
+  # 班員7人目の従業員番号の人員が空の場合の処理
   else:
     # 班員7人目に空を入れる
     member7_obj_get = ''
 
 
-  # 班員8人目の従業員番号の人員がいるか確認
-  member8_obj_filter = member.objects.filter(employee_no__contains = team_get.member8)
-  # 班員8人目の従業員番号の人員がいる場合の処理
-  if member8_obj_filter.count() == 1:
-     # 班員8人目の情報取得
-    member8_obj_get = member.objects.get(employee_no = team_get.member8)
+  # 班員8人目の従業員番号の人員が空でない場合の処理
+  if  team_get.member8 != '':
+    # 班員8人目の従業員番号の人員がいるか確認
+    member8_obj_filter = member.objects.filter(employee_no = team_get.member8)
 
-  # 班員8人目の従業員番号の人員がいない場合の処理
+    # 班員8人目の従業員番号の人員がいる場合の処理
+    if member8_obj_filter.count() != 0:
+      # 班員8人目の情報取得
+      member8_obj_get = member.objects.get(employee_no = team_get.member8)
+
+    # 班員8人目の従業員番号の人員がいない場合の処理
+    else:
+      # 班員8人目に空を入れる
+      member8_obj_get = ''
+
+  # 班員8人目の従業員番号の人員が空の場合の処理
   else:
     # 班員8人目に空を入れる
     member8_obj_get = ''
 
 
-  # 班員9人目の従業員番号の人員がいるか確認
-  member9_obj_filter = member.objects.filter(employee_no__contains = team_get.member9)
-  # 班員9人目の従業員番号の人員がいる場合の処理
-  if member9_obj_filter.count() == 1:
-     # 班員9人目の情報取得
-    member9_obj_get = member.objects.get(employee_no = team_get.member9)
+  # 班員9人目の従業員番号の人員が空でない場合の処理
+  if  team_get.member9 != '':
+    # 班員9人目の従業員番号の人員がいるか確認
+    member9_obj_filter = member.objects.filter(employee_no = team_get.member9)
 
-  # 班員9人目の従業員番号の人員がいない場合の処理
+    # 班員9人目の従業員番号の人員がいる場合の処理
+    if member9_obj_filter.count() != 0:
+      # 班員9人目の情報取得
+      member9_obj_get = member.objects.get(employee_no = team_get.member9)
+
+    # 班員9人目の従業員番号の人員がいない場合の処理
+    else:
+      # 班員9人目に空を入れる
+      member9_obj_get = ''
+
+  # 班員9人目の従業員番号の人員が空の場合の処理
   else:
     # 班員9人目に空を入れる
     member9_obj_get = ''
 
 
-  # 班員10人目の従業員番号の人員がいるか確認
-  member10_obj_filter = member.objects.filter(employee_no__contains = team_get.member10)
-  # 班員10人目の従業員番号の人員がいる場合の処理
-  if member10_obj_filter.count() == 1:
-     # 班員10人目の情報取得
-    member10_obj_get = member.objects.get(employee_no = team_get.member10)
+  # 班員10人目の従業員番号の人員が空でない場合の処理
+  if  team_get.member10 != '':
+    # 班員10人目の従業員番号の人員がいるか確認
+    member10_obj_filter = member.objects.filter(employee_no = team_get.member10)
 
-  # 班員10人目の従業員番号の人員がいない場合の処理
+    # 班員10人目の従業員番号の人員がいる場合の処理
+    if member10_obj_filter.count() != 0:
+      # 班員10人目の情報取得
+      member10_obj_get = member.objects.get(employee_no = team_get.member10)
+
+    # 班員10人目の従業員番号の人員がいない場合の処理
+    else:
+      # 班員10人目に空を入れる
+      member10_obj_get = ''
+
+  # 班員10人目の従業員番号の人員が空の場合の処理
   else:
     # 班員10人目に空を入れる
     member10_obj_get = ''
 
 
-  # 班員11人目の従業員番号の人員がいるか確認
-  member11_obj_filter = member.objects.filter(employee_no__contains = team_get.member11)
-  # 班員11人目の従業員番号の人員がいる場合の処理
-  if member11_obj_filter.count() == 1:
-     # 班員11人目の情報取得
-    member11_obj_get = member.objects.get(employee_no = team_get.member11)
+  # 班員11人目の従業員番号の人員が空でない場合の処理
+  if  team_get.member11 != '':
+    # 班員11人目の従業員番号の人員がいるか確認
+    member11_obj_filter = member.objects.filter(employee_no = team_get.member11)
 
-  # 班員11人目の従業員番号の人員がいない場合の処理
+    # 班員11人目の従業員番号の人員がいる場合の処理
+    if member11_obj_filter.count() != 0:
+      # 班員11人目の情報取得
+      member11_obj_get = member.objects.get(employee_no = team_get.member11)
+
+    # 班員11人目の従業員番号の人員がいない場合の処理
+    else:
+      # 班員11人目に空を入れる
+      member11_obj_get = ''
+
+  # 班員11人目の従業員番号の人員が空の場合の処理
   else:
     # 班員11人目に空を入れる
     member11_obj_get = ''
 
 
-  # 班員12人目の従業員番号の人員がいるか確認
-  member12_obj_filter = member.objects.filter(employee_no__contains = team_get.member12)
-  # 班員12人目の従業員番号の人員がいる場合の処理
-  if member12_obj_filter.count() == 1:
-     # 班員12人目の情報取得
-    member12_obj_get = member.objects.get(employee_no = team_get.member12)
+  # 班員12人目の従業員番号の人員が空でない場合の処理
+  if  team_get.member12 != '':
+    # 班員12人目の従業員番号の人員がいるか確認
+    member12_obj_filter = member.objects.filter(employee_no = team_get.member12)
 
-  # 班員12人目の従業員番号の人員がいない場合の処理
+    # 班員12人目の従業員番号の人員がいる場合の処理
+    if member12_obj_filter.count() != 0:
+      # 班員12人目の情報取得
+      member12_obj_get = member.objects.get(employee_no = team_get.member12)
+
+    # 班員12人目の従業員番号の人員がいない場合の処理
+    else:
+      # 班員12人目に空を入れる
+      member12_obj_get = ''
+
+  # 班員12人目の従業員番号の人員が空の場合の処理
   else:
     # 班員12人目に空を入れる
     member12_obj_get = ''
 
 
-  # 班員13人目の従業員番号の人員がいるか確認
-  member13_obj_filter = member.objects.filter(employee_no__contains = team_get.member13)
-  # 班員13人目の従業員番号の人員がいる場合の処理
-  if member13_obj_filter.count() == 1:
-     # 班員13人目の情報取得
-    member13_obj_get = member.objects.get(employee_no = team_get.member13)
+  # 班員13人目の従業員番号の人員が空でない場合の処理
+  if  team_get.member13 != '':
+    # 班員13人目の従業員番号の人員がいるか確認
+    member13_obj_filter = member.objects.filter(employee_no = team_get.member13)
 
-  # 班員13人目の従業員番号の人員がいない場合の処理
+    # 班員13人目の従業員番号の人員がいる場合の処理
+    if member13_obj_filter.count() != 0:
+      # 班員13人目の情報取得
+      member13_obj_get = member.objects.get(employee_no = team_get.member13)
+
+    # 班員13人目の従業員番号の人員がいない場合の処理
+    else:
+      # 班員13人目に空を入れる
+      member13_obj_get = ''
+
+  # 班員13人目の従業員番号の人員が空の場合の処理
   else:
     # 班員13人目に空を入れる
     member13_obj_get = ''
 
 
-  # 班員14人目の従業員番号の人員がいるか確認
-  member14_obj_filter = member.objects.filter(employee_no__contains = team_get.member14)
-  # 班員14人目の従業員番号の人員がいる場合の処理
-  if member14_obj_filter.count() == 1:
-     # 班員14人目の情報取得
-    member14_obj_get = member.objects.get(employee_no = team_get.member14)
+  # 班員14人目の従業員番号の人員が空でない場合の処理
+  if  team_get.member14 != '':
+    # 班員14人目の従業員番号の人員がいるか確認
+    member14_obj_filter = member.objects.filter(employee_no = team_get.member14)
 
-  # 班員14人目の従業員番号の人員がいない場合の処理
+    # 班員14人目の従業員番号の人員がいる場合の処理
+    if member14_obj_filter.count() != 0:
+      # 班員14人目の情報取得
+      member14_obj_get = member.objects.get(employee_no = team_get.member14)
+
+    # 班員14人目の従業員番号の人員がいない場合の処理
+    else:
+      # 班員14人目に空を入れる
+      member14_obj_get = ''
+
+  # 班員14人目の従業員番号の人員が空の場合の処理
   else:
     # 班員14人目に空を入れる
     member14_obj_get = ''
 
 
-  # 班員15人目の従業員番号の人員がいるか確認
-  member15_obj_filter = member.objects.filter(employee_no__contains = team_get.member15)
-  # 班員15人目の従業員番号の人員がいる場合の処理
-  if member15_obj_filter.count() == 1:
-     # 班員15人目の情報取得
-    member15_obj_get = member.objects.get(employee_no = team_get.member15)
+  # 班員15人目の従業員番号の人員が空でない場合の処理
+  if  team_get.member15 != '':
+    # 班員15人目の従業員番号の人員がいるか確認
+    member15_obj_filter = member.objects.filter(employee_no = team_get.member15)
 
-  # 班員15人目の従業員番号の人員がいない場合の処理
+    # 班員15人目の従業員番号の人員がいる場合の処理
+    if member15_obj_filter.count() != 0:
+      # 班員15人目の情報取得
+      member15_obj_get = member.objects.get(employee_no = team_get.member15)
+
+    # 班員15人目の従業員番号の人員がいない場合の処理
+    else:
+      # 班員15人目に空を入れる
+      member15_obj_get = ''
+
+  # 班員15人目の従業員番号の人員が空の場合の処理
   else:
     # 班員15人目に空を入れる
     member15_obj_get = ''

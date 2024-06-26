@@ -4,6 +4,7 @@ from django.contrib import messages
 from django.core.paginator import Paginator
 import datetime
 import itertools
+from ..utils import round_time
 from ..models import member
 from ..models import Business_Time_graph
 from ..models import kosu_division
@@ -129,7 +130,7 @@ def input(request):
   # セッションに就業日の履歴がある場合の処理
   else:
     # フォームの初期値に就業日の履歴を入れる
-    new_work_day = request.session.get('day', None)
+    new_work_day = request.session['day']
 
 
 
@@ -2109,9 +2110,16 @@ def input(request):
       return redirect(to = '/input')
     
     # 残業時間が15の倍数でない場合の処理
-    if int(request.POST['over_work'])%15 != 0 and work != '休出':
+    if int(request.POST['over_work'])%15 != 0 and request.POST['work'] != '休出':
       # エラーメッセージ出力
       messages.error(request, '残業時間が15分の倍数になっていません。工数登録できませんでした。ERROR018')
+      # このページをリダイレクト
+      return redirect(to = '/input')
+
+    # 休出時に残業時間が5の倍数でない場合の処理
+    if int(request.POST['over_work'])%5 != 0 and request.POST['work'] == '休出':
+      # エラーメッセージ出力
+      messages.error(request, '残業時間が5分の倍数になっていません。工数登録できませんでした。ERROR084')
       # このページをリダイレクト
       return redirect(to = '/input')
 
@@ -2265,11 +2273,10 @@ def input(request):
     now_time = datetime.datetime.now().time()
 
     # 現在時刻を5分単位で丸め
-    about_time = str(now_time.replace(minute = now_time.minute - now_time.minute % 5, \
-                                      second = 0, microsecond = 0))
-
+    rounded_time = round_time(now_time)
+    
     # 現在時刻を初期値に設定
-    default_end_time = about_time[ : -3]
+    default_end_time = rounded_time.strftime('%H:%M')
 
     # 更新された就業日取得
     new_work_day = request.session.get('day', kosu_today)
@@ -2279,7 +2286,7 @@ def input(request):
 
     # 翌日チェックBOX、工数区分保持
     if request.POST['start_time'] != '':
-      if request.POST['start_time'] > request.POST['end_time'] :
+      if datetime.datetime.strptime(request.POST['start_time'], "%H:%M") > datetime.datetime.strptime(default_end_time, "%H:%M"):
         POST_check = True
 
       else:
