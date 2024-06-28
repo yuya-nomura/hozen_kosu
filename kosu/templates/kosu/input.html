@@ -137,14 +137,12 @@
           </div>
         </td>
       </tr>
-      <tr>
+      <tr><th><td>
         <div class="number-input-group">
-          <th><td>
-            <input type="submit" value="工数登録"  name="Registration" class="btn btn-blue1 mt-2">　　　
-            <input type="submit" value="休憩変更登録"  name="change_display" class="btn btn-blue2 mt-2">
-          </td></th>
+          <input type="submit" value="工数登録"  name="Registration" class="btn btn-blue1 mt-2">　　　
+          <input type="submit" value="休憩変更登録"  name="change_display" class="btn btn-blue2 mt-2">
         </div>
-      </tr>
+      </td></th></tr>
       <button id="update" name="update" class="btn btn-link"></button>
     </table>
     {% if obj_link != '' %}
@@ -160,7 +158,7 @@
       {% for i in time_display_list %}
       <tr>
         {% for k in i %}
-          <div class="number-input-group"></div>
+          <div class="number-input-group">
             <td style="text-align:center;">
               {{k}}
             </td>

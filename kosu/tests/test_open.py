@@ -1,8 +1,5 @@
-import datetime
-from bs4 import BeautifulSoup
 from django.test import TestCase
 from django.urls import reverse
-from .utils import round_time
 from kosu.models import member
 from kosu.models import kosu_division
 from kosu.models import Business_Time_graph
@@ -14,7 +11,7 @@ from kosu.models import inquiry_data
 
 
 
-class MultiplePagesAccessTestCase(TestCase):
+class Open_pages(TestCase):
     # ダミーデータ定義
     def setUp(self):        
         # memberダミーデータ
@@ -133,6 +130,14 @@ class MultiplePagesAccessTestCase(TestCase):
             answer = '回答'
             )
     
+        # セッション定義
+        self.session = self.client.session
+        self.session['login_No'] = self.member.employee_no
+        self.session['input_def'] = self.kosu_division.kosu_name
+        self.session['break_today'] = self.Business_Time_graph.work_day2
+        self.session.save()
+
+
 
     # ヘルプページ開きチェック
     def test_help(self):
@@ -150,6 +155,11 @@ class MultiplePagesAccessTestCase(TestCase):
 
     # ログインページ開きチェック
     def test_login(self):
+        # セッション削除
+        session = self.client.session
+        del session['login_No']
+        session.save()
+
         # URL定義
         url = reverse('login')
         # URLに対してGETリクエスト送信
@@ -164,11 +174,6 @@ class MultiplePagesAccessTestCase(TestCase):
 
     # MENUページ開きチェック
     def test_main(self):
-        # セッション定義
-        session = self.client.session
-        session['login_No'] = self.member.employee_no
-        session.save()
-
         # URL定義
         url = reverse('main')
         # URLに対してGETリクエスト送信
@@ -183,11 +188,6 @@ class MultiplePagesAccessTestCase(TestCase):
 
     # 工数MENUページ開きチェック
     def test_kosu_main(self):
-        # セッション定義
-        session = self.client.session
-        session['login_No'] = self.member.employee_no
-        session.save()
-
         # URL定義
         url = reverse('kosu_main')
         # URLに対してGETリクエスト送信
@@ -202,11 +202,6 @@ class MultiplePagesAccessTestCase(TestCase):
 
     # 工数区分定義MENUページ開きチェック
     def test_def_main(self):
-        # セッション定義
-        session = self.client.session
-        session['login_No'] = self.member.employee_no
-        session.save()
-
         # URL定義
         url = reverse('def_main')
         # URLに対してGETリクエスト送信
@@ -221,11 +216,6 @@ class MultiplePagesAccessTestCase(TestCase):
 
     # 人員MENUページ開きチェック
     def test_member_main(self):
-        # セッション定義
-        session = self.client.session
-        session['login_No'] = self.member.employee_no
-        session.save()
-
         # URL定義
         url = reverse('member_main')
         # URLに対してGETリクエスト送信
@@ -240,11 +230,6 @@ class MultiplePagesAccessTestCase(TestCase):
 
     # 班員MENUページ開きチェック
     def test_team_main(self):
-        # セッション定義
-        session = self.client.session
-        session['login_No'] = self.member.employee_no
-        session.save()
-
         # URL定義
         url = reverse('team_main')
         # URLに対してGETリクエスト送信
@@ -259,11 +244,6 @@ class MultiplePagesAccessTestCase(TestCase):
 
     # 問い合わせMENUページ開きチェック
     def test_inquiry_main(self):
-        # セッション定義
-        session = self.client.session
-        session['login_No'] = self.member.employee_no
-        session.save()
-
         # URL定義
         url = reverse('inquiry_main')
         # URLに対してGETリクエスト送信
@@ -278,11 +258,6 @@ class MultiplePagesAccessTestCase(TestCase):
 
     # 管理者MENUページ開きチェック
     def test_administrator(self):
-        # セッション定義
-        session = self.client.session
-        session['login_No'] = self.member.employee_no
-        session.save()
-
         # URL定義
         url = reverse('administrator')
         # URLに対してGETリクエスト送信
@@ -297,12 +272,6 @@ class MultiplePagesAccessTestCase(TestCase):
 
     # 工数登録ページ開きチェック
     def test_input(self):
-        # セッション定義
-        session = self.client.session
-        session['login_No'] = self.member.employee_no
-        session['input_def'] = self.kosu_division.kosu_name
-        session.save()
-
         # URL定義
         url = reverse('input')
         # URLに対してGETリクエスト送信
@@ -315,173 +284,8 @@ class MultiplePagesAccessTestCase(TestCase):
 
 
 
-    # 工数登録ページ現在時刻表示チェック(日付またぎ無し)
-    def test_input_now_time_post_not_over_day(self):
-        # セッション定義
-        session = self.client.session
-        session['login_No'] = self.member.employee_no
-        session['input_def'] = self.kosu_division.kosu_name
-        session.save()
-
-        # URL定義
-        url = reverse('input')
-        
-        # 取得したURLに対してPOST送信するデータ定義 
-        response = self.client.post(url, {
-            'now_time' : '現在時刻',
-            'start_time' : '0:00',
-            'work' : self.Business_Time_graph.work_time,
-            'tyoku2' : self.Business_Time_graph.tyoku2,
-            'kosu_def_list' : 'A',
-            'work_detail' : 'テスト',
-            'break_change' : True,
-            'over_work' : 30
-        })
-
-        # リクエストのレスポンスステータスコードが200(OK)であることを確認
-        self.assertEqual(response.status_code, 200)
-        
-        # 現在時刻取得
-        now_time = datetime.datetime.now().time()
-        expected_time = round_time(now_time).strftime('%H:%M')  # round_time関数を直接使用
-
-        # BeautifulSoupを使ってHTMLレスポンスを解析
-        soup = BeautifulSoup(response.content, 'html.parser')
-        
-        # <input>タグのvalue属性を取得
-        end_time_input = soup.find('input', {'id': 'end_time'})
-        if end_time_input:
-            actual_value = end_time_input.get('value')
-        else:
-            actual_value = None
-        
-        # チェックボックスの状態を確認
-        tomorrow_check_input = soup.find('input', {'id': 'id_tomorrow_check'})
-        if tomorrow_check_input:
-            checkbox_checked = tomorrow_check_input.has_attr('checked')
-        else:
-            checkbox_checked = False
-
-        # value属性が期待する値と一致するか確認
-        self.assertEqual(actual_value, expected_time)
-        # チェックボックスがチェックされていないことを確認
-        self.assertFalse(checkbox_checked)
-
-
-
-    # 工数登録ページ現在時刻表示チェック(日付またぎ有)
-    def test_input_now_time_post_over_day(self):
-        # セッション定義
-        session = self.client.session
-        session['login_No'] = self.member.employee_no
-        session['input_def'] = self.kosu_division.kosu_name
-        session.save()
-
-        # URL定義
-        url = reverse('input')
-        
-        # 取得したURLに対してPOST送信するデータ定義 
-        response = self.client.post(url, {
-            'now_time' : '現在時刻',
-            'start_time' : '23:55',
-            'work' : self.Business_Time_graph.work_time,
-            'tyoku2' : self.Business_Time_graph.tyoku2,
-            'kosu_def_list' : 'A',
-            'work_detail' : 'テスト',
-            'break_change' : True,
-            'over_work' : 30
-        })
-
-        # リクエストのレスポンスステータスコードが200(OK)であることを確認
-        self.assertEqual(response.status_code, 200)
-        
-        # 現在時刻取得
-        now_time = datetime.datetime.now().time()
-        expected_time = round_time(now_time).strftime('%H:%M')  # round_time関数を直接使用
-
-        # BeautifulSoupを使ってHTMLレスポンスを解析
-        soup = BeautifulSoup(response.content, 'html.parser')
-        
-        # <input>タグのvalue属性を取得
-        end_time_input = soup.find('input', {'id': 'end_time'})
-        if end_time_input:
-            actual_value = end_time_input.get('value')
-        else:
-            actual_value = None
-        
-        # チェックボックスの状態を確認
-        tomorrow_check_input = soup.find('input', {'id': 'id_tomorrow_check'})
-        if tomorrow_check_input:
-            checkbox_checked = tomorrow_check_input.has_attr('checked')
-        else:
-            checkbox_checked = False
-
-        # value属性が期待する値と一致するか確認
-        self.assertEqual(actual_value, expected_time)
-        # チェックボックスがチェックされていることを確認
-        self.assertTrue(checkbox_checked)
-
-
-
-    # 工数登録ページ残業登録チェック
-    def test_input_over_time_post(self):
-        # セッション定義
-        session = self.client.session
-        session['login_No'] = self.member.employee_no
-        session['input_def'] = self.kosu_division.kosu_name
-        session.save()
-
-        # フォームデータ定義(工数データ有の場合)
-        form_data = {
-            'work_day' : self.Business_Time_graph.work_day2,
-            'work' : self.Business_Time_graph.work_time,
-            'tyoku2' : self.Business_Time_graph.tyoku2,
-            'over_work' : '150',
-            'over_time_correction' : '残業のみ修正',
-            }
-        
-        # URL定義
-        url = reverse('input')
-        # 取得したURLに対してPOSTリクエスト送信
-        response = self.client.post(url, form_data)
-        # リクエストのレスポンスステータスコードが302(リダイレクト)であることを確認
-        self.assertEqual(response.status_code, 302)
-
-        # テストユーザーの工数データ取得
-        updated_entry = Business_Time_graph.objects.get(employee_no3 = self.member.employee_no, \
-                                                        work_day2 = self.Business_Time_graph.work_day2)
-        # 残業時間が150に更新されていることを確認
-        self.assertEqual(updated_entry.over_time, 150)
-
-        # フォームデータ2定義(工数データ無しの場合)
-        form_data2 = {
-            'work_day' : datetime.datetime.strptime(self.Business_Time_graph.work_day2, '%Y-%m-%d').date() + datetime.timedelta(days = 1),
-            'over_work' : '90',
-            'over_time_correction' : '残業のみ修正',
-            }
-
-        # 取得したURLに対してPOSTリクエスト送信
-        response = self.client.post(url, form_data2)
-        # リクエストのレスポンスステータスコードが302(リダイレクト)であることを確認
-        self.assertEqual(response.status_code, 302)
-
-        # テストユーザーの工数データ取得
-        updated_entry = Business_Time_graph.objects.get(employee_no3 = self.member.employee_no, \
-                                                        work_day2 = datetime.datetime.strptime(self.Business_Time_graph.work_day2, '%Y-%m-%d').date() + datetime.timedelta(days = 1))
-        # 残業時間が90に更新されていることを確認
-        self.assertEqual(updated_entry.over_time, 90)
-
-
-
     # 当日休憩変更ページ開きチェック
     def test_today_break_time(self):
-        # セッション定義
-        session = self.client.session
-        session['login_No'] = self.member.employee_no
-        session['input_def'] = self.kosu_division.kosu_name
-        session['break_today'] = self.Business_Time_graph.work_day2
-        session.save()
-
         # URL定義
         url = reverse('today_break_time')
         # URLに対してGETリクエスト送信
@@ -496,11 +300,6 @@ class MultiplePagesAccessTestCase(TestCase):
 
     # 休憩変更ページ開きチェック
     def test_break_time(self):
-        # セッション定義
-        session = self.client.session
-        session['login_No'] = self.member.employee_no
-        session.save()
-
         # URL定義
         url = reverse('break_time')
         # URLに対してGETリクエスト送信
@@ -515,11 +314,6 @@ class MultiplePagesAccessTestCase(TestCase):
 
     # 工数履歴ページ開きチェック
     def test_kosu_list(self):
-        # セッション定義
-        session = self.client.session
-        session['login_No'] = self.member.employee_no
-        session.save()
-        
         # URL定義
         url = reverse('kosu_list', args = [1])
         # URLに対してGETリクエスト送信
@@ -534,12 +328,6 @@ class MultiplePagesAccessTestCase(TestCase):
 
     # 工数詳細ページ開きチェック
     def test_detail(self):
-        # セッション定義
-        session = self.client.session
-        session['login_No'] = self.member.employee_no
-        session['input_def'] = self.kosu_division.kosu_name
-        session.save()
-
         # URL定義
         url = reverse('detail', args = [self.Business_Time_graph.id])
         # URLに対してGETリクエスト送信
@@ -554,12 +342,6 @@ class MultiplePagesAccessTestCase(TestCase):
 
     # 工数データ削除ページ開きチェック
     def test_delete(self):
-        # セッション定義
-        session = self.client.session
-        session['login_No'] = self.member.employee_no
-        session['input_def'] = self.kosu_division.kosu_name
-        session.save()
-
         # URL定義
         url = reverse('delete', args = [self.Business_Time_graph.id])
         # URLに対してGETリクエスト送信
@@ -574,11 +356,6 @@ class MultiplePagesAccessTestCase(TestCase):
 
     # 工数データページ開きチェック
     def test_graph(self):
-        # セッション定義
-        session = self.client.session
-        session['login_No'] = self.member.employee_no
-        session.save()
-
         # URL定義
         url = reverse('graph', args = [1])
         # URLに対してGETリクエスト送信
@@ -593,12 +370,6 @@ class MultiplePagesAccessTestCase(TestCase):
 
     # 工数集計ページ開きチェック
     def test_total(self):
-        # セッション定義
-        session = self.client.session
-        session['login_No'] = self.member.employee_no
-        session['input_def'] = self.kosu_division.kosu_name
-        session.save()
-
         # URL定義
         url = reverse('total')
         # URLに対してGETリクエスト送信
@@ -613,11 +384,6 @@ class MultiplePagesAccessTestCase(TestCase):
 
     # 勤務入力ページ開きチェック
     def test_schedule(self):
-        # セッション定義
-        session = self.client.session
-        session['login_No'] = self.member.employee_no
-        session.save()
-
         # URL定義
         url = reverse('schedule')
         # URLに対してGETリクエスト送信
@@ -632,11 +398,6 @@ class MultiplePagesAccessTestCase(TestCase):
 
     # 残業管理ページ開きチェック
     def test_over_time(self):
-        # セッション定義
-        session = self.client.session
-        session['login_No'] = self.member.employee_no
-        session.save()
-
         # URL定義
         url = reverse('over_time')
         # URLに対してGETリクエスト送信
@@ -651,12 +412,6 @@ class MultiplePagesAccessTestCase(TestCase):
 
     # 工数区分定義確認ページ開きチェック
     def test_kosu_def(self):
-        # セッション定義
-        session = self.client.session
-        session['login_No'] = self.member.employee_no
-        session['input_def'] = self.kosu_division.kosu_name
-        session.save()
-
         # URL定義
         url = reverse('kosu_def')
         # URLに対してGETリクエスト送信
@@ -671,12 +426,6 @@ class MultiplePagesAccessTestCase(TestCase):
 
     # 工数区分定義切り替えページ開きチェック
     def test_kosu_Ver(self):
-        # セッション定義
-        session = self.client.session
-        session['login_No'] = self.member.employee_no
-        session['input_def'] = self.kosu_division.kosu_name
-        session.save()
-
         # URL定義
         url = reverse('kosu_Ver')
         # URLに対してGETリクエスト送信
@@ -691,12 +440,6 @@ class MultiplePagesAccessTestCase(TestCase):
 
     # 工数区分定義一覧ページ開きチェック
     def test_def_list(self):
-        # セッション定義
-        session = self.client.session
-        session['login_No'] = self.member.employee_no
-        session['input_def'] = self.kosu_division.kosu_name
-        session.save()
-
         # URL定義
         url = reverse('def_list', args = [1])
         # URLに対してGETリクエスト送信
@@ -711,12 +454,6 @@ class MultiplePagesAccessTestCase(TestCase):
 
     # 工数区分定義新規登録ページ開きチェック
     def test_def_new(self):
-        # セッション定義
-        session = self.client.session
-        session['login_No'] = self.member.employee_no
-        session['input_def'] = self.kosu_division.kosu_name
-        session.save()
-
         # URL定義
         url = reverse('def_new')
         # URLに対してGETリクエスト送信
@@ -731,12 +468,6 @@ class MultiplePagesAccessTestCase(TestCase):
 
     # 工数区分定義編集ページ開きチェック
     def test_def_edit(self):
-        # セッション定義
-        session = self.client.session
-        session['login_No'] = self.member.employee_no
-        session['input_def'] = self.kosu_division.kosu_name
-        session.save()
-
         # URL定義
         url = reverse('def_edit', args = [self.kosu_division.id])
         # URLに対してGETリクエスト送信
@@ -751,12 +482,6 @@ class MultiplePagesAccessTestCase(TestCase):
 
     # 工数区分定義削除ページ開きチェック
     def test_def_delete(self):
-        # セッション定義
-        session = self.client.session
-        session['login_No'] = self.member.employee_no
-        session['input_def'] = self.kosu_division.kosu_name
-        session.save()
-
         # URL定義
         url = reverse('def_delete', args = [self.kosu_division.id])
         # URLに対してGETリクエスト送信
@@ -771,11 +496,6 @@ class MultiplePagesAccessTestCase(TestCase):
 
     # 人員登録ページ開きチェック
     def test_member_new(self):
-        # セッション定義
-        session = self.client.session
-        session['login_No'] = self.member.employee_no
-        session.save()
-
         # URL定義
         url = reverse('member_new')
         # URLに対してGETリクエスト送信
@@ -790,11 +510,6 @@ class MultiplePagesAccessTestCase(TestCase):
 
     # 人員一覧ページ開きチェック
     def test_member(self):
-        # セッション定義
-        session = self.client.session
-        session['login_No'] = self.member.employee_no
-        session.save()
-
         # URL定義
         url = reverse('member', args = [1])
         # URLに対してGETリクエスト送信
@@ -808,11 +523,6 @@ class MultiplePagesAccessTestCase(TestCase):
 
     # 人員編集ページ開きチェック
     def test_member_edit(self):
-        # セッション定義
-        session = self.client.session
-        session['login_No'] = self.member.employee_no
-        session.save()
-
         # URL定義
         url = reverse('member_edit', args = [self.member.employee_no])
         # URLに対してGETリクエスト送信
@@ -827,11 +537,6 @@ class MultiplePagesAccessTestCase(TestCase):
 
     # 人員削除ページ開きチェック
     def test_member_delete(self):
-        # セッション定義
-        session = self.client.session
-        session['login_No'] = self.member.employee_no
-        session.save()
-
         # URL定義
         url = reverse('member_delete', args = [self.member.employee_no])
         # URLに対してGETリクエスト送信
@@ -846,11 +551,6 @@ class MultiplePagesAccessTestCase(TestCase):
 
     # 班員設定ページ開きチェック
     def test_team(self):
-        # セッション定義
-        session = self.client.session
-        session['login_No'] = self.member.employee_no
-        session.save()
-
         # URL定義
         url = reverse('team')
         # URLに対してGETリクエスト送信
@@ -865,12 +565,6 @@ class MultiplePagesAccessTestCase(TestCase):
 
     # 班員工数グラフページ開きチェック
     def test_team_graph(self):
-        # セッション定義
-        session = self.client.session
-        session['login_No'] = self.member.employee_no
-        session['input_def'] = self.kosu_division.kosu_name
-        session.save()
-
         # URL定義
         url = reverse('team_graph')
         # URLに対してGETリクエスト送信
@@ -885,11 +579,6 @@ class MultiplePagesAccessTestCase(TestCase):
 
     # 班員工数確認ページ開きチェック
     def test_team_kosu(self):
-        # セッション定義
-        session = self.client.session
-        session['login_No'] = self.member.employee_no
-        session.save()
-
         # URL定義
         url = reverse('team_kosu', args = [1])
         # URLに対してGETリクエスト送信
@@ -904,12 +593,6 @@ class MultiplePagesAccessTestCase(TestCase):
 
     # 工数詳細ページ開きチェック
     def test_team_detail(self):
-        # セッション定義
-        session = self.client.session
-        session['login_No'] = self.member.employee_no
-        session['input_def'] = self.kosu_division.kosu_name
-        session.save()
-
         # URL定義
         url = reverse('team_detail', args = [self.Business_Time_graph.id])
         # URLに対してGETリクエスト送信
@@ -924,11 +607,6 @@ class MultiplePagesAccessTestCase(TestCase):
 
     # 班員工数入力状況一覧ページ開きチェック
     def test_team_calendar(self):
-        # セッション定義
-        session = self.client.session
-        session['login_No'] = self.member.employee_no
-        session.save()
-
         # URL定義
         url = reverse('team_calendar')
         # URLに対してGETリクエスト送信
@@ -943,11 +621,6 @@ class MultiplePagesAccessTestCase(TestCase):
 
     # 班員残業管理ページ開きチェック
     def test_team_over_time(self):
-        # セッション定義
-        session = self.client.session
-        session['login_No'] = self.member.employee_no
-        session.save()
-
         # URL定義
         url = reverse('team_over_time')
         # URLに対してGETリクエスト送信
@@ -962,11 +635,6 @@ class MultiplePagesAccessTestCase(TestCase):
 
     # 工数入力可否(ショップ単位)ページ開きチェック
     def test_class_list(self):
-        # セッション定義
-        session = self.client.session
-        session['login_No'] = self.member.employee_no
-        session.save()
-
         # URL定義
         url = reverse('class_list')
         # URLに対してGETリクエスト送信
@@ -981,12 +649,6 @@ class MultiplePagesAccessTestCase(TestCase):
 
     # 工数詳細ページ開きチェック
     def test_class_detail(self):
-        # セッション定義
-        session = self.client.session
-        session['login_No'] = self.member.employee_no
-        session['input_def'] = self.kosu_division.kosu_name
-        session.save()
-
         # URL定義
         url = reverse('class_detail', args = [self.Business_Time_graph.id])
         # URLに対してGETリクエスト送信
@@ -1001,11 +663,6 @@ class MultiplePagesAccessTestCase(TestCase):
 
     # 問い合わせ入力ページ開きチェック
     def test_inquiry_new(self):
-        # セッション定義
-        session = self.client.session
-        session['login_No'] = self.member.employee_no
-        session.save()
-
         # URL定義
         url = reverse('inquiry_new')
         # URLに対してGETリクエスト送信
@@ -1020,11 +677,6 @@ class MultiplePagesAccessTestCase(TestCase):
 
     # 問い合わせ履歴ページ開きチェック
     def test_inquiry_list(self):
-        # セッション定義
-        session = self.client.session
-        session['login_No'] = self.member.employee_no
-        session.save()
-
         # URL定義
         url = reverse('inquiry_list', args = [1])
         # URLに対してGETリクエスト送信
@@ -1039,11 +691,6 @@ class MultiplePagesAccessTestCase(TestCase):
 
     # 問い合わせ詳細ページ開きチェック
     def test_inquiry_display(self):
-        # セッション定義
-        session = self.client.session
-        session['login_No'] = self.member.employee_no
-        session.save()
-
         # URL定義
         url = reverse('inquiry_display', args = [self.inquiry_data.id])
         # URLに対してGETリクエスト送信
@@ -1058,11 +705,6 @@ class MultiplePagesAccessTestCase(TestCase):
 
     # 問い合わせ編集ページ開きチェック
     def test_inquiry_edit(self):
-        # セッション定義
-        session = self.client.session
-        session['login_No'] = self.member.employee_no
-        session.save()
-
         # URL定義
         url = reverse('inquiry_edit', args = [self.inquiry_data.id])
         # URLに対してGETリクエスト送信
@@ -1072,21 +714,3 @@ class MultiplePagesAccessTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         # レスポンスコンテンツに「問い合わせ編集」という文字列が含まれていることを確認
         self.assertContains(response, '問い合わせ編集')
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

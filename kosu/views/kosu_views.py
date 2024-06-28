@@ -2459,7 +2459,7 @@ def input(request):
     #工数データがある場合の処理
     if obj_filter.count() != 0:
       # 工数データ取得
-      obj_get = Business_Time_graph.objects.get(employee_no3 = request.session.get('login_No', None),\
+      obj_get = Business_Time_graph.objects.get(employee_no3 = request.session['login_No'],\
                                                 work_day2 = request.session.get('day', kosu_today))
 
       # 休憩データが空の場合の処理
