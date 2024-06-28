@@ -23,13 +23,11 @@
   </form>
   <table class="table table-custom">
     {% for i in data %}
-      {% if i.employee_no != 11111 %}
-        <tr>
-          <td>{{i}}</td>
-          <td><a href="{% url 'member_edit' i.employee_no %}" class="text-warning">編集</a></td>
-          <td><a href="{% url 'member_delete' i.employee_no %}" class="text-warning">削除</a></td>
-        <tr>
-      {% endif %}
+      <tr>
+        <td>{{i}}</td>
+        <td><a href="{% url 'member_edit' i.employee_no %}" class="text-warning">編集</a></td>
+        <td><a href="{% url 'member_delete' i.employee_no %}" class="text-warning">削除</a></td>
+      <tr>
     {% endfor %}
     </table>
     <ul class="pagination justify-content-center">

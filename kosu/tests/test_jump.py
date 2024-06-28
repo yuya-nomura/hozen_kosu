@@ -706,7 +706,7 @@ class Page_jump(TestCase):
         self.assertContains(response, '<a href="' + reverse('detail', args=[self.Business_Time_graph.id]) + '">詳細</a>', html=True)
         # ボタンを押すシミュレーション
         response = self.client.get(reverse('detail', args = [self.Business_Time_graph.id]))
-        
+
         # リダイレクトが成功し、ステータスコードが200であることを確認
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'kosu/detail.html')
@@ -749,7 +749,7 @@ class Page_jump(TestCase):
 
     # 工数削除から工数履歴へジャンプテスト
     def test_delete_kosu_list_jump(self):
-        # 工数詳細ページにアクセス
+        # 工数削除ページにアクセス
         response = self.client.get(reverse('delete', args=[self.Business_Time_graph.id]))
         self.assertEqual(response.status_code, 200)
 
@@ -817,7 +817,7 @@ class Page_jump(TestCase):
 
     # 勤務入力から工数MENUへジャンプテスト
     def test_schedule_kosu_MENU_jump(self):
-        # 工数集計ページにアクセス
+        # 勤務入力ページにアクセス
         response = self.client.get(reverse('schedule'))
         self.assertEqual(response.status_code, 200)
 
@@ -851,7 +851,7 @@ class Page_jump(TestCase):
 
     # 残業管理から工数MENUへジャンプテスト
     def test_over_time_kosu_MENU_jump(self):
-        # 工数集計ページにアクセス
+        # 残業管理ページにアクセス
         response = self.client.get(reverse('over_time'))
         self.assertEqual(response.status_code, 200)
 
@@ -883,8 +883,767 @@ class Page_jump(TestCase):
 
 
 
+    # 工数区分定義確認から工数区分定義MENUへジャンプテスト
+    def test_kosu_def_def_MENU_jump(self):
+        # 工数区分定義確認ページにアクセス
+        response = self.client.get(reverse('kosu_def'))
+        self.assertEqual(response.status_code, 200)
+
+        # HTMLに含まれるボタンが正しく設定されているかを確認
+        self.assertContains(response, '<a href="' + reverse('def_main') + '" class="text-success">工数区分定義MENUへ</a>', html=True)
+        # ボタンを押すシミュレーション
+        response = self.client.get(reverse('def_main'))
+        
+        # リダイレクトが成功し、ステータスコードが200であることを確認
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'kosu/def_main.html')
 
 
+
+    # 工数区分定義MENUから工数区分定義切り替えへジャンプテスト
+    def test_def_MENU_def_Ver_jump(self):
+        # 工数区分定義MENUページにアクセス
+        response = self.client.get(reverse('def_main'))
+        self.assertEqual(response.status_code, 200)
+
+        # HTMLに含まれるボタンが正しく設定されているかを確認
+        self.assertContains(response, 'onclick="location.href=\'/kosu_Ver\'"')
+        # ボタンを押すシミュレーション
+        response = self.client.get(reverse('kosu_Ver'))
+
+        # リダイレクトが成功し、ステータスコードが200であることを確認
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'kosu/kosu_Ver.html')
+
+
+
+    # 工数区分定義切り替えから工数区分定義MENUへジャンプテスト
+    def test_def_Ver_def_MENU_jump(self):
+        # 工数区分定義確認ページにアクセス
+        response = self.client.get(reverse('kosu_Ver'))
+        self.assertEqual(response.status_code, 200)
+
+        # HTMLに含まれるボタンが正しく設定されているかを確認
+        self.assertContains(response, '<a href="' + reverse('def_main') + '" class="text-success">工数区分定義MENUへ</a>', html=True)
+        # ボタンを押すシミュレーション
+        response = self.client.get(reverse('def_main'))
+        
+        # リダイレクトが成功し、ステータスコードが200であることを確認
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'kosu/def_main.html')
+
+
+
+    # 工数区分定義MENUから工数区分定義一覧へジャンプテスト
+    def test_def_MENU_def_list_jump(self):
+        # 工数区分定義MENUページにアクセス
+        response = self.client.get(reverse('def_main'))
+        self.assertEqual(response.status_code, 200)
+
+        # HTMLに含まれるボタンが正しく設定されているかを確認
+        self.assertContains(response, 'onclick="location.href=\'/def_list/1\'"')
+        # ボタンを押すシミュレーション
+        response = self.client.get(reverse('def_list', args = [1]))
+
+        # リダイレクトが成功し、ステータスコードが200であることを確認
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'kosu/def_list.html')
+
+
+
+    # 工数区分定義一覧から工数区分定義MENUへジャンプテスト
+    def test_def_list_def_MENU_jump(self):
+        # 工数区分定義一覧ページにアクセス
+        response = self.client.get(reverse('def_list', args = [1]))
+        self.assertEqual(response.status_code, 200)
+
+        # HTMLに含まれるボタンが正しく設定されているかを確認
+        self.assertContains(response, '<a href="' + reverse('def_main') + '" class="text-success">工数区分定義MENUへ</a>', html=True)
+        # ボタンを押すシミュレーション
+        response = self.client.get(reverse('def_main'))
+        
+        # リダイレクトが成功し、ステータスコードが200であることを確認
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'kosu/def_main.html')
+
+
+
+    # 工数区分定義一覧から工数区分定義新規作成へジャンプテスト
+    def test_def_list_def_new_jump(self):
+        # 工数区分定義一覧ページにアクセス
+        response = self.client.get(reverse('def_list', args = [1]))
+        self.assertEqual(response.status_code, 200)
+
+        # HTMLに含まれるボタンが正しく設定されているかを確認
+        self.assertContains(response, '<a href="' + reverse('def_new') + '" class="text-success">新規登録</a>', html=True)
+        # ボタンを押すシミュレーション
+        response = self.client.get(reverse('def_new'))
+        
+        # リダイレクトが成功し、ステータスコードが200であることを確認
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'kosu/def_new.html')
+
+
+
+    # 工数定義区分新規作成から工数区分定義一覧へジャンプテスト
+    def test_def_new_def_list_jump(self):
+        # 工数定義区分新規作成ページにアクセス
+        response = self.client.get(reverse('def_new'))
+        self.assertEqual(response.status_code, 200)
+
+        # HTMLに含まれるボタンが正しく設定されているかを確認
+        self.assertContains(response, '<a href="' + reverse('def_list', args = [1]) + '" class="text-success">一覧へ戻る</a>', html=True)
+        # ボタンを押すシミュレーション
+        response = self.client.get(reverse('def_list', args = [1]))
+
+        # リダイレクトが成功し、ステータスコードが200であることを確認
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'kosu/def_list.html')
+
+
+
+    # 工数区分定義一覧から工数区分定義編集へジャンプテスト
+    def test_def_list_def_edit_jump(self):
+        # 工数区分定義一覧ページにアクセス
+        response = self.client.get(reverse('def_list', args = [1]))
+        self.assertEqual(response.status_code, 200)
+
+        # HTMLに含まれるボタンが正しく設定されているかを確認
+        self.assertContains(response, '<a href="' + reverse('def_edit', args=[self.kosu_division.id]) + '" class="text-success">編集</a>', html=True)
+        # ボタンを押すシミュレーション
+        response = self.client.get(reverse('def_edit', args = [self.kosu_division.id]))
+
+        # リダイレクトが成功し、ステータスコードが200であることを確認
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'kosu/def_edit.html')
+
+
+
+    # 工数定義区分編集から工数区分定義一覧へジャンプテスト
+    def test_def_edit_def_list_jump(self):
+        # 工数定義区分編集ページにアクセス
+        response = self.client.get(reverse('def_edit', args = [self.kosu_division.id]))
+        self.assertEqual(response.status_code, 200)
+
+        # HTMLに含まれるボタンが正しく設定されているかを確認
+        self.assertContains(response, '<a href="' + reverse('def_list', args = [1]) + '" class="text-success">一覧へ戻る</a>', html=True)
+        # ボタンを押すシミュレーション
+        response = self.client.get(reverse('def_list', args = [1]))
+
+        # リダイレクトが成功し、ステータスコードが200であることを確認
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'kosu/def_list.html')
+
+
+
+    # 工数区分定義一覧から工数区分定義削除へジャンプテスト
+    def test_def_list_def_delete_jump(self):
+        # 工数履歴ページにアクセス
+        response = self.client.get(reverse('def_list', args = [1]))
+        self.assertEqual(response.status_code, 200)
+
+        # HTMLに含まれるボタンが正しく設定されているかを確認
+        self.assertContains(response, '<a href="' + reverse('def_delete', args=[self.kosu_division.id]) + '" class="text-success">削除</a>', html=True)
+        # ボタンを押すシミュレーション
+        response = self.client.get(reverse('def_delete', args = [self.kosu_division.id]))
+        
+        # リダイレクトが成功し、ステータスコードが200であることを確認
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'kosu/def_delete.html')
+
+
+
+    # 工数定義区分削除から工数区分定義一覧へジャンプテスト
+    def test_def_delete_def_list_jump(self):
+        # 工数定義区分編集ページにアクセス
+        response = self.client.get(reverse('def_delete', args = [self.kosu_division.id]))
+        self.assertEqual(response.status_code, 200)
+
+        # HTMLに含まれるボタンが正しく設定されているかを確認
+        self.assertContains(response, '<a href="' + reverse('def_list', args = [1]) + '" class="text-success">一覧へ戻る</a>', html=True)
+        # ボタンを押すシミュレーション
+        response = self.client.get(reverse('def_list', args = [1]))
+
+        # リダイレクトが成功し、ステータスコードが200であることを確認
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'kosu/def_list.html')
+
+
+
+    # 人員MENUから人員新規作成へジャンプテスト
+    def test_member_MENU_member_new_jump(self):
+        # 人員MENUページにアクセス
+        response = self.client.get(reverse('member_main'))
+        self.assertEqual(response.status_code, 200)
+
+        # HTMLに含まれるボタンが正しく設定されているかを確認
+        self.assertContains(response, 'onclick="location.href=\'/new\'"')
+        # ボタンを押すシミュレーション
+        response = self.client.get(reverse('member_new'))
+
+        # リダイレクトが成功し、ステータスコードが200であることを確認
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'kosu/member_new.html')
+
+
+
+    # 人員新規作成から人員MENUへジャンプテスト
+    def test_member_new_member_MENU_jump(self):
+        # 人員新規作成ページにアクセス
+        response = self.client.get(reverse('member_new'))
+        self.assertEqual(response.status_code, 200)
+
+        # HTMLに含まれるボタンが正しく設定されているかを確認
+        self.assertContains(response, '<a href="' + reverse('member_main') + '" class="text-warning">人員MENUへ</a>', html=True)
+        # ボタンを押すシミュレーション
+        response = self.client.get(reverse('member_main'))
+        
+        # リダイレクトが成功し、ステータスコードが200であることを確認
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'kosu/member_main.html')
+
+
+
+    # 人員新規作成から人員一覧へジャンプテスト
+    def test_member_new_member_list_jump(self):
+        # 人員新規作成ページにアクセス
+        response = self.client.get(reverse('member_new'))
+        self.assertEqual(response.status_code, 200)
+
+        # HTMLに含まれるボタンが正しく設定されているかを確認
+        self.assertContains(response, '<a href="' + reverse('member', args = [1]) + '" class="text-warning">人員一覧へ</a>', html=True)
+        # ボタンを押すシミュレーション
+        response = self.client.get(reverse('member', args = [1]))
+        
+        # リダイレクトが成功し、ステータスコードが200であることを確認
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'kosu/member.html')
+
+
+
+    # 人員MENUから人員一覧へジャンプテスト
+    def test_member_MENU_member_list_jump(self):
+        # 人員MENUページにアクセス
+        response = self.client.get(reverse('member_main'))
+        self.assertEqual(response.status_code, 200)
+
+        # HTMLに含まれるボタンが正しく設定されているかを確認
+        self.assertContains(response, 'onclick="location.href=\'/member/1\'"')
+        # ボタンを押すシミュレーション
+        response = self.client.get(reverse('member', args = [1]))
+
+        # リダイレクトが成功し、ステータスコードが200であることを確認
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'kosu/member.html')
+
+
+
+    # 人員一覧から人員MENUへジャンプテスト
+    def test_member_list_member_MENU_jump(self):
+        # 人員新規作成ページにアクセス
+        response = self.client.get(reverse('member', args = [1]))
+        self.assertEqual(response.status_code, 200)
+
+        # HTMLに含まれるボタンが正しく設定されているかを確認
+        self.assertContains(response, '<a href="' + reverse('member_main') + '" class="text-warning">人員MENUへ</a>', html=True)
+        # ボタンを押すシミュレーション
+        response = self.client.get(reverse('member_main'))
+        
+        # リダイレクトが成功し、ステータスコードが200であることを確認
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'kosu/member_main.html')
+
+
+
+    # 人員一覧から人員新規作成へジャンプテスト
+    def test_member_list_member_new_jump(self):
+        # 人員一覧ページにアクセス
+        response = self.client.get(reverse('member', args = [1]))
+        self.assertEqual(response.status_code, 200)
+
+        # HTMLに含まれるボタンが正しく設定されているかを確認
+        self.assertContains(response, '<a href="' + reverse('member_new') + '" class="text-warning">新規登録</a>', html=True)
+        # ボタンを押すシミュレーション
+        response = self.client.get(reverse('member_new'))
+        
+        # リダイレクトが成功し、ステータスコードが200であることを確認
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'kosu/member_new.html')
+
+
+
+    # 人員一覧から人員編集へジャンプテスト
+    def test_member_list_member_edit_jump(self):
+        # 人員一覧ページにアクセス
+        response = self.client.get(reverse('member', args = [1]))
+        self.assertEqual(response.status_code, 200)
+
+        # HTMLに含まれるボタンが正しく設定されているかを確認
+        self.assertContains(response, '<a href="' + reverse('member_edit', args=[self.member.employee_no]) + '" class="text-warning">編集</a>', html=True)
+        # ボタンを押すシミュレーション
+        response = self.client.get(reverse('member_edit', args=[self.member.employee_no]))
+
+        # リダイレクトが成功し、ステータスコードが200であることを確認
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'kosu/member_edit.html')
+
+
+
+    # 人員編集から人員一覧へジャンプテスト
+    def test_member_edit_member_list_jump(self):
+        # 人員編集ページにアクセス
+        response = self.client.get(reverse('member_edit', args = [self.member.employee_no]))
+        self.assertEqual(response.status_code, 200)
+
+        # HTMLに含まれるボタンが正しく設定されているかを確認
+        self.assertContains(response, '<a href="' + reverse('member', args = [1]) + '" class="text-warning">一覧へ戻る</a>', html=True)
+        # ボタンを押すシミュレーション
+        response = self.client.get(reverse('member', args = [1]))
+
+        # リダイレクトが成功し、ステータスコードが200であることを確認
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'kosu/member.html')
+
+
+
+    # 人員一覧から人員削除へジャンプテスト
+    def test_member_list_member_delete_jump(self):
+        # 人員一覧ページにアクセス
+        response = self.client.get(reverse('member', args = [1]))
+        self.assertEqual(response.status_code, 200)
+
+        # HTMLに含まれるボタンが正しく設定されているかを確認
+        self.assertContains(response, '<a href="' + reverse('member_delete', args=[self.member.employee_no]) + '" class="text-warning">削除</a>', html=True)
+        # ボタンを押すシミュレーション
+        response = self.client.get(reverse('member_delete', args=[self.member.employee_no]))
+        
+        # リダイレクトが成功し、ステータスコードが200であることを確認
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'kosu/member_delete.html')
+
+
+
+    # 人員削除から人員一覧へジャンプテスト
+    def test_member_delete_member_list_jump(self):
+        # 人員編集ページにアクセス
+        response = self.client.get(reverse('member_delete', args = [self.member.employee_no]))
+        self.assertEqual(response.status_code, 200)
+
+        # HTMLに含まれるボタンが正しく設定されているかを確認
+        self.assertContains(response, '<a href="' + reverse('member', args = [1]) + '" class="text-warning">一覧へ戻る</a>', html=True)
+        # ボタンを押すシミュレーション
+        response = self.client.get(reverse('member', args = [1]))
+
+        # リダイレクトが成功し、ステータスコードが200であることを確認
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'kosu/member.html')
+
+
+
+    # 班員MENUから班員登録へジャンプテスト
+    def test_team_MENU_team_jump(self):
+        # 班員MENUページにアクセス
+        response = self.client.get(reverse('team_main'))
+        self.assertEqual(response.status_code, 200)
+
+        # HTMLに含まれるボタンが正しく設定されているかを確認
+        self.assertContains(response, 'onclick="location.href=\'/team\'"')
+        # ボタンを押すシミュレーション
+        response = self.client.get(reverse('team'))
+
+        # リダイレクトが成功し、ステータスコードが200であることを確認
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'kosu/team.html')
+
+
+
+    # 班員登録から班員員MENUへジャンプテスト
+    def test_team_team_MENU_jump(self):
+        # 班員登録ページにアクセス
+        response = self.client.get(reverse('team'))
+        self.assertEqual(response.status_code, 200)
+
+        # HTMLに含まれるボタンが正しく設定されているかを確認
+        self.assertContains(response, '<a href="' + reverse('team_main') + '" class="text-danger">班員MENUへ</a>', html=True)
+        # ボタンを押すシミュレーション
+        response = self.client.get(reverse('team_main'))
+        
+        # リダイレクトが成功し、ステータスコードが200であることを確認
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'kosu/team_main.html')
+
+
+
+    # 班員MENUから班員工数グラフへジャンプテスト
+    def test_team_MENU_team_graph_jump(self):
+        # 班員MENUページにアクセス
+        response = self.client.get(reverse('team_main'))
+        self.assertEqual(response.status_code, 200)
+
+        # HTMLに含まれるボタンが正しく設定されているかを確認
+        self.assertContains(response, 'onclick="location.href=\'/team_graph\'"')
+        # ボタンを押すシミュレーション
+        response = self.client.get(reverse('team_graph'))
+
+        # リダイレクトが成功し、ステータスコードが200であることを確認
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'kosu/team_graph.html')
+    
+
+
+    # 班員工数グラフから班員MENUへジャンプテスト
+    def test_team_graph_team_MENU_jump(self):
+        # 班員工数グラフページにアクセス
+        response = self.client.get(reverse('team_graph'))
+        self.assertEqual(response.status_code, 200)
+
+        # HTMLに含まれるボタンが正しく設定されているかを確認
+        self.assertContains(response, '<a href="' + reverse('team_main') + '" class="text-danger">班員MENUへ</a>', html=True)
+        # ボタンを押すシミュレーション
+        response = self.client.get(reverse('team_main'))
+        
+        # リダイレクトが成功し、ステータスコードが200であることを確認
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'kosu/team_main.html')
+
+
+
+    # 班員工数グラフから班員工数詳細へジャンプテスト
+    def test_team_graph_team_kosu_jump(self):
+        # 班員工数グラフページにアクセス
+        response = self.client.get(reverse('team_graph'))
+        self.assertEqual(response.status_code, 200)
+
+        # HTMLに含まれるボタンが正しく設定されているかを確認
+        self.assertContains(response, '<a href="' + reverse('team_kosu', args = [1]) + '" class="text-danger">班員工数詳細へ</a>', html=True)
+        # ボタンを押すシミュレーション
+        response = self.client.get(reverse('team_kosu', args = [1]))
+        
+        # リダイレクトが成功し、ステータスコードが200であることを確認
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'kosu/team_kosu.html')
+
+
+
+    # 班員MENUから班員工数詳細へジャンプテスト
+    def test_team_MENU_team_kosu_jump(self):
+        # 班員MENUページにアクセス
+        response = self.client.get(reverse('team_main'))
+        self.assertEqual(response.status_code, 200)
+
+        # HTMLに含まれるボタンが正しく設定されているかを確認
+        self.assertContains(response, 'onclick="location.href=\'/team_kosu/1\'"')
+        # ボタンを押すシミュレーション
+        response = self.client.get(reverse('team_kosu', args = [1]))
+
+        # リダイレクトが成功し、ステータスコードが200であることを確認
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'kosu/team_kosu.html')
+
+
+
+    # 班員工数詳細から班員MENUへジャンプテスト
+    def test_team_kosu_team_MENU_jump(self):
+        # 班員工数詳細一覧ページにアクセス
+        response = self.client.get(reverse('team_kosu', args = [1]))
+        self.assertEqual(response.status_code, 200)
+
+        # HTMLに含まれるボタンが正しく設定されているかを確認
+        self.assertContains(response, '<a href="' + reverse('team_main') + '" class="text-danger">班員MENUへ</a>', html=True)
+        # ボタンを押すシミュレーション
+        response = self.client.get(reverse('team_main'))
+        
+        # リダイレクトが成功し、ステータスコードが200であることを確認
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'kosu/team_main.html')
+
+
+
+    # 班員工数詳細から班員工数グラフへジャンプテスト
+    def test_team_kosu_team_graph_jump(self):
+        # 班員工数詳細一覧ページにアクセス
+        response = self.client.get(reverse('team_kosu', args = [1]))
+        self.assertEqual(response.status_code, 200)
+
+        # HTMLに含まれるボタンが正しく設定されているかを確認
+        self.assertContains(response, '<a href="' + reverse('team_graph') + '" class="text-danger">班員工数グラフへ</a>', html=True)
+        # ボタンを押すシミュレーション
+        response = self.client.get(reverse('team_graph'))
+
+        # リダイレクトが成功し、ステータスコードが200であることを確認
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'kosu/team_graph.html')
+
+
+
+    # 班員工数詳細から工数詳細へジャンプテスト
+    def test_team_kosu_team_detail_jump(self):
+        # 班員工数詳細ページにアクセス
+        response = self.client.get(reverse('team_kosu', args = [1]))
+        self.assertEqual(response.status_code, 200)
+
+        # HTMLに含まれるボタンが正しく設定されているかを確認
+        self.assertContains(response, '<a href="' + reverse('team_detail', args=[self.Business_Time_graph.id]) + '" >詳細</a>', html=True)
+        # ボタンを押すシミュレーション
+        response = self.client.get(reverse('team_detail', args=[self.Business_Time_graph.id]))
+
+        # リダイレクトが成功し、ステータスコードが200であることを確認
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'kosu/team_detail.html')
+
+
+
+    # 工数詳細から班員工数詳細へジャンプテスト
+    def test_team_detail_team_kosu_jump(self):
+        # 工数詳細ページにアクセス
+        response = self.client.get(reverse('team_detail', args = [self.Business_Time_graph.id]))
+        self.assertEqual(response.status_code, 200)
+
+        # HTMLに含まれるボタンが正しく設定されているかを確認
+        self.assertContains(response, '<a href="' + reverse('team_kosu', args = [1]) + '" class="text-danger">班員工数詳細へ</a>', html=True)
+        # ボタンを押すシミュレーション
+        response = self.client.get(reverse('team_kosu', args = [1]))
+
+        # リダイレクトが成功し、ステータスコードが200であることを確認
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'kosu/team_kosu.html')
+
+
+
+    # 班員MENUから班員工数入力状況一覧へジャンプテスト
+    def test_team_MENU_team_calendar_jump(self):
+        # 班員MENUページにアクセス
+        response = self.client.get(reverse('team_main'))
+        self.assertEqual(response.status_code, 200)
+
+        # HTMLに含まれるボタンが正しく設定されているかを確認
+        self.assertContains(response, 'onclick="location.href=\'/team_calendar\'"')
+        # ボタンを押すシミュレーション
+        response = self.client.get(reverse('team_calendar'))
+
+        # リダイレクトが成功し、ステータスコードが200であることを確認
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'kosu/team_calendar.html')
+
+
+
+    # 班員工数入力状況一覧から班員MENUへジャンプテスト
+    def test_team_calendar_team_MENU_jump(self):
+        # 班員工数詳細一覧ページにアクセス
+        response = self.client.get(reverse('team_calendar'))
+        self.assertEqual(response.status_code, 200)
+
+        # HTMLに含まれるボタンが正しく設定されているかを確認
+        self.assertContains(response, '<a href="' + reverse('team_main') + '" class="text-danger">班員MENUへ</a>', html=True)
+        # ボタンを押すシミュレーション
+        response = self.client.get(reverse('team_main'))
+        
+        # リダイレクトが成功し、ステータスコードが200であることを確認
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'kosu/team_main.html')
+
+
+
+    # 班員MENUから班員残業管理へジャンプテスト
+    def test_team_MENU_team_over_time_jump(self):
+        # 班員MENUページにアクセス
+        response = self.client.get(reverse('team_main'))
+        self.assertEqual(response.status_code, 200)
+
+        # HTMLに含まれるボタンが正しく設定されているかを確認
+        self.assertContains(response, 'onclick="location.href=\'/team_over_time\'"')
+        # ボタンを押すシミュレーション
+        response = self.client.get(reverse('team_over_time'))
+
+        # リダイレクトが成功し、ステータスコードが200であることを確認
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'kosu/team_over_time.html')
+
+
+
+    # 班員工数入力状況一覧から班員MENUへジャンプテスト
+    def test_team_over_time_team_MENU_jump(self):
+        # 班員残業管理ページにアクセス
+        response = self.client.get(reverse('team_over_time'))
+        self.assertEqual(response.status_code, 200)
+
+        # HTMLに含まれるボタンが正しく設定されているかを確認
+        self.assertContains(response, '<a href="' + reverse('team_main') + '" class="text-danger">班員MENUへ</a>', html=True)
+        # ボタンを押すシミュレーション
+        response = self.client.get(reverse('team_main'))
+
+        # リダイレクトが成功し、ステータスコードが200であることを確認
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'kosu/team_main.html')
+
+
+
+    # 班員MENUから工数入力可否(ショップ単位)へジャンプテスト
+    def test_team_MENU_class_list_jump(self):
+        # 班員MENUページにアクセス
+        response = self.client.get(reverse('team_main'))
+        self.assertEqual(response.status_code, 200)
+
+        # HTMLに含まれるボタンが正しく設定されているかを確認
+        self.assertContains(response, 'onclick="location.href=\'/class_list\'"')
+        # ボタンを押すシミュレーション
+        response = self.client.get(reverse('class_list'))
+
+        # リダイレクトが成功し、ステータスコードが200であることを確認
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'kosu/class_list.html')
+
+
+
+    # 工数入力可否(ショップ単位)から班員MENUへジャンプテスト
+    def test_class_list_time_team_MENU_jump(self):
+        # 工数入力可否(ショップ単位)ページにアクセス
+        response = self.client.get(reverse('class_list'))
+        self.assertEqual(response.status_code, 200)
+
+        # HTMLに含まれるボタンが正しく設定されているかを確認
+        self.assertContains(response, '<a href="' + reverse('team_main') + '" class="text-danger">班員MENUへ</a>', html=True)
+        # ボタンを押すシミュレーション
+        response = self.client.get(reverse('team_main'))
+        
+        # リダイレクトが成功し、ステータスコードが200であることを確認
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'kosu/team_main.html')
+
+
+
+    # 問い合わせMENUから問い合わせ入力へジャンプテスト
+    def test_inquiry_MENU_inquiry_new_jump(self):
+        # 問い合わせMENUページにアクセス
+        response = self.client.get(reverse('inquiry_main'))
+        self.assertEqual(response.status_code, 200)
+
+        # HTMLに含まれるボタンが正しく設定されているかを確認
+        self.assertContains(response, 'onclick="location.href=\'/inquiry_new\'"')
+        # ボタンを押すシミュレーション
+        response = self.client.get(reverse('inquiry_new'))
+
+        # リダイレクトが成功し、ステータスコードが200であることを確認
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'kosu/inquiry_new.html')
+
+
+
+    # 問い合わせ入力から問い合わせMENUへジャンプテスト
+    def test_inquiry_new_inquiry_MENU_jump(self):
+        # 工数入力可否(ショップ単位)ページにアクセス
+        response = self.client.get(reverse('inquiry_new'))
+        self.assertEqual(response.status_code, 200)
+
+        # HTMLに含まれるボタンが正しく設定されているかを確認
+        self.assertContains(response, '<a href="' + reverse('inquiry_main') + '" class="text-pink">問い合わせMENUへ</a>', html=True)
+        # ボタンを押すシミュレーション
+        response = self.client.get(reverse('inquiry_main'))
+        
+        # リダイレクトが成功し、ステータスコードが200であることを確認
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'kosu/inquiry_main.html')
+
+
+
+    # 問い合わせMENUから問い合わせ履歴へジャンプテスト
+    def test_inquiry_MENU_inquiry_list_jump(self):
+        # 問い合わせMENUページにアクセス
+        response = self.client.get(reverse('inquiry_main'))
+        self.assertEqual(response.status_code, 200)
+
+        # HTMLに含まれるボタンが正しく設定されているかを確認
+        self.assertContains(response, 'onclick="location.href=\'/inquiry_list/1\'"')
+        # ボタンを押すシミュレーション
+        response = self.client.get(reverse('inquiry_list', args = [1]))
+
+        # リダイレクトが成功し、ステータスコードが200であることを確認
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'kosu/inquiry_list.html')
+
+
+
+    # 問い合わせ履歴から問い合わせMENUへジャンプテスト
+    def test_inquiry_list_inquiry_MENU_jump(self):
+        # 問い合わせ履歴ページにアクセス
+        response = self.client.get(reverse('inquiry_list', args = [1]))
+        self.assertEqual(response.status_code, 200)
+
+        # HTMLに含まれるボタンが正しく設定されているかを確認
+        self.assertContains(response, '<a href="' + reverse('inquiry_main') + '" class="text-pink">問い合わせMENUへ</a>', html=True)
+        # ボタンを押すシミュレーション
+        response = self.client.get(reverse('inquiry_main'))
+        
+        # リダイレクトが成功し、ステータスコードが200であることを確認
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'kosu/inquiry_main.html')
+
+
+
+    # 問い合わせ履歴から問い合わせ表示へジャンプテスト
+    def test_inquiry_list_inquiry_display_jump(self):
+        # 問い合わせ履歴ページにアクセス
+        response = self.client.get(reverse('inquiry_list', args = [1]))
+        self.assertEqual(response.status_code, 200)
+
+        # HTMLに含まれるボタンが正しく設定されているかを確認
+        self.assertContains(response, '<a href="' + reverse('inquiry_display', args=[self.inquiry_data.id]) + '" class="text-pink">' + str(self.inquiry_data.name) + '</a>', html=True)
+        # ボタンを押すシミュレーション
+        response = self.client.get(reverse('inquiry_display', args=[self.inquiry_data.id]))
+        
+        # リダイレクトが成功し、ステータスコードが200であることを確認
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'kosu/inquiry_display.html')
+
+
+
+    # 問い合わせ表示から問い合わせ履歴へジャンプテスト
+    def test_inquiry_display_inquiry_list_jump(self):
+        # 問い合わせ表示ページにアクセス
+        response = self.client.get(reverse('inquiry_display', args=[self.inquiry_data.id]))
+        self.assertEqual(response.status_code, 200)
+
+        # HTMLに含まれるボタンが正しく設定されているかを確認
+        self.assertContains(response, '<a href="' + reverse('inquiry_list', args = [1]) + '" class="text-pink">お問い合わせ履歴へ</a>', html=True)
+        # ボタンを押すシミュレーション
+        response = self.client.get(reverse('inquiry_list', args = [1]))
+
+        # リダイレクトが成功し、ステータスコードが200であることを確認
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'kosu/inquiry_list.html')
+
+
+
+    # 問い合わせ表示から問い合わせ編集へジャンプテスト
+    def test_inquiry_display_inquiry_edit(self):
+        # 問い合わせ表示ページにアクセス
+        response = self.client.get(reverse('inquiry_display', args=[self.inquiry_data.id]))
+        self.assertEqual(response.status_code, 200)
+
+        # 編集ボタンを押した場合のPOSTリクエスト
+        response = self.client.post(reverse('inquiry_display', args=[self.inquiry_data.id]), {
+            'Registration': '編集'
+        })
+
+        # 問い合わせ編集ページにリダイレクトされることを確認
+        self.assertRedirects(response, reverse('inquiry_edit', args=[self.inquiry_data.id]))
+
+
+
+    # 問い合わせ履歴から問い合わせ入力へジャンプテスト
+    def test_inquiry_list_inquiry_new_jump(self):
+        # 問い合わせ履歴ページにアクセス
+        response = self.client.get(reverse('inquiry_list', args = [1]))
+        self.assertEqual(response.status_code, 200)
+
+        # HTMLに含まれるボタンが正しく設定されているかを確認
+        self.assertContains(response, '<a class="text-pink" href="' + reverse('inquiry_new') + '" >問い合わせ入力</a>', html=True)
+        # ボタンを押すシミュレーション
+        response = self.client.get(reverse('inquiry_new'))
+        
+        # リダイレクトが成功し、ステータスコードが200であることを確認
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'kosu/inquiry_new.html')
 
 
 

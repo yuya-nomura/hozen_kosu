@@ -12,7 +12,7 @@
 </head>
 <body class="container">
   <h1 class="display-1 text-pink">{{title}}</h1>
-  <p class="h6"><a class="text-pink" href="{% url 'inquiry_main' %}">問い合わせMENUへ</a></p>
+  <p class="h6"><a href="{% url 'inquiry_main' %}" class="text-pink">問い合わせMENUへ</a></p>
   <p>　</p>
   <form action="{% url 'inquiry_new' %}" method="post">
     {% csrf_token %}

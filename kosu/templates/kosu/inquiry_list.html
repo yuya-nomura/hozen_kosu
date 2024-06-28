@@ -41,7 +41,7 @@
     {% for i in data %}
       <tr>
         <td>{{i.id}}</td>
-        <td><a class="text-pink" href="{% url 'inquiry_display' i.id %}">{{i.name}}</a></td>
+        <td><a href="{% url 'inquiry_display' i.id %}" class="text-pink">{{i.name}}</a></td>
         <td>{{i.content_choice}}</td>
         <td>{{i.inquiry|truncatechars:4}}</td>
         {% if i.answer != None %}
