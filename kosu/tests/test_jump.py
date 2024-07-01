@@ -545,6 +545,47 @@ class Page_jump(TestCase):
 
 
     # 工数登録から当日休憩変更へジャンプテスト
+    def test_input_kosu_def_time(self):
+        # 工数登録ページにアクセス
+        response = self.client.get(reverse('input'))
+        self.assertEqual(response.status_code, 200)
+
+        # 定義確認を押す
+        response = self.client.post(reverse('input'), {
+            'tyoku2': self.Business_Time_graph.tyoku2,
+            'work': self.Business_Time_graph.work_time,
+            'kosu_def_list': 'A',
+            'work_detail': 'テスト',
+            'over_work': self.Business_Time_graph.over_time,
+            'start_time': '20:00',
+            'end_time': '21:00',
+            'tomorrow_check': False,
+            'def_find': '定義確認',
+        })
+
+        # 定義確認を押した後に 'today_break_time' ページにリダイレクトされることを確認
+        self.assertRedirects(response, reverse('kosu_def'))
+
+
+
+    # 工数区分定義確認から工数登録へジャンプテスト
+    def test_kosu_def_input_jump(self):
+        # 工数区分定義確認ページにアクセス
+        response = self.client.get(reverse('kosu_def'))
+        self.assertEqual(response.status_code, 200)
+
+        # HTMLに含まれるボタンが正しく設定されているかを確認
+        self.assertContains(response, '<a href="' + reverse('input') + '" >工数入力へ</a>', html=True)
+        # ボタンを押すシミュレーション
+        response = self.client.get(reverse('input'))
+        
+        # リダイレクトが成功し、ステータスコードが200であることを確認
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'kosu/input.html')
+
+
+
+    # 工数登録から当日休憩変更へジャンプテスト
     def test_input_today_break_time(self):
         # 工数登録ページにアクセス
         response = self.client.get(reverse('input'))

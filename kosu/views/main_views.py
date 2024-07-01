@@ -1026,40 +1026,67 @@ def administrator_menu(request):
       # 読み込み予定データと同一の従業員番号のデータが存在するか確認
       member_data_filter = member.objects.filter(employee_no = ws.cell(row = i + 1, column = 1).value)
 
-      # 読み込み予定データと同一の従業員番号のデータが存在する場合の処理
-      if member_data_filter.count() != 0:
+      # 上書きチェックONの場合の処理
+      if ('overwrite_check' in request.POST):
+        # 読み込み予定データと同一の従業員番号のデータが存在する場合の処理
+        if member_data_filter.count() != 0:
+          # 読み込み予定データと同一の従業員番号のデータを取得
+          member_data_get = member.objects.get(employee_no = ws.cell(row = i + 1, column = 1).value)
+          # 読み込み予定データと同一の従業員番号のデータを削除
+          member_data_get.delete()
 
-        # 読み込み予定データと同一の従業員番号のデータを取得
-        member_data_get = member.objects.get(employee_no = ws.cell(row = i + 1, column = 1).value)
-        
-        # 読み込み予定データと同一の従業員番号のデータを削除
-        member_data_get.delete()
+        # Excelからデータを読み込み
+        new_data = member(employee_no = ws.cell(row = i + 1, column = 1).value, \
+                          name = ws.cell(row = i + 1, column = 2).value, \
+                          shop = ws.cell(row = i + 1, column = 3).value, \
+                          authority = ws.cell(row = i + 1, column = 4).value, \
+                          administrator = ws.cell(row = i + 1, column = 5).value, \
+                          break_time1 = ws.cell(row = i + 1, column = 6).value, \
+                          break_time1_over1 = ws.cell(row = i + 1, column = 7).value, \
+                          break_time1_over2 = ws.cell(row = i + 1, column = 8).value, \
+                          break_time1_over3 = ws.cell(row = i + 1, column = 9).value, \
+                          break_time2 = ws.cell(row = i + 1, column = 10).value, \
+                          break_time2_over1 = ws.cell(row = i + 1, column = 11).value, \
+                          break_time2_over2 = ws.cell(row = i + 1, column = 12).value, \
+                          break_time2_over3 = ws.cell(row = i + 1, column = 13).value, \
+                          break_time3 = ws.cell(row = i + 1, column = 14).value, \
+                          break_time3_over1 = ws.cell(row = i + 1, column = 15).value, \
+                          break_time3_over2 = ws.cell(row = i + 1, column = 16).value, \
+                          break_time3_over3 = ws.cell(row = i + 1, column = 17).value, \
+                          break_time4 = ws.cell(row = i + 1, column = 18).value, \
+                          break_time4_over1 = ws.cell(row = i + 1, column = 19).value, \
+                          break_time4_over2 = ws.cell(row = i + 1, column = 20).value, \
+                          break_time4_over3 = ws.cell(row = i + 1, column = 21).value)
+        new_data.save()
 
+      # 上書きチェックOFFの場合の処理
+      else:
+        # 読み込み予定データと同一の従業員番号のデータが存在しない場合の処理
+        if member_data_filter.count() == 0:
+          # Excelからデータを読み込み
+          new_data = member(employee_no = ws.cell(row = i + 1, column = 1).value, \
+                            name = ws.cell(row = i + 1, column = 2).value, \
+                            shop = ws.cell(row = i + 1, column = 3).value, \
+                            authority = ws.cell(row = i + 1, column = 4).value, \
+                            administrator = ws.cell(row = i + 1, column = 5).value, \
+                            break_time1 = ws.cell(row = i + 1, column = 6).value, \
+                            break_time1_over1 = ws.cell(row = i + 1, column = 7).value, \
+                            break_time1_over2 = ws.cell(row = i + 1, column = 8).value, \
+                            break_time1_over3 = ws.cell(row = i + 1, column = 9).value, \
+                            break_time2 = ws.cell(row = i + 1, column = 10).value, \
+                            break_time2_over1 = ws.cell(row = i + 1, column = 11).value, \
+                            break_time2_over2 = ws.cell(row = i + 1, column = 12).value, \
+                            break_time2_over3 = ws.cell(row = i + 1, column = 13).value, \
+                            break_time3 = ws.cell(row = i + 1, column = 14).value, \
+                            break_time3_over1 = ws.cell(row = i + 1, column = 15).value, \
+                            break_time3_over2 = ws.cell(row = i + 1, column = 16).value, \
+                            break_time3_over3 = ws.cell(row = i + 1, column = 17).value, \
+                            break_time4 = ws.cell(row = i + 1, column = 18).value, \
+                            break_time4_over1 = ws.cell(row = i + 1, column = 19).value, \
+                            break_time4_over2 = ws.cell(row = i + 1, column = 20).value, \
+                            break_time4_over3 = ws.cell(row = i + 1, column = 21).value)
+          new_data.save()
       
-      # Excelからデータを読み込み
-      new_data = member(employee_no = ws.cell(row = i + 1, column = 1).value, \
-                        name = ws.cell(row = i + 1, column = 2).value, \
-                        shop = ws.cell(row = i + 1, column = 3).value, \
-                        authority = ws.cell(row = i + 1, column = 4).value, \
-                        administrator = ws.cell(row = i + 1, column = 5).value, \
-                        break_time1 = ws.cell(row = i + 1, column = 6).value, \
-                        break_time1_over1 = ws.cell(row = i + 1, column = 7).value, \
-                        break_time1_over2 = ws.cell(row = i + 1, column = 8).value, \
-                        break_time1_over3 = ws.cell(row = i + 1, column = 9).value, \
-                        break_time2 = ws.cell(row = i + 1, column = 10).value, \
-                        break_time2_over1 = ws.cell(row = i + 1, column = 11).value, \
-                        break_time2_over2 = ws.cell(row = i + 1, column = 12).value, \
-                        break_time2_over3 = ws.cell(row = i + 1, column = 13).value, \
-                        break_time3 = ws.cell(row = i + 1, column = 14).value, \
-                        break_time3_over1 = ws.cell(row = i + 1, column = 15).value, \
-                        break_time3_over2 = ws.cell(row = i + 1, column = 16).value, \
-                        break_time3_over3 = ws.cell(row = i + 1, column = 17).value, \
-                        break_time4 = ws.cell(row = i + 1, column = 18).value, \
-                        break_time4_over1 = ws.cell(row = i + 1, column = 19).value, \
-                        break_time4_over2 = ws.cell(row = i + 1, column = 20).value, \
-                        break_time4_over3 = ws.cell(row = i + 1, column = 21).value)
-
-      new_data.save()
 
 
     # 一時ファイル削除

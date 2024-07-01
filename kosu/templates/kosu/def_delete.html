@@ -16,7 +16,7 @@
     <tr><td>
         <form action="{% url 'def_delete' id %}" method="post">
         {% csrf_token %}
-        <input type="submit" value="工数区分定義削除" onclick="return confirmDelete();" class="btn btn-green1 mt-2">
+        <input type="submit" value="工数区分定義削除" onclick="return confirmDelete();" class="btn btn-green4 mt-2">
         </form>
       </td></tr>
     <tr><td>工数区分定義Ver：<br>{{obj.kosu_name}}</td></tr>
@@ -223,7 +223,7 @@
     <tr><th>
       <form action="{% url 'def_delete' id %}" method="post">
       {% csrf_token %}
-      <input type="submit" value="工数区分定義削除" onclick="return confirmDelete();" class="btn btn-green1 mt-2">
+      <input type="submit" value="工数区分定義削除" onclick="return confirmDelete();" class="btn btn-green4 mt-2">
       </form>
     </th></tr>
   </table>

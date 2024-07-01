@@ -25,14 +25,14 @@
   {% csrf_token %}
      {{form.as_table}}
   <tr><th><td>
-    <input type="submit" value="登録" name=registration class="btn btn-gray mt-2">
+    <input type="submit" value="登録" name=registration class="btn btn-gray2 mt-2">
   </td></th></tr>
   <tr><th><td>
     　
   </td></th></tr>
   <tr><th>
     <h1 class="display-6 text-dark">データ管理</h1>
-    <p>(バックアップを押すと指定のデータのデータがPCにダウンロードされます)</p>
+    <small>(バックアップを押すとデータがPCにダウンロードされます)</small>
   </th></tr>
   <tr>
     <th>
@@ -41,8 +41,8 @@
     <td>
       <input type="date" class="form-control custom-border" style="width: 200px;" name="data_day" id="data_day">
       以前のデータを<br>
-      <input type="submit" value="バックアップ" name=kosu_backup class="btn btn-gray mt-2">
-      <input type="submit" value="削除" name=kosu_delete class="btn btn-gray mt-2">
+      <input type="submit" value="バックアップ" name=kosu_backup class="btn btn-gray2 mt-2">
+      <input type="submit" value="削除" name=kosu_delete class="btn btn-gray2 mt-2">
     </td>
   </tr>
   <tr>
@@ -51,7 +51,7 @@
     </th>
     <td>
       {{load_form.kosu_file}}
-      <input type="submit" value="ロード" name=kosu_load class="btn btn-gray mt-2">
+      <input type="submit" value="ロード" name=kosu_load class="btn btn-gray2 mt-2">
     </td>
   </tr>
   <tr><th><td>
@@ -62,7 +62,7 @@
       人員情報バックアップ
     </th>
     <td>
-      <input type="submit" value="バックアップ" name=member_backup class="btn btn-gray mt-2">
+      <input type="submit" value="バックアップ" name=member_backup class="btn btn-gray2 mt-2">
     </td>
   </tr>
   <tr>
@@ -71,7 +71,27 @@
     </th>
     <td>
       {{load_form.member_file}}
-      <input type="submit" value="ロード" name=member_load class="btn btn-gray mt-2">
+      <input type="submit" value="ロード" name=member_load class="btn btn-gray2 mt-2">
+    </td>
+  </tr>
+  <tr>
+    <th></th>
+    <td>
+      同一従業員番号があった場合上書きする　　
+      <input type="checkbox" id="overwrite_check" name="overwrite_check" class="big">
+      <style>
+        input.big {
+          transform: scale(1.5);
+        }
+      </style>
+    </td>
+  </tr>
+  <tr>
+    <th></th>
+    <td>
+      <small>
+        (上書きした場合、全工数と問い合わせデータの氏名削除。バックアップ後実施のこと)
+      </small>
     </td>
   </tr>
   <tr><th><td>
@@ -82,7 +102,7 @@
       班員情報バックアップ
     </th>
     <td>
-      <input type="submit" value="バックアップ" name=team_backup class="btn btn-gray mt-2">
+      <input type="submit" value="バックアップ" name=team_backup class="btn btn-gray2 mt-2">
     </td>
   </tr>
   <tr>
@@ -91,7 +111,7 @@
     </th>
     <td>
       {{load_form.team_file}}
-      <input type="submit" value="ロード" name=team_load class="btn btn-gray mt-2">
+      <input type="submit" value="ロード" name=team_load class="btn btn-gray2 mt-2">
     </td>
   </tr>
   <tr><th><td>
@@ -102,7 +122,7 @@
       工数区分定義バックアップ
     </th>
     <td>
-      <input type="submit" value="バックアップ" name=def_backup class="btn btn-gray mt-2">
+      <input type="submit" value="バックアップ" name=def_backup class="btn btn-gray2 mt-2">
     </td>
   </tr>
   <tr>
@@ -111,7 +131,7 @@
     </th>
     <td>
       {{load_form.def_file}}
-      <input type="submit" value="ロード" name=def_load class="btn btn-gray mt-2">
+      <input type="submit" value="ロード" name=def_load class="btn btn-gray2 mt-2">
     </td>
   </tr>
   <tr><th><td>
@@ -122,7 +142,7 @@
       お問い合わせバックアップ
     </th>
     <td>
-      <input type="submit" value="バックアップ" name=inquiry_backup class="btn btn-gray mt-2">
+      <input type="submit" value="バックアップ" name=inquiry_backup class="btn btn-gray2 mt-2">
     </td>
   </tr>
   <tr>
@@ -131,7 +151,7 @@
     </th>
     <td>
       {{load_form.inquiry_file}}
-      <input type="submit" value="ロード" name=inquiry_load class="btn btn-gray mt-2">
+      <input type="submit" value="ロード" name=inquiry_load class="btn btn-gray2 mt-2">
     </td>
   </tr>
   <tr><th><td>
@@ -142,7 +162,7 @@
       管理者設定バックアップ
     </th>
     <td>
-      <input type="submit" value="バックアップ" name=setting_backup class="btn btn-gray mt-2">
+      <input type="submit" value="バックアップ" name=setting_backup class="btn btn-gray2 mt-2">
     </td>
   </tr>
   <tr>
@@ -151,7 +171,7 @@
     </th>
     <td>
       {{load_form.setting_file}}
-      <input type="submit" value="ロード" name=setting_load class="btn btn-gray mt-2">
+      <input type="submit" value="ロード" name=setting_load class="btn btn-gray2 mt-2">
     </td>
   </tr>
   </form>
