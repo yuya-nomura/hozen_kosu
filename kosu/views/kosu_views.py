@@ -2083,7 +2083,9 @@ def input(request):
 
     # 入力値をセッションに保存する
     request.session['day'] = work_day
+    request.session['start_time'] = end_time
     request.session['end_time'] = end_time
+
 
     # エラー時の工数定義区分保持がセッションにある場合の処理
     if 'error_def' in request.session:
@@ -2094,6 +2096,9 @@ def input(request):
     if 'error_detail' in request.session:
       # セッション削除
       del request.session['error_detail']
+
+    # 翌日チェックリセット
+    request.session['tomorrow_check'] = False
 
     # このページをリダイレクトする
     return redirect(to = '/input')
@@ -2282,25 +2287,24 @@ def input(request):
     new_work_day = request.session.get('day', kosu_today)
 
     # 作業開始時間保持
-    request.session['end_time'] = request.POST['start_time']
+    request.session['start_time'] = request.POST['start_time']
 
     # 翌日チェックBOX、工数区分保持
     if request.POST['start_time'] != '':
       if datetime.datetime.strptime(request.POST['start_time'], "%H:%M") > datetime.datetime.strptime(default_end_time, "%H:%M"):
-        POST_check = True
+        request.session['tomorrow_check'] = True
 
       else:
-        POST_check =False
+        request.session['tomorrow_check'] = False
 
     else:
-      POST_check =False
+      request.session['tomorrow_check'] = False
 
     # 時刻取得時の初期値の定義
     def_default = {'work' : request.POST['work'],
                    'tyoku2' : request.POST['tyoku2'],
                    'kosu_def_list' : request.POST['kosu_def_list'],
                    'work_detail' : request.POST['work_detail'],
-                   'tomorrow_check' : POST_check,
                    'break_change' : 'break_change' in request.POST,
                    'over_work' : request.POST['over_work']}
 
@@ -2477,6 +2481,31 @@ def input(request):
       
 
 
+  # 定義確認処理
+  if "def_find" in request.POST:
+
+    # 直初期値設定保持
+    request.session['error_tyoku'] = request.POST['tyoku2']
+    # 勤務初期値設定保持
+    request.session['error_work'] = request.POST['work']
+    # 工数区分定義初期値設定保持
+    request.session['error_def'] = request.POST['kosu_def_list']
+    # 作業詳細初期値設定保持
+    request.session['error_detail'] = request.POST['work_detail']
+    # 残業初期値設定保持
+    request.session['error_over_work'] = request.POST['over_work']
+    # 作業開始時間保持
+    request.session['start_time'] = request.POST['start_time']
+    # 作業終了時間保持
+    request.session['end_time'] = request.POST['end_time']
+    # 翌日チェック保持
+    request.session['tomorrow_check'] = 'tomorrow_check' in request.POST
+
+    # 工数定義区分画面へジャンプ
+    return redirect(to = '/kosu_def')
+
+
+
   # 作業終了時の変数がある場合の処理
   if 'default_end_time' in locals():
     # 処理なし
@@ -2557,11 +2586,13 @@ def input(request):
   # 初期値を設定するリスト作成
   kosu_list = {'work' : work_default,
                'tyoku2' : tyoku_default, 
+               'tomorrow_check' : request.session.get('tomorrow_check', False),
                'kosu_def_list': request.session.get('error_def', ''),
                'work_detail' : request.session.get('error_detail', ''),
                'over_work' : over_work_default,
                'break_change' : break_change_default,}
-  default_start_time = request.session.get('end_time', '')
+  
+  default_start_time = request.session.get('start_time', '')
   
   # エラー時の工数定義区分保持がセッションにある場合の処理
   if 'error_def' in request.session:

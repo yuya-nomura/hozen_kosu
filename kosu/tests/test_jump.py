@@ -1,22 +1,19 @@
 from django.test import TestCase, Client
 from django.urls import reverse
 import os
-from kosu.models import member
-from kosu.models import kosu_division
-from kosu.models import administrator_data
-from kosu.models import Business_Time_graph
-from kosu.models import team_member
-from kosu.models import inquiry_data
+from kosu.models import member, kosu_division, Business_Time_graph, team_member, administrator_data, inquiry_data
 
 
 
 
 
+# 各ページリンクテスト
 class Page_jump(TestCase):
-    # ダミーデータ定義
-    def setUp(self):        
+    # 初期データ作成
+    @classmethod
+    def setUpTestData(cls):       
         # memberダミーデータ
-        self.member = member.objects.create(
+        cls.member = member.objects.create(
             employee_no = 111,
             name = 'テストユーザー',
             shop = 'その他',
@@ -41,7 +38,7 @@ class Page_jump(TestCase):
             )
 
         # administrator_dataダミーデータ
-        self.administrator_data = administrator_data.objects.create(
+        cls.administrator_data = administrator_data.objects.create(
             menu_row = 20,
             administrator_employee_no1 = '111',
             administrator_employee_no2 = '',
@@ -49,7 +46,7 @@ class Page_jump(TestCase):
             )
 
         # kosu_divisionダミーデータ
-        self.kosu_division = kosu_division.objects.create(
+        cls.kosu_division = kosu_division.objects.create(
             kosu_name = 'トライ定義',
             kosu_title_1 = '工数区分名1',
             kosu_division_1_1 = '定義1',
@@ -84,10 +81,10 @@ class Page_jump(TestCase):
         )
 
         # Business_Time_graphダミーデータ
-        self.Business_Time_graph = Business_Time_graph.objects.create(
+        cls.Business_Time_graph = Business_Time_graph.objects.create(
             employee_no3 = 111,
-            name = self.member,
-            def_ver2 = self.kosu_division.kosu_name,
+            name = cls.member,
+            def_ver2 = cls.kosu_division.kosu_name,
             work_day2 = '2000-01-01',
             tyoku2 = '4',
             time_work = '################################################################################################AAAAAAAAAAAABBBBBBBBBBBBCCCCCCCCCCCCDDDDDDDDDDDD$$$$$$$$$$$$EEEEEEEEEEEEFFFFFFFFFFFFGGGGGGGGGGGGHHHHHHHHHHHHIIIIIIIIIIIIJJJJJJJJJJ##############################################################',
@@ -103,7 +100,7 @@ class Page_jump(TestCase):
             )
 
         # team_memberダミーデータ
-        self.team_member = team_member.objects.create(
+        cls.team_member = team_member.objects.create(
             employee_no5 = 111,
             member1 = '',
             member2 = 111,
@@ -123,14 +120,18 @@ class Page_jump(TestCase):
             )
 
         # inquiry_dataダミーデータ
-        self.inquiry_data = inquiry_data.objects.create(
+        cls.inquiry_data = inquiry_data.objects.create(
             employee_no2 = 111,
-            name = self.member,
+            name = cls.member,
             content_choice = '問い合わせ',
             inquiry = '',
             answer = '回答'
             )
+        
 
+
+    # 初期データ
+    def setUp(self):
         # テストクライアント初期化
         self.client = Client()
 

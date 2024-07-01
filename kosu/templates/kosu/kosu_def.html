@@ -11,7 +11,10 @@
 </head>
 <body class="container">
   <h1 class="display-4 text-success">{{title}}</h1>
-  <p class="h6"><a href="{% url 'def_main' %}" class="text-success">工数区分定義MENUへ</a></p>
+  <p class="h6">
+    <a href="{% url 'def_main' %}" class="text-success">工数区分定義MENUへ</a>　　　
+    <a href="{% url 'input' %}">工数入力へ</a>
+  </p>
   <p>定義を確認したい工数区分を選択し検索を押して下さい。</p>
   <form action="{% url 'kosu_def' %}" method="post">
   {% csrf_token %}
