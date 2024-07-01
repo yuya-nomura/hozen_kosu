@@ -86,7 +86,7 @@
           <td>
             <div class="number-input-group">
               {{form.kosu_def_list}}　
-              <input type="submit" value="定義確認"  name="def_find" class="btn btn-green1 mt-2 btn-sm">
+              <input type="submit" value="定義確認"  name="def_find" class="btn btn-green4 mt-2 btn-sm">
             </div>
           </td>
         </tr>
@@ -112,7 +112,10 @@
             業務区分
           </th>
           <td>
-            {{form.kosu_def_list}}
+            <div class="number-input-group">
+              {{form.kosu_def_list}}
+              <input type="submit" value="定義確認"  name="def_find" class="btn btn-green4 mt-2 btn-sm">
+            </div>
           </td>
         </tr>
       {% endif %}
