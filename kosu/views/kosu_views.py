@@ -717,7 +717,7 @@ def input(request):
 
 
       # 以前同日に打ち込んだ工数区分定義と違う場合の処理
-      if obj_get.def_ver2 != request.session.get('input_def', None) and obj_get.def_ver2 != '':
+      if obj_get.def_ver2 != request.session['input_def'] and obj_get.def_ver2 != None:
         # エラーメッセージ出力
         messages.error(request, '前に入力された工数と工数区分定義のVerが違います。入力できません。ERROR007')
         # このページをリダイレクト
@@ -6123,7 +6123,6 @@ def schedule(request):
             work_day2 = datetime.date(year, month, day_list[i]), \
               defaults = {'name' : member_instance, \
                           'work_time' : eval('request.POST["day{}"]'.format(i + 1)), \
-                          'def_ver2' : request.session['input_def'],\
                           'time_work' : '#'*288, \
                           'detail_work' : '$'*288, \
                           'over_time' : 0, \
