@@ -5551,14 +5551,15 @@ def graph(request, num):
 
     # グラフデータ一覧用オブジェクト取得
     obj = Business_Time_graph.objects.filter(employee_no3__contains = request.POST['employee_no6'], \
-                                             work_day2__contains = request.POST['team_day'])
+                                             work_day2__contains = request.POST['team_day'])\
+                                              .order_by('work_day2', 'employee_no3').reverse()
     
 
   
   # POST時以外の処理
   else:
     # グラフデータ一覧用オブジェクト取得
-    obj = Business_Time_graph.objects.all().order_by('work_day2').reverse()
+    obj = Business_Time_graph.objects.all().order_by('work_day2', 'employee_no3').reverse()
 
 
 

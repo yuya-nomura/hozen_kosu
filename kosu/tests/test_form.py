@@ -610,3 +610,63 @@ class Page_form(TestCase):
 
 
 
+    # 工数詳細ページ工数削除チェック
+    def test_detail_post(self):
+        # フォームデータ定義
+        form_data = {
+            'start_time': '13:00',
+            'end_time': '14:00',
+            'kosu_delete' : '工数削除',
+            }
+
+        # URLに対してPOSTリクエスト送信
+        response = self.client.post(reverse('detail', args = [self.Business_Time_graph.id]), form_data)
+        # リクエストのレスポンスステータスコードが302(リダイレクト)であることを確認
+        self.assertEqual(response.status_code, 302)
+
+        # テストユーザーの工数データ取得
+        updated_entry = Business_Time_graph.objects.get(employee_no3 = self.member.employee_no, \
+                                                        work_day2 = self.Business_Time_graph.work_day2)
+        # 作業内容が更新されていることを確認
+        self.assertEqual(updated_entry.time_work, '################################################################################################AAAAAAAAAAAABBBBBBBBBBBBCCCCCCCCCCCCDDDDDDDDDDDD$$$$$$$$$$$$############FFFFFFFFFFFFGGGGGGGGGGGGHHHHHHHHHHHHIIIIIIIIIIIIJJJJJJJJJJ##############################################################')
+
+
+
+    # 工数削除ページ工数削除チェック
+    def test_delete_post(self):
+        # フォームデータ定義
+        form_data = {
+            'kosu_delete' : '工数データ削除',
+            }
+
+        # URLに対してPOSTリクエスト送信
+        response = self.client.post(reverse('delete', args = [self.Business_Time_graph.id]), form_data)
+        # リクエストのレスポンスステータスコードが302(リダイレクト)であることを確認
+        self.assertEqual(response.status_code, 302)
+
+        # テストユーザーの工数データ取得
+        updated_entry = Business_Time_graph.objects.filter(employee_no3 = self.member.employee_no, \
+                                                           work_day2 = self.Business_Time_graph.work_day2)
+        # レコードがないことを確認
+        self.assertEqual(updated_entry.count(), 0)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
