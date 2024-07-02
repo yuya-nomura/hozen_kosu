@@ -2061,9 +2061,9 @@ def input(request):
       member_instance = member.objects.get(employee_no = request.session['login_No'])
 
       # 指定のレコードにPOST送信された値を上書きする 
-      new = Business_Time_graph(employee_no3 = request.session.get('login_No', None), \
+      new = Business_Time_graph(employee_no3 = request.session['login_No'], \
                                 name = member_instance, \
-                                def_ver2 = request.session.get('input_def', None), \
+                                def_ver2 = request.session['input_def'], \
                                 work_day2 = work_day, \
                                 work_time = work,\
                                 tyoku2 = tyoku, \
@@ -5234,7 +5234,7 @@ def total(request):
                                                     work_day2__startswith = kosu_year)
 
 
-      #指定年に工数入力がない場合の処理
+      # 指定年に工数入力がない場合の処理
       if kosu_total.count() == 0:
 
         # 工数区分定義データ取得
@@ -5255,9 +5255,7 @@ def total(request):
         graph_list = list(itertools.repeat(0, def_num))
 
 
-      # 指定年に工数入力がある場合の処理
-      graph_list = []
-      if kosu_total.count() >= 1:
+      if kosu_total.count() != 0:
 
         # 年の最初の日の工数区分定義でグラフ項目リスト作成
         for v in kosu_total:
@@ -5286,7 +5284,7 @@ def total(request):
         # 指定年の工数を加算しデータリスト作成
         graph_list = list(itertools.repeat(0, def_num))
         for i in kosu_total:
-          # 各工数区分定義の累積工数リスト作成
+          # 日毎の累積工数リスト作成
           str_n = 0
           graph_year = []
           for m in str_list:
@@ -5310,13 +5308,12 @@ def total(request):
 
       # 指定月の工数取得
       kosu_total = Business_Time_graph.objects.filter(employee_no3 = request.session.get('login_No', None), \
-                                                    work_day2__startswith = kosu_month)
-      
+                                                      work_day2__startswith = kosu_month)
+
       #指定月に工数入力がない場合の処理
       if kosu_total.count() == 0:
-
         # 工数区分定義データ取得
-        kosu_obj = kosu_division.objects.get(kosu_name = request.session.get('input_def', None))
+        kosu_obj = kosu_division.objects.get(kosu_name = request.session['input_def'])
       
         # 工数区分定義の数をカウント
         def_num = 0
@@ -5334,9 +5331,7 @@ def total(request):
 
 
       # 指定月に工数入力がある場合の処理
-      graph_list = []
-      if kosu_total.count() >= 1:
-
+      if kosu_total.count() != 0:
         # 月の最初の日の工数区分定義でグラフ項目リスト作成
         for v in kosu_total:
           # 工数区分定義データ取得
@@ -5364,7 +5359,7 @@ def total(request):
         # 指定月の工数を加算しデータリスト作成
         graph_list = list(itertools.repeat(0, def_num))
         for i in kosu_total:
-          # 各工数区分定義の累積工数リスト作成
+          # 日毎の累積工数リスト作成
           str_n = 0
           graph_month = []
           for m in str_list:
@@ -5378,10 +5373,6 @@ def total(request):
             kosu_sum = sum(v)
             graph_list[w] = kosu_sum
 
-
-    # フォームにPOSTした値を設定し定義
-    form = kosu_dayForm(request.POST)
-    default_day = request.POST['kosu_day']
 
     # ログイン者の工数集計データ取得
     kosu_total = Business_Time_graph.objects.filter(employee_no3 = request.session.get('login_No', None), \
@@ -5476,6 +5467,11 @@ def total(request):
       graph_list = graph_library.values()
 
 
+    # フォームにPOSTした値を設定し定義
+    form = kosu_dayForm(request.POST)
+    default_day = request.POST['kosu_day']
+
+
 
   # HTMLに渡す辞書
   context = {
@@ -5551,7 +5547,7 @@ def graph(request, num):
 
     # グラフデータ一覧用オブジェクト取得
     obj = Business_Time_graph.objects.filter(employee_no3__contains = request.POST['employee_no6'], \
-                                             work_day2__contains = request.POST['team_day'])\
+                                             work_day2__contains = request.POST['work_day'])\
                                               .order_by('work_day2', 'employee_no3').reverse()
     
 
@@ -6127,6 +6123,7 @@ def schedule(request):
             work_day2 = datetime.date(year, month, day_list[i]), \
               defaults = {'name' : member_instance, \
                           'work_time' : eval('request.POST["day{}"]'.format(i + 1)), \
+                          'def_ver2' : request.session['input_def'],\
                           'time_work' : '#'*288, \
                           'detail_work' : '$'*288, \
                           'over_time' : 0, \

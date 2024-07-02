@@ -16,14 +16,12 @@
       <a href="{% url 'kosu_list' 1 %}">工数一覧へ</a>
     </p>
     <form action="{% url 'graph' 1 %}" method="post">
-    {% csrf_token %}
-      {% bootstrap_javascript jquery='full' %} 
-      {{ form.media }}
+      {% csrf_token %}
       <p>従業員番号：</p>
       <p>{{form.employee_no6}}</p>
       <p>日付：</p>
-      <p><input type="date" class="form-control custom-border" style="width: 200px;" name="team_day" id="team_day"></p>
-      <p><input type="submit" value="検索" class="btn btn-blue7 mt-2"></p>
+      <p><input type="date" class="form-control custom-border" style="width: 200px;" name="work_day" id="work_day"></p>
+      <p><input type="submit" value="検索" name="data_find" class="btn btn-blue7 mt-2"></p>
     <table class="table text-nowrap">
       <tr>
         <th>就業日</th>

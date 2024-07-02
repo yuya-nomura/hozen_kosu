@@ -89,7 +89,7 @@ class Page_form(TestCase):
             def_ver2 = cls.kosu_division.kosu_name,
             work_day2 = '2000-01-01',
             tyoku2 = '4',
-            time_work = '################################################################################################AAAAAAAAAAAABBBBBBBBBBBBCCCCCCCCCCCCDDDDDDDDDDDD$$$$$$$$$$$$EEEEEEEEEEEEFFFFFFFFFFFFGGGGGGGGGGGGHHHHHHHHHHHHIIIIIIIIIIIIJJJJJJJJJJ##############################################################',
+            time_work = '################################################################################################AAAAAAAAAAAABBBBBBBBBBBBCCCCCCCCCCCCDDDDDDDDDDDD$$$$$$$$$$$$EEEEEEEEEEEEFFFFFFFFFFFFGGGGGGGGGGGGHHHHHHHHHHHHIIIIIIIIIIJJJJJJJJJJJJ##############################################################',
             detail_work = '$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$aaa$aaa$aaa$aaa$aaa$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$bbb$bbb$bbb$bbb$bbb$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$',
             over_time = 120,
             breaktime = '#12001300',
@@ -303,7 +303,7 @@ class Page_form(TestCase):
         updated_entry = Business_Time_graph.objects.get(employee_no3 = self.member.employee_no, \
                                                         work_day2 = self.Business_Time_graph.work_day2)
         # 作業内容が更新されていることを確認
-        self.assertEqual(updated_entry.time_work, '################################################################################################AAAAAAAAAAAABBBBBBBBBBBBCCCCCCCCCCCCDDDDDDDDDDDD$$$$$$$$$$$$EEEEEEEEEEEEFFFFFFFFFFFFGGGGGGGGGGGGHHHHHHHHHHHHIIIIIIIIIIIIJJJJJJJJJJAA$$$A########################################################')
+        self.assertEqual(updated_entry.time_work, '################################################################################################AAAAAAAAAAAABBBBBBBBBBBBCCCCCCCCCCCCDDDDDDDDDDDD$$$$$$$$$$$$EEEEEEEEEEEEFFFFFFFFFFFFGGGGGGGGGGGGHHHHHHHHHHHHIIIIIIIIIIJJJJJJJJJJJJAA$$$A########################################################')
         # 残業時間が135に更新されていることを確認
         self.assertEqual(updated_entry.over_time, 135)
         # 整合性がOKに更新されていることを確認
@@ -333,7 +333,7 @@ class Page_form(TestCase):
         updated_entry = Business_Time_graph.objects.get(employee_no3 = self.member.employee_no, \
                                                         work_day2 = self.Business_Time_graph.work_day2)
         # 作業内容が更新されていることを確認
-        self.assertEqual(updated_entry.time_work, 'BBBB############################################################################################AAAAAAAAAAAABBBBBBBBBBBBCCCCCCCCCCCCDDDDDDDDDDDD$$$$$$$$$$$$EEEEEEEEEEEEFFFFFFFFFFFFGGGGGGGGGGGGHHHHHHHHHHHHIIIIIIIIIIIIJJJJJJJJJJAA$$$A######################################################BB')
+        self.assertEqual(updated_entry.time_work, 'BBBB############################################################################################AAAAAAAAAAAABBBBBBBBBBBBCCCCCCCCCCCCDDDDDDDDDDDD$$$$$$$$$$$$EEEEEEEEEEEEFFFFFFFFFFFFGGGGGGGGGGGGHHHHHHHHHHHHIIIIIIIIIIJJJJJJJJJJJJAA$$$A######################################################BB')
         # 整合性がNGに更新されていることを確認
         self.assertEqual(updated_entry.judgement, False)
 
@@ -605,7 +605,7 @@ class Page_form(TestCase):
         self.assertEqual(response.status_code, 200)
 
         data = response.context['data']
-        # レコードがないことを確認
+        # レコードが3つであることを確認
         self.assertEqual(len(data), 3)
 
 
@@ -628,7 +628,7 @@ class Page_form(TestCase):
         updated_entry = Business_Time_graph.objects.get(employee_no3 = self.member.employee_no, \
                                                         work_day2 = self.Business_Time_graph.work_day2)
         # 作業内容が更新されていることを確認
-        self.assertEqual(updated_entry.time_work, '################################################################################################AAAAAAAAAAAABBBBBBBBBBBBCCCCCCCCCCCCDDDDDDDDDDDD$$$$$$$$$$$$############FFFFFFFFFFFFGGGGGGGGGGGGHHHHHHHHHHHHIIIIIIIIIIIIJJJJJJJJJJ##############################################################')
+        self.assertEqual(updated_entry.time_work, '################################################################################################AAAAAAAAAAAABBBBBBBBBBBBCCCCCCCCCCCCDDDDDDDDDDDD$$$$$$$$$$$$############FFFFFFFFFFFFGGGGGGGGGGGGHHHHHHHHHHHHIIIIIIIIIIJJJJJJJJJJJJ##############################################################')
 
 
 
@@ -649,6 +649,293 @@ class Page_form(TestCase):
                                                            work_day2 = self.Business_Time_graph.work_day2)
         # レコードがないことを確認
         self.assertEqual(updated_entry.count(), 0)
+
+
+
+    # 工数データページ検索チェック
+    def test_graph_post(self):
+        # memberダミーデータ(ユーザー追加)
+        self.member = member.objects.create(
+            employee_no = 112,
+            name = 'テストユーザー2',
+            shop = 'その他',
+            authority = True,
+            administrator = True,
+            break_time1 = '#10401130',
+            break_time1_over1 = '#15101520',
+            break_time1_over2 = '#20202110',
+            break_time1_over3 = '#01400150',
+            break_time2 = '#17501840',
+            break_time2_over1 = '#22302240',
+            break_time2_over2 = '#03400430',
+            break_time2_over3 = '#09000910',
+            break_time3 = '#01400230',
+            break_time3_over1 = '#07050715',
+            break_time3_over2 = '#12151305',
+            break_time3_over3 = '#17351745',
+            break_time4 = '#12001300',
+            break_time4_over1 = '#19001915',
+            break_time4_over2 = '#01150215',
+            break_time4_over3 = '#06150630',
+            )
+
+        # Business_Time_graphダミーデータ
+        self.Business_Time_graph = Business_Time_graph.objects.create(
+            employee_no3 = 111,
+            name = self.member,
+            def_ver2 = self.kosu_division.kosu_name,
+            work_day2 = '2000-01-02',
+            tyoku2 = '4',
+            time_work = '################################################################################################AAAAAAAAAAAABBBBBBBBBBBBCCCCCCCCCCCCDDDDDDDDDDDD$$$$$$$$$$$$EEEEEEEEEEEEFFFFFFFFFFFFGGGGGGGGGGGGHHHHHHHHHHHHIIIIIIIIIIIIJJJJJJJJJJ##############################################################',
+            detail_work = '$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$aaa$aaa$aaa$aaa$aaa$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$bbb$bbb$bbb$bbb$bbb$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$',
+            over_time = 120,
+            breaktime = '#12001300',
+            breaktime_over1 = '#19001915',
+            breaktime_over2 = '#01150215',
+            breaktime_over3 = '#06150630',
+            work_time = '出勤',
+            judgement = True,
+            break_change = False,
+            )
+        
+        # Business_Time_graphダミーデータ
+        self.Business_Time_graph = Business_Time_graph.objects.create(
+            employee_no3 = 112,
+            name = self.member,
+            def_ver2 = self.kosu_division.kosu_name,
+            work_day2 = '2000-01-01',
+            tyoku2 = '4',
+            time_work = '################################################################################################AAAAAAAAAAAABBBBBBBBBBBBCCCCCCCCCCCCDDDDDDDDDDDD$$$$$$$$$$$$EEEEEEEEEEEEFFFFFFFFFFFFGGGGGGGGGGGGHHHHHHHHHHHHIIIIIIIIIIIIJJJJJJJJJJ##############################################################',
+            detail_work = '$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$aaa$aaa$aaa$aaa$aaa$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$bbb$bbb$bbb$bbb$bbb$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$',
+            over_time = 120,
+            breaktime = '#12001300',
+            breaktime_over1 = '#19001915',
+            breaktime_over2 = '#01150215',
+            breaktime_over3 = '#06150630',
+            work_time = '出勤',
+            judgement = True,
+            break_change = False,
+            )
+
+        # Business_Time_graphダミーデータ
+        self.Business_Time_graph = Business_Time_graph.objects.create(
+            employee_no3 = 112,
+            name = self.member,
+            def_ver2 = self.kosu_division.kosu_name,
+            work_day2 = '2000-01-02',
+            tyoku2 = '4',
+            time_work = '################################################################################################AAAAAAAAAAAABBBBBBBBBBBBCCCCCCCCCCCCDDDDDDDDDDDD$$$$$$$$$$$$EEEEEEEEEEEEFFFFFFFFFFFFGGGGGGGGGGGGHHHHHHHHHHHHIIIIIIIIIIIIJJJJJJJJJJ##############################################################',
+            detail_work = '$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$aaa$aaa$aaa$aaa$aaa$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$bbb$bbb$bbb$bbb$bbb$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$',
+            over_time = 120,
+            breaktime = '#12001300',
+            breaktime_over1 = '#19001915',
+            breaktime_over2 = '#01150215',
+            breaktime_over3 = '#06150630',
+            work_time = '出勤',
+            judgement = True,
+            break_change = False,
+            )
+
+
+        # フォームデータ定義
+        form_data = {
+            'employee_no6' : 111,
+            'work_day': '',
+            'data_find' : '検索',
+            }
+
+        # URLに対してPOSTリクエスト送信
+        response = self.client.post(reverse('graph', args = [1]), form_data)
+        # レスポンスが成功（ステータスコード200）であることを確認します。
+        self.assertEqual(response.status_code, 200)
+
+        data = response.context['data']
+        # レコードが2つであることを確認
+        self.assertEqual(len(data), 2)
+
+        # 全てのレコードの従業員番号3が111であることを確認
+        for record in data:
+            self.assertEqual(record.employee_no3, 111)
+
+
+        # フォームデータ定義
+        form_data2 = {
+            'employee_no6' : 112,
+            'work_day': '',
+            'data_find' : '検索',
+            }
+
+        # URLに対してPOSTリクエスト送信
+        response = self.client.post(reverse('graph', args = [1]), form_data2)
+        # レスポンスが成功（ステータスコード200）であることを確認します。
+        self.assertEqual(response.status_code, 200)
+
+        data2 = response.context['data']
+        # レコードが2つであることを確認
+        self.assertEqual(len(data2), 2)
+
+        # 全てのレコードの従業員番号が112であることを確認
+        for record in data2:
+            self.assertEqual(record.employee_no3, 112)
+
+
+        # フォームデータ定義
+        form_data3 = {
+            'employee_no6' : '',
+            'work_day': '2000-01-01',
+            'data_find' : '検索',
+            }
+
+        # URLに対してPOSTリクエスト送信
+        response = self.client.post(reverse('graph', args = [1]), form_data3)
+        # レスポンスが成功（ステータスコード200）であることを確認します。
+        self.assertEqual(response.status_code, 200)
+
+        data3 = response.context['data']
+        # レコードが2つであることを確認
+        self.assertEqual(len(data3), 2)
+
+        # 全てのレコードの就業日が'2000-01-01'であることを確認
+        for record in data3:
+            self.assertEqual(record.work_day2.strftime('%Y-%m-%d'), '2000-01-01')
+
+
+        # フォームデータ定義
+        form_data4 = {
+            'employee_no6' : '',
+            'work_day': '2000-01-02',
+            'data_find' : '検索',
+            }
+
+        # URLに対してPOSTリクエスト送信
+        response = self.client.post(reverse('graph', args = [1]), form_data4)
+        # レスポンスが成功（ステータスコード200）であることを確認します。
+        self.assertEqual(response.status_code, 200)
+
+        data4 = response.context['data']
+        # レコードが2つであることを確認
+        self.assertEqual(len(data4), 2)
+
+        # 全てのレコードの就業日が'2000-01-02'であることを確認
+        for record in data4:
+            self.assertEqual(record.work_day2.strftime('%Y-%m-%d'), '2000-01-02')
+
+
+        # フォームデータ定義
+        form_data5 = {
+            'employee_no6' : '',
+            'work_day': '',
+            'data_find' : '検索',
+            }
+
+        # URLに対してPOSTリクエスト送信
+        response = self.client.post(reverse('graph', args = [1]), form_data5)
+        # レスポンスが成功（ステータスコード200）であることを確認します。
+        self.assertEqual(response.status_code, 200)
+
+        data5 = response.context['data']
+        # レコードが4つであることを確認
+        self.assertEqual(len(data5), 4)
+
+
+
+    # 工数データページ検索チェック
+    def test_total_post(self):
+        # Business_Time_graphダミーデータ
+        for day in range(1, 400):
+            self.Business_Time_graph = Business_Time_graph.objects.create(
+                employee_no3 = 111,
+                name = self.member,
+                def_ver2 = self.kosu_division.kosu_name,
+                work_day2 = datetime.datetime.strptime('2020-01-01', '%Y-%m-%d').date() + datetime.timedelta(days = day),
+                tyoku2 = '4',
+                time_work = '################################################################################################AAAAAAAAAAAABBBBBBBBBBBBCCCCCCCCCCCCDDDDDDDDDDDD$$$$$$$$$$$$EEEEEEEEEEEEFFFFFFFFFFFFGGGGGGGGGGGGHHHHHHHHHHHHIIIIIIIIIIJJJJJJJJJJJJ##############################################################',
+                detail_work = '$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$aaa$aaa$aaa$aaa$aaa$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$bbb$bbb$bbb$bbb$bbb$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$',
+                over_time = 120,
+                breaktime = '#12001300',
+                breaktime_over1 = '#19001915',
+                breaktime_over2 = '#01150215',
+                breaktime_over3 = '#06150630',
+                work_time = '出勤',
+                judgement = True,
+                break_change = False,
+                )
+
+
+        # フォームデータ定義
+        form_data = {
+            'kosu_day' : self.Business_Time_graph.work_day2,
+            'kosu_order': '1',
+            'kosu_summarize' : '1',
+            'kosu_find': '検索',
+            }
+
+        # URLに対してPOSTリクエスト送信
+        response = self.client.post(reverse('total'), form_data)
+        # レスポンスが成功（ステータスコード200）であることを確認します。
+        self.assertEqual(response.status_code, 200)
+        # 集計値が正しいか確認
+        graph_list = list(response.context['graph_list'])
+        expected_list = [60, 60, 60, 60, 60, 60, 60, 60, 50, 60]
+        self.assertEqual(graph_list, expected_list)
+
+
+        # フォームデータ定義
+        form_data2 = {
+            'kosu_day' : self.Business_Time_graph.work_day2,
+            'kosu_order': '2',
+            'kosu_summarize' : '1',
+            'kosu_find': '検索',
+            }
+
+        # URLに対してPOSTリクエスト送信
+        response = self.client.post(reverse('total'), form_data2)
+        # レスポンスが成功（ステータスコード200）であることを確認します。
+        self.assertEqual(response.status_code, 200)
+        # 集計値が正しいか確認
+        graph_list = list(response.context['graph_list'])
+        expected_list = [60, 60, 60, 60, 60, 60, 60, 60, 60, 50]
+        self.assertEqual(graph_list, expected_list)
+
+
+        # フォームデータ定義
+        form_data3 = {
+            'kosu_day' : self.Business_Time_graph.work_day2,
+            'kosu_order': '1',
+            'kosu_summarize' : '2',
+            'kosu_find': '検索',
+            }
+
+        # URLに対してPOSTリクエスト送信
+        response = self.client.post(reverse('total'), form_data3)
+        # レスポンスが成功（ステータスコード200）であることを確認します。
+        self.assertEqual(response.status_code, 200)
+
+        aaa = Business_Time_graph.objects.all()
+        for ccc in aaa:
+            print(ccc.work_day2)
+            print(ccc.time_work)
+
+        # 集計値が正しいか確認
+        graph_list = list(response.context['graph_list'])
+        expected_list = [1860, 1860, 1860, 1860, 1860, 1860, 1860, 1860, 1550, 1860]
+        self.assertEqual(graph_list, expected_list)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
