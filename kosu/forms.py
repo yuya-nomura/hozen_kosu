@@ -572,14 +572,88 @@ class all_kosu_findForm(forms.Form):
 
 class all_kosuForm(forms.Form):
 
+  tyoku_list = [
+    ('', ''),
+    ('1', '1直'), 
+    ('2', '2直'), 
+    ('3', '3直'), 
+    ('4', '常昼')
+    ]
+  
+  work_list = [
+    ('', ''),
+    ('出勤', '出勤'),
+    ('シフト出', 'シフト出'),
+    ('休出', '休出'),
+    ('休日', '休日'),
+    ('年休', '年休'),
+    ('半前年休', '半前年休'),
+    ('半後年休', '半後年休'),
+    ('公休', '公休'),
+    ('シフト休', 'シフト休'),
+    ('代休', '代休'),
+    ('早退', '早退・遅刻'),
+    ]
+  
   employee_no = forms.IntegerField(label = '従業員番号', widget = forms.NumberInput(attrs = {'class' : 'form-control custom-border', 'min' : 0, 'style' : 'width : 200px;'}), required = False)
   def_ver = forms.ChoiceField(label = '工数定義区分Ver', widget = forms.Select(attrs = {'class' : 'form-control custom-border', 'style' : 'width : 200px;'}), required = False)
-
-
-
-
-
-
+  tyoku = forms.ChoiceField(label = '直', widget = forms.Select(attrs = {'class' : 'form-control custom-border', 'style' : 'width : 200px;'}), choices = tyoku_list, required = False)
+  work_time = forms.ChoiceField(label = '勤務', widget = forms.Select(attrs = {'class' : 'form-control custom-border', 'style' : 'width : 200px;'}), choices = work_list, required = False)
+  time_work0 = forms.CharField(label = '作業内容0時台', required = False, widget = forms.TextInput(attrs = {'class' : 'form-control custom-border', 'style' : 'width : 200px;'}))
+  time_work1 = forms.CharField(label = '作業内容1時台', required = False, widget = forms.TextInput(attrs = {'class' : 'form-control custom-border', 'style' : 'width : 200px;'}))
+  time_work2 = forms.CharField(label = '作業内容2時台', required = False, widget = forms.TextInput(attrs = {'class' : 'form-control custom-border', 'style' : 'width : 200px;'}))
+  time_work3 = forms.CharField(label = '作業内容3時台', required = False, widget = forms.TextInput(attrs = {'class' : 'form-control custom-border', 'style' : 'width : 200px;'}))
+  time_work4 = forms.CharField(label = '作業内容4時台', required = False, widget = forms.TextInput(attrs = {'class' : 'form-control custom-border', 'style' : 'width : 200px;'}))
+  time_work5 = forms.CharField(label = '作業内容5時台', required = False, widget = forms.TextInput(attrs = {'class' : 'form-control custom-border', 'style' : 'width : 200px;'}))
+  time_work6 = forms.CharField(label = '作業内容6時台', required = False, widget = forms.TextInput(attrs = {'class' : 'form-control custom-border', 'style' : 'width : 200px;'}))
+  time_work7 = forms.CharField(label = '作業内容7時台', required = False, widget = forms.TextInput(attrs = {'class' : 'form-control custom-border', 'style' : 'width : 200px;'}))
+  time_work8 = forms.CharField(label = '作業内容8時台', required = False, widget = forms.TextInput(attrs = {'class' : 'form-control custom-border', 'style' : 'width : 200px;'}))
+  time_work9 = forms.CharField(label = '作業内容9時台', required = False, widget = forms.TextInput(attrs = {'class' : 'form-control custom-border', 'style' : 'width : 200px;'}))
+  time_work10 = forms.CharField(label = '作業内容10時台', required = False, widget = forms.TextInput(attrs = {'class' : 'form-control custom-border', 'style' : 'width : 200px;'}))
+  time_work11 = forms.CharField(label = '作業内容11時台', required = False, widget = forms.TextInput(attrs = {'class' : 'form-control custom-border', 'style' : 'width : 200px;'}))
+  time_work12 = forms.CharField(label = '作業内容12時台', required = False, widget = forms.TextInput(attrs = {'class' : 'form-control custom-border', 'style' : 'width : 200px;'}))
+  time_work13 = forms.CharField(label = '作業内容13時台', required = False, widget = forms.TextInput(attrs = {'class' : 'form-control custom-border', 'style' : 'width : 200px;'}))
+  time_work14 = forms.CharField(label = '作業内容14時台', required = False, widget = forms.TextInput(attrs = {'class' : 'form-control custom-border', 'style' : 'width : 200px;'}))
+  time_work15 = forms.CharField(label = '作業内容15時台', required = False, widget = forms.TextInput(attrs = {'class' : 'form-control custom-border', 'style' : 'width : 200px;'}))
+  time_work16 = forms.CharField(label = '作業内容16時台', required = False, widget = forms.TextInput(attrs = {'class' : 'form-control custom-border', 'style' : 'width : 200px;'}))
+  time_work17 = forms.CharField(label = '作業内容17時台', required = False, widget = forms.TextInput(attrs = {'class' : 'form-control custom-border', 'style' : 'width : 200px;'}))
+  time_work18 = forms.CharField(label = '作業内容18時台', required = False, widget = forms.TextInput(attrs = {'class' : 'form-control custom-border', 'style' : 'width : 200px;'}))
+  time_work19 = forms.CharField(label = '作業内容19時台', required = False, widget = forms.TextInput(attrs = {'class' : 'form-control custom-border', 'style' : 'width : 200px;'}))
+  time_work20 = forms.CharField(label = '作業内容20時台', required = False, widget = forms.TextInput(attrs = {'class' : 'form-control custom-border', 'style' : 'width : 200px;'}))
+  time_work21 = forms.CharField(label = '作業内容21時台', required = False, widget = forms.TextInput(attrs = {'class' : 'form-control custom-border', 'style' : 'width : 200px;'}))
+  time_work22 = forms.CharField(label = '作業内容22時台', required = False, widget = forms.TextInput(attrs = {'class' : 'form-control custom-border', 'style' : 'width : 200px;'}))
+  time_work23 = forms.CharField(label = '作業内容23時台', required = False, widget = forms.TextInput(attrs = {'class' : 'form-control custom-border', 'style' : 'width : 200px;'}))
+  detail_work0 = forms.CharField(label = '作業詳細0時台', required = False, widget = forms.TextInput(attrs = {'class' : 'form-control custom-border', 'style' : 'width : 200px;'}))
+  detail_work1 = forms.CharField(label = '作業詳細1時台', required = False, widget = forms.TextInput(attrs = {'class' : 'form-control custom-border', 'style' : 'width : 200px;'}))
+  detail_work2 = forms.CharField(label = '作業詳細2時台', required = False, widget = forms.TextInput(attrs = {'class' : 'form-control custom-border', 'style' : 'width : 200px;'}))
+  detail_work3 = forms.CharField(label = '作業詳細3時台', required = False, widget = forms.TextInput(attrs = {'class' : 'form-control custom-border', 'style' : 'width : 200px;'}))
+  detail_work4 = forms.CharField(label = '作業詳細4時台', required = False, widget = forms.TextInput(attrs = {'class' : 'form-control custom-border', 'style' : 'width : 200px;'}))
+  detail_work5 = forms.CharField(label = '作業詳細5時台', required = False, widget = forms.TextInput(attrs = {'class' : 'form-control custom-border', 'style' : 'width : 200px;'}))
+  detail_work6 = forms.CharField(label = '作業詳細6時台', required = False, widget = forms.TextInput(attrs = {'class' : 'form-control custom-border', 'style' : 'width : 200px;'}))
+  detail_work7 = forms.CharField(label = '作業詳細7時台', required = False, widget = forms.TextInput(attrs = {'class' : 'form-control custom-border', 'style' : 'width : 200px;'}))
+  detail_work8 = forms.CharField(label = '作業詳細8時台', required = False, widget = forms.TextInput(attrs = {'class' : 'form-control custom-border', 'style' : 'width : 200px;'}))
+  detail_work9 = forms.CharField(label = '作業詳細9時台', required = False, widget = forms.TextInput(attrs = {'class' : 'form-control custom-border', 'style' : 'width : 200px;'}))
+  detail_work10 = forms.CharField(label = '作業詳細10時台', required = False, widget = forms.TextInput(attrs = {'class' : 'form-control custom-border', 'style' : 'width : 200px;'}))
+  detail_work11 = forms.CharField(label = '作業詳細11時台', required = False, widget = forms.TextInput(attrs = {'class' : 'form-control custom-border', 'style' : 'width : 200px;'}))
+  detail_work12 = forms.CharField(label = '作業詳細12時台', required = False, widget = forms.TextInput(attrs = {'class' : 'form-control custom-border', 'style' : 'width : 200px;'}))
+  detail_work13 = forms.CharField(label = '作業詳細13時台', required = False, widget = forms.TextInput(attrs = {'class' : 'form-control custom-border', 'style' : 'width : 200px;'}))
+  detail_work14 = forms.CharField(label = '作業詳細14時台', required = False, widget = forms.TextInput(attrs = {'class' : 'form-control custom-border', 'style' : 'width : 200px;'}))
+  detail_work15 = forms.CharField(label = '作業詳細15時台', required = False, widget = forms.TextInput(attrs = {'class' : 'form-control custom-border', 'style' : 'width : 200px;'}))
+  detail_work16 = forms.CharField(label = '作業詳細16時台', required = False, widget = forms.TextInput(attrs = {'class' : 'form-control custom-border', 'style' : 'width : 200px;'}))
+  detail_work17 = forms.CharField(label = '作業詳細17時台', required = False, widget = forms.TextInput(attrs = {'class' : 'form-control custom-border', 'style' : 'width : 200px;'}))
+  detail_work18 = forms.CharField(label = '作業詳細18時台', required = False, widget = forms.TextInput(attrs = {'class' : 'form-control custom-border', 'style' : 'width : 200px;'}))
+  detail_work19 = forms.CharField(label = '作業詳細19時台', required = False, widget = forms.TextInput(attrs = {'class' : 'form-control custom-border', 'style' : 'width : 200px;'}))
+  detail_work20 = forms.CharField(label = '作業詳細20時台', required = False, widget = forms.TextInput(attrs = {'class' : 'form-control custom-border', 'style' : 'width : 200px;'}))
+  detail_work21 = forms.CharField(label = '作業詳細21時台', required = False, widget = forms.TextInput(attrs = {'class' : 'form-control custom-border', 'style' : 'width : 200px;'}))
+  detail_work22 = forms.CharField(label = '作業詳細22時台', required = False, widget = forms.TextInput(attrs = {'class' : 'form-control custom-border', 'style' : 'width : 200px;'}))
+  detail_work23 = forms.CharField(label = '作業詳細23時台', required = False, widget = forms.TextInput(attrs = {'class' : 'form-control custom-border', 'style' : 'width : 200px;'}))
+  over_time = forms.IntegerField(label = '残業', widget = forms.NumberInput(attrs = {'class' : 'form-control custom-border', 'min' : 0, 'style' : 'width : 200px;'}), required = False)
+  breaktime = forms.CharField(label = '昼休憩時間', required = False, widget = forms.TextInput(attrs = {'class' : 'form-control custom-border', 'style' : 'width : 200px;'}))
+  breaktime_over1 = forms.CharField(label = '残業休憩時間1', required = False, widget = forms.TextInput(attrs = {'class' : 'form-control custom-border', 'style' : 'width : 200px;'}))
+  breaktime_over2 = forms.CharField(label = '残業休憩時間2', required = False, widget = forms.TextInput(attrs = {'class' : 'form-control custom-border', 'style' : 'width : 200px;'}))
+  breaktime_over3 = forms.CharField(label = '残業休憩時間3', required = False, widget = forms.TextInput(attrs = {'class' : 'form-control custom-border', 'style' : 'width : 200px;'}))
+  judgement = forms.BooleanField(label = '整合性', required = False, widget = forms.CheckboxInput(attrs = {'class' : 'form-check-input'}))
+  break_change = forms.BooleanField(label = '休憩変更チェック', required = False, widget = forms.CheckboxInput(attrs = {'class' : 'form-check-input'}))
 
 
 

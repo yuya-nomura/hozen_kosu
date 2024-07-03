@@ -201,8 +201,8 @@ def input(request):
               else:
                 # 工数が入力され始めのインデントで最後の空データのインデント取得
                 graph_start_index = i - 1
-                # ループから抜ける
-                break
+              # ループから抜ける
+              break
 
 
           # 工数が入力され終わりのインデント取得ループ
@@ -217,8 +217,8 @@ def input(request):
               else:
                 # 工数が入力され終わりのインデント取得
                 graph_end_index = 290 - i
-                # ループから抜ける
-                break
+              # ループから抜ける
+              break
 
 
           # 入力直が1直の場合の処理
@@ -460,8 +460,8 @@ def input(request):
               else:
                 # 工数が入力され始めのインデントで最後の空データのインデント取得
                 graph_start_index = i - 1
-                # ループから抜ける
-                break
+              # ループから抜ける
+              break
 
 
           # 工数が入力され終わりのインデント取得ループ
@@ -478,8 +478,8 @@ def input(request):
               else:
                 # 工数が入力され終わりのインデント取得
                 graph_end_index = 290 - i
-                # ループから抜ける
-                break
+              # ループから抜ける
+              break
 
   
           # 入力直が1直の場合の処理
@@ -2342,7 +2342,7 @@ def input(request):
               t = '05'
             graph_item.append('{}:{}'.format(i, t))
 
-
+ 
     # 選択されている就業日のグラフデータがない場合の処理
     if data_count.count() == 0:
       # 0を288個入れたリスト作成
@@ -2370,95 +2370,99 @@ def input(request):
             graph_list[i] = n
             break
 
+
+      # 作業内容が空でない場合の処理
+      if graph_list != list(itertools.repeat(0, 288)):
+        # 工数が入力されていない部分を切り捨てデータを見やすく
+        if obj_get.tyoku2 != '3':
+          for i in range(288):
+            if graph_list[i] != 0:
+              if i == 0:
+                graph_start_index = i
+
+              else:
+                graph_start_index = i - 1
+
+              break
     
-      # 工数が入力されていない部分を切り捨てデータを見やすく
-      if obj_get.tyoku2 != '3':
-        for i in range(288):
-          if graph_list[i] != 0:
-            if i == 0:
-              graph_start_index = i
 
-            else:
-              graph_start_index = i - 1
-              break
+          for i in range(1, 289):
+            if graph_list[-i] != 0:
+              if i == 1:
+                graph_end_index = 289 - i
 
-  
-        for i in range(1, 289):
-          if graph_list[-i] != 0:
-            if i == 1:
-              graph_end_index = 289 - i
+              else:
+                graph_end_index = 290 - i
 
-            else:
-              graph_end_index = 290 - i
               break
 
 
-        if obj_get.tyoku2 == '1':
-          if graph_end_index <= 184:
-            graph_end_index = 184
+          if obj_get.tyoku2 == '1':
+            if graph_end_index <= 184:
+              graph_end_index = 184
 
-        if obj_get.tyoku2 == '2' and (member_obj.shop == 'W1' or member_obj.shop == 'W2' or \
-                                        member_obj.shop == 'A1' or member_obj.shop == 'A2'):
-          if graph_end_index <= 240:
-            graph_end_index = 240
+          if obj_get.tyoku2 == '2' and (member_obj.shop == 'W1' or member_obj.shop == 'W2' or \
+                                          member_obj.shop == 'A1' or member_obj.shop == 'A2'):
+            if graph_end_index <= 240:
+              graph_end_index = 240
 
-        if obj_get.tyoku2 == '2' and (member_obj.shop == 'P' or member_obj.shop == 'R' or \
-                                        member_obj.shop == 'T1' or member_obj.shop == 'T2' or \
-                                         member_obj.shop == 'その他' or member_obj.shop == '組長以上'):
-          if graph_end_index <= 270:
-            graph_end_index = 270
+          if obj_get.tyoku2 == '2' and (member_obj.shop == 'P' or member_obj.shop == 'R' or \
+                                          member_obj.shop == 'T1' or member_obj.shop == 'T2' or \
+                                          member_obj.shop == 'その他' or member_obj.shop == '組長以上'):
+            if graph_end_index <= 270:
+              graph_end_index = 270
 
-        if obj_get.tyoku2 == '4':
-          if graph_end_index <= 204:
-            graph_end_index = 204
+          if obj_get.tyoku2 == '4':
+            if graph_end_index <= 204:
+              graph_end_index = 204
 
-        del graph_list[graph_end_index:]
-        del graph_list[:graph_start_index]
-        del graph_item[graph_end_index:]
-        del graph_item[:graph_start_index]
-
-      else:
-        graph_list = graph_list*2
-        graph_item = graph_item*2
-
-        del graph_list[:204]
-        del graph_list[288:]
-        del graph_item[:204]
-        del graph_item[288:]
-
-        for i in range(288):
-          if graph_list[i] != 0:
-            if i == 0:
-              graph_start_index = i
-
-            else:
-              graph_start_index = i - 1
-              break
-
-
-        for i in range(1, 289):
-          if graph_list[-i] != 0:
-            if i == 1:
-              graph_end_index = 289 - i
-
-            else:
-              graph_end_index = 290 - i
-              break
-
-
-        if member_obj.shop == 'W1' or member_obj.shop == 'W2' or \
-          member_obj.shop == 'A1' or member_obj.shop == 'A2':
-          if graph_end_index <= 140:
-            graph_end_index = 140
+          del graph_list[graph_end_index:]
+          del graph_list[:graph_start_index]
+          del graph_item[graph_end_index:]
+          del graph_item[:graph_start_index]
 
         else:
-          if graph_end_index <= 169:
-            graph_end_index = 169
+          graph_list = graph_list*2
+          graph_item = graph_item*2
 
-        del graph_list[graph_end_index:]
-        del graph_list[:graph_start_index]
-        del graph_item[graph_end_index:]
-        del graph_item[:graph_start_index]
+          del graph_list[:204]
+          del graph_list[288:]
+          del graph_item[:204]
+          del graph_item[288:]
+
+          for i in range(288):
+            if graph_list[i] != 0:
+              if i == 0:
+                graph_start_index = i
+
+              else:
+                graph_start_index = i - 1
+                break
+
+
+          for i in range(1, 289):
+            if graph_list[-i] != 0:
+              if i == 1:
+                graph_end_index = 289 - i
+
+              else:
+                graph_end_index = 290 - i
+                break
+
+
+          if member_obj.shop == 'W1' or member_obj.shop == 'W2' or \
+            member_obj.shop == 'A1' or member_obj.shop == 'A2':
+            if graph_end_index <= 140:
+              graph_end_index = 140
+
+          else:
+            if graph_end_index <= 169:
+              graph_end_index = 169
+
+          del graph_list[graph_end_index:]
+          del graph_list[:graph_start_index]
+          del graph_item[graph_end_index:]
+          del graph_item[:graph_start_index]
 
 
 
@@ -6653,7 +6657,7 @@ def all_kosu(request, num):
   # POST時の処理
   if (request.method == 'POST'):
 
-    # 名前リスト定義
+    # 従業員番号リスト定義
     employee_no_name_list = []
 
     # ショップ指定ある場合の処理
@@ -6661,9 +6665,9 @@ def all_kosu(request, num):
       # ショップ指定し工数データのある従業員番号リスト作成
       member_shop_list = member.objects.filter(shop = request.POST['shop']).values_list('employee_no', flat=True)
 
-      # 従業員番号を名前に変更するループ
+      # 従業員番号リスト作成ループ
       for No in list(member_shop_list):
-        # 従業員番号リスト作成
+        # 従業員番号追加
         employee_no_name_list.append(No)
 
     # ショップ指定ある場合の処理
@@ -6671,22 +6675,23 @@ def all_kosu(request, num):
       # ショップ指定し工数データのある従業員番号リスト作成
       member_shop_list = member.objects.all().values_list('employee_no', flat=True)
 
-      # 従業員番号を名前に変更するループ
+      # 従業員番号リスト作成ループ
       for No in list(member_shop_list):
-        # 従業員番号リスト作成
+        # 従業員番号追加
         employee_no_name_list.append(No)
 
     # 整合性OKをPOSTした場合の処理
     if request.POST['OK_NG'] == 'OK':
-      judgement = True
+      judgement = [True]
     
     # 整合性NGをPOSTした場合の処理
     elif request.POST['OK_NG'] == 'NG':
-      judgement = False
+      judgement = [False]
 
     # 整合性で空欄をPOSTした場合の処理
     else:
-      judgement = ''
+      judgement = [True, False]
+
 
     # 工数データ取得
     obj = Business_Time_graph.objects.filter(employee_no3__contains = request.POST['name'], \
@@ -6694,7 +6699,7 @@ def all_kosu(request, num):
                                              work_day2__contains = request.POST['work_day'], \
                                              tyoku2__contains = request.POST['tyoku'], \
                                              work_time__contains = request.POST['work'], \
-                                             judgement = judgement, \
+                                             judgement__in = judgement, \
                                              ).order_by('work_day2', 'employee_no3').reverse()
 
     # 取得した工数データを1ページあたりの件数分取得
@@ -6758,9 +6763,14 @@ def all_kosu_detail(request, num):
     return redirect(to = '/login')
 
   # ログイン者が問い合わせ担当者でない場合の処理
-  if request.session['login_No'] not in [page_num.administrator_employee_no1, page_num.administrator_employee_no2, page_num.administrator_employee_no3]:
+  if request.session['login_No'] not in (page_num.administrator_employee_no1, page_num.administrator_employee_no2, page_num.administrator_employee_no3):
     # 権限がなければメインページに飛ぶ
     return redirect(to = '/')
+
+
+  # 指定IDの工数履歴のレコードのオブジェクトを変数に入れる
+  obj_get = Business_Time_graph.objects.get(id = num)
+
 
   # フォーム定義
   form = all_kosuForm()
@@ -6769,10 +6779,10 @@ def all_kosu_detail(request, num):
   Ver_list = kosu_division.objects.values_list('kosu_name', flat=True)\
                      .order_by('id').distinct()
 
-  # 名前リスト定義
+  # 工数定義区分Verリスト定義
   Ver_choose = []
 
-  # 従業員番号を名前に変更するループ
+  # 工数定義区分Verを名前に変更するループ
   for No in list(Ver_list):
     # 名前リスト作成
     Ver_choose.append(No)
@@ -6780,7 +6790,9 @@ def all_kosu_detail(request, num):
   # フォーム選択肢定義
   form.fields['def_ver'].choices = Ver_choose
 
-
+  form_default = {
+    'employee_no' : obj_get.employee_no3,
+  }
 
 
 
