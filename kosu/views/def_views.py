@@ -137,7 +137,7 @@ def kosu_Ver(request):
     choices_list.append((i.kosu_name, i.kosu_name))
 
   # フォームの初期値を設置
-  form_init = {'versionchoice' : request.session.get('input_def', None)}
+  form_init = {'versionchoice' : request.session['input_def']}
   # フォームの初期状態定義
   form = versionchoiceForm(form_init)
   # フォームの選択肢定義
@@ -150,7 +150,7 @@ def kosu_Ver(request):
     request.session['input_def'] = request.POST['versionchoice']
 
   # Ver表示用オブジェクト取得
-  mes_obj = kosu_division.objects.get(kosu_name = request.session.get('input_def', ''))
+  mes_obj = kosu_division.objects.get(kosu_name = request.session['input_def'])
 
   # HTMLに渡す辞書
   context = {

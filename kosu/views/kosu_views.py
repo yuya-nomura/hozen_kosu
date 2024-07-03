@@ -5,6 +5,7 @@ from django.core.paginator import Paginator
 import datetime
 import itertools
 from ..utils import round_time
+from django.db.models import Q
 from ..models import member
 from ..models import Business_Time_graph
 from ..models import kosu_division
@@ -14,6 +15,8 @@ from ..forms import kosu_dayForm
 from ..forms import team_kosuForm
 from ..forms import schedule_timeForm
 from ..forms import scheduleForm
+from ..forms import all_kosu_findForm
+from ..forms import all_kosuForm
 
 
 
@@ -717,7 +720,7 @@ def input(request):
 
 
       # 以前同日に打ち込んだ工数区分定義と違う場合の処理
-      if obj_get.def_ver2 != request.session['input_def'] and obj_get.def_ver2 != None:
+      if obj_get.def_ver2 not in (request.session['input_def'], None, ''):
         # エラーメッセージ出力
         messages.error(request, '前に入力された工数と工数区分定義のVerが違います。入力できません。ERROR007')
         # このページをリダイレクト
@@ -2086,19 +2089,34 @@ def input(request):
     request.session['start_time'] = end_time
     request.session['end_time'] = end_time
 
+    # エラー時の直保持がセッションにある場合の処理
+    if 'error_tyoku' in request.session:
+      # セッション削除
+      del request.session['error_tyoku']
+
+    # エラー時の勤務保持がセッションにある場合の処理
+    if 'error_work' in request.session:
+      # セッション削除
+      del request.session['error_work']
 
     # エラー時の工数定義区分保持がセッションにある場合の処理
     if 'error_def' in request.session:
       # セッション削除
       del request.session['error_def']
 
-    # エラー時の作業詳細保持保持がセッションにある場合の処理
+    # エラー時の作業詳細保持がセッションにある場合の処理
     if 'error_detail' in request.session:
       # セッション削除
       del request.session['error_detail']
 
+    # エラー時の残業保持がセッションにある場合の処理
+    if 'error_over_work' in request.session:
+      # セッション削除
+      del request.session['error_over_work']
+
     # 翌日チェックリセット
     request.session['tomorrow_check'] = False
+
 
     # このページをリダイレクトする
     return redirect(to = '/input')
@@ -2546,41 +2564,26 @@ def input(request):
     # 休憩時間変更に空を入れる
     break_change_default = False
 
-    # エラー時の直保持がセッションにある場合の処理
-    if 'error_tyoku' in request.session:
-      # 直初期値にエラー時の直保持を入れる
-      tyoku_default = request.session['error_tyoku']
-      # セッション削除
-      del request.session['error_tyoku']
-    
-    # エラー時の直保持がセッションにない場合の処理
-    else:
-      # 直初期値に空を入れる
-      tyoku_default = ''
+  # エラー時の直保持がセッションにある場合の処理
+  if 'error_tyoku' in request.session:
+    # 直初期値にエラー時の直保持を入れる
+    tyoku_default = request.session['error_tyoku']
+    # セッション削除
+    del request.session['error_tyoku']
 
-    # エラー時の勤務保持がセッションにある場合の処理
-    if 'error_work' in request.session:
-      # 勤務初期値にエラー時の直保持を入れる
-      work_default = request.session['error_work']
-      # セッション削除
-      del request.session['error_work']
-    
-    # エラー時の勤務保持がセッションにない場合の処理
-    else:
-      # 勤務初期値に空を入れる
-      work_default = ''
+  # エラー時の勤務保持がセッションにある場合の処理
+  if 'error_work' in request.session:
+    # 勤務初期値にエラー時の直保持を入れる
+    work_default = request.session['error_work']
+    # セッション削除
+    del request.session['error_work']
 
-    # エラー時の残業保持がセッションにある場合の処理
-    if 'error_over_work' in request.session:
-      # 残業初期値にエラー時の直保持を入れる
-      over_work_default = request.session['error_over_work']
-      # セッション削除
-      del request.session['error_over_work']
-    
-    # エラー時の残業保持がセッションにない場合の処理
-    else:
-      # 勤務初期値に空を入れる
-      over_work_default = 0
+  # エラー時の残業保持がセッションにある場合の処理
+  if 'error_over_work' in request.session:
+    # 残業初期値にエラー時の直保持を入れる
+    over_work_default = request.session['error_over_work']
+    # セッション削除
+    del request.session['error_over_work']
 
 
   # 初期値を設定するリスト作成
@@ -6083,13 +6086,13 @@ def schedule(request):
 
 
           # 就業を上書き
-          Business_Time_graph.objects.update_or_create(employee_no3 = request.session.get('login_No', ''), \
+          Business_Time_graph.objects.update_or_create(employee_no3 = request.session['login_No'], \
             work_day2 = datetime.date(year, month, day_list[i]), \
               defaults = {'work_time' : eval('request.POST["day{}"]'.format(i + 1)), \
                           'judgement' : judgement})
 
           # 更新後の就業を取得
-          record_del = Business_Time_graph.objects.get(employee_no3 = request.session.get('login_No', ''), \
+          record_del = Business_Time_graph.objects.get(employee_no3 = request.session['login_No'], \
                                                        work_day2 = datetime.date(year, month, day_list[i]))
 
           # 更新後、就業が消されていて工数データが空であればレコードを消す
@@ -6119,7 +6122,7 @@ def schedule(request):
           member_instance = member.objects.get(employee_no = request.session['login_No'])
 
           # 就業データ作成(空の工数データも入れる)
-          Business_Time_graph.objects.update_or_create(employee_no3 = request.session.get('login_No', ''), \
+          Business_Time_graph.objects.update_or_create(employee_no3 = request.session['login_No'], \
             work_day2 = datetime.date(year, month, day_list[i]), \
               defaults = {'name' : member_instance, \
                           'work_time' : eval('request.POST["day{}"]'.format(i + 1)), \
@@ -6614,6 +6617,168 @@ def over_time(request):
 
 
 
+# 全工数操作画面定義
+def all_kosu(request, num):
+
+  # 設定データ取得
+  page_num = administrator_data.objects.order_by("id").last()
+
+  # セッションにログインした従業員番号がない場合の処理
+  if request.session.get('login_No', None) == None:
+    # 未ログインならログインページに飛ぶ
+    return redirect(to = '/login')
+
+  # ログイン者が問い合わせ担当者でない場合の処理
+  if request.session['login_No'] not in [page_num.administrator_employee_no1, page_num.administrator_employee_no2, page_num.administrator_employee_no3]:
+    # 権限がなければメインページに飛ぶ
+    return redirect(to = '/')
+
+
+  # 工数データのある従業員番号リスト作成
+  employee_no_list = Business_Time_graph.objects.values_list('employee_no3', flat=True)\
+                     .order_by('employee_no3').distinct()
+  
+  # 名前リスト定義
+  name_list = [['', '']]
+
+  # 従業員番号を名前に変更するループ
+  for No in list(employee_no_list):
+    # 指定従業員番号で人員情報取得
+    name = member.objects.get(employee_no = No)
+    # 名前リスト作成
+    name_list.append([No, name])
+
+
+
+  # POST時の処理
+  if (request.method == 'POST'):
+
+    # 名前リスト定義
+    employee_no_name_list = []
+
+    # ショップ指定ある場合の処理
+    if request.POST['shop'] != '':
+      # ショップ指定し工数データのある従業員番号リスト作成
+      member_shop_list = member.objects.filter(shop = request.POST['shop']).values_list('employee_no', flat=True)
+
+      # 従業員番号を名前に変更するループ
+      for No in list(member_shop_list):
+        # 従業員番号リスト作成
+        employee_no_name_list.append(No)
+
+    # ショップ指定ある場合の処理
+    else:
+      # ショップ指定し工数データのある従業員番号リスト作成
+      member_shop_list = member.objects.all().values_list('employee_no', flat=True)
+
+      # 従業員番号を名前に変更するループ
+      for No in list(member_shop_list):
+        # 従業員番号リスト作成
+        employee_no_name_list.append(No)
+
+    # 整合性OKをPOSTした場合の処理
+    if request.POST['OK_NG'] == 'OK':
+      judgement = True
+    
+    # 整合性NGをPOSTした場合の処理
+    elif request.POST['OK_NG'] == 'NG':
+      judgement = False
+
+    # 整合性で空欄をPOSTした場合の処理
+    else:
+      judgement = ''
+
+    # 工数データ取得
+    obj = Business_Time_graph.objects.filter(employee_no3__contains = request.POST['name'], \
+                                             employee_no3__in = employee_no_name_list, \
+                                             work_day2__contains = request.POST['work_day'], \
+                                             tyoku2__contains = request.POST['tyoku'], \
+                                             work_time__contains = request.POST['work'], \
+                                             judgement = judgement, \
+                                             ).order_by('work_day2', 'employee_no3').reverse()
+
+    # 取得した工数データを1ページあたりの件数分取得
+    data = Paginator(obj, page_num.menu_row)
+
+
+    # フォーム定義
+    form = all_kosu_findForm(request.POST)
+    # フォーム選択肢定義
+    form.fields['name'].choices = name_list
+
+
+
+  # POSTしていない時の処理
+  else:
+    # 全工数データを取得
+    obj = Business_Time_graph.objects.all().order_by('work_day2', 'employee_no3').reverse()
+    # 取得した工数データを1ページあたりの件数分取得
+    data = Paginator(obj, page_num.menu_row)
+
+
+    # フォーム定義
+    form = all_kosu_findForm()
+    # フォーム選択肢定義
+    form.fields['name'].choices = name_list
+
+
+
+  # HTMLに渡す辞書
+  context = {
+    'title' : '全工数履歴',
+    'data' : data.get_page(num),
+    'form' : form,
+    'num' : num,
+    }
+  
+
+
+  # 指定したHTMLに辞書を渡して表示を完成させる
+  return render(request, 'kosu/all_kosu.html', context)
+
+
+
+
+
+#--------------------------------------------------------------------------------------------------------
+
+
+
+
+
+# 全工数操作画面定義
+def all_kosu_detail(request, num):
+
+  # 設定データ取得
+  page_num = administrator_data.objects.order_by("id").last()
+
+  # セッションにログインした従業員番号がない場合の処理
+  if request.session.get('login_No', None) == None:
+    # 未ログインならログインページに飛ぶ
+    return redirect(to = '/login')
+
+  # ログイン者が問い合わせ担当者でない場合の処理
+  if request.session['login_No'] not in [page_num.administrator_employee_no1, page_num.administrator_employee_no2, page_num.administrator_employee_no3]:
+    # 権限がなければメインページに飛ぶ
+    return redirect(to = '/')
+
+  # フォーム定義
+  form = all_kosuForm()
+
+  # 工数定義区分Verリスト作成
+  Ver_list = kosu_division.objects.values_list('kosu_name', flat=True)\
+                     .order_by('id').distinct()
+
+  # 名前リスト定義
+  Ver_choose = []
+
+  # 従業員番号を名前に変更するループ
+  for No in list(Ver_list):
+    # 名前リスト作成
+    Ver_choose.append(No)
+
+  # フォーム選択肢定義
+  form.fields['def_ver'].choices = Ver_choose
 
 
 
@@ -6622,6 +6787,50 @@ def over_time(request):
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  # HTMLに渡す辞書
+  context = {
+    'title' : '工数データ',
+    'form' : form,
+    'num' : num,
+    }
+  
+
+
+  # 指定したHTMLに辞書を渡して表示を完成させる
+  return render(request, 'kosu/all_kosu_detail.html', context)
 
 
 

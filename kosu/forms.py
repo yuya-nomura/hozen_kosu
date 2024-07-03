@@ -512,3 +512,105 @@ class inquiry_findForm(forms.Form):
   category = forms.ChoiceField(label = 'カテゴリー', widget = forms.Select(attrs = {'class' : 'form-control custom-border', 'style' : 'width : 200px;'}), choices = category_list, required = False)
   name_list = forms.ChoiceField(label = '氏名', widget = forms.Select(attrs = {'class' : 'form-control custom-border', 'style' : 'width : 200px;'}), required = False)
 
+
+
+
+
+class all_kosu_findForm(forms.Form):
+  shop_list = [
+    ('', ''),
+    ('P', 'プレス'),
+    ('R', '成形'),
+    ('W1', '301ボデ'),
+    ('W2', '302ボデ'),
+    ('T1', '301塗装'),
+    ('T2', '302塗装'),
+    ('A1', '301組立'),
+    ('A2', '302組立'),
+    ('その他', 'その他'),
+    ('組長以上', '組長以上')
+    ]
+
+  tyoku_list = [
+    ('', ''),
+    ('1', '1直'), 
+    ('2', '2直'), 
+    ('3', '3直'), 
+    ('4', '常昼')
+    ]
+
+  work_list = [
+    ('', ''),
+    ('出勤', '出勤'),
+    ('シフト出', 'シフト出'),
+    ('休出', '休出'),
+    ('休日', '休日'),
+    ('年休', '年休'),
+    ('半前年休', '半前年休'),
+    ('半後年休', '半後年休'),
+    ('公休', '公休'),
+    ('シフト休', 'シフト休'),
+    ('代休', '代休'),
+    ('早退', '早退・遅刻'),
+    ]
+
+  OK_NG_list = [
+    ('', ''),
+    ('OK', 'OK'), 
+    ('NG', 'NG'), 
+    ]
+
+  name = forms.ChoiceField(label = '氏名', widget = forms.Select(attrs = {'class' : 'form-control custom-border', 'style' : 'width : 200px;'}), required = False)
+  shop = forms.ChoiceField(label = 'ショップ選択', widget = forms.Select(attrs = {'class' : 'form-control custom-border', 'style' : 'width : 200px;'}), choices = shop_list, required = False)
+  tyoku = forms.ChoiceField(label = '直選択', widget = forms.Select(attrs = {'class' : 'form-control custom-border', 'style' : 'width : 200px;'}), choices = tyoku_list, required = False)
+  work = forms.ChoiceField(label = '勤務選択', widget = forms.Select(attrs = {'class' : 'form-control custom-border', 'style' : 'width : 200px;'}), choices = work_list, required = False)
+  OK_NG = forms.ChoiceField(label = '整合性', widget = forms.Select(attrs = {'class' : 'form-control custom-border', 'style' : 'width : 200px;'}), choices = OK_NG_list, required = False)
+
+
+
+
+
+class all_kosuForm(forms.Form):
+
+  employee_no = forms.IntegerField(label = '従業員番号', widget = forms.NumberInput(attrs = {'class' : 'form-control custom-border', 'min' : 0, 'style' : 'width : 200px;'}), required = False)
+  def_ver = forms.ChoiceField(label = '工数定義区分Ver', widget = forms.Select(attrs = {'class' : 'form-control custom-border', 'style' : 'width : 200px;'}), required = False)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
