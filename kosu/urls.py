@@ -20,6 +20,7 @@ urlpatterns = [
     path('administrator', main_views.administrator_menu, name = 'administrator'),
     path('all_kosu/<int:num>', kosu_views.all_kosu, name = 'all_kosu'),
     path('all_kosu_detail/<int:num>', kosu_views.all_kosu_detail, name = 'all_kosu_detail'),
+    path('all_kosu_delete/<int:num>', kosu_views.all_kosu_delete, name = 'all_kosu_delete'),
     path('input', kosu_views.input, name = 'input'),
     path('today_break_time', kosu_views.today_break_time, name = 'today_break_time'),
     path('list/<int:num>', kosu_views.kosu_list, name = 'kosu_list'),

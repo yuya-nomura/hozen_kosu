@@ -2567,6 +2567,10 @@ def input(request):
     ok_ng = False
     # 休憩時間変更に空を入れる
     break_change_default = False
+    # 勤務情報に空を入れる 
+    work_default = ''
+    # 直情報に空を入れる
+    tyoku_default = ''
 
   # エラー時の直保持がセッションにある場合の処理
   if 'error_tyoku' in request.session:
@@ -4761,7 +4765,7 @@ def detail(request, num):
 
 
 
-# 工数履歴画面定義
+# 工数削除画面定義
 def delete(request, num):
 
   # 未ログインならログインページに飛ぶ
@@ -5523,6 +5527,12 @@ def graph(request, num):
   # 設定データ取得
   page_num = administrator_data.objects.order_by("id").last()
 
+  # 全データ確認表示変数
+  if request.session['login_No'] in (page_num.administrator_employee_no1, page_num.administrator_employee_no2, page_num.administrator_employee_no3):
+    display_open = True
+  else:
+    display_open = False
+
 
   # 工数データのある従業員番号リストを作成
   employee_no_list = Business_Time_graph.objects.values_list('employee_no3', flat=True)\
@@ -5575,7 +5585,8 @@ def graph(request, num):
   context = {
     'title' : '工数データ',
     'data' : data.get_page(num),
-    'form' : form
+    'form' : form,
+    'display_open' : display_open,
   }
 
 
@@ -6772,12 +6783,9 @@ def all_kosu_detail(request, num):
   obj_get = Business_Time_graph.objects.get(id = num)
 
 
-  # フォーム定義
-  form = all_kosuForm()
-
   # 工数定義区分Verリスト作成
   Ver_list = kosu_division.objects.values_list('kosu_name', flat=True)\
-                     .order_by('id').distinct()
+                    .order_by('id').distinct()
 
   # 工数定義区分Verリスト定義
   Ver_choose = []
@@ -6785,57 +6793,369 @@ def all_kosu_detail(request, num):
   # 工数定義区分Verを名前に変更するループ
   for No in list(Ver_list):
     # 名前リスト作成
-    Ver_choose.append(No)
-
-  # フォーム選択肢定義
-  form.fields['def_ver'].choices = Ver_choose
-
-  form_default = {
-    'employee_no' : obj_get.employee_no3,
-  }
+    Ver_choose.append([No, No])
 
 
 
+  # POST時の処理
+  if (request.method == 'POST'):
+    # フォーム定義
+    form = all_kosuForm(request.POST)
+
+    # フォーム選択肢定義
+    form.fields['def_ver'].choices = Ver_choose
+
+    # 作業内容整形
+    time_work = request.POST['time_work0'] + \
+                request.POST['time_work1'] + \
+                request.POST['time_work2'] + \
+                request.POST['time_work3'] + \
+                request.POST['time_work4'] + \
+                request.POST['time_work5'] + \
+                request.POST['time_work6'] + \
+                request.POST['time_work7'] + \
+                request.POST['time_work8'] + \
+                request.POST['time_work9'] + \
+                request.POST['time_work10'] + \
+                request.POST['time_work11'] + \
+                request.POST['time_work12'] + \
+                request.POST['time_work13'] + \
+                request.POST['time_work14'] + \
+                request.POST['time_work15'] + \
+                request.POST['time_work16'] + \
+                request.POST['time_work17'] + \
+                request.POST['time_work18'] + \
+                request.POST['time_work19'] + \
+                request.POST['time_work20'] + \
+                request.POST['time_work21'] + \
+                request.POST['time_work22'] + \
+                request.POST['time_work23']
+
+
+    # 作業内容データの内容を上書きして更新
+    Business_Time_graph.objects.update_or_create(employee_no3 = request.POST['employee_no'], \
+                                                 work_day2 = request.POST['work_day'], \
+                                                 defaults = {'def_ver2' : request.POST['def_ver'], \
+                                                             'work_time' : request.POST['work_time'], \
+                                                             'tyoku2' : request.POST['tyoku'], \
+                                                             'time_work' : time_work, \
+                                                             'over_time' : request.POST['over_time'], \
+                                                             'breaktime' : request.POST['breaktime'], \
+                                                             'breaktime_over1' : request.POST['breaktime_over1'], \
+                                                             'breaktime_over2' : request.POST['breaktime_over2'], \
+                                                             'breaktime_over3' : request.POST['breaktime_over3'], \
+                                                             'judgement' : 'judgement' in request.POST, \
+                                                             'break_change' : 'break_change' in request.POST})
+
+    default_day = str(request.POST['work_day'])
 
 
 
+  # POST時以外の処理
+  else:
+    # 作業詳細を取得しリストに解凍
+    detail_list = obj_get.detail_work.split('$')
+
+    # 時間帯作業分け
+    work_list0 = obj_get.time_work[ : 12]
+    work_list1 = obj_get.time_work[12 : 24]
+    work_list2 = obj_get.time_work[24 : 36]
+    work_list3 = obj_get.time_work[36 : 48]
+    work_list4 = obj_get.time_work[48 : 60]
+    work_list5 = obj_get.time_work[60 : 72]
+    work_list6 = obj_get.time_work[72 : 84]
+    work_list7 = obj_get.time_work[84 : 96]
+    work_list8 = obj_get.time_work[96 : 108]
+    work_list9 = obj_get.time_work[108 : 120]
+    work_list10 = obj_get.time_work[120 : 132]
+    work_list11 = obj_get.time_work[132 : 144]
+    work_list12 = obj_get.time_work[144 : 156]
+    work_list13 = obj_get.time_work[156 : 168]
+    work_list14 = obj_get.time_work[168 : 180]
+    work_list15 = obj_get.time_work[180 : 192]
+    work_list16 = obj_get.time_work[192 : 204]
+    work_list17 = obj_get.time_work[204 : 216]
+    work_list18 = obj_get.time_work[216 : 228]
+    work_list19 = obj_get.time_work[228 : 240]
+    work_list20 = obj_get.time_work[240 : 252]
+    work_list21 = obj_get.time_work[252 : 264]
+    work_list22 = obj_get.time_work[264 : 276]
+    work_list23 = obj_get.time_work[276 : ]
+    detail_list0 = detail_list[ : 12]
+    detail_list1 = detail_list[12 : 24]
+    detail_list2 = detail_list[24 : 36]
+    detail_list3 = detail_list[36 : 48]
+    detail_list4 = detail_list[48 : 60]
+    detail_list5 = detail_list[60 : 72]
+    detail_list6 = detail_list[72 : 84]
+    detail_list7 = detail_list[84 : 96]
+    detail_list8 = detail_list[96 : 108]
+    detail_list9 = detail_list[108 : 120]
+    detail_list10 = detail_list[120 : 132]
+    detail_list11 = detail_list[132 : 144]
+    detail_list12 = detail_list[144 : 156]
+    detail_list13 = detail_list[156 : 168]
+    detail_list14 = detail_list[168 : 180]
+    detail_list15 = detail_list[180 : 192]
+    detail_list16 = detail_list[192 : 204]
+    detail_list17 = detail_list[204 : 216]
+    detail_list18 = detail_list[216 : 228]
+    detail_list19 = detail_list[228 : 240]
+    detail_list20 = detail_list[240 : 252]
+    detail_list21 = detail_list[252 : 264]
+    detail_list22 = detail_list[264 : 276]
+    detail_list23 = detail_list[276 : ]
+
+    # 作業詳細リストを文字列に変更
+    detail_list_str0 = ''
+    detail_list_str1 = ''
+    detail_list_str2 = ''
+    detail_list_str3 = ''
+    detail_list_str4 = ''
+    detail_list_str5 = ''
+    detail_list_str6 = ''
+    detail_list_str7 = ''
+    detail_list_str8 = ''
+    detail_list_str9 = ''
+    detail_list_str10 = ''
+    detail_list_str11 = ''
+    detail_list_str12 = ''
+    detail_list_str13 = ''
+    detail_list_str14 = ''
+    detail_list_str15 = ''
+    detail_list_str16 = ''
+    detail_list_str17 = ''
+    detail_list_str18 = ''
+    detail_list_str19 = ''
+    detail_list_str20 = ''
+    detail_list_str21 = ''
+    detail_list_str22 = ''
+    detail_list_str23 = ''
+
+    # 作業詳細リストSTRに変換
+    for i, e in enumerate(detail_list0):
+      if i == len(detail_list0) - 1:
+        detail_list_str0 = detail_list_str0 + detail_list0[i]
+      else:
+        detail_list_str0 = detail_list_str0 + detail_list0[i] + '$'
+
+    for i, e in enumerate(detail_list1):
+      if i == len(detail_list1) - 1:
+        detail_list_str1 = detail_list_str1 + detail_list1[i]
+      else:
+        detail_list_str1 = detail_list_str1 + detail_list1[i] + '$'
+
+    for i, e in enumerate(detail_list2):
+      if i == len(detail_list2) - 1:
+        detail_list_str2 = detail_list_str2 + detail_list2[i]
+      else:
+        detail_list_str2 = detail_list_str2 + detail_list2[i] + '$'
+
+    for i, e in enumerate(detail_list3):
+      if i == len(detail_list3) - 1:
+        detail_list_str3 = detail_list_str3 + detail_list3[i]
+      else:
+        detail_list_str3 = detail_list_str3 + detail_list3[i] + '$'
+
+    for i, e in enumerate(detail_list4):
+      if i == len(detail_list4) - 1:
+        detail_list_str4 = detail_list_str4 + detail_list4[i]
+      else:
+        detail_list_str4 = detail_list_str4 + detail_list4[i] + '$'
+
+    for i, e in enumerate(detail_list5):
+      if i == len(detail_list5) - 1:
+        detail_list_str5 = detail_list_str5 + detail_list5[i]
+      else:
+        detail_list_str5 = detail_list_str5 + detail_list5[i] + '$'
+
+    for i, e in enumerate(detail_list6):
+      if i == len(detail_list6) - 1:
+        detail_list_str6 = detail_list_str6 + detail_list6[i]
+      else:
+        detail_list_str6 = detail_list_str6 + detail_list6[i] + '$'
+
+    for i, e in enumerate(detail_list7):
+      if i == len(detail_list7) - 1:
+        detail_list_str7 = detail_list_str7 + detail_list7[i]
+      else:
+        detail_list_str7 = detail_list_str7 + detail_list7[i] + '$'
+
+    for i, e in enumerate(detail_list8):
+      if i == len(detail_list8) - 1:
+        detail_list_str8 = detail_list_str8 + detail_list8[i]
+      else:
+        detail_list_str8 = detail_list_str8 + detail_list8[i] + '$'
+
+    for i, e in enumerate(detail_list9):
+      if i == len(detail_list9) - 1:
+        detail_list_str9 = detail_list_str9 + detail_list9[i]
+      else:
+        detail_list_str9 = detail_list_str9 + detail_list9[i] + '$'
+
+    for i, e in enumerate(detail_list10):
+      if i == len(detail_list10) - 1:
+        detail_list_str10 = detail_list_str10 + detail_list10[i]
+      else:
+        detail_list_str10 = detail_list_str10 + detail_list10[i] + '$'
+
+    for i, e in enumerate(detail_list11):
+      if i == len(detail_list11) - 1:
+        detail_list_str11 = detail_list_str11 + detail_list11[i]
+      else:
+        detail_list_str11 = detail_list_str11 + detail_list11[i] + '$'
+
+    for i, e in enumerate(detail_list12):
+      if i == len(detail_list12) - 1:
+        detail_list_str12 = detail_list_str12 + detail_list12[i]
+      else:
+        detail_list_str12 = detail_list_str12 + detail_list12[i] + '$'
+
+    for i, e in enumerate(detail_list13):
+      if i == len(detail_list13) - 1:
+        detail_list_str13 = detail_list_str13 + detail_list13[i]
+      else:
+        detail_list_str13 = detail_list_str13 + detail_list13[i] + '$'
+
+    for i, e in enumerate(detail_list14):
+      if i == len(detail_list14) - 1:
+        detail_list_str14 = detail_list_str14 + detail_list14[i]
+      else:
+        detail_list_str14 = detail_list_str14 + detail_list14[i] + '$'
+
+    for i, e in enumerate(detail_list15):
+      if i == len(detail_list15) - 1:
+        detail_list_str15 = detail_list_str15 + detail_list15[i]
+      else:
+        detail_list_str15 = detail_list_str15 + detail_list15[i] + '$'
+
+    for i, e in enumerate(detail_list16):
+      if i == len(detail_list16) - 1:
+        detail_list_str16 = detail_list_str16 + detail_list16[i]
+      else:
+        detail_list_str16 = detail_list_str16 + detail_list16[i] + '$'
+
+    for i, e in enumerate(detail_list17):
+      if i == len(detail_list17) - 1:
+        detail_list_str17 = detail_list_str17 + detail_list17[i]
+      else:
+        detail_list_str17 = detail_list_str17 + detail_list17[i] + '$'
+
+    for i, e in enumerate(detail_list18):
+      if i == len(detail_list18) - 1:
+        detail_list_str18 = detail_list_str18 + detail_list18[i]
+      else:
+        detail_list_str18 = detail_list_str18 + detail_list18[i] + '$'
+
+    for i, e in enumerate(detail_list19):
+      if i == len(detail_list19) - 1:
+        detail_list_str19 = detail_list_str19 + detail_list19[i]
+      else:
+        detail_list_str19 = detail_list_str19 + detail_list19[i] + '$'
+
+    for i, e in enumerate(detail_list20):
+      if i == len(detail_list20) - 1:
+        detail_list_str20 = detail_list_str20 + detail_list20[i]
+      else:
+        detail_list_str20 = detail_list_str20 + detail_list20[i] + '$'
+
+    for i, e in enumerate(detail_list21):
+      if i == len(detail_list21) - 1:
+        detail_list_str21 = detail_list_str21 + detail_list21[i]
+      else:
+        detail_list_str21 = detail_list_str21 + detail_list21[i] + '$'
+
+    for i, e in enumerate(detail_list22):
+      if i == len(detail_list22) - 1:
+        detail_list_str22 = detail_list_str22 + detail_list22[i]
+      else:
+        detail_list_str22 = detail_list_str22 + detail_list22[i] + '$'
+
+    for i, e in enumerate(detail_list23):
+      if i == len(detail_list23) - 1:
+        detail_list_str23 = detail_list_str23 + detail_list23[i]
+      else:
+        detail_list_str23 = detail_list_str23 + detail_list23[i] + '$'
 
 
+    form_default = {
+      'employee_no' : obj_get.employee_no3,
+      'def_ver' : obj_get.def_ver2,
+      'tyoku' : obj_get.tyoku2,
+      'work_time' : obj_get.work_time,
+      'time_work0' : work_list0,
+      'time_work1' : work_list1,
+      'time_work2' : work_list2,
+      'time_work3' : work_list3,
+      'time_work4' : work_list4,
+      'time_work5' : work_list5,
+      'time_work6' : work_list6,
+      'time_work7' : work_list7,
+      'time_work8' : work_list8,
+      'time_work9' : work_list9,
+      'time_work10' : work_list10,
+      'time_work11' : work_list11,
+      'time_work12' : work_list12,
+      'time_work13' : work_list13,
+      'time_work14' : work_list14,
+      'time_work15' : work_list15,
+      'time_work16' : work_list16,
+      'time_work17' : work_list17,
+      'time_work18' : work_list18,
+      'time_work19' : work_list19,
+      'time_work20' : work_list20,
+      'time_work21' : work_list21,
+      'time_work22' : work_list22,
+      'time_work23' : work_list23,
+      'detail_work0' : detail_list_str0,
+      'detail_work1' : detail_list_str1,
+      'detail_work2' : detail_list_str2,
+      'detail_work3' : detail_list_str3,
+      'detail_work4' : detail_list_str4,
+      'detail_work5' : detail_list_str5,
+      'detail_work6' : detail_list_str6,
+      'detail_work7' : detail_list_str7,
+      'detail_work8' : detail_list_str8,
+      'detail_work9' : detail_list_str9,
+      'detail_work10' : detail_list_str10,
+      'detail_work11' : detail_list_str11,
+      'detail_work12' : detail_list_str12,
+      'detail_work13' : detail_list_str13,
+      'detail_work14' : detail_list_str14,
+      'detail_work15' : detail_list_str15,
+      'detail_work16' : detail_list_str16,
+      'detail_work17' : detail_list_str17,
+      'detail_work18' : detail_list_str18,
+      'detail_work19' : detail_list_str19,
+      'detail_work20' : detail_list_str20,
+      'detail_work21' : detail_list_str21,
+      'detail_work22' : detail_list_str22,
+      'detail_work23' : detail_list_str23,
+      'over_time' : obj_get.over_time,
+      'breaktime' : obj_get.breaktime,
+      'breaktime_over1' : obj_get.breaktime_over1,
+      'breaktime_over2' : obj_get.breaktime_over2,
+      'breaktime_over3' : obj_get.breaktime_over3,
+      'judgement' : obj_get.judgement,
+      'break_change' : obj_get.break_change,
+      }
+
+    default_day = obj_get.work_day2
 
 
+    # フォーム定義
+    form = all_kosuForm(form_default)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    # フォーム選択肢定義
+    form.fields['def_ver'].choices = Ver_choose
 
 
 
   # HTMLに渡す辞書
   context = {
-    'title' : '工数データ',
+    'title' : '工数データ編集',
     'form' : form,
+    'default_day' : str(default_day),
     'num' : num,
     }
   
@@ -6843,6 +7163,72 @@ def all_kosu_detail(request, num):
 
   # 指定したHTMLに辞書を渡して表示を完成させる
   return render(request, 'kosu/all_kosu_detail.html', context)
+
+
+
+
+
+#--------------------------------------------------------------------------------------------------------
+
+
+
+
+# 全工数操作画面定義
+def all_kosu_delete(request, num):
+
+  # 設定データ取得
+  page_num = administrator_data.objects.order_by("id").last()
+
+  # セッションにログインした従業員番号がない場合の処理
+  if request.session.get('login_No', None) == None:
+    # 未ログインならログインページに飛ぶ
+    return redirect(to = '/login')
+
+  # ログイン者が問い合わせ担当者でない場合の処理
+  if request.session['login_No'] not in (page_num.administrator_employee_no1, page_num.administrator_employee_no2, page_num.administrator_employee_no3):
+    # 権限がなければメインページに飛ぶ
+    return redirect(to = '/')
+
+  # 指定IDの工数履歴のレコードのオブジェクトを変数に入れる
+  obj_get = Business_Time_graph.objects.get(id = num)
+
+  # POST時の処理
+  if (request.method == 'POST'):
+    # 取得していた指定従業員番号のレコードを削除する
+    obj_get.delete()
+
+    # 工数履歴画面をリダイレクトする
+    return redirect(to = '/all_kosu/1')
+
+
+
+  # HTMLに渡す辞書
+  context = {
+    'title' : '工数データ削除',
+    'num' : num,
+    'obj' : obj_get,
+    }
+  
+
+
+  # 指定したHTMLに辞書を渡して表示を完成させる
+  return render(request, 'kosu/all_kosu_delete.html', context)
+
+
+
+
+
+#--------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
 
 
 

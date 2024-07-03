@@ -13,7 +13,10 @@
     <h1 class="display-4 text-primary">{{title}}</h1>
     <p class="h6">
       <a href="{% url 'kosu_main' %}">工数MENUへ</a>　　　
-      <a href="{% url 'kosu_list' 1 %}">工数一覧へ</a>
+      <a href="{% url 'kosu_list' 1 %}">工数一覧へ</a>　　　
+      {% if display_open == True %}
+        <a href="{% url 'all_kosu' 1 %}">全データ確認</a>
+      {% endif %}
     </p>
     <form action="{% url 'graph' 1 %}" method="post">
       {% csrf_token %}

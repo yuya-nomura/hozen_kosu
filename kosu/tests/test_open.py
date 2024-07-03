@@ -39,7 +39,7 @@ class Open_pages(TestCase):
         # administrator_dataダミーデータ
         cls.administrator_data = administrator_data.objects.create(
             menu_row = 20,
-            administrator_employee_no1 = '11111',
+            administrator_employee_no1 = 11111,
             administrator_employee_no2 = '',
             administrator_employee_no3 = '',
             )
@@ -368,6 +368,23 @@ class Open_pages(TestCase):
         self.assertEqual(response.status_code, 200)
         # レスポンスコンテンツに「工数データ」という文字列が含まれていることを確認
         self.assertContains(response, '工数データ')
+
+
+
+    # 全工数データページ開きチェック
+    def test_all_kosu(self):
+        # URL定義
+        url = reverse('all_kosu', args = [1])
+        # URLに対してGETリクエスト送信
+        response = self.client.get(url)
+
+        # リクエストのレスポンスステータスコードが200(OK)であることを確認
+        self.assertEqual(response.status_code, 200)
+        # レスポンスコンテンツに「全工数履歴」という文字列が含まれていることを確認
+        self.assertContains(response, '全工数履歴')
+
+
+
 
 
 
