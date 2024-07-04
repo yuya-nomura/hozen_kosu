@@ -15,7 +15,7 @@
   </style>
 </head>
 <body class="container">
-  <h1 class="display-4 text-danger">{{title}}</h1>
+  <h1 class="display-5 text-danger">{{title}}</h1>
   <p class="h6"><a href="{% url 'team_main' %}" class="text-danger">班員MENUへ</a></p>
   <form action="{% url 'class_list' %}" method="post">
   {% csrf_token %}
