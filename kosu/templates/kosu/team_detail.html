@@ -19,24 +19,26 @@
   </div>
   {% endfor %}
   <p>　</p>
-  <table class="table">
-    <tr>
-      <p class="h5">{{day}}の入力状況</p>
-    </tr>
-    <tr>
-      <th>作業時間</th>
-      <th>工数区分</th>
-      <th>作業詳細</th>
-    </tr>
-    {% for i in time_display_list %}
-    <tr>
-      {% for k in i %}
-      <td>
-      {{k}}
-      </td>
+  <div class="table-responsive">
+    <table class="table no-wrap">
+      <tr>
+        <p class="h5">{{day}}の入力状況</p>
+      </tr>
+      <tr>
+        <th class="text-center">作業時間</th>
+        <th class="text-center">工数区分</th>
+        <th class="text-center">作業詳細</th>
+      </tr>
+      {% for i in time_display_list %}
+      <tr>
+        {% for k in i %}
+        <td class="text-center">
+        {{k}}
+        </td>
+        {% endfor %}
+      </tr>
       {% endfor %}
-    </tr>
-    {% endfor %}
-  </table>
+    </table>
+  </div>
 </body>
 </html>

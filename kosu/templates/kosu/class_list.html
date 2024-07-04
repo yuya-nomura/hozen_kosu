@@ -82,15 +82,15 @@
             {{k}}
           {% else %}
           {% if k.judgement == True %}
-          <td class="table-green no-wrap" style="text-align:center;">
-            <a href="{% url 'class_detail' k.id %}">　OK　</a>
+          <td class="table-green no-wrap fs-5" style="text-align:center;">
+            <a href="{% url 'class_detail' k.id %}">OK</a>
           {% else %}
           {% if k.judgement == False %}
-          <td class="no-wrap" style="text-align:center;">
-            <a href="{% url 'class_detail' k.id %}">　NG　</a>
+          <td class="no-wrap fs-5" style="text-align:center;">
+            <a href="{% url 'class_detail' k.id %}">NG</a>
           {% else %}
-          <td class="no-wrap" style="text-align:center;">
-            　NG　
+          <td class="no-wrap fs-5" style="text-align:center;">
+            NG
           {% endif %}
           {% endif %}
           {% endif %}

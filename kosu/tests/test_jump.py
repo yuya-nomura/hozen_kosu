@@ -741,7 +741,7 @@ class Page_jump(TestCase):
     # 工数データから全工数確認へジャンプテスト
     def test_all_kosu_detail_all_kosu_jump(self):
         # 工数データページにアクセス
-        response = self.client.get(reverse('all_kosu_detail', args = [1]))
+        response = self.client.get(reverse('all_kosu_detail', args = [self.Business_Time_graph.id]))
         self.assertEqual(response.status_code, 200)
 
         # HTMLに含まれるボタンが正しく設定されているかを確認
@@ -775,7 +775,7 @@ class Page_jump(TestCase):
     # 工数データ削除から全工数確認へジャンプテスト
     def test_all_kosu_delete_all_kosu_jump(self):
         # 工数データ削除ページにアクセス
-        response = self.client.get(reverse('all_kosu_delete', args = [1]))
+        response = self.client.get(reverse('all_kosu_delete', args = [self.Business_Time_graph.id]))
         self.assertEqual(response.status_code, 200)
 
         # HTMLに含まれるボタンが正しく設定されているかを確認
