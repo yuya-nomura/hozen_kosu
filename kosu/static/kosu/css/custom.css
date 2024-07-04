@@ -58,5 +58,13 @@
     margin-right: 0.5rem;
 }
 
+.no-wrap {
+  white-space: nowrap;
+}
+
+.text-center {
+  text-align: center;
+}
+
 
 

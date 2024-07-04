@@ -11,6 +11,11 @@
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@3.5.1/dist/chart.min.js"></script>
   <script src="{% static 'kosu/js/jquery-clock-timepicker.min.js' %}"></script>
+  <style>
+    input.big {
+      transform: scale(1.5);
+    }
+  </style>
 </head>
 <body class="container">
   <h1 class="display-6 text-primary">{{day}}の{{title}}</h1>
@@ -29,7 +34,7 @@
   {% csrf_token %}
   <p>　</p>
   <div class="table-responsive">
-    <table class="table">
+    <table class="table no-wrap">
       <tr>
         <p class="h4">履歴を削除する時間を指定</p>
       </tr>
@@ -39,34 +44,27 @@
         <input class="your-time-field form-control custom-border" style="width: 80px;" type="text" id="end_time" name="end_time" data-precision="5">　
         翌日
         <input type="checkbox" id="tomorrow_check" name="tomorrow_check" class="big">　　
-        <style>
-          input.big {
-            transform: scale(1.5);
-          }
-        </style>
         <input type="submit" value="工数削除" name="kosu_delete" onclick="return confirmDelete();" class="btn btn-blue7 mt-2">
       </tr>
       <tr>
         <h1 class="display-4 text-primary">　</h1>
       </tr>
       <tr>
-        <th style="white-space: nowrap;">項目削除</th>
-        <th style="white-space: nowrap;">作業時間</th>
-        <th style="white-space: nowrap;">工数区分</th>
-        <th style="white-space: nowrap;">作業詳細</th>
+        <th class="text-center">項目削除</th>
+        <th class="text-center">作業時間</th>
+        <th class="text-center">工数区分</th>
+        <th class="text-center">作業詳細</th>
       </tr>
       {% for i in time_display_list %}
       <tr>
-        <div class="number-input-group">
-          <td style="white-space: nowrap;">
-            <input type="submit" value="{{ forloop.counter }}" name="item_delete" onclick="return confirmDelete();" class="btn btn-blue7 mt-2">
-          </td>
-          {% for k in i %}
-          <td style="white-space: nowrap;">
-            {{k}}
-          </td>
-          {% endfor %}
-        </div>
+        <td class="text-center">
+          <input type="submit" value="{{ forloop.counter }}" name="item_delete" onclick="return confirmDelete();" class="btn btn-blue7 mt-2">
+        </td>
+        {% for k in i %}
+        <td class="text-center">
+          {{k}}
+        </td>
+        {% endfor %}
       </tr>
       {% endfor %}
     </table>
