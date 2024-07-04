@@ -687,6 +687,7 @@ class Page_form(TestCase):
         response = self.client.post(reverse('total'), form_data)
         # レスポンスが成功（ステータスコード200）であることを確認
         self.assertEqual(response.status_code, 200)
+
         # 集計値が正しいか確認
         graph_list = list(response.context['graph_list'])
         expected_list = [60, 60, 60, 60, 60, 60, 60, 60, 50, 60]
@@ -705,6 +706,7 @@ class Page_form(TestCase):
         response = self.client.post(reverse('total'), form_data2)
         # レスポンスが成功（ステータスコード200）であることを確認
         self.assertEqual(response.status_code, 200)
+
         # 集計値が正しいか確認
         graph_list = list(response.context['graph_list'])
         expected_list = [60, 60, 60, 60, 60, 60, 60, 60, 60, 50]
@@ -789,7 +791,7 @@ class Page_form(TestCase):
 
 
     # 勤務入力ページ表示切替チェック
-    def test_total_post(self):
+    def test_schedule_change(self):
 
         # フォームデータ定義
         form_data = {
@@ -825,6 +827,217 @@ class Page_form(TestCase):
         day_list = list(response.context['day_list'])
         expected_list = ['', '', 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, '', '', '', '', '', '']
         self.assertEqual(day_list, expected_list)
+
+
+
+    # 勤務入力ページ勤務登録チェック
+    def test_schedule_post(self):
+
+        # フォームデータ定義
+        form_data = {
+            'year' : '2000',
+            'month': '1',
+            'time_update': '表示切替',
+            }
+
+        # URLに対してPOSTリクエスト送信
+        response = self.client.post(reverse('schedule'), form_data)
+        # レスポンスが成功（ステータスコード200）であることを確認
+        self.assertEqual(response.status_code, 200)
+
+        # フォームデータ2定義
+        form_data2 = {
+            'day7': '休日',
+            'day8': '休日',
+            'day9': '',
+            'day10': '',
+            'day11': '',
+            'day12': '',
+            'day13': '',
+            'day14': '',
+            'day15': '',
+            'day16': '',
+            'day17': '',
+            'day18': '',
+            'day19': '',
+            'day20': '',
+            'day21': '',
+            'day22': '',
+            'day23': '',
+            'day24': '',
+            'day25': '',
+            'day26': '',
+            'day27': '',
+            'day28': '',
+            'day29': '',
+            'day30': '',
+            'day31': '',
+            'day32': '',
+            'day33': '',
+            'day34': '',
+            'day35': '',
+            'day36': '',
+            'day37': '',
+            'work_update': '勤務登録',
+            }
+
+        # URLに対してPOSTリクエスト送信
+        response = self.client.post(reverse('schedule'), form_data2)
+        # リクエストのレスポンスステータスコードが302(リダイレクト)であることを確認
+        self.assertEqual(response.status_code, 200)
+
+        # テストユーザーの工数データ取得
+        updated_entry1 = Business_Time_graph.objects.get(employee_no3 = self.member.employee_no, \
+                                                        work_day2 = '2000-01-01')
+        updated_entry2 = Business_Time_graph.objects.get(employee_no3 = self.member.employee_no, \
+                                                        work_day2 = '2000-01-02')
+        # 作業内容が更新されていることを確認
+        self.assertEqual(updated_entry1.work_time, '休日')
+        self.assertEqual(updated_entry2.work_time, '休日')
+
+
+
+    # 残業管理ページ表示切替チェック
+    def test_over_time_change(self):
+
+        # フォームデータ定義
+        form_data = {
+            'year': '2000',
+            'month': '1',
+            'date_change': '表示切替',
+            }
+
+        # URLに対してPOSTリクエスト送信
+        response = self.client.post(reverse('over_time'), form_data)
+        # レスポンスが成功（ステータスコード200）であることを確認
+        self.assertEqual(response.status_code, 200)
+
+        # 集計値が正しいか確認
+        week_list = list(response.context['week_list'])
+        expected_list = ['土', '日', '月', '火', '水', '木', '金', '土', '日', '月', '火', '水', '木', '金', '土', '日', '月', '火', '水', '木', '金', '土', '日', '月', '火', '水', '木', '金', '土', '日', '月']
+        self.assertEqual(week_list, expected_list)
+
+
+        # フォームデータ定義
+        form_data2 = {
+            'year': '2000',
+            'month': '2',
+            'date_change': '表示切替',
+            }
+
+        # URLに対してPOSTリクエスト送信
+        response = self.client.post(reverse('over_time'), form_data2)
+        # レスポンスが成功（ステータスコード200）であることを確認
+        self.assertEqual(response.status_code, 200)
+
+        # 集計値が正しいか確認
+        week_list = list(response.context['week_list'])
+        expected_list = ['火', '水', '木', '金', '土', '日', '月', '火', '水', '木', '金', '土', '日', '月', '火', '水', '木', '金', '土', '日', '月', '火', '水', '木', '金', '土', '日', '月', '火']
+        self.assertEqual(week_list, expected_list)
+
+
+
+    #工数区分定義確認ページ表示切替チェック
+    def test_kosu_def_change(self):
+
+        # フォームデータ定義
+        form_data = {
+            'kosu_def_list': '工数区分名1',
+            'def_find': '検索',
+            }
+
+        # URLに対してPOSTリクエスト送信
+        response = self.client.post(reverse('kosu_def'), form_data)
+        # レスポンスが成功（ステータスコード200）であることを確認
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.context['def1'], '定義1')
+        self.assertEqual(response.context['def2'], '作業内容1')
+
+
+        # フォームデータ定義
+        form_data2 = {
+            'kosu_def_list': '工数区分名2',
+            'def_find': '検索',
+            }
+
+        # URLに対してPOSTリクエスト送信
+        response = self.client.post(reverse('kosu_def'), form_data2)
+        # レスポンスが成功（ステータスコード200）であることを確認
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.context['def1'], '定義2')
+        self.assertEqual(response.context['def2'], '作業内容2')
+
+
+
+    #工数区分定義切替ページ切替チェック
+    def test_def_Ver_change(self):
+
+        # kosu_divisionダミーデータ
+        self.kosu_division = kosu_division.objects.create(
+            kosu_name = 'トライ定義2',
+            kosu_title_1 = '工数区分名A',
+            kosu_division_1_1 = '定義A',
+            kosu_division_2_1 = '作業内容A',
+            kosu_title_2 = '工数区分名B',
+            kosu_division_1_2 = '定義B',
+            kosu_division_2_2 = '作業内容B',
+            kosu_title_3 = '工数区分名C',
+            kosu_division_1_3 = '定義C',
+            kosu_division_2_3 = '作業内容C',
+            kosu_title_4 = '工数区分名D',
+            kosu_division_1_4 = '定義D',
+            kosu_division_2_4 = '作業内容D',
+            kosu_title_5 = '工数区分名E',
+            kosu_division_1_5 = '定義E',
+            kosu_division_2_5 = '作業内容E',
+            kosu_title_6 = '工数区分名F',
+            kosu_division_1_6 = '定義F',
+            kosu_division_2_6 = '作業内容F',
+            kosu_title_7 = '工数区分名G',
+            kosu_division_1_7 = '定義G',
+            kosu_division_2_7 = '作業内容G',
+            kosu_title_8 = '工数区分名H',
+            kosu_division_1_8 = '定義H',
+            kosu_division_2_8 = '作業内容H',
+            kosu_title_9 = '工数区分名I',
+            kosu_division_1_9 = '定義I',
+            kosu_division_2_9 = '作業内容I',
+            kosu_title_10 = '工数区分名J',
+            kosu_division_1_10 = '定義J',
+            kosu_division_2_10 = '作業内容J',
+            )
+
+        # フォームデータ定義
+        form_data = {
+            'versionchoice': 'トライ定義',
+            'def_change': '検索',
+            }
+
+        # URLに対してPOSTリクエスト送信
+        response = self.client.post(reverse('kosu_Ver'), form_data)
+        # レスポンスが成功（ステータスコード200）であることを確認
+        self.assertEqual(response.status_code, 200)
+
+        # セッションデータを確認
+        session = self.client.session
+        self.assertEqual(session['input_def'], 'トライ定義')
+
+
+        # フォームデータ定義
+        form_data2 = {
+            'versionchoice': 'トライ定義2',
+            'def_change': '検索',
+            }
+
+        # URLに対してPOSTリクエスト送信
+        response = self.client.post(reverse('kosu_Ver'), form_data2)
+        # レスポンスが成功（ステータスコード200）であることを確認
+        self.assertEqual(response.status_code, 200)
+
+        # セッションデータを確認
+        session = self.client.session
+        self.assertEqual(session['input_def'], 'トライ定義2')
+
 
 
 

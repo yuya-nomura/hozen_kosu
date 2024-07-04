@@ -32,11 +32,9 @@ def kosu_def(request):
   if (request.method == 'POST'):
 
     # 検索欄が空欄の場合の処理
-    if request.POST['kosu_def_list'] == "":
-
+    if request.POST['kosu_def_list'] == '':
       # エラーメッセージ出力
       messages.error(request, '確認する定義区分が選択されていません。ERROR031')
-
       # このページをリダイレクト
       return redirect(to = '/kosu_def')
 
@@ -69,16 +67,15 @@ def kosu_def(request):
     # オブジェクトからPOST送信した工数区分の定義と作業内容読み出し
     for n in range(50):
       if eval('obj.kosu_title_{}'.format(n + 1)) == request.POST['kosu_def_list']:
-        def1 = eval('obj.kosu_title_{}'.format(n + 1))
-        def2 = eval('obj.kosu_division_1_{}'.format(n + 1))
-        def3 = eval('obj.kosu_division_2_{}'.format(n + 1))
+        def1 = eval('obj.kosu_division_1_{}'.format(n + 1))
+        def2 = eval('obj.kosu_division_2_{}'.format(n + 1))
+        break
 
   # POST送信していないときの処理
   else:
     # 表示データ空にする
     def1 = ''
     def2 = ''
-    def3 = ''
 
     # 現在使用している工数区分のオブジェクトを取得
     kosu_obj = kosu_division.objects.get(kosu_name = request.session.get('input_def', None))
@@ -105,8 +102,6 @@ def kosu_def(request):
     'form' : form,
     'def1' : def1,
     'def2' : def2,
-    'def2' : def2,
-    'def3' : def3,
     }
   
   # 指定したHTMLに辞書を渡して表示を完成させる

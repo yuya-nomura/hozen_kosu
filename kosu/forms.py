@@ -360,16 +360,6 @@ class kosu_divisionForm(forms.ModelForm):
 
 
 
-
-
-
-
-
-
-
-
-
-
 class scheduleForm(forms.Form):
   employment_list = [
     ('', ''),
