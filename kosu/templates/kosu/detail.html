@@ -43,12 +43,13 @@
           transform: scale(1.5);
         }
       </style>
-      <input type="submit" value="工数削除" name="kosu_delete" class="btn btn-blue7 mt-2">
+      <input type="submit" value="工数削除" name="kosu_delete" onclick="return confirmDelete();" class="btn btn-blue7 mt-2">
     </tr>
     <tr>
       <h1 class="display-4 text-primary">　</h1>
     </tr>
     <tr>
+      <th style="text-align:center;">項目削除</th>
       <th style="text-align:center;">作業時間</th>
       <th style="text-align:center;">工数区分</th>
       <th style="text-align:center;">作業詳細</th>
@@ -56,6 +57,9 @@
     {% for i in time_display_list %}
     <tr>
       <div class="number-input-group">
+        <td style="text-align:center;">
+          <input type="submit" value="{{ forloop.counter }}" name="item_delete" onclick="return confirmDelete();" class="btn btn-blue7 mt-2">
+        </td>
         {% for k in i %}
         <td style="text-align:center;">
           {{k}}
@@ -80,6 +84,9 @@
             onAdjust: function(newVal, oldVal) {}
         });
     });
+  </script>
+  <script>
+    function confirmDelete() {return confirm('この操作は元に戻せません。本当に削除しますか？');}
   </script>
 </body>
 </html>

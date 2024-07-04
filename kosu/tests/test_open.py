@@ -13,7 +13,7 @@ class Open_pages(TestCase):
     def setUpTestData(cls):   
         # memberダミーデータ
         cls.member = member.objects.create(
-            employee_no = 11111,
+            employee_no = '11111',
             name = 'テストユーザー',
             shop = 'その他',
             authority = True,
@@ -39,7 +39,7 @@ class Open_pages(TestCase):
         # administrator_dataダミーデータ
         cls.administrator_data = administrator_data.objects.create(
             menu_row = 20,
-            administrator_employee_no1 = 11111,
+            administrator_employee_no1 = '11111',
             administrator_employee_no2 = '',
             administrator_employee_no3 = '',
             )
@@ -81,7 +81,7 @@ class Open_pages(TestCase):
 
         # Business_Time_graphダミーデータ
         cls.Business_Time_graph = Business_Time_graph.objects.create(
-            employee_no3 = 11111,
+            employee_no3 = '11111',
             name = cls.member,
             def_ver2 = cls.kosu_division.kosu_name,
             work_day2 = '2000-01-01',
@@ -100,27 +100,27 @@ class Open_pages(TestCase):
 
         # team_memberダミーデータ
         cls.team_member = team_member.objects.create(
-            employee_no5 = 11111,
+            employee_no5 = '11111',
             member1 = '',
-            member2 = 11111,
+            member2 = '11111',
             member3 = '',
-            member4 = 11111,
+            member4 = '11111',
             member5 = '',
-            member6 = 11111,
+            member6 = '11111',
             member7 = '',
-            member8 = 11111,
+            member8 = '11111',
             member9 = '',
-            member10 = 11111,
+            member10 = '11111',
             member11 = '',
-            member12 = 11111,
+            member12 = '11111',
             member13 = '',
-            member14 = 11111,
+            member14 = '11111',
             member15 = '',
             )
 
         # inquiry_dataダミーデータ
         cls.inquiry_data = inquiry_data.objects.create(
-            employee_no2 = 11111,
+            employee_no2 = '11111',
             name = cls.member,
             content_choice = '問い合わせ',
             inquiry = '',
@@ -357,27 +357,14 @@ class Open_pages(TestCase):
 
 
 
-    # 工数データページ開きチェック
-    def test_graph(self):
-        # URL定義
-        url = reverse('graph', args = [1])
-        # URLに対してGETリクエスト送信
-        response = self.client.get(url)
-
-        # リクエストのレスポンスステータスコードが200(OK)であることを確認
-        self.assertEqual(response.status_code, 200)
-        # レスポンスコンテンツに「工数データ」という文字列が含まれていることを確認
-        self.assertContains(response, '工数データ')
-
-
-
     # 全工数データページ開きチェック
     def test_all_kosu(self):
         # URL定義
         url = reverse('all_kosu', args = [1])
         # URLに対してGETリクエスト送信
         response = self.client.get(url)
-
+        if response.status_code == 302:
+            print(f'飛び先: {response.url}')
         # リクエストのレスポンスステータスコードが200(OK)であることを確認
         self.assertEqual(response.status_code, 200)
         # レスポンスコンテンツに「全工数履歴」という文字列が含まれていることを確認
@@ -385,6 +372,31 @@ class Open_pages(TestCase):
 
 
 
+    # 全工数データページ開きチェック
+    def test_all_kosu_detail(self):
+        # URL定義
+        url = reverse('all_kosu_detail', args = [self.Business_Time_graph.id])
+        # URLに対してGETリクエスト送信
+        response = self.client.get(url)
+
+        # リクエストのレスポンスステータスコードが200(OK)であることを確認
+        self.assertEqual(response.status_code, 200)
+        # レスポンスコンテンツに「工数データ編集」という文字列が含まれていることを確認
+        self.assertContains(response, '工数データ編集')
+
+
+
+    # 全工数データページ開きチェック
+    def test_all_kosu_delete(self):
+        # URL定義
+        url = reverse('all_kosu_delete', args = [self.Business_Time_graph.id])
+        # URLに対してGETリクエスト送信
+        response = self.client.get(url)
+
+        # リクエストのレスポンスステータスコードが200(OK)であることを確認
+        self.assertEqual(response.status_code, 200)
+        # レスポンスコンテンツに「工数データ編集」という文字列が含まれていることを確認
+        self.assertContains(response, '工数データ削除')
 
 
 

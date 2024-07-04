@@ -56,6 +56,12 @@ def kosu_list(request, num):
   # 設定データ取得
   page_num = administrator_data.objects.order_by("id").last()
 
+  # 全データ確認表示変数
+  if request.session['login_No'] in (page_num.administrator_employee_no1, page_num.administrator_employee_no2, page_num.administrator_employee_no3):
+    display_open = True
+  else:
+    display_open = False
+
 
 
   # POST時の処理
@@ -91,6 +97,7 @@ def kosu_list(request, num):
     'member_data' : member_data,
     'data' : data.get_page(num),
     'default_day' : default_day,
+    'display_open' : display_open,
     'num' : num,
     }
   
@@ -4518,8 +4525,8 @@ def detail(request, num):
 
 
 
-  # POST時の処理
-  if (request.method == 'POST'):
+  # 時間指定工数削除時の処理
+  if "kosu_delete" in request.POST:
     # 作業内容と作業詳細を取得しリストに解凍
     work_list = list(obj_get.time_work)
     detail_list = obj_get.detail_work.split('$')
@@ -4734,12 +4741,196 @@ def detail(request, num):
 
 
     # 作業内容データの内容を上書きして更新
-    Business_Time_graph.objects.update_or_create(employee_no3 = request.session.get('login_No', None), \
+    Business_Time_graph.objects.update_or_create(employee_no3 = request.session['login_No'], \
       work_day2 = obj_get.work_day2, defaults = {'time_work' : ''.join(work_list), \
                                                  'detail_work' : detail_list_str, \
                                                  'judgement' : judgement})
 
 
+    # このページ読み直し
+    return redirect(to = '/detail/{}'.format(num))
+
+
+
+  # 項目指定工数削除時の処理
+  if "item_delete" in request.POST:
+    # 項目削除釦の項目名取得
+    pressed_button = int(request.POST.get('item_delete'))
+
+    # 作業内容と作業詳細を取得しリストに解凍
+    work_list = list(obj_get.time_work)
+    detail_list = obj_get.detail_work.split('$')
+
+    # 日を跨いでいない時の処理
+    if kosu_list[pressed_button - 1] < kosu_list[pressed_button]:
+      # 指定された時間の作業内容と作業詳細を消す
+      for i in range(kosu_list[pressed_button - 1], kosu_list[pressed_button]):
+        work_list[i] = '#'
+        detail_list[i] = ''
+    
+    # 日を跨いでいる時の処理
+    else:
+      # 指定された時間の作業内容と作業詳細を消す
+      for i in range(kosu_list[pressed_button - 1] , 288):
+        work_list[i] = '#'
+        detail_list[i] = ''
+
+      for i in range(kosu_list[pressed_button]):
+        work_list[i] = '#'
+        detail_list[i] = ''
+
+
+    # 工数合計取得
+    kosu_total = 1440 - (work_list.count('#')*5) - (work_list.count('$')*5)
+
+    # 工数入力OK_NGリセット
+    judgement = False
+
+    # 出勤、休出時、工数合計と残業に整合性がある場合の処理
+    if (obj_get.work_time == '出勤' or obj_get.work_time == 'シフト出') and \
+      kosu_total - int(obj_get.over_time) == 470:
+      # 工数入力OK_NGをOKに切り替え
+      judgement = True
+
+
+    # 休出時、工数合計と残業に整合性がある場合の処理
+    if obj_get.work_time == '休出' and kosu_total == int(obj_get.over_time):
+      # 工数入力OK_NGをOKに切り替え
+      judgement = True
+
+
+    # 早退・遅刻時、工数合計と残業に整合性がある場合の処理
+    if obj_get.work_time == '早退・遅刻' and kosu_total != 0:
+      # 工数入力OK_NGをOKに切り替え
+      judgement = True
+
+
+    # ログイン者の人員データ取得
+    member_obj = member.objects.get(employee_no = request.session['login_No'])
+
+
+    # ログイン者の登録ショップが三組三交替Ⅱ甲乙丙番Cで1直の場合の処理
+    if (member_obj.shop == 'W1' or member_obj.shop == 'W2' or \
+      member_obj.shop == 'A1' or member_obj.shop == 'A2') and \
+        obj_get.tyoku2 == '1':
+      # 半前年休時、工数合計と残業に整合性がある場合の処理
+      if obj_get.work_time == '半前年休' and kosu_total - int(obj_get.over_time) == 230:
+        # 工数入力OK_NGをOKに切り替え
+        judgement = True
+
+      # 半後年休時、工数合計と残業に整合性がある場合の処理
+      if obj_get.work_time == '半後年休' and kosu_total - int(obj_get.over_time) == 240:
+        # 工数入力OK_NGをOKに切り替え
+        judgement = True
+
+
+    # ログイン者の登録ショップが三組三交替Ⅱ甲乙丙番Cで2直の場合の処理
+    if (member_obj.shop == 'W1' or member_obj.shop == 'W2' or \
+      member_obj.shop == 'A1' or member_obj.shop == 'A2') and \
+        obj_get.tyoku2 == '2':
+      # 半前年休時、工数合計と残業に整合性がある場合の処理
+      if obj_get.work_time == '半前年休' and kosu_total - int(obj_get.over_time) == 290:
+        # 工数入力OK_NGをOKに切り替え
+        judgement = True
+
+      # 半後年休時、工数合計と残業に整合性がある場合の処理
+      if obj_get.work_time == '半後年休' and kosu_total - int(obj_get.over_time) == 180:
+        # 工数入力OK_NGをOKに切り替え
+        judgement = True
+
+
+    # ログイン者の登録ショップが三組三交替Ⅱ甲乙丙番Cで3直の場合の処理
+    if (member_obj.shop == 'W1' or member_obj.shop == 'W2' or \
+      member_obj.shop == 'A1' or member_obj.shop == 'A2') and \
+        obj_get.tyoku2 == '3':
+      # 半前年休時、工数合計と残業に整合性がある場合の処理
+      if obj_get.work_time == '半前年休' and kosu_total - int(obj_get.over_time) == 230:
+        # 工数入力OK_NGをOKに切り替え
+        judgement = True
+
+      # 半後年休時、工数合計と残業に整合性がある場合の処理
+      if obj_get.work_time == '半後年休' and kosu_total - int(obj_get.over_time) == 240:
+        # 工数入力OK_NGをOKに切り替え
+        judgement = True
+
+
+    # ログイン者の登録ショップが三組三交替Ⅱ甲乙丙番Bで1直の場合の処理
+    if (member_obj.shop == 'P' or member_obj.shop == 'R' or \
+      member_obj.shop == 'T1' or member_obj.shop == 'T2' or \
+        member_obj.shop == 'その他' or member_obj.shop == '組長以上') and \
+        obj_get.tyoku2 == '1':
+      # 半前年休時、工数合計と残業に整合性がある場合の処理
+      if obj_get.work_time == '半前年休' and kosu_total - int(obj_get.over_time) == 220:
+        # 工数入力OK_NGをOKに切り替え
+        judgement = True
+
+      # 半後年休時、工数合計と残業に整合性がある場合の処理
+      if obj_get.work_time == '半後年休' and kosu_total - int(obj_get.over_time) == 250:
+        # 工数入力OK_NGをOKに切り替え
+        judgement = True
+
+
+    # ログイン者の登録ショップが三組三交替Ⅱ甲乙丙番Bで2直の場合の処理
+    if (member_obj.shop == 'P' or member_obj.shop == 'R' or \
+      member_obj.shop == 'T1' or member_obj.shop == 'T2' or \
+        member_obj.shop == 'その他' or member_obj.shop == '組長以上') and \
+        obj_get.tyoku2 == '2':
+      # 半前年休時、工数合計と残業に整合性がある場合の処理
+      if obj_get.work_time == '半前年休' and kosu_total - int(obj_get.over_time) == 230:
+        # 工数入力OK_NGをOKに切り替え
+        judgement = True
+
+      # 半後年休時、工数合計と残業に整合性がある場合の処理
+      if obj_get.work_time == '半後年休' and kosu_total - int(obj_get.over_time) == 240:
+        # 工数入力OK_NGをOKに切り替え
+        judgement = True
+
+
+    # ログイン者の登録ショップが三組三交替Ⅱ甲乙丙番Bで3直の場合の処理
+    if (member_obj.shop == 'P' or member_obj.shop == 'R' or \
+      member_obj.shop == 'T1' or member_obj.shop == 'T2' or \
+        member_obj.shop == 'その他' or member_obj.shop == '組長以上') and \
+        obj_get.tyoku2 == '3':
+      # 半前年休時、工数合計と残業に整合性がある場合の処理
+      if obj_get.work_time == '半前年休' and kosu_total - int(obj_get.over_time) == 275:
+        # 工数入力OK_NGをOKに切り替え
+        judgement = True
+
+      # 半後年休時、工数合計と残業に整合性がある場合の処理
+      if obj_get.work_time == '半後年休' and kosu_total - int(obj_get.over_time) == 195:
+        # 工数入力OK_NGをOKに切り替え
+        judgement = True
+
+
+    # 常昼の場合の処理
+    if obj_get.tyoku2 == '4':
+      # 半前年休時、工数合計と残業に整合性がある場合の処理
+      if obj_get.work_time == '半前年休' and kosu_total - int(obj_get.over_time) == 230:
+        # 工数入力OK_NGをOKに切り替え
+        judgement = True
+
+      # 半後年休時、工数合計と残業に整合性がある場合の処理
+      if obj_get.work_time == '半後年休' and kosu_total - int(obj_get.over_time) == 240:
+        # 工数入力OK_NGをOKに切り替え
+        judgement = True
+
+
+    # 作業詳細リストを文字列に変更
+    detail_list_str = ''
+    for i, e in enumerate(detail_list):
+      if i == len(detail_list) - 1:
+        detail_list_str = detail_list_str + detail_list[i]
+      else:
+        detail_list_str = detail_list_str + detail_list[i] + '$'
+
+
+    # 作業内容データの内容を上書きして更新
+    Business_Time_graph.objects.update_or_create(employee_no3 = request.session['login_No'], \
+      work_day2 = obj_get.work_day2, defaults = {'time_work' : ''.join(work_list), \
+                                                 'detail_work' : detail_list_str, \
+                                                 'judgement' : judgement})
+
+    # このページ読み直し
     return redirect(to = '/detail/{}'.format(num))
 
 
@@ -5340,7 +5531,6 @@ def total(request):
         # 0が工数区分定義と同じ数入ったリスト作成
         graph_list = list(itertools.repeat(0, def_num))
 
-
       # 指定月に工数入力がある場合の処理
       if kosu_total.count() != 0:
         # 月の最初の日の工数区分定義でグラフ項目リスト作成
@@ -5500,99 +5690,6 @@ def total(request):
 
   # 指定したHTMLに辞書を渡して表示を完成させる
   return render(request, 'kosu/total.html', context)
-
-
-
-
-
-#--------------------------------------------------------------------------------------------------------
-
-
-
-
-
-# グラフデータ画面定義
-def graph(request, num): 
-
-  # 未ログインならログインページに飛ぶ
-  if request.session.get('login_No', None) == None:
-    return redirect(to = '/login')
-
-  # ログイン者の情報取得
-  data = member.objects.get(employee_no = request.session['login_No'])
-  # ログイン者に権限がなければメインページに戻る
-  if data.administrator == False:
-    return redirect(to = '/')
-  
-  # 設定データ取得
-  page_num = administrator_data.objects.order_by("id").last()
-
-  # 全データ確認表示変数
-  if request.session['login_No'] in (page_num.administrator_employee_no1, page_num.administrator_employee_no2, page_num.administrator_employee_no3):
-    display_open = True
-  else:
-    display_open = False
-
-
-  # 工数データのある従業員番号リストを作成
-  employee_no_list = Business_Time_graph.objects.values_list('employee_no3', flat=True)\
-                                                .order_by('employee_no3').distinct()
-  # 名前リスト定義
-  name_list = [['', '']]
-
-  # 従業員番号を名前に変更するループ
-  for No in list(employee_no_list):
-    # 指定従業員番号で人員情報取得
-    name = member.objects.get(employee_no = No)
-    # 名前リスト作成
-    name_list.append([No, name])
-
-
-  # フォームの初期状態定義
-  form = team_kosuForm()
-  # フォームの選択肢定義
-  form.fields['employee_no6'].choices = name_list
-
-
-
-  # POST時の処理
-  if (request.method == 'POST'):
-    # POST後のフォーム状態定義
-    form = team_kosuForm(request.POST)
-    # フォームの選択肢定義
-    form.fields['employee_no6'].choices = name_list
-
-    # グラフデータ一覧用オブジェクト取得
-    obj = Business_Time_graph.objects.filter(employee_no3__contains = request.POST['employee_no6'], \
-                                             work_day2__contains = request.POST['work_day'])\
-                                              .order_by('work_day2', 'employee_no3').reverse()
-    
-
-  
-  # POST時以外の処理
-  else:
-    # グラフデータ一覧用オブジェクト取得
-    obj = Business_Time_graph.objects.all().order_by('work_day2', 'employee_no3').reverse()
-
-
-
-  # 取得した工数データを1ページあたりの件数分取得
-  data = Paginator(obj, page_num.menu_row)
-
-
-
-  # HTMLに渡す辞書
-  context = {
-    'title' : '工数データ',
-    'data' : data.get_page(num),
-    'form' : form,
-    'display_open' : display_open,
-  }
-
-
-
-  # 指定したHTMLに辞書を渡して表示を完成させる
-  return render(request, 'kosu/graph.html', context)
 
 
 
@@ -5815,7 +5912,7 @@ def schedule(request):
       if day_list[i] != '':
         day_filter = Business_Time_graph.objects.filter(employee_no3 = request.session.get('login_No', None), \
                                                         work_day2 = datetime.date(year, month, day_list[i]))
-        if day_filter.count() > 0:
+        if day_filter.count() != 0:
           day_get = Business_Time_graph.objects.get(employee_no3 = request.session.get('login_No', None), \
                                                     work_day2 = datetime.date(year, month, day_list[i]))
           form_default_list[('day{}'.format(i + 1))] = day_get.work_time
@@ -6408,7 +6505,7 @@ def schedule(request):
       OK_NG_list.append(False)
 
 
-
+  
   # HTMLに渡す辞書
   context = {
     'title' : '勤務入力',
@@ -6666,7 +6763,7 @@ def all_kosu(request, num):
 
 
   # POST時の処理
-  if (request.method == 'POST'):
+  if 'kosu_find' in request.POST:
 
     # 従業員番号リスト定義
     employee_no_name_list = []
@@ -6708,6 +6805,8 @@ def all_kosu(request, num):
     obj = Business_Time_graph.objects.filter(employee_no3__contains = request.POST['name'], \
                                              employee_no3__in = employee_no_name_list, \
                                              work_day2__contains = request.POST['work_day'], \
+                                             work_day2__gte = request.POST['start_day'], \
+                                             work_day2__lte = request.POST['end_day'], \
                                              tyoku2__contains = request.POST['tyoku'], \
                                              work_time__contains = request.POST['work'], \
                                              judgement__in = judgement, \
@@ -6721,6 +6820,11 @@ def all_kosu(request, num):
     form = all_kosu_findForm(request.POST)
     # フォーム選択肢定義
     form.fields['name'].choices = name_list
+
+    # 日付POST後保持
+    default_day = str(request.POST['work_day'])
+    default_start_day = str(request.POST['start_day'])
+    default_end_day = str(request.POST['end_day'])
 
 
 
@@ -6738,12 +6842,24 @@ def all_kosu(request, num):
     form.fields['name'].choices = name_list
 
 
+    # 今日の日時取得
+    today = datetime.date.today()
+
+    # 日付POST後変数定義
+    default_day = str(today)
+    default_start_day = str(today)
+    default_end_day = str(today)
+
+
 
   # HTMLに渡す辞書
   context = {
     'title' : '全工数履歴',
     'data' : data.get_page(num),
     'form' : form,
+    'default_day' : default_day,
+    'default_start_day' : default_start_day,
+    'default_end_day' : default_end_day,
     'num' : num,
     }
   
@@ -6762,7 +6878,7 @@ def all_kosu(request, num):
 
 
 
-# 全工数操作画面定義
+# 工数編集画面定義
 def all_kosu_detail(request, num):
 
   # 設定データ取得
@@ -7173,7 +7289,7 @@ def all_kosu_detail(request, num):
 
 
 
-# 全工数操作画面定義
+# 工数削除画面定義
 def all_kosu_delete(request, num):
 
   # 設定データ取得

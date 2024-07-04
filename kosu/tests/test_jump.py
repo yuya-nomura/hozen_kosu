@@ -14,7 +14,7 @@ class Page_jump(TestCase):
     def setUpTestData(cls):       
         # memberダミーデータ
         cls.member = member.objects.create(
-            employee_no = 111,
+            employee_no = '111',
             name = 'テストユーザー',
             shop = 'その他',
             authority = True,
@@ -82,7 +82,7 @@ class Page_jump(TestCase):
 
         # Business_Time_graphダミーデータ
         cls.Business_Time_graph = Business_Time_graph.objects.create(
-            employee_no3 = 111,
+            employee_no3 = '111',
             name = cls.member,
             def_ver2 = cls.kosu_division.kosu_name,
             work_day2 = '2000-01-01',
@@ -101,27 +101,27 @@ class Page_jump(TestCase):
 
         # team_memberダミーデータ
         cls.team_member = team_member.objects.create(
-            employee_no5 = 111,
+            employee_no5 = '111',
             member1 = '',
-            member2 = 111,
+            member2 = '111',
             member3 = '',
-            member4 = 111,
+            member4 = '111',
             member5 = '',
-            member6 = 111,
+            member6 = '111',
             member7 = '',
-            member8 = 111,
+            member8 = '111',
             member9 = '',
-            member10 = 111,
+            member10 = '111',
             member11 = '',
-            member12 = 111,
+            member12 = '111',
             member13 = '',
-            member14 = 111,
+            member14 = '111',
             member15 = '',
             )
 
         # inquiry_dataダミーデータ
         cls.inquiry_data = inquiry_data.objects.create(
-            employee_no2 = 111,
+            employee_no2 = '111',
             name = cls.member,
             content_choice = '問い合わせ',
             inquiry = '',
@@ -680,51 +680,34 @@ class Page_jump(TestCase):
         self.assertContains(response, '<a href="' + reverse('kosu_main') + '" >工数MENUへ</a>', html=True)
         # ボタンを押すシミュレーション
         response = self.client.get(reverse('kosu_main'))
-        
+
         # リダイレクトが成功し、ステータスコードが200であることを確認
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'kosu/kosu_main.html')
 
 
 
-    # 工数履歴から工数データへジャンプテスト
-    def test_kosu_list_graph_jump(self):
+    # 工数履歴から全工数データへジャンプテスト
+    def test_kosu_list_all_kosu_jump(self):
         # 工数データページにアクセス
         response = self.client.get(reverse('kosu_list', args = [1]))
         self.assertEqual(response.status_code, 200)
 
         # HTMLに含まれるボタンが正しく設定されているかを確認
-        self.assertContains(response, '<a href="' + reverse('graph', args = [1]) + '" >データ確認</a>', html=True)
+        self.assertContains(response, '<a href="' + reverse('all_kosu', args = [1]) + '" >全データ確認</a>', html=True)
         # ボタンを押すシミュレーション
-        response = self.client.get(reverse('graph', args = [1]))
+        response = self.client.get(reverse('all_kosu', args = [1]))
         
         # リダイレクトが成功し、ステータスコードが200であることを確認
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'kosu/graph.html')
+        self.assertTemplateUsed(response, 'kosu/all_kosu.html')
 
 
 
-    # 工数データから工数履歴へジャンプテスト
-    def test_graph_kosu_list_jump(self):
-        # 工数データページにアクセス
-        response = self.client.get(reverse('graph', args = [1]))
-        self.assertEqual(response.status_code, 200)
-
-        # HTMLに含まれるボタンが正しく設定されているかを確認
-        self.assertContains(response, '<a href="' + reverse('kosu_list', args = [1]) + '" >工数一覧へ</a>', html=True)
-        # ボタンを押すシミュレーション
-        response = self.client.get(reverse('kosu_list', args = [1]))
-        
-        # リダイレクトが成功し、ステータスコードが200であることを確認
-        self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'kosu/kosu_list.html')
-
-
-
-    # 工数データから工数MENUへジャンプテスト
-    def test_graph_kosu_main_jump(self):
-        # 工数データページにアクセス
-        response = self.client.get(reverse('graph', args = [1]))
+    # 全工数確認から工数MENUへジャンプテスト
+    def test_all_kosu_kosu_MENU_jump(self):
+        # 工数履歴ページにアクセス
+        response = self.client.get(reverse('all_kosu', args = [1]))
         self.assertEqual(response.status_code, 200)
 
         # HTMLに含まれるボタンが正しく設定されているかを確認
@@ -735,6 +718,74 @@ class Page_jump(TestCase):
         # リダイレクトが成功し、ステータスコードが200であることを確認
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'kosu/kosu_main.html')
+
+
+
+    # 全工数確認から工数データへジャンプテスト
+    def test_all_kosu_all_kosu_detail_jump(self):
+        # 全工数確認ページにアクセス
+        response = self.client.get(reverse('all_kosu', args = [1]))
+        self.assertEqual(response.status_code, 200)
+
+        # HTMLに含まれるボタンが正しく設定されているかを確認
+        self.assertContains(response, '<a href="' + reverse('all_kosu_detail', args=[self.Business_Time_graph.id]) + '">詳細</a>', html=True)
+        # ボタンを押すシミュレーション
+        response = self.client.get(reverse('all_kosu_detail', args = [self.Business_Time_graph.id]))
+
+        # リダイレクトが成功し、ステータスコードが200であることを確認
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'kosu/all_kosu_detail.html')
+
+
+
+    # 工数データから全工数確認へジャンプテスト
+    def test_all_kosu_detail_all_kosu_jump(self):
+        # 工数データページにアクセス
+        response = self.client.get(reverse('all_kosu_detail', args = [1]))
+        self.assertEqual(response.status_code, 200)
+
+        # HTMLに含まれるボタンが正しく設定されているかを確認
+        self.assertContains(response, '<a href="' + reverse('all_kosu', args = [1]) + '" >データ一覧へ</a>', html=True)
+        # ボタンを押すシミュレーション
+        response = self.client.get(reverse('all_kosu', args = [1]))
+
+        # リダイレクトが成功し、ステータスコードが200であることを確認
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'kosu/all_kosu.html')
+
+
+
+    # 全工数確認から工数データ削除へジャンプテスト
+    def test_all_kosu_all_kosu_delete_jump(self):
+        # 全工数確認ページにアクセス
+        response = self.client.get(reverse('all_kosu', args = [1]))
+        self.assertEqual(response.status_code, 200)
+
+        # HTMLに含まれるボタンが正しく設定されているかを確認
+        self.assertContains(response, '<a href="' + reverse('all_kosu_delete', args=[self.Business_Time_graph.id]) + '">削除</a>', html=True)
+        # ボタンを押すシミュレーション
+        response = self.client.get(reverse('all_kosu_delete', args = [self.Business_Time_graph.id]))
+
+        # リダイレクトが成功し、ステータスコードが200であることを確認
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'kosu/all_kosu_delete.html')
+
+
+
+    # 工数データ削除から全工数確認へジャンプテスト
+    def test_all_kosu_delete_all_kosu_jump(self):
+        # 工数データ削除ページにアクセス
+        response = self.client.get(reverse('all_kosu_delete', args = [1]))
+        self.assertEqual(response.status_code, 200)
+
+        # HTMLに含まれるボタンが正しく設定されているかを確認
+        self.assertContains(response, '<a href="' + reverse('all_kosu', args = [1]) + '" >データ一覧へ</a>', html=True)
+        # ボタンを押すシミュレーション
+        response = self.client.get(reverse('all_kosu', args = [1]))
+
+        # リダイレクトが成功し、ステータスコードが200であることを確認
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'kosu/all_kosu.html')
 
 
 

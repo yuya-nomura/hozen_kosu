@@ -29,7 +29,6 @@ urlpatterns = [
     path('delete/<int:num>', kosu_views.delete, name = 'delete'),
     path('total', kosu_views.total, name = 'total'),
     path('over_time', kosu_views.over_time, name = 'over_time'),
-    path('graph/<int:num>', kosu_views.graph, name = 'graph'),
     path('schedule', kosu_views.schedule, name = 'schedule'),
     path('member/<int:num>', member_views.member_page, name = 'member'),
     path('new', member_views.member_new, name = 'member_new'),

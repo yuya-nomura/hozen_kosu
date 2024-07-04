@@ -19,8 +19,18 @@
     {% csrf_token %}
     <table class="table-borderless">
     <tr>
-      <th>就業日：</th>
-      <td><input type="date" class="form-control custom-border" name="work_day" id="work_day" style="width: 200px;"></td>
+      <th>就業日(指定)：</th>
+      <td><input type="date" class="form-control custom-border" name="work_day" id="work_day" style="width: 315px;" value={{default_day}}></td>
+    </tr>
+    <tr>
+      <th>就業日(期間)：</th>
+      <td>
+        <div class="number-input-group">
+          <input type="date" class="form-control custom-border" name="start_day" id="start_day" style="width: 140px;" value={{default_start_day}}>
+          ～
+          <input type="date" class="form-control custom-border" name="end_day" id="end_day" style="width: 140px;" value={{default_end_day}}>
+        </div>
+      </td>
     </tr>
     <tr>
       <th>氏名：</th>

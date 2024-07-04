@@ -560,11 +560,11 @@ class all_kosu_findForm(forms.Form):
     ('NG', 'NG'), 
     ]
 
-  name = forms.ChoiceField(label = '氏名', widget = forms.Select(attrs = {'class' : 'form-control custom-border', 'style' : 'width : 200px;'}), required = False)
-  shop = forms.ChoiceField(label = 'ショップ選択', widget = forms.Select(attrs = {'class' : 'form-control custom-border', 'style' : 'width : 200px;'}), choices = shop_list, required = False)
-  tyoku = forms.ChoiceField(label = '直選択', widget = forms.Select(attrs = {'class' : 'form-control custom-border', 'style' : 'width : 200px;'}), choices = tyoku_list, required = False)
-  work = forms.ChoiceField(label = '勤務選択', widget = forms.Select(attrs = {'class' : 'form-control custom-border', 'style' : 'width : 200px;'}), choices = work_list, required = False)
-  OK_NG = forms.ChoiceField(label = '整合性', widget = forms.Select(attrs = {'class' : 'form-control custom-border', 'style' : 'width : 200px;'}), choices = OK_NG_list, required = False)
+  name = forms.ChoiceField(label = '氏名', widget = forms.Select(attrs = {'class' : 'form-control custom-border', 'style' : 'width : 315px;'}), required = False)
+  shop = forms.ChoiceField(label = 'ショップ選択', widget = forms.Select(attrs = {'class' : 'form-control custom-border', 'style' : 'width : 315px;'}), choices = shop_list, required = False)
+  tyoku = forms.ChoiceField(label = '直選択', widget = forms.Select(attrs = {'class' : 'form-control custom-border', 'style' : 'width : 315px;'}), choices = tyoku_list, required = False)
+  work = forms.ChoiceField(label = '勤務選択', widget = forms.Select(attrs = {'class' : 'form-control custom-border', 'style' : 'width : 315px;'}), choices = work_list, required = False)
+  OK_NG = forms.ChoiceField(label = '整合性', widget = forms.Select(attrs = {'class' : 'form-control custom-border', 'style' : 'width : 315px;'}), choices = OK_NG_list, required = False)
 
 
 
