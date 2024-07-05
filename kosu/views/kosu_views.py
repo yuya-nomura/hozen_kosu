@@ -7205,16 +7205,30 @@ def all_kosu(request, num):
       judgement = [True, False]
 
 
-    # 工数データ取得
-    obj = Business_Time_graph.objects.filter(employee_no3__contains = request.POST['name'], \
-                                             employee_no3__in = employee_no_name_list, \
-                                             work_day2__contains = request.POST['work_day'], \
-                                             work_day2__gte = request.POST['start_day'], \
-                                             work_day2__lte = request.POST['end_day'], \
-                                             tyoku2__contains = request.POST['tyoku'], \
-                                             work_time__contains = request.POST['work'], \
-                                             judgement__in = judgement, \
-                                             ).order_by('work_day2', 'employee_no3').reverse()
+
+    try:
+      # 工数データ取得
+      obj = Business_Time_graph.objects.filter(employee_no3__contains = request.POST['name'], \
+                                              employee_no3__in = employee_no_name_list, \
+                                              work_day2__gte = request.POST['start_day'], \
+                                              work_day2__lte = request.POST['end_day'], \
+                                              tyoku2__contains = request.POST['tyoku'], \
+                                              work_time__contains = request.POST['work'], \
+                                              judgement__in = judgement, \
+                                              ).order_by('work_day2', 'employee_no3').reverse()
+
+    # エラー時の処理
+    except:
+      # 工数データ取得
+      obj = Business_Time_graph.objects.filter(employee_no3__contains = request.POST['name'], \
+                                              employee_no3__in = employee_no_name_list, \
+                                              tyoku2__contains = request.POST['tyoku'], \
+                                              work_time__contains = request.POST['work'], \
+                                              judgement__in = judgement, \
+                                              ).order_by('work_day2', 'employee_no3').reverse()
+
+
+
 
     # 取得した工数データを1ページあたりの件数分取得
     data = Paginator(obj, page_num.menu_row)
@@ -7224,11 +7238,6 @@ def all_kosu(request, num):
     form = all_kosu_findForm(request.POST)
     # フォーム選択肢定義
     form.fields['name'].choices = name_list
-
-    # 日付POST後保持
-    default_day = str(request.POST['work_day'])
-    default_start_day = str(request.POST['start_day'])
-    default_end_day = str(request.POST['end_day'])
 
 
 
@@ -7249,11 +7258,6 @@ def all_kosu(request, num):
     # 今日の日時取得
     today = datetime.date.today()
 
-    # 日付POST後変数定義
-    default_day = str(today)
-    default_start_day = str(today)
-    default_end_day = str(today)
-
 
 
   # HTMLに渡す辞書
@@ -7261,9 +7265,6 @@ def all_kosu(request, num):
     'title' : '全工数履歴',
     'data' : data.get_page(num),
     'form' : form,
-    'default_day' : default_day,
-    'default_start_day' : default_start_day,
-    'default_end_day' : default_end_day,
     'num' : num,
     }
   
@@ -7362,12 +7363,41 @@ def all_kosu_detail(request, num):
                 request.POST['time_work21'] + \
                 request.POST['time_work22'] + \
                 request.POST['time_work23']
+    
+    # POSTした従業員番号があるか確認
+    member_filter = member.objects.filter(employee_no = request.POST['employee_no'])
+    # 従業員番号がない場合の処理
+    if member_filter.count() == 0:
+      # エラーメッセージ出力
+      messages.error(request, 'その従業員番号は人員データにありません。ERROR092')
+      # このページをリダイレクト
+      return redirect(to = '/all_kosu_detail/{}'.format(num))
 
+    # 従業員番号か日付に変更があった場合の処理
+    if request.POST['employee_no'] != request.session['memory_No'] or \
+      str(request.POST['work_day']) != request.session['memory_day']:
+      # 変更後の日付に工数データがあるか確認
+      obj_filter = Business_Time_graph.objects.filter(employee_no3 = request.POST['employee_no'], \
+                                                      work_day2 = request.POST['work_day'])
+      
+      # 工数データがある場合の処理
+      if obj_filter.count() != 0:
+        # エラーメッセージ出力
+        messages.error(request, 'その日付には既に工数データがあります。ERROR091')
+        # このページをリダイレクト
+        return redirect(to = '/all_kosu_detail/{}'.format(num))
+      
+      else:
+        # 元の工数データ削除
+        obj_get.delete()
+    # 従業員番号に該当するmemberインスタンスを取得
+    member_instance = member.objects.get(employee_no = request.session['login_No'])
 
     # 作業内容データの内容を上書きして更新
     Business_Time_graph.objects.update_or_create(employee_no3 = request.POST['employee_no'], \
                                                  work_day2 = request.POST['work_day'], \
-                                                 defaults = {'def_ver2' : request.POST['def_ver'], \
+                                                 defaults = {'name' : member_instance, \
+                                                             'def_ver2' : request.POST['def_ver'], \
                                                              'work_time' : request.POST['work_time'], \
                                                              'tyoku2' : request.POST['tyoku'], \
                                                              'time_work' : time_work, \
@@ -7385,6 +7415,11 @@ def all_kosu_detail(request, num):
 
   # POST時以外の処理
   else:
+    # 変更前従業員番号記憶
+    request.session['memory_No'] = obj_get.employee_no3
+    # 変更前日付記憶
+    request.session['memory_day'] = str(obj_get.work_day2)
+
     # 作業詳細を取得しリストに解凍
     detail_list = obj_get.detail_work.split('$')
 
