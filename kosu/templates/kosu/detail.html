@@ -54,17 +54,24 @@
         <th class="text-center">作業時間</th>
         <th class="text-center">工数区分</th>
         <th class="text-center">作業詳細</th>
+        <th class="text-center">作業時間編集</th>
       </tr>
       {% for i in time_display_list %}
       <tr>
         <td class="text-center">
-          <input type="submit" value="{{ forloop.counter }}" name="item_delete" onclick="return confirmDelete();" class="btn btn-blue7 mt-2">
+          <input type="submit" value="{{forloop.counter}}" name="item_delete" onclick="return confirmDelete();" class="btn btn-blue7 mt-2">
         </td>
         {% for k in i %}
         <td class="text-center">
           {{k}}
         </td>
         {% endfor %}
+        <td class="text-center">
+          <input class="your-time-field form-control custom-border" style="width : 80px;" type="text" id="start_time{{forloop.counter}}" name="start_time{{forloop.counter}}" data-precision="5" value={{default_start_time}}>
+          ～
+          <input class="your-time-field form-control custom-border" style="width : 80px;" type="text" id="end_time{{forloop.counter}}" name="end_time{{forloop.counter}}" data-precision="5" value={{default_end_time}}>
+          <input type="submit" value="変更{{forloop.counter}}" name="item_edit" onclick="return confirm_edit();" class="btn btn-blue7 mt-2">
+        </td>
       </tr>
       {% endfor %}
     </table>
@@ -87,6 +94,7 @@
   </script>
   <script>
     function confirmDelete() {return confirm('この操作は元に戻せません。本当に削除しますか？');}
+    function confirm_edit() {return confirm('作業時間を変更します');}
   </script>
 </body>
 </html>

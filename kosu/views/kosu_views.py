@@ -4935,6 +4935,308 @@ def detail(request, num):
 
 
 
+  # 項目作業時間変更時の処理
+  if "item_edit" in request.POST:
+    # 項目名取得
+    pressed_button = request.POST.get('item_edit')
+    # 項目ID取得
+    edit_id = int(pressed_button[2 : ])
+
+    start_time = request.POST.get('start_time{}'.format(edit_id))
+    end_time = request.POST.get('end_time{}'.format(edit_id))
+
+
+    # 作業開始時間の指定がない場合の処理
+    if start_time in ('', None):
+      # エラーメッセージ出力
+      messages.error(request, '時間が入力されていません。ERROR089')
+      # このページをリダイレクト
+      return redirect(to = '/detail/{}'.format(num))
+    
+    # 作業終了時間の指定がない場合の処理
+    if end_time in ('', None):
+      # エラーメッセージ出力
+      messages.error(request, '時間が入力されていません。ERROR090')
+      # このページをリダイレクト
+      return redirect(to = '/detail/{}'.format(num))
+
+  
+    # 作業開始時間の区切りのインデックス取得
+    start_time_index = start_time.index(':')
+    # 作業開始時取得
+    start_time_hour = start_time[ : start_time_index]
+    # 作業開始分取得
+    start_time_min = start_time[start_time_index + 1 : ]
+    # 作業終了時間の区切りのインデックス取得
+    end_time_index = end_time.index(':')
+    # 作業終了時取得
+    end_time_hour = end_time[ : end_time_index]
+    # 作業終了分取得
+    end_time_min = end_time[end_time_index + 1 : ]
+
+    # 作業開始時間のインデント取得
+    start_time_ind = int(int(start_time_hour)*12 + int(start_time_min)/5)
+    # 作業終了時間のインデント取得
+    end_time_ind = int(int(end_time_hour)*12 + int(end_time_min)/5)
+
+
+    # 作業開始時間と終了時間が同じ場合の処理
+    if start_time_ind == end_time_ind:
+      # エラーメッセージ出力
+      messages.error(request, '入力された作業時間が正しくありません。ERROR088')
+      # このページをリダイレクト
+      return redirect(to = '/detail/{}'.format(num))
+
+
+    # 作業内容と作業詳細を取得しリストに解凍
+    work_list = list(obj_get.time_work)
+    detail_list = obj_get.detail_work.split('$')
+
+
+    # 変更前の作業時間が日を跨いでいない時の処理
+    if kosu_list[edit_id - 1] < kosu_list[edit_id]:
+      # 指定された時間の作業内容と作業詳細を消すループ
+      for i in range(kosu_list[edit_id - 1], kosu_list[edit_id]):
+        # 最初のループの処理
+        if i == kosu_list[edit_id - 1]:
+          # 作業内容と作業詳細記憶
+          work_memory = work_list[i]
+          detail_memory = detail_list[i]
+        
+        # 作業内容、作業詳細削除
+        work_list[i] = '#'
+        detail_list[i] = ''
+        
+
+    # 変更前の作業時間が日を跨いでいる時の処理
+    else:
+      # 指定された時間の作業内容と作業詳細を消す
+      for i in range(kosu_list[edit_id - 1] , 288):
+        # 最初のループの処理
+        if i == kosu_list[edit_id - 1]:
+          # 作業内容と作業詳細記憶
+          work_memory = work_list[i]
+          detail_memory = detail_list[i]
+
+        # 作業内容、作業詳細削除
+        work_list[i] = '#'
+        detail_list[i] = ''
+
+
+      for i in range(kosu_list[edit_id]):
+        # 作業内容、作業詳細削除
+        work_list[i] = '#'
+        detail_list[i] = ''
+
+
+    # 変更後の作業時間が日を跨いでいない時の処理
+    if start_time_ind < end_time_ind:
+      # 変更後の作業時間に工数データが入力されていないかチェック
+      for k in range(start_time_ind, end_time_ind):
+        # 変更後の作業時間に工数データが入力されている場合の処理
+        if work_list[k] != '#':
+          if work_list[k] != '$':
+            # エラーメッセージ出力
+            messages.error(request, '入力された作業時間には既に工数が入力されているので入力できません。ERROR085')
+            # このページをリダイレクト
+            return redirect(to = '/detail/{}'.format(num))
+
+        # 変更後の作業時間に工数データが入力されていない場合の処理
+        else:
+          # 作業内容、作業詳細書き込み
+          work_list[k] = work_memory
+          detail_list[i] = detail_memory
+          
+    # 変更後の作業時間が日を跨いでいる時の処理
+    else:
+      # 変更後の作業時間に工数データが入力されていないかチェック
+      for k in range(start_time_ind, 288):
+        # 変更後の作業時間に工数データが入力されている場合の処理
+        if work_list[k] != '#':
+          if work_list[k] != '$':
+            # エラーメッセージ出力
+            messages.error(request, '入力された作業時間には既に工数が入力されているので入力できません。ERROR086')
+            # このページをリダイレクト
+            return redirect(to = '/detail/{}'.format(num))
+
+        # 変更後の作業時間に工数データが入力されていない場合の処理
+        else:
+          # 作業内容、作業詳細書き込み
+          work_list[k] = work_memory
+          detail_list[i] = detail_memory
+
+      # 変更後の作業時間に工数データが入力されていないかチェック
+      for k in range(end_time_ind):
+        # 変更後の作業時間に工数データが入力されている場合の処理
+        if work_list[k] != '#':
+          if work_list[k] != '$':
+            # エラーメッセージ出力
+            messages.error(request, '入力された作業時間には既に工数が入力されているので入力できません。ERROR087')
+            # このページをリダイレクト
+            return redirect(to = '/detail/{}'.format(num))
+
+        # 変更後の作業時間に工数データが入力されていない場合の処理
+        else:
+          # 作業内容、作業詳細書き込み
+          work_list[k] = work_memory
+          detail_list[i] = detail_memory
+
+
+    # 工数合計取得
+    kosu_total = 1440 - (work_list.count('#')*5) - (work_list.count('$')*5)
+
+    # 工数入力OK_NGリセット
+    judgement = False
+
+    # 出勤、休出時、工数合計と残業に整合性がある場合の処理
+    if (obj_get.work_time == '出勤' or obj_get.work_time == 'シフト出') and \
+      kosu_total - int(obj_get.over_time) == 470:
+      # 工数入力OK_NGをOKに切り替え
+      judgement = True
+
+
+    # 休出時、工数合計と残業に整合性がある場合の処理
+    if obj_get.work_time == '休出' and kosu_total == int(obj_get.over_time):
+      # 工数入力OK_NGをOKに切り替え
+      judgement = True
+
+
+    # 早退・遅刻時、工数合計と残業に整合性がある場合の処理
+    if obj_get.work_time == '早退・遅刻' and kosu_total != 0:
+      # 工数入力OK_NGをOKに切り替え
+      judgement = True
+
+
+    # ログイン者の人員データ取得
+    member_obj = member.objects.get(employee_no = request.session['login_No'])
+
+
+    # ログイン者の登録ショップが三組三交替Ⅱ甲乙丙番Cで1直の場合の処理
+    if (member_obj.shop == 'W1' or member_obj.shop == 'W2' or \
+      member_obj.shop == 'A1' or member_obj.shop == 'A2') and \
+        obj_get.tyoku2 == '1':
+      # 半前年休時、工数合計と残業に整合性がある場合の処理
+      if obj_get.work_time == '半前年休' and kosu_total - int(obj_get.over_time) == 230:
+        # 工数入力OK_NGをOKに切り替え
+        judgement = True
+
+      # 半後年休時、工数合計と残業に整合性がある場合の処理
+      if obj_get.work_time == '半後年休' and kosu_total - int(obj_get.over_time) == 240:
+        # 工数入力OK_NGをOKに切り替え
+        judgement = True
+
+
+    # ログイン者の登録ショップが三組三交替Ⅱ甲乙丙番Cで2直の場合の処理
+    if (member_obj.shop == 'W1' or member_obj.shop == 'W2' or \
+      member_obj.shop == 'A1' or member_obj.shop == 'A2') and \
+        obj_get.tyoku2 == '2':
+      # 半前年休時、工数合計と残業に整合性がある場合の処理
+      if obj_get.work_time == '半前年休' and kosu_total - int(obj_get.over_time) == 290:
+        # 工数入力OK_NGをOKに切り替え
+        judgement = True
+
+      # 半後年休時、工数合計と残業に整合性がある場合の処理
+      if obj_get.work_time == '半後年休' and kosu_total - int(obj_get.over_time) == 180:
+        # 工数入力OK_NGをOKに切り替え
+        judgement = True
+
+
+    # ログイン者の登録ショップが三組三交替Ⅱ甲乙丙番Cで3直の場合の処理
+    if (member_obj.shop == 'W1' or member_obj.shop == 'W2' or \
+      member_obj.shop == 'A1' or member_obj.shop == 'A2') and \
+        obj_get.tyoku2 == '3':
+      # 半前年休時、工数合計と残業に整合性がある場合の処理
+      if obj_get.work_time == '半前年休' and kosu_total - int(obj_get.over_time) == 230:
+        # 工数入力OK_NGをOKに切り替え
+        judgement = True
+
+      # 半後年休時、工数合計と残業に整合性がある場合の処理
+      if obj_get.work_time == '半後年休' and kosu_total - int(obj_get.over_time) == 240:
+        # 工数入力OK_NGをOKに切り替え
+        judgement = True
+
+
+    # ログイン者の登録ショップが三組三交替Ⅱ甲乙丙番Bで1直の場合の処理
+    if (member_obj.shop == 'P' or member_obj.shop == 'R' or \
+      member_obj.shop == 'T1' or member_obj.shop == 'T2' or \
+        member_obj.shop == 'その他' or member_obj.shop == '組長以上') and \
+        obj_get.tyoku2 == '1':
+      # 半前年休時、工数合計と残業に整合性がある場合の処理
+      if obj_get.work_time == '半前年休' and kosu_total - int(obj_get.over_time) == 220:
+        # 工数入力OK_NGをOKに切り替え
+        judgement = True
+
+      # 半後年休時、工数合計と残業に整合性がある場合の処理
+      if obj_get.work_time == '半後年休' and kosu_total - int(obj_get.over_time) == 250:
+        # 工数入力OK_NGをOKに切り替え
+        judgement = True
+
+
+    # ログイン者の登録ショップが三組三交替Ⅱ甲乙丙番Bで2直の場合の処理
+    if (member_obj.shop == 'P' or member_obj.shop == 'R' or \
+      member_obj.shop == 'T1' or member_obj.shop == 'T2' or \
+        member_obj.shop == 'その他' or member_obj.shop == '組長以上') and \
+        obj_get.tyoku2 == '2':
+      # 半前年休時、工数合計と残業に整合性がある場合の処理
+      if obj_get.work_time == '半前年休' and kosu_total - int(obj_get.over_time) == 230:
+        # 工数入力OK_NGをOKに切り替え
+        judgement = True
+
+      # 半後年休時、工数合計と残業に整合性がある場合の処理
+      if obj_get.work_time == '半後年休' and kosu_total - int(obj_get.over_time) == 240:
+        # 工数入力OK_NGをOKに切り替え
+        judgement = True
+
+
+    # ログイン者の登録ショップが三組三交替Ⅱ甲乙丙番Bで3直の場合の処理
+    if (member_obj.shop == 'P' or member_obj.shop == 'R' or \
+      member_obj.shop == 'T1' or member_obj.shop == 'T2' or \
+        member_obj.shop == 'その他' or member_obj.shop == '組長以上') and \
+        obj_get.tyoku2 == '3':
+      # 半前年休時、工数合計と残業に整合性がある場合の処理
+      if obj_get.work_time == '半前年休' and kosu_total - int(obj_get.over_time) == 275:
+        # 工数入力OK_NGをOKに切り替え
+        judgement = True
+
+      # 半後年休時、工数合計と残業に整合性がある場合の処理
+      if obj_get.work_time == '半後年休' and kosu_total - int(obj_get.over_time) == 195:
+        # 工数入力OK_NGをOKに切り替え
+        judgement = True
+
+
+    # 常昼の場合の処理
+    if obj_get.tyoku2 == '4':
+      # 半前年休時、工数合計と残業に整合性がある場合の処理
+      if obj_get.work_time == '半前年休' and kosu_total - int(obj_get.over_time) == 230:
+        # 工数入力OK_NGをOKに切り替え
+        judgement = True
+
+      # 半後年休時、工数合計と残業に整合性がある場合の処理
+      if obj_get.work_time == '半後年休' and kosu_total - int(obj_get.over_time) == 240:
+        # 工数入力OK_NGをOKに切り替え
+        judgement = True
+
+
+    # 作業詳細リストを文字列に変更
+    detail_list_str = ''
+    for i, e in enumerate(detail_list):
+      if i == len(detail_list) - 1:
+        detail_list_str = detail_list_str + detail_list[i]
+      else:
+        detail_list_str = detail_list_str + detail_list[i] + '$'
+
+
+    # 作業内容データの内容を上書きして更新
+    Business_Time_graph.objects.update_or_create(employee_no3 = request.session['login_No'], \
+      work_day2 = obj_get.work_day2, defaults = {'time_work' : ''.join(work_list), \
+                                                 'detail_work' : detail_list_str, \
+                                                 'judgement' : judgement})
+
+    # このページ読み直し
+    return redirect(to = '/detail/{}'.format(num))
+
+
+
   # HTMLに渡す辞書
   context = {
     'title' : '工数詳細',
