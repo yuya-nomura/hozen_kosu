@@ -22,16 +22,21 @@ def member_page(request, num):
 
   # 未ログインならログインページに飛ぶ
   if request.session.get('login_No', None) == None:
-
     return redirect(to = '/login')
 
+  try:
+    # ログイン者の情報取得
+    data = member.objects.get(employee_no = request.session['login_No'])
 
-  # ログイン者の情報取得
-  data = member.objects.get(employee_no = request.session['login_No'])
+  # セッション値から人員情報取得できない場合の処理
+  except member.DoesNotExist:
+    # セッション削除
+    request.session.clear()
+    # ログインページに戻る
+    return redirect(to = '/login')
 
   # ログイン者に権限がなければメインページに戻る
   if data.authority == False:
-
     return redirect(to = '/')
 
 
@@ -105,8 +110,16 @@ def member_new(request):
     return redirect(to = '/login')
 
 
-  # ログイン者の情報取得
-  data = member.objects.get(employee_no = request.session['login_No'])
+  try:
+    # ログイン者の情報取得
+    data = member.objects.get(employee_no = request.session['login_No'])
+
+  # セッション値から人員情報取得できない場合の処理
+  except member.DoesNotExist:
+    # セッション削除
+    request.session.clear()
+    # ログインページに戻る
+    return redirect(to = '/login') 
 
   # ログイン者に権限がなければメインページに戻る
   if data.authority == False:
@@ -229,8 +242,17 @@ def member_edit(request, num):
   if request.session.get('login_No', None) == None:
     return redirect(to = '/login')
 
-  # ログイン者の情報取得
-  data = member.objects.get(employee_no = request.session['login_No'])
+  try:
+    # ログイン者の情報取得
+    data = member.objects.get(employee_no = request.session['login_No'])
+
+  # セッション値から人員情報取得できない場合の処理
+  except member.DoesNotExist:
+    # セッション削除
+    request.session.clear()
+    # ログインページに戻る
+    return redirect(to = '/login')
+
   # ログイン者に権限がなければメインページに戻る
   if data.authority == False:
     return redirect(to = '/')
@@ -254,7 +276,7 @@ def member_edit(request, num):
 
 
     # 編集した従業員番号の登録がすでにあるかチェック
-    if int(request.session.get('edit_No', None)) != int(request.POST['employee_no']) \
+    if int(request.session['edit_No']) != int(request.POST['employee_no']) \
       and data.count() >= 1:
       # エラーメッセージ出力
       messages.error(request, '入力した従業員番号はすでに登録があるので登録できません。ERROR021')
@@ -262,13 +284,90 @@ def member_edit(request, num):
       return redirect(to = '/member_edit/{}'.format(num))
 
 
+    # 従業員番号を変更した場合の処理
+    if int(request.session['edit_No']) != int(request.POST['employee_no']):
+      # 変更前の人員データ取得
+      obj_get = member.objects.get(employee_no = request.session['edit_No'])
+      # 取得した人員データ削除
+      obj_get.delete()
+
+
+    # 登録ショップが三組三交替Ⅱ甲乙丙番Cの場合の休憩初期値登録
+    if request.POST['shop'] == 'W1' or request.POST['shop'] == 'W2' \
+      or request.POST['shop'] == 'A1' or request.POST['shop'] == 'A2':
+      # 1直休憩時間初期値定義
+      break1_1 = '#11401240'
+      break1_2 = '#17201735'
+      break1_3 = '#23350035'
+      break1_4 = '#04350450'
+
+      # 2直休憩時間初期値定義
+      break2_1 = '#14101510'
+      break2_2 = '#22002215'
+      break2_3 = '#04150515'
+      break2_4 = '#09150930'
+
+      # 3直休憩時間初期値定義
+      break3_1 = '#23500050'
+      break3_2 = '#06400655'
+      break3_3 = '#12551355'
+      break3_4 = '#17551810'
+
+      # 常昼休憩時間初期値定義
+      break4_1 = '#12001300'
+      break4_2 = '#19001915'
+      break4_3 = '#01150215'
+      break4_4 = '#06150630'
+
+    # 登録ショップが三組三交替Ⅱ甲乙丙番Bか常昼の場合の休憩初期値登録
+    else:
+      # 1直休憩時間初期値定義
+      break1_1 = '#10401130'
+      break1_2 = '#15101520'
+      break1_3 = '#20202110'
+      break1_4 = '#01400150'
+
+      # 2直休憩時間初期値定義
+      break2_1 = '#17501840'
+      break2_2 = '#22302240'
+      break2_3 = '#03400430'
+      break2_4 = '#09000910'
+
+      # 3直休憩時間初期値定義
+      break3_1 = '#01400230'
+      break3_2 = '#07050715'
+      break3_3 = '#12151305'
+      break3_4 = '#17351745'
+
+      # 常昼休憩時間初期値定義
+      break4_1 = '#12001300'
+      break4_2 = '#19001915'
+      break4_3 = '#01150215'
+      break4_4 = '#06150630'
+
     # 指定従業員番号のレコードにPOST送信された値を上書きする
     member.objects.update_or_create(employee_no = request.POST['employee_no'], \
                                     defaults = {'employee_no' : find, \
                                                 'name' : request.POST['name'], \
                                                 'shop' : request.POST['shop'], \
                                                 'authority' : 'authority' in request.POST, \
-                                                'administrator' : 'administrator' in request.POST})
+                                                'administrator' : 'administrator' in request.POST, \
+                                                'break_time1' : break1_1, \
+                                                'break_time1_over1' : break1_2, \
+                                                'break_time1_over2' : break1_3, \
+                                                'break_time1_over3' : break1_4, \
+                                                'break_time2' : break2_1, \
+                                                'break_time2_over1' : break2_2, \
+                                                'break_time2_over2' : break2_3, \
+                                                'break_time2_over3' : break2_4, \
+                                                'break_time3' : break3_1, \
+                                                'break_time3_over1' : break3_2, \
+                                                'break_time3_over2' : break3_3, \
+                                                'break_time3_over3' : break3_4, \
+                                                'break_time4' : break4_1, \
+                                                'break_time4_over1' : break4_2, \
+                                                'break_time4_over2' : break4_3, \
+                                                'break_time4_over3' : break4_4})
 
     # 工数履歴画面をリダイレクトする
     return redirect(to = '/member/1')
@@ -296,8 +395,16 @@ def member_delete(request, num):
   if request.session.get('login_No', None) == None:
     return redirect(to = '/login')
   
-  # ログイン者の情報取得
-  data = member.objects.get(employee_no = request.session['login_No'])
+  try:
+    # ログイン者の情報取得
+    data = member.objects.get(employee_no = request.session['login_No'])
+
+  # セッション値から人員情報取得できない場合の処理
+  except member.DoesNotExist:
+    # セッション削除
+    request.session.clear()
+    # ログインページに戻る
+    return redirect(to = '/login')
   
   # ログイン者に権限がなければメインページに戻る
   if data.authority == False:

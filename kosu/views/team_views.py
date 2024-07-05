@@ -34,8 +34,17 @@ def team(request):
     return redirect(to = '/login')
   
 
-  # ログイン者の情報取得
-  data = member.objects.get(employee_no = request.session['login_No'])
+  try:
+    # ログイン者の情報取得
+    data = member.objects.get(employee_no = request.session['login_No'])
+
+  # セッション値から人員情報取得できない場合の処理
+  except member.DoesNotExist:
+    # セッション削除
+    request.session.clear()
+    # ログインページに戻る
+    return redirect(to = '/login') 
+  
   # ログイン者に権限がなければメインページに戻る
   if data.authority == False:
     return redirect(to = '/')
@@ -214,8 +223,17 @@ def team_graph(request):
   if request.session.get('login_No', None) == None:
     return redirect(to = '/login')
   
-  # ログイン者の情報取得
-  data = member.objects.get(employee_no = request.session['login_No'])
+  try:
+    # ログイン者の情報取得
+    data = member.objects.get(employee_no = request.session['login_No'])
+
+  # セッション値から人員情報取得できない場合の処理
+  except member.DoesNotExist:
+    # セッション削除
+    request.session.clear()
+    # ログインページに戻る
+    return redirect(to = '/login') 
+
   # ログイン者に権限がなければメインページに戻る
   if data.authority == False:
     return redirect(to = '/')
@@ -573,8 +591,17 @@ def team_kosu(request, num):
   if request.session.get('login_No', None) == None:
     return redirect(to = '/login')
 
-  # ログイン者の情報取得
-  data = member.objects.get(employee_no = request.session['login_No'])
+  try:
+    # ログイン者の情報取得
+    data = member.objects.get(employee_no = request.session['login_No'])
+
+  # セッション値から人員情報取得できない場合の処理
+  except member.DoesNotExist:
+    # セッション削除
+    request.session.clear()
+    # ログインページに戻る
+    return redirect(to = '/login') 
+  
   # ログイン者に権限がなければメインページに戻る
   if data.authority == False:
     return redirect(to = '/')
@@ -707,8 +734,17 @@ def team_detail(request, num):
   if request.session.get('login_No', None) == None:
     return redirect(to = '/login')
   
-  # ログイン者の情報取得
-  data = member.objects.get(employee_no = request.session['login_No'])
+  try:
+    # ログイン者の情報取得
+    data = member.objects.get(employee_no = request.session['login_No'])
+
+  # セッション値から人員情報取得できない場合の処理
+  except member.DoesNotExist:
+    # セッション削除
+    request.session.clear()
+    # ログインページに戻る
+    return redirect(to = '/login') 
+
   # ログイン者に権限がなければメインページに戻る
   if data.authority == False:
     return redirect(to = '/')
@@ -863,8 +899,17 @@ def team_calendar(request):
   if request.session.get('login_No', None) == None:
     return redirect(to = '/login')
   
-  # ログイン者の情報取得
-  data = member.objects.get(employee_no = request.session['login_No'])
+  try:
+    # ログイン者の情報取得
+    data = member.objects.get(employee_no = request.session['login_No'])
+
+  # セッション値から人員情報取得できない場合の処理
+  except member.DoesNotExist:
+    # セッション削除
+    request.session.clear()
+    # ログインページに戻る
+    return redirect(to = '/login') 
+
   # ログイン者に権限がなければメインページに戻る
   if data.authority == False:
     return redirect(to = '/')
@@ -1905,8 +1950,17 @@ def team_over_time(request):
   if request.session.get('login_No', None) == None:
     return redirect(to = '/login')
   
-  # ログイン者の情報取得
-  data = member.objects.get(employee_no = request.session['login_No'])
+  try:
+    # ログイン者の情報取得
+    data = member.objects.get(employee_no = request.session['login_No'])
+
+  # セッション値から人員情報取得できない場合の処理
+  except member.DoesNotExist:
+    # セッション削除
+    request.session.clear()
+    # ログインページに戻る
+    return redirect(to = '/login') 
+
   # ログイン者に権限がなければメインページに戻る
   if data.authority == False:
     return redirect(to = '/')
@@ -2436,8 +2490,16 @@ def class_list(request):
     return redirect(to = '/login')
   
   
-  # ログイン者の情報取得
-  data = member.objects.get(employee_no = request.session['login_No'])
+  try:
+    # ログイン者の情報取得
+    data = member.objects.get(employee_no = request.session['login_No'])
+
+  # セッション値から人員情報取得できない場合の処理
+  except member.DoesNotExist:
+    # セッション削除
+    request.session.clear()
+    # ログインページに戻る
+    return redirect(to = '/login') 
 
 
 

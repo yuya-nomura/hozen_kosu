@@ -31,6 +31,23 @@ from ..forms import all_kosuForm
 # 工数履歴画面定義
 def kosu_list(request, num):
 
+  # セッションにログインした従業員番号がない場合の処理
+  if request.session.get('login_No', None) == None:
+    # 未ログインならログインページに飛ぶ
+    return redirect(to = '/login')
+
+  try:
+    # ログイン者の情報取得
+    member_data = member.objects.get(employee_no = request.session['login_No'])
+
+  # セッション値から人員情報取得できない場合の処理
+  except member.DoesNotExist:
+    # セッション削除
+    request.session.clear()
+    # ログインページに戻る
+    return redirect(to = '/login')
+  
+
   # 今日の日時取得
   kosu_today = datetime.date.today()
 
@@ -44,14 +61,6 @@ def kosu_list(request, num):
     # フォームの初期値に今日の日付を入れる
     default_day = str(kosu_today)
 
-
-  # ログイン者の情報取得
-  member_data = member.objects.get(employee_no = request.session['login_No'])
-
-  # セッションにログインした従業員番号がない場合の処理
-  if request.session.get('login_No', None) == None:
-    # 未ログインならログインページに飛ぶ
-    return redirect(to = '/login')
 
   # 設定データ取得
   page_num = administrator_data.objects.order_by("id").last()
@@ -123,14 +132,20 @@ def input(request):
   if request.session.get('login_No', None) == None:
     # 未ログインならログインページに飛ぶ
     return redirect(to = '/login')
-  
+
+  try:
+    # ログイン者の情報取得
+    member_obj = member.objects.get(employee_no = request.session['login_No'])
+  # セッション値から人員情報取得できない場合の処理
+  except member.DoesNotExist:
+    # セッション削除
+    request.session.clear()
+    # ログインページに戻る
+    return redirect(to = '/login')
+
 
   # 今日の日時を変数に格納
   kosu_today = datetime.date.today()
-
-  # ログイン者の情報取得
-  member_obj = member.objects.get(employee_no = request.session['login_No'])
-
 
   # セッションに就業日の履歴がない場合の処理
   if request.session.get('day', None) == None:
@@ -3058,8 +3073,20 @@ def input(request):
 # 休憩時間定義画面定義
 def break_time(request): 
 
-  # 未ログインならログインページに飛ぶ
+  # セッションにログインした従業員番号がない場合の処理
   if request.session.get('login_No', None) == None:
+    # 未ログインならログインページに飛ぶ
+    return redirect(to = '/login')
+
+  try:
+    # ログイン者の情報取得
+    member_data = member.objects.get(employee_no = request.session['login_No'])
+
+  # セッション値から人員情報取得できない場合の処理
+  except member.DoesNotExist:
+    # セッション削除
+    request.session.clear()
+    # ログインページに戻る
     return redirect(to = '/login')
 
 
@@ -3654,9 +3681,28 @@ def break_time(request):
 # 当日休憩変更定義画面定義
 def today_break_time(request): 
 
-  # 未ログインならログインページに飛ぶ
+  # セッションにログインした従業員番号がない場合の処理
   if request.session.get('login_No', None) == None:
+    # 未ログインならログインページに飛ぶ
     return redirect(to = '/login')
+
+  try:
+    # ログイン者の情報取得
+    member_data = member.objects.get(employee_no = request.session['login_No'])
+
+  # セッション値から人員情報取得できない場合の処理
+  except member.DoesNotExist:
+    # セッション削除
+    request.session.clear()
+    # ログインページに戻る
+    return redirect(to = '/login')
+
+
+  # セッションに工数入力日がない場合の処理
+  if request.session.get('break_today', None) == None:
+    # 工数入力画面に飛ぶ
+    return redirect(to = '/input')
+  
 
 
   # POST時の処理
@@ -3781,14 +3827,14 @@ def today_break_time(request):
 
 
     # 工数データあるか確認
-    kosu_data_filter = Business_Time_graph.objects.filter(employee_no3 = request.session.get('login_No', None), \
-                                                    work_day2 = request.session.get('break_today', None))
+    kosu_data_filter = Business_Time_graph.objects.filter(employee_no3 = request.session['login_No'], \
+                                                    work_day2 = request.session['break_today'])
 
     # 工数データある場合の処理
     if kosu_data_filter.count() != 0:
       # 工数データ取得
-      kosu_data_get = Business_Time_graph.objects.get(employee_no3 = request.session.get('login_No', None), \
-                                                      work_day2 = request.session.get('break_today', None))
+      kosu_data_get = Business_Time_graph.objects.get(employee_no3 = request.session['login_No'], \
+                                                      work_day2 = request.session['break_today'])
 
       # 作業内容と作業詳細をリストに解凍
       kosu_def = list(kosu_data_get.time_work)
@@ -4194,8 +4240,16 @@ def detail(request, num):
   if request.session.get('login_No', None) == None:
     return redirect(to = '/login')
   
-  # ログイン者情報取得
-  data = member.objects.get(employee_no = request.session['login_No'])
+  try:
+    # ログイン者の情報取得
+    data = member.objects.get(employee_no = request.session['login_No'])
+
+  # セッション値から人員情報取得できない場合の処理
+  except member.DoesNotExist:
+    # セッション削除
+    request.session.clear()
+    # ログインページに戻る
+    return redirect(to = '/login')
 
   # 指定IDの工数履歴のレコードのオブジェクトを変数に入れる
   obj_get = Business_Time_graph.objects.get(id = num)
@@ -5265,8 +5319,16 @@ def delete(request, num):
   if request.session.get('login_No', None) == None:
     return redirect(to = '/login')
   
-  # ログイン者情報取得
-  data = member.objects.get(employee_no = request.session['login_No'])
+  try:
+    # ログイン者の情報取得
+    data = member.objects.get(employee_no = request.session['login_No'])
+
+  # セッション値から人員情報取得できない場合の処理
+  except member.DoesNotExist:
+    # セッション削除
+    request.session.clear()
+    # ログインページに戻る
+    return redirect(to = '/login')
 
   # 指定IDの工数履歴のレコードのオブジェクトを変数に入れる
   obj_get = Business_Time_graph.objects.get(id = num)
@@ -5633,8 +5695,16 @@ def total(request):
   if request.session.get('login_No', None) == None:
     return redirect(to = '/login')
 
-  # ログイン者の情報取得
-  data = member.objects.get(employee_no = request.session['login_No'])
+  try:
+    # ログイン者の情報取得
+    data = member.objects.get(employee_no = request.session['login_No'])
+
+  # セッション値から人員情報取得できない場合の処理
+  except member.DoesNotExist:
+    # セッション削除
+    request.session.clear()
+    # ログインページに戻る
+    return redirect(to = '/login')
 
 
 
@@ -6010,6 +6080,18 @@ def schedule(request):
   if request.session.get('login_No', None) == None:
     return redirect(to = '/login')
   
+  try:
+    # ログイン者の情報取得
+    member_data = member.objects.get(employee_no = request.session['login_No'])
+
+  # セッション値から人員情報取得できない場合の処理
+  except member.DoesNotExist:
+    # セッション削除
+    request.session.clear()
+    # ログインページに戻る
+    return redirect(to = '/login')
+
+
   # 本日の日付取得
   today = datetime.date.today()
 
@@ -6880,8 +6962,16 @@ def over_time(request):
     # 未ログインならログインページに飛ぶ
     return redirect(to = '/login')
 
-  # ログイン者の情報取得
-  data = member.objects.get(employee_no = request.session['login_No'])
+  try:
+    # ログイン者の情報取得
+    data = member.objects.get(employee_no = request.session['login_No'])
+
+  # セッション値から人員情報取得できない場合の処理
+  except member.DoesNotExist:
+    # セッション削除
+    request.session.clear()
+    # ログインページに戻る
+    return redirect(to = '/login')
 
 
 
@@ -7048,6 +7138,18 @@ def all_kosu(request, num):
     return redirect(to = '/')
 
 
+  try:
+    # ログイン者の情報取得
+    member_data = member.objects.get(employee_no = request.session['login_No'])
+
+  # セッション値から人員情報取得できない場合の処理
+  except member.DoesNotExist:
+    # セッション削除
+    request.session.clear()
+    # ログインページに戻る
+    return redirect(to = '/login')
+
+
   # 工数データのある従業員番号リスト作成
   employee_no_list = Business_Time_graph.objects.values_list('employee_no3', flat=True)\
                      .order_by('employee_no3').distinct()
@@ -7196,6 +7298,18 @@ def all_kosu_detail(request, num):
     # 権限がなければメインページに飛ぶ
     return redirect(to = '/')
 
+
+  try:
+    # ログイン者の情報取得
+    member_data = member.objects.get(employee_no = request.session['login_No'])
+
+  # セッション値から人員情報取得できない場合の処理
+  except member.DoesNotExist:
+    # セッション削除
+    request.session.clear()
+    # ログインページに戻る
+    return redirect(to = '/login')
+  
 
   # 指定IDの工数履歴のレコードのオブジェクトを変数に入れる
   obj_get = Business_Time_graph.objects.get(id = num)
@@ -7606,6 +7720,19 @@ def all_kosu_delete(request, num):
   if request.session['login_No'] not in (page_num.administrator_employee_no1, page_num.administrator_employee_no2, page_num.administrator_employee_no3):
     # 権限がなければメインページに飛ぶ
     return redirect(to = '/')
+
+
+  try:
+    # ログイン者の情報取得
+    member_data = member.objects.get(employee_no = request.session['login_No'])
+
+  # セッション値から人員情報取得できない場合の処理
+  except member.DoesNotExist:
+    # セッション削除
+    request.session.clear()
+    # ログインページに戻る
+    return redirect(to = '/login')
+  
 
   # 指定IDの工数履歴のレコードのオブジェクトを変数に入れる
   obj_get = Business_Time_graph.objects.get(id = num)

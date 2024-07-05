@@ -26,6 +26,17 @@ def kosu_def(request):
   if request.session.get('login_No', None) == None:
     return redirect(to = '/login')
 
+  try:
+    # ログイン者の情報取得
+    data = member.objects.get(employee_no = request.session['login_No'])
+
+  # セッション値から人員情報取得できない場合の処理
+  except member.DoesNotExist:
+    # セッション削除
+    request.session.clear()
+    # ログインページに戻る
+    return redirect(to = '/login') 
+
 
 
   # POST時の処理
@@ -123,6 +134,17 @@ def kosu_Ver(request):
   if request.session.get('login_No', None) == None:
     return redirect(to = '/login')
   
+  try:
+    # ログイン者の情報取得
+    data = member.objects.get(employee_no = request.session['login_No'])
+
+  # セッション値から人員情報取得できない場合の処理
+  except member.DoesNotExist:
+    # セッション削除
+    request.session.clear()
+    # ログインページに戻る
+    return redirect(to = '/login') 
+
   # 工数区分定義の選択リスト作成(空)
   choices_list = []
   # 工数区分定義の登録されているバージョンを取得
@@ -159,7 +181,11 @@ def kosu_Ver(request):
 
 
 
+
+
 #--------------------------------------------------------------------------------------------------------
+
+
 
 
 
@@ -169,8 +195,16 @@ def def_list(request, num):
   if request.session.get('login_No', None) == None:
     return redirect(to = '/login')
   
-  # ログイン者情報取得
-  data = member.objects.get(employee_no = request.session['login_No'])
+  try:
+    # ログイン者の情報取得
+    data = member.objects.get(employee_no = request.session['login_No'])
+
+  # セッション値から人員情報取得できない場合の処理
+  except member.DoesNotExist:
+    # セッション削除
+    request.session.clear()
+    # ログインページに戻る
+    return redirect(to = '/login') 
 
   # ログイン者が管理者でなければメニュー画面に飛ぶ
   if data.administrator != True:
@@ -195,7 +229,13 @@ def def_list(request, num):
   return render(request, 'kosu/def_list.html', context)
 
 
+
+
+
 #--------------------------------------------------------------------------------------------------------
+
+
+
 
 
 # 工数区分定義編集画面定義
@@ -204,8 +244,16 @@ def def_edit(request, num):
   if request.session.get('login_No', None) == None:
     return redirect(to = '/login')
   
-  # ログイン者情報取得
-  data = member.objects.get(employee_no = request.session['login_No'])
+  try:
+    # ログイン者の情報取得
+    data = member.objects.get(employee_no = request.session['login_No'])
+
+  # セッション値から人員情報取得できない場合の処理
+  except member.DoesNotExist:
+    # セッション削除
+    request.session.clear()
+    # ログインページに戻る
+    return redirect(to = '/login') 
 
   # ログイン者が管理者でなければメニュー画面に飛ぶ
   if data.administrator != True:
@@ -406,7 +454,13 @@ def def_edit(request, num):
   return render(request, 'kosu/def_edit.html', context)
 
 
+
+
+
 #--------------------------------------------------------------------------------------------------------
+
+
+
 
 
 # 工数区分定義削除画面定義
@@ -415,8 +469,16 @@ def def_delete(request, num):
   if request.session.get('login_No', None) == None:
     return redirect(to = '/login')
   
-  # ログイン者情報取得
-  data = member.objects.get(employee_no = request.session['login_No'])
+  try:
+    # ログイン者の情報取得
+    data = member.objects.get(employee_no = request.session['login_No'])
+
+  # セッション値から人員情報取得できない場合の処理
+  except member.DoesNotExist:
+    # セッション削除
+    request.session.clear()
+    # ログインページに戻る
+    return redirect(to = '/login') 
 
   # ログイン者が管理者でなければメニュー画面に飛ぶ
   if data.administrator != True:
@@ -449,7 +511,13 @@ def def_delete(request, num):
   return render(request, 'kosu/def_delete.html', context)
 
 
+
+
+
 #--------------------------------------------------------------------------------------------------------
+
+
+
 
 
 # 工数区分定義登録画面定義
@@ -458,8 +526,16 @@ def def_new(request):
   if request.session.get('login_No', None) == None:
     return redirect(to = '/login')
 
-  # ログイン者情報取得
-  data = member.objects.get(employee_no = request.session['login_No'])
+  try:
+    # ログイン者の情報取得
+    data = member.objects.get(employee_no = request.session['login_No'])
+
+  # セッション値から人員情報取得できない場合の処理
+  except member.DoesNotExist:
+    # セッション削除
+    request.session.clear()
+    # ログインページに戻る
+    return redirect(to = '/login') 
 
   # ログイン者が管理者でなければメニュー画面に飛ぶ
   if data.administrator != True:
@@ -493,6 +569,9 @@ def def_new(request):
 
   # 指定したHTMLに辞書を渡して表示を完成させる
   return render(request, 'kosu/def_new.html', context)
+
+
+
 
 
 #--------------------------------------------------------------------------------------------------------

@@ -44,7 +44,7 @@
         <input class="your-time-field form-control custom-border" style="width: 80px;" type="text" id="end_time" name="end_time" data-precision="5">　
         翌日
         <input type="checkbox" id="tomorrow_check" name="tomorrow_check" class="big">　　
-        <input type="submit" value="工数削除" name="kosu_delete" onclick="return confirmDelete();" class="btn btn-blue7 mt-2">
+        <input type="submit" value="工数削除" name="kosu_delete" class="btn btn-blue7 mt-2" onclick="return confirmDelete();">
       </tr>
       <tr>
         <h1 class="display-4 text-primary">　</h1>
@@ -59,7 +59,7 @@
       {% for i in time_display_list %}
       <tr>
         <td class="text-center">
-          <input type="submit" value="{{forloop.counter}}" name="item_delete" onclick="return confirmDelete();" class="btn btn-blue7 mt-2">
+          <input type="submit" value="{{forloop.counter}}" name="item_delete" class="btn btn-blue7 mt-2" onclick="return confirmDelete();">
         </td>
         {% for k in i %}
         <td class="text-center">

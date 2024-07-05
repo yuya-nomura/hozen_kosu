@@ -23,7 +23,6 @@ def inquiry_new(request):
 
   # 未ログインならログインページに飛ぶ
   if request.session.get('login_No', None) == None:
-
     return redirect(to = '/login')
 
 
@@ -31,8 +30,17 @@ def inquiry_new(request):
   form = inquiryForm()
 
 
-  # ログイン者の情報取得
-  data = member.objects.get(employee_no = request.session['login_No'])
+  try:
+    # ログイン者の情報取得
+    data = member.objects.get(employee_no = request.session['login_No'])
+
+  # セッション値から人員情報取得できない場合の処理
+  except member.DoesNotExist:
+    # セッション削除
+    request.session.clear()
+    # ログインページに戻る
+    return redirect(to = '/login')
+
 
 
   # POST時の処理
@@ -140,8 +148,18 @@ def inquiry_list(request, num):
 
   # 未ログインならログインページに飛ぶ
   if request.session.get('login_No', None) == None:
-
     return redirect(to = '/login')
+
+  try:
+    # ログイン者の情報取得
+    member_data = member.objects.get(employee_no = request.session['login_No'])
+
+  # セッション値から人員情報取得できない場合の処理
+  except member.DoesNotExist:
+    # セッション削除
+    request.session.clear()
+    # ログインページに戻る
+    return redirect(to = '/login') 
 
 
   # 問い合わせ履歴のある従業員番号リスト作成
@@ -293,8 +311,16 @@ def inquiry_display(request, num):
   # 指定IDの工数履歴のレコードのオブジェクトを変数に入れる
   obj_get = inquiry_data.objects.get(id = num)
 
-  # ログイン者の情報取得
-  data = member.objects.get(employee_no = request.session['login_No'])
+  try:
+    # ログイン者の情報取得
+    data = member.objects.get(employee_no = request.session['login_No'])
+
+  # セッション値から人員情報取得できない場合の処理
+  except member.DoesNotExist:
+    # セッション削除
+    request.session.clear()
+    # ログインページに戻る
+    return redirect(to = '/login') 
 
   # 本人確認リセット
   himself = False
@@ -530,8 +556,17 @@ def inquiry_edit(request, num):
   # 指定IDの工数履歴のレコードのオブジェクト取得
   obj_get = inquiry_data.objects.get(id = num)
 
-  # ログイン者情報取得
-  login_obj_get = member.objects.get(employee_no = request.session['login_No'])
+  try:
+    # ログイン者の情報取得
+    login_obj_get = member.objects.get(employee_no = request.session['login_No'])
+
+  # セッション値から人員情報取得できない場合の処理
+  except member.DoesNotExist:
+    # セッション削除
+    request.session.clear()
+    # ログインページに戻る
+    return redirect(to = '/login') 
+
 
   # フォーム初期値定義
   form_default = {'content_choice' : obj_get.content_choice, 
