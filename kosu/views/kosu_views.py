@@ -7437,7 +7437,33 @@ def all_kosu_detail(request, num):
                 request.POST['time_work21'] + \
                 request.POST['time_work22'] + \
                 request.POST['time_work23']
-    
+
+    # 作業詳細整形
+    detail_work = request.POST['detail_work0'] + \
+                  request.POST['detail_work1'] + \
+                  request.POST['detail_work2'] + \
+                  request.POST['detail_work3'] + \
+                  request.POST['detail_work4'] + \
+                  request.POST['detail_work5'] + \
+                  request.POST['detail_work6'] + \
+                  request.POST['detail_work7'] + \
+                  request.POST['detail_work8'] + \
+                  request.POST['detail_work9'] + \
+                  request.POST['detail_work10'] + \
+                  request.POST['detail_work11'] + \
+                  request.POST['detail_work12'] + \
+                  request.POST['detail_work13'] + \
+                  request.POST['detail_work14'] + \
+                  request.POST['detail_work15'] + \
+                  request.POST['detail_work16'] + \
+                  request.POST['detail_work17'] + \
+                  request.POST['detail_work18'] + \
+                  request.POST['detail_work19'] + \
+                  request.POST['detail_work20'] + \
+                  request.POST['detail_work21'] + \
+                  request.POST['detail_work22'] + \
+                  request.POST['detail_work23']
+
     # POSTした従業員番号があるか確認
     member_filter = member.objects.filter(employee_no = request.POST['employee_no'])
     # 従業員番号がない場合の処理
@@ -7465,7 +7491,7 @@ def all_kosu_detail(request, num):
         # 元の工数データ削除
         obj_get.delete()
     # 従業員番号に該当するmemberインスタンスを取得
-    member_instance = member.objects.get(employee_no = request.session['login_No'])
+    member_instance = member.objects.get(employee_no = request.POST['employee_no'])
 
     # 作業内容データの内容を上書きして更新
     Business_Time_graph.objects.update_or_create(employee_no3 = request.POST['employee_no'], \
@@ -7475,6 +7501,7 @@ def all_kosu_detail(request, num):
                                                              'work_time' : request.POST['work_time'], \
                                                              'tyoku2' : request.POST['tyoku'], \
                                                              'time_work' : time_work, \
+                                                             'detail_work' : detail_work, \
                                                              'over_time' : request.POST['over_time'], \
                                                              'breaktime' : request.POST['breaktime'], \
                                                              'breaktime_over1' : request.POST['breaktime_over1'], \

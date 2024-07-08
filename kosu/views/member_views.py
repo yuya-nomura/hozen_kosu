@@ -2,8 +2,7 @@ from django.shortcuts import render
 from django.shortcuts import redirect
 from django.core.paginator import Paginator
 from django.contrib import messages
-from ..models import member
-from ..models import administrator_data
+from ..models import member, Business_Time_graph, administrator_data, inquiry_data
 from ..forms import memberForm
 from ..forms import member_findForm
 
@@ -268,11 +267,8 @@ def member_edit(request, num):
   # POST時の処理
   if (request.method == 'POST'):
 
-    # POST送信された従業員番号を変数に入れる
-    find = request.POST['employee_no']
-
     # 人員登録データの内、従業員番号がPOST送信された値と等しいレコードのオブジェクトを取得
-    data = member.objects.filter(employee_no = find)
+    data = member.objects.filter(employee_no = request.POST['employee_no'])
 
 
     # 編集した従業員番号の登録がすでにあるかチェック
@@ -282,14 +278,6 @@ def member_edit(request, num):
       messages.error(request, '入力した従業員番号はすでに登録があるので登録できません。ERROR021')
       # このページをリダイレクト
       return redirect(to = '/member_edit/{}'.format(num))
-
-
-    # 従業員番号を変更した場合の処理
-    if int(request.session['edit_No']) != int(request.POST['employee_no']):
-      # 変更前の人員データ取得
-      obj_get = member.objects.get(employee_no = request.session['edit_No'])
-      # 取得した人員データ削除
-      obj_get.delete()
 
 
     # 登録ショップが三組三交替Ⅱ甲乙丙番Cの場合の休憩初期値登録
@@ -347,7 +335,7 @@ def member_edit(request, num):
 
     # 指定従業員番号のレコードにPOST送信された値を上書きする
     member.objects.update_or_create(employee_no = request.POST['employee_no'], \
-                                    defaults = {'employee_no' : find, \
+                                    defaults = {'employee_no' : request.POST['employee_no'], \
                                                 'name' : request.POST['name'], \
                                                 'shop' : request.POST['shop'], \
                                                 'authority' : 'authority' in request.POST, \
@@ -368,6 +356,26 @@ def member_edit(request, num):
                                                 'break_time4_over1' : break4_2, \
                                                 'break_time4_over2' : break4_3, \
                                                 'break_time4_over3' : break4_4})
+
+
+    # 従業員番号を変更した場合の処理
+    if int(request.session['edit_No']) != int(request.POST['employee_no']):
+      # 変更前の人員データ取得
+      obj_get = member.objects.get(employee_no = request.session['edit_No'])
+      # 取得した人員データ削除
+      obj_get.delete()
+
+      # 変更前の従業員での工数データ取得
+      kosu_obj = Business_Time_graph.objects.filter(employee_no3 = request.session['edit_No'])
+      # 変更前の従業員での問い合わせデータ取得
+      inquiry_obj = inquiry_data.objects.filter(employee_no2 = request.session['edit_No'])
+      # 変更後の従業員番号に該当するmemberインスタンスを取得
+      member_instance = member.objects.get(employee_no = request.POST['employee_no'])
+      # 工数データの従業員番号、名前更新
+      kosu_obj.update(employee_no3 = request.POST['employee_no'], name = member_instance)
+      # 問い合わせデータの従業員番号、名前更新
+      inquiry_obj.update(employee_no2 = request.POST['employee_no'], name = member_instance)
+
 
     # 工数履歴画面をリダイレクトする
     return redirect(to = '/member/1')

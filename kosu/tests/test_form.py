@@ -925,7 +925,7 @@ class Page_form(TestCase):
 
         # URLに対してPOSTリクエスト送信
         response = self.client.post(reverse('schedule'), form_data2)
-        # リクエストのレスポンスステータスコードが302(リダイレクト)であることを確認
+        # レスポンスが成功（ステータスコード200）であることを確認
         self.assertEqual(response.status_code, 200)
 
         # テストユーザーの工数データ取得
@@ -1082,17 +1082,221 @@ class Page_form(TestCase):
 
 
 
+    #工数区分定義切替ページ切替チェック
+    def test_def_new(self):
+
+        # フォームデータ定義
+        form_data = {
+            'kosu_name': 'トライ定義A',
+            'kosu_title_1': '工数区分名A',
+            'kosu_division_1_1': '定義A',
+            'kosu_division_2_1': '作業内容A',
+            'kosu_title_2': '工数区分名B',
+            'kosu_division_1_2': '定義B',
+            'kosu_division_2_2': '作業内容B',
+            'kosu_title_3': '工数区分名C',
+            'kosu_division_1_3': '定義C',
+            'kosu_division_2_3': '作業内容C',
+            'kosu_title_4': '工数区分名D',
+            'kosu_division_1_4': '定義D',
+            'kosu_division_2_4': '作業内容D',
+            'kosu_title_5': '工数区分名E',
+            'kosu_division_1_5': '定義E',
+            'kosu_division_2_5': '作業内容E',
+            'kosu_title_6': '工数区分名F',
+            'kosu_division_1_6': '定義F',
+            'kosu_division_2_6': '作業内容F',
+            'kosu_title_7': '工数区分名G',
+            'kosu_division_1_7': '定義G',
+            'kosu_division_2_7': '作業内容G',
+            'kosu_title_8': '工数区分名H',
+            'kosu_division_1_8': '定義H',
+            'kosu_division_2_8': '作業内容H',
+            'def_new': '新規登録',
+            }
+
+        # URLに対してPOSTリクエスト送信
+        response = self.client.post(reverse('def_new'), form_data)
+        # リクエストのレスポンスステータスコードが302(リダイレクト)であることを確認
+        self.assertEqual(response.status_code, 302)
+
+        # 新規工数区分定義取得
+        updated_entry = kosu_division.objects.get(kosu_name = 'トライ定義A')
+        # 定義が更新されていることを確認
+        self.assertEqual(updated_entry.kosu_title_1, '工数区分名A')
+        self.assertEqual(updated_entry.kosu_division_1_1, '定義A')
 
 
 
+    #工数区分定義切替ページ切替チェック
+    def test_def_edit(self):
 
+        # フォームデータ定義
+        form_data = {
+            'kosu_name': '編集定義',
+            'kosu_title_1': '編集工数区分名A',
+            'kosu_division_1_1': '編集定義A',
+            'kosu_division_2_1': '編集作業内容A',
+            'kosu_title_2': '編集工数区分名B',
+            'kosu_division_1_2': '編集定義B',
+            'kosu_division_2_2': '編集作業内容B',
+            'kosu_title_3': '編集工数区分名C',
+            'kosu_division_1_3': '編集定義C',
+            'kosu_division_2_3': '編集作業内容C',
+            'kosu_title_4': '編集工数区分名D',
+            'kosu_division_1_4': '編集定義D',
+            'kosu_division_2_4': '編集作業内容D',
+            'kosu_title_5': '編集工数区分名E',
+            'kosu_division_1_5': '編集定義E',
+            'kosu_division_2_5': '編集作業内容E',
+            'kosu_title_6': '編集工数区分名F',
+            'kosu_division_1_6': '編集定義F',
+            'kosu_division_2_6': '編集作業内容F',
+            'kosu_title_7': '編集工数区分名G',
+            'kosu_division_1_7': '編集定義G',
+            'kosu_division_2_7': '編集作業内容G',
+            'kosu_title_8': '編集工数区分名H',
+            'kosu_division_1_8': '編集定義H',
+            'kosu_division_2_8': '編集作業内容H',
+            'kosu_title_9': '',
+            'kosu_division_1_9': '',
+            'kosu_division_2_9': '',
+            'kosu_title_10': '',
+            'kosu_division_1_10': '',
+            'kosu_division_2_10': '',
+            'kosu_title_11': '',
+            'kosu_division_1_11': '',
+            'kosu_division_2_11': '',
+            'kosu_title_12': '',
+            'kosu_division_1_12': '',
+            'kosu_division_2_12': '',
+            'kosu_title_13': '',
+            'kosu_division_1_13': '',
+            'kosu_division_2_13': '',
+            'kosu_title_14': '',
+            'kosu_division_1_14': '',
+            'kosu_division_2_14': '',
+            'kosu_title_15': '',
+            'kosu_division_1_15': '',
+            'kosu_division_2_15': '',
+            'kosu_title_16': '',
+            'kosu_division_1_16': '',
+            'kosu_division_2_16': '',
+            'kosu_title_17': '',
+            'kosu_division_1_17': '',
+            'kosu_division_2_17': '',
+            'kosu_title_18': '',
+            'kosu_division_1_18': '',
+            'kosu_division_2_18': '',
+            'kosu_title_19': '',
+            'kosu_division_1_19': '',
+            'kosu_division_2_19': '',
+            'kosu_title_20': '',
+            'kosu_division_1_20': '',
+            'kosu_division_2_20': '',
+            'kosu_title_21': '',
+            'kosu_division_1_21': '',
+            'kosu_division_2_21': '',
+            'kosu_title_22': '',
+            'kosu_division_1_22': '',
+            'kosu_division_2_22': '',
+            'kosu_title_23': '',
+            'kosu_division_1_23': '',
+            'kosu_division_2_23': '',
+            'kosu_title_24': '',
+            'kosu_division_1_24': '',
+            'kosu_division_2_24': '',
+            'kosu_title_25': '',
+            'kosu_division_1_25': '',
+            'kosu_division_2_25': '',
+            'kosu_title_26': '',
+            'kosu_division_1_26': '',
+            'kosu_division_2_26': '',
+            'kosu_title_27': '',
+            'kosu_division_1_27': '',
+            'kosu_division_2_27': '',
+            'kosu_title_28': '',
+            'kosu_division_1_28': '',
+            'kosu_division_2_28': '',
+            'kosu_title_29': '',
+            'kosu_division_1_29': '',
+            'kosu_division_2_29': '',
+            'kosu_title_30': '',
+            'kosu_division_1_30': '',
+            'kosu_division_2_30': '',
+            'kosu_title_31': '',
+            'kosu_division_1_31': '',
+            'kosu_division_2_31': '',
+            'kosu_title_32': '',
+            'kosu_division_1_32': '',
+            'kosu_division_2_32': '',
+            'kosu_title_33': '',
+            'kosu_division_1_33': '',
+            'kosu_division_2_33': '',
+            'kosu_title_34': '',
+            'kosu_division_1_34': '',
+            'kosu_division_2_34': '',
+            'kosu_title_35': '',
+            'kosu_division_1_35': '',
+            'kosu_division_2_35': '',
+            'kosu_title_36': '',
+            'kosu_division_1_36': '',
+            'kosu_division_2_36': '',
+            'kosu_title_37': '',
+            'kosu_division_1_37': '',
+            'kosu_division_2_37': '',
+            'kosu_title_38': '',
+            'kosu_division_1_38': '',
+            'kosu_division_2_38': '',
+            'kosu_title_39': '',
+            'kosu_division_1_39': '',
+            'kosu_division_2_39': '',
+            'kosu_title_40': '',
+            'kosu_division_1_40': '',
+            'kosu_division_2_40': '',
+            'kosu_title_41': '',
+            'kosu_division_1_41': '',
+            'kosu_division_2_41': '',
+            'kosu_title_42': '',
+            'kosu_division_1_42': '',
+            'kosu_division_2_42': '',
+            'kosu_title_43': '',
+            'kosu_division_1_43': '',
+            'kosu_division_2_43': '',
+            'kosu_title_44': '',
+            'kosu_division_1_44': '',
+            'kosu_division_2_44': '',
+            'kosu_title_45': '',
+            'kosu_division_1_45': '',
+            'kosu_division_2_45': '',
+            'kosu_title_46': '',
+            'kosu_division_1_46': '',
+            'kosu_division_2_46': '',
+            'kosu_title_47': '',
+            'kosu_division_1_47': '',
+            'kosu_division_2_47': '',
+            'kosu_title_48': '',
+            'kosu_division_1_48': '',
+            'kosu_division_2_48': '',
+            'kosu_title_49': '',
+            'kosu_division_1_49': '',
+            'kosu_division_2_49': '',
+            'kosu_title_50': '',
+            'kosu_division_1_50': '',
+            'kosu_division_2_50': '',
+            'def_edit': '登録',
+            }
 
+        # URLに対してPOSTリクエスト送信
+        response = self.client.post(reverse('def_edit', args = [self.kosu_division.id]), form_data)
+        # リクエストのレスポンスステータスコードが302(リダイレクト)であることを確認
+        self.assertEqual(response.status_code, 302)
 
-
-
-
-
-
+        # 新規工数区分定義取得
+        updated_entry = kosu_division.objects.get(kosu_name = '編集定義')
+        # 定義が更新されていることを確認
+        self.assertEqual(updated_entry.kosu_title_1, '編集工数区分名A')
+        self.assertEqual(updated_entry.kosu_division_1_1, '編集定義A')
 
 
 
