@@ -22,9 +22,9 @@
       <th>就業日：</th>
       <td>
         <div class="number-input-group">
-          <input type="date" class="form-control custom-border" name="start_day" id="start_day" style="width: 140px;">
+          <input type="date" class="form-control custom-border" name="start_day" id="start_day" style="width: 140px;" value={{default_start_day}}>
           ～
-          <input type="date" class="form-control custom-border" name="end_day" id="end_day" style="width: 140px;">
+          <input type="date" class="form-control custom-border" name="end_day" id="end_day" style="width: 140px;" value={{default_end_day}}>
         </div>
       </td>
     </tr>
@@ -49,7 +49,8 @@
       <td>{{form.OK_NG}}</td>
     </tr>
     <tr><th><td>
-        <input type="submit" value="検索" name="kosu_find" class="btn btn-blue7 mt-2">
+        <input type="submit" value="検索" name="kosu_find" class="btn btn-blue7 mt-2">　　
+        <input type="submit" value="検索レコード全削除" name="kosu_delete" class="btn btn-blue7 mt-2" onclick="return confirmDelete();">
     </td></th></tr>
     </table>
     <p>　</p>
@@ -139,5 +140,8 @@
       {% endif %}
     </ul>
   </form>
+  <script>
+    function confirmDelete() {return confirm('この操作は元に戻せません。本当に削除しますか？');}
+  </script>
 </body>
 </html>

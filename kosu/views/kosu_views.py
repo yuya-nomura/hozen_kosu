@@ -7239,10 +7239,80 @@ def all_kosu(request, num):
     # フォーム選択肢定義
     form.fields['name'].choices = name_list
 
+    # 日付初期値保持
+    default_start_day = str(request.POST['start_day'])
+    default_end_day = str(request.POST['end_day'])
 
 
-  # POSTしていない時の処理
-  else:
+  
+  # 検索結果削除
+  if 'kosu_delete' in request.POST:
+
+    # 従業員番号リスト定義
+    employee_no_name_list = []
+
+    # ショップ指定ある場合の処理
+    if request.POST['shop'] != '':
+      # ショップ指定し工数データのある従業員番号リスト作成
+      member_shop_list = member.objects.filter(shop = request.POST['shop']).values_list('employee_no', flat=True)
+
+      # 従業員番号リスト作成ループ
+      for No in list(member_shop_list):
+        # 従業員番号追加
+        employee_no_name_list.append(No)
+
+    # ショップ指定ある場合の処理
+    else:
+      # ショップ指定し工数データのある従業員番号リスト作成
+      member_shop_list = member.objects.all().values_list('employee_no', flat=True)
+
+      # 従業員番号リスト作成ループ
+      for No in list(member_shop_list):
+        # 従業員番号追加
+        employee_no_name_list.append(No)
+
+    # 整合性OKをPOSTした場合の処理
+    if request.POST['OK_NG'] == 'OK':
+      judgement = [True]
+    
+    # 整合性NGをPOSTした場合の処理
+    elif request.POST['OK_NG'] == 'NG':
+      judgement = [False]
+
+    # 整合性で空欄をPOSTした場合の処理
+    else:
+      judgement = [True, False]
+
+
+
+    try:
+      # 工数データ取得
+      obj = Business_Time_graph.objects.filter(employee_no3__contains = request.POST['name'], \
+                                              employee_no3__in = employee_no_name_list, \
+                                              work_day2__gte = request.POST['start_day'], \
+                                              work_day2__lte = request.POST['end_day'], \
+                                              tyoku2__contains = request.POST['tyoku'], \
+                                              work_time__contains = request.POST['work'], \
+                                              judgement__in = judgement, \
+                                              ).order_by('work_day2', 'employee_no3').reverse()
+
+    # エラー時の処理
+    except:
+      # 工数データ取得
+      obj = Business_Time_graph.objects.filter(employee_no3__contains = request.POST['name'], \
+                                              employee_no3__in = employee_no_name_list, \
+                                              tyoku2__contains = request.POST['tyoku'], \
+                                              work_time__contains = request.POST['work'], \
+                                              judgement__in = judgement, \
+                                              ).order_by('work_day2', 'employee_no3').reverse()
+    # 検索レコード削除
+    obj.delete()
+    # このページ読み直し
+    return redirect(to = '/all_kosu/1')
+
+
+  # GET時の処理
+  if (request.method == 'GET'):
     # 全工数データを取得
     obj = Business_Time_graph.objects.all().order_by('work_day2', 'employee_no3').reverse()
     # 取得した工数データを1ページあたりの件数分取得
@@ -7257,13 +7327,17 @@ def all_kosu(request, num):
 
     # 今日の日時取得
     today = datetime.date.today()
-
+    # 日付フォーム初期値定義
+    default_start_day = str(today)
+    default_end_day = str(today)
 
 
   # HTMLに渡す辞書
   context = {
     'title' : '全工数履歴',
     'data' : data.get_page(num),
+    'default_start_day' : default_start_day,
+    'default_end_day' : default_end_day,
     'form' : form,
     'num' : num,
     }

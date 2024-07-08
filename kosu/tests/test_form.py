@@ -632,6 +632,48 @@ class Page_form(TestCase):
 
 
 
+    # 工数詳細ページ工数項目削除チェック
+    def test_detail_item_delete(self):
+        # フォームデータ定義
+        form_data = {
+            'item_delete' : '1',
+            }
+
+        # URLに対してPOSTリクエスト送信
+        response = self.client.post(reverse('detail', args = [self.Business_Time_graph.id]), form_data)
+        # リクエストのレスポンスステータスコードが302(リダイレクト)であることを確認
+        self.assertEqual(response.status_code, 302)
+
+        # テストユーザーの工数データ取得
+        updated_entry = Business_Time_graph.objects.get(employee_no3 = self.member.employee_no, \
+                                                        work_day2 = self.Business_Time_graph.work_day2)
+        # 作業内容が更新されていることを確認
+        self.assertEqual(updated_entry.time_work, '############################################################################################################BBBBBBBBBBBBCCCCCCCCCCCCDDDDDDDDDDDD$$$$$$$$$$$$EEEEEEEEEEEEFFFFFFFFFFFFGGGGGGGGGGGGHHHHHHHHHHHHIIIIIIIIIIJJJJJJJJJJJJ##############################################################')
+
+
+
+    # 工数詳細ページ工数項目削除チェック
+    def test_detail_item_edit(self):
+        # フォームデータ定義
+        form_data = {
+            'start_time1' : '7:30',
+            'end_time1' : '8:30',
+            'item_edit': '変更1',
+            }
+
+        # URLに対してPOSTリクエスト送信
+        response = self.client.post(reverse('detail', args = [self.Business_Time_graph.id]), form_data)
+        # リクエストのレスポンスステータスコードが302(リダイレクト)であることを確認
+        self.assertEqual(response.status_code, 302)
+
+        # テストユーザーの工数データ取得
+        updated_entry = Business_Time_graph.objects.get(employee_no3 = self.member.employee_no, \
+                                                        work_day2 = self.Business_Time_graph.work_day2)
+        # 作業内容が更新されていることを確認
+        self.assertEqual(updated_entry.time_work, '##########################################################################################AAAAAAAAAAAA######BBBBBBBBBBBBCCCCCCCCCCCCDDDDDDDDDDDD$$$$$$$$$$$$EEEEEEEEEEEEFFFFFFFFFFFFGGGGGGGGGGGGHHHHHHHHHHHHIIIIIIIIIIJJJJJJJJJJJJ##############################################################')
+
+
+
     # 工数削除ページ工数削除チェック
     def test_delete_post(self):
         # フォームデータ定義
