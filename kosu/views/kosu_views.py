@@ -5727,12 +5727,12 @@ def total(request):
     if kosu_total.count() == 0:
 
       # 工数区分定義データ取得
-      kosu_obj = kosu_division.objects.get(kosu_name = request.session.get('input_def', None))
+      kosu_obj = kosu_division.objects.get(kosu_name = request.session['input_def'])
     
       # 工数区分定義の数をカウント
       def_num = 0
       for n in range(1, 51):
-        if eval('kosu_obj.kosu_title_{}'.format(n)) != None:
+        if eval('kosu_obj.kosu_title_{}'.format(n)) not in ('', None):
           def_num = n
 
       # 工数区分定義の選択リスト作成
@@ -5744,19 +5744,29 @@ def total(request):
       graph_list = list(itertools.repeat(0, def_num))
 
     # ログイン者の本日の工数集計データがある場合の処理
-    if kosu_total.count() >= 1:
-
+    else:
       # ログイン者の工数集計データ取得
-      graph_data = Business_Time_graph.objects.get(employee_no3 = request.session.get('login_No', None), \
+      graph_data = Business_Time_graph.objects.get(employee_no3 = request.session['login_No'], \
                                                    work_day2 = today)
-      # 工数区分定義データ取得
-      kosu_obj = kosu_division.objects.get(kosu_name = graph_data.def_ver2)
+
+      # 工数データに工数区分定義の値がある場合の処理
+      if graph_data.def_ver2 not in ('', None):
+        # 工数区分定義データ取得
+        kosu_obj = kosu_division.objects.get(kosu_name = graph_data.def_ver2)
+
+      # 工数データに工数区分定義の値がある場合の処理
+      else:
+        # 工数区分定義データ取得
+        kosu_obj = kosu_division.objects.get(kosu_name = request.session['input_def'])
+
 
       # 工数区分定義の数をカウント
       def_num = 0
       for n in range(1, 51):
-        if eval('kosu_obj.kosu_title_{}'.format(n)) != None:
+        if eval('kosu_obj.kosu_title_{}'.format(n)) not in ('', None):
           def_num = n
+        else:
+          break
 
       # 工数区分定義の選択リスト作成
       graph_item = []
@@ -5776,7 +5786,6 @@ def total(request):
       graph_list = []
 
       for i in str_list:
-
         str_n = graph_data.time_work.count(i)*5
 
         graph_list.append(str_n)
@@ -5804,56 +5813,77 @@ def total(request):
       kosu_year = post_day[: 4]
 
       # 指定年の工数取得
-      kosu_total = Business_Time_graph.objects.filter(employee_no3 = request.session.get('login_No', None), \
+      kosu_total = Business_Time_graph.objects.filter(employee_no3 = request.session['login_No'], \
                                                     work_day2__startswith = kosu_year)
 
 
       # 指定年に工数入力がない場合の処理
       if kosu_total.count() == 0:
-
         # 工数区分定義データ取得
-        kosu_obj = kosu_division.objects.get(kosu_name = request.session.get('input_def', None))
+        kosu_obj = kosu_division.objects.get(kosu_name = request.session['input_def'])
       
         # 工数区分定義の数をカウント
         def_num = 0
         for n in range(1, 51):
-          if eval('kosu_obj.kosu_title_{}'.format(n)) != None:
+          if eval('kosu_obj.kosu_title_{}'.format(n)) not in ('', None):
             def_num = n
+          else:
+            break
 
         # 工数区分定義の選択リスト作成
         graph_item = []
         for i in range(def_num):
           graph_item.append(eval('kosu_obj.kosu_title_{}'.format(i + 1)))
-        
+
         # 0が工数区分定義と同じ数入ったリスト作成
         graph_list = list(itertools.repeat(0, def_num))
 
 
-      if kosu_total.count() != 0:
-
+      # 指定年に工数入力がある場合の処理
+      else:
         # 年の最初の日の工数区分定義でグラフ項目リスト作成
-        for v in kosu_total:
-          # 工数区分定義データ取得
-          kosu_obj = kosu_division.objects.get(kosu_name = v.def_ver2)
-          # 工数区分定義の数をカウント
-          def_num = 0
-          for n in range(1, 51):
-            if eval('kosu_obj.kosu_title_{}'.format(n)) != None:
-              def_num = n
+        for ind, v in enumerate(kosu_total):
+          # 工数区分定義が空でない場合の処理
+          if v.def_ver2 not in ('', None):
+            # 工数区分定義データ取得
+            kosu_obj = kosu_division.objects.get(kosu_name = v.def_ver2)
+            # 工数区分定義の数をカウント
+            def_num = 0
+            for n in range(1, 51):
+              if eval('kosu_obj.kosu_title_{}'.format(n)) not in ('', None):
+                def_num = n
+              else:
+                break
+            break
 
-          # 工数区分定義の選択リスト作成
-          graph_item = []
-          for i in range(def_num):
-            graph_item.append(eval('kosu_obj.kosu_title_{}'.format(i + 1)))
+          # 工数区分定義が空の場合の処理
+          else:
+            if ind == len(kosu_total) - 1:
+              # 工数区分定義データ取得
+              kosu_obj = kosu_division.objects.get(kosu_name = request.session['input_def'])
 
-          # 工数データリスト内の各文字を定義
-          str_list = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', \
-                      'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', \
-                        'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', \
-                            'q', 'r', 's', 't', 'u', 'v', 'w', 'x',]
-          # 工数データリスト内の各文字を工数区分定義の数に調整
-          del str_list[def_num:]
-          break
+              # 工数区分定義の数をカウント
+              def_num = 0
+              for n in range(1, 51):
+                if eval('kosu_obj.kosu_title_{}'.format(n)) not in ('', None):
+                  def_num = n
+                else:
+                  break
+
+
+        # 工数区分定義の選択リスト作成
+        graph_item = []
+        for i in range(def_num):
+          graph_item.append(eval('kosu_obj.kosu_title_{}'.format(i + 1)))
+
+        # 工数データリスト内の各文字を定義
+        str_list = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', \
+                    'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', \
+                      'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', \
+                          'q', 'r', 's', 't', 'u', 'v', 'w', 'x',]
+        # 工数データリスト内の各文字を工数区分定義の数に調整
+        del str_list[def_num:]
+
 
         # 指定年の工数を加算しデータリスト作成
         graph_list = list(itertools.repeat(0, def_num))
@@ -5881,7 +5911,7 @@ def total(request):
       kosu_month = post_day[: 7]
 
       # 指定月の工数取得
-      kosu_total = Business_Time_graph.objects.filter(employee_no3 = request.session.get('login_No', None), \
+      kosu_total = Business_Time_graph.objects.filter(employee_no3 = request.session['login_No'], \
                                                       work_day2__startswith = kosu_month)
 
       #指定月に工数入力がない場合の処理
@@ -5892,42 +5922,63 @@ def total(request):
         # 工数区分定義の数をカウント
         def_num = 0
         for n in range(1, 51):
-          if eval('kosu_obj.kosu_title_{}'.format(n)) != None:
+          if eval('kosu_obj.kosu_title_{}'.format(n)) not in ('', None):
             def_num = n
+          else:
+            break
 
         # 工数区分定義の選択リスト作成
         graph_item = []
         for i in range(def_num):
           graph_item.append(eval('kosu_obj.kosu_title_{}'.format(i + 1)))
-        
+
         # 0が工数区分定義と同じ数入ったリスト作成
         graph_list = list(itertools.repeat(0, def_num))
 
       # 指定月に工数入力がある場合の処理
-      if kosu_total.count() != 0:
+      else:
         # 月の最初の日の工数区分定義でグラフ項目リスト作成
-        for v in kosu_total:
-          # 工数区分定義データ取得
-          kosu_obj = kosu_division.objects.get(kosu_name = v.def_ver2)
-          # 工数区分定義の数をカウント
-          def_num = 0
-          for n in range(1, 51):
-            if eval('kosu_obj.kosu_title_{}'.format(n)) != None:
-              def_num = n
+        for ind, v in enumerate(kosu_total):
+          # 工数区分定義が空でない場合の処理
+          if v.def_ver2 not in ('', None):
+            # 工数区分定義データ取得
+            kosu_obj = kosu_division.objects.get(kosu_name = v.def_ver2)
+            # 工数区分定義の数をカウント
+            def_num = 0
+            for n in range(1, 51):
+              if eval('kosu_obj.kosu_title_{}'.format(n)) not in ('', None):
+                def_num = n
+              else:
+                break
+            break
 
-          # 工数区分定義の選択リスト作成
-          graph_item = []
-          for i in range(def_num):
-            graph_item.append(eval('kosu_obj.kosu_title_{}'.format(i + 1)))
+          # 工数区分定義が空の場合の処理
+          else:
+            if ind == len(kosu_total) - 1:
+              # 工数区分定義データ取得
+              kosu_obj = kosu_division.objects.get(kosu_name = request.session['input_def'])
 
-          # 工数データリスト内の各文字を定義
-          str_list = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', \
-                      'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', \
-                        'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', \
-                            'q', 'r', 's', 't', 'u', 'v', 'w', 'x',]
-          # 工数データリスト内の各文字を工数区分定義の数に調整
-          del str_list[def_num:]
-          break
+              # 工数区分定義の数をカウント
+              def_num = 0
+              for n in range(1, 51):
+                if eval('kosu_obj.kosu_title_{}'.format(n)) not in ('', None):
+                  def_num = n
+                else:
+                  break
+
+        # 工数区分定義の選択リスト作成
+        graph_item = []
+        for i in range(def_num):
+          graph_item.append(eval('kosu_obj.kosu_title_{}'.format(i + 1)))
+
+        # 工数データリスト内の各文字を定義
+        str_list = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', \
+                    'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', \
+                      'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', \
+                          'q', 'r', 's', 't', 'u', 'v', 'w', 'x',]
+        # 工数データリスト内の各文字を工数区分定義の数に調整
+        del str_list[def_num:]
+
 
         # 指定月の工数を加算しデータリスト作成
         graph_list = list(itertools.repeat(0, def_num))
@@ -5948,19 +5999,18 @@ def total(request):
 
 
     # ログイン者の工数集計データ取得
-    kosu_total = Business_Time_graph.objects.filter(employee_no3 = request.session.get('login_No', None), \
+    kosu_total = Business_Time_graph.objects.filter(employee_no3 = request.session['login_No'], \
                                                     work_day2 = request.POST['kosu_day'])
 
-    # ログイン者の本日の工数集計データがない場合の処理
+    # ログイン者の指定日の工数集計データがない場合の処理
     if kosu_total.count() == 0 and request.POST['kosu_summarize'] == '1':
-      
       # 工数区分定義データ取得
-      kosu_obj = kosu_division.objects.get(kosu_name = request.session.get('input_def', None))
+      kosu_obj = kosu_division.objects.get(kosu_name = request.session['input_def'])
     
       # 工数区分定義の数をカウント
       def_num = 0
       for n in range(1, 51):
-        if eval('kosu_obj.kosu_title_{}'.format(n)) != None:
+        if eval('kosu_obj.kosu_title_{}'.format(n)) not in ('', None):
           def_num = n
 
       # 工数区分定義の選択リスト作成
@@ -5972,20 +6022,29 @@ def total(request):
       graph_list = list(itertools.repeat(0, def_num))
 
 
-    # ログイン者の本日の工数集計データがある場合の処理
-    if kosu_total.count() >= 1 and request.POST['kosu_summarize'] == '1':
-
+    # ログイン者の指定日の工数集計データがある場合の処理
+    if kosu_total.count() != 0 and request.POST['kosu_summarize'] == '1':
       # ログイン者の工数集計データ取得
-      graph_data = Business_Time_graph.objects.get(employee_no3 = request.session.get('login_No', None), \
+      graph_data = Business_Time_graph.objects.get(employee_no3 = request.session['login_No'], \
                                                    work_day2 = request.POST['kosu_day'])
-      # 工数区分定義データ取得
-      kosu_obj = kosu_division.objects.get(kosu_name = graph_data.def_ver2)
+
+      # 工数データに工数区分定義の値がある場合の処理
+      if graph_data.def_ver2 not in ('', None):
+        # 工数区分定義データ取得
+        kosu_obj = kosu_division.objects.get(kosu_name = graph_data.def_ver2)
+
+      # 工数データに工数区分定義の値がある場合の処理
+      else:
+        # 工数区分定義データ取得
+        kosu_obj = kosu_division.objects.get(kosu_name = request.session['input_def'])
 
       # 工数区分定義の数をカウント
       def_num = 0
       for n in range(1, 51):
-        if eval('kosu_obj.kosu_title_{}'.format(n)) != None:
+        if eval('kosu_obj.kosu_title_{}'.format(n)) not in ('', None):
           def_num = n
+        else:
+          break
 
       # 工数区分定義の選択リスト作成
       graph_item = []
