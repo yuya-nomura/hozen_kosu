@@ -1011,7 +1011,7 @@ class Page_form(TestCase):
 
 
 
-    #工数区分定義切替ページ切替チェック
+    #工数区分定義Ver切替ページ切替チェック
     def test_def_Ver_change(self):
 
         # kosu_divisionダミーデータ
@@ -1082,7 +1082,7 @@ class Page_form(TestCase):
 
 
 
-    #工数区分定義切替ページ切替チェック
+    #工数区分定義新規作成ページチェック
     def test_def_new(self):
 
         # フォームデータ定義
@@ -1128,7 +1128,7 @@ class Page_form(TestCase):
 
 
 
-    #工数区分定義切替ページ切替チェック
+    #工数区分定義編集ページチェック
     def test_def_edit(self):
 
         # フォームデータ定義
@@ -1297,6 +1297,104 @@ class Page_form(TestCase):
         # 定義が更新されていることを確認
         self.assertEqual(updated_entry.kosu_title_1, '編集工数区分名A')
         self.assertEqual(updated_entry.kosu_division_1_1, '編集定義A')
+
+
+
+    #工数区分定義削除ページチェック
+    def test_def_delete(self):
+        # フォームデータ定義
+        form_data = {
+            'def_delete' : '工数区分定義削除',
+            }
+
+        # URLに対してPOSTリクエスト送信
+        response = self.client.post(reverse('def_delete', args = [self.kosu_division.id]), form_data)
+        # リクエストのレスポンスステータスコードが302(リダイレクト)であることを確認
+        self.assertEqual(response.status_code, 302)
+
+        # テストユーザーの工数データ取得
+        updated_entry = kosu_division.objects.filter(kosu_name = self.kosu_division)
+        # レコードがないことを確認
+        self.assertEqual(updated_entry.count(), 0)
+
+
+
+    #人員新規作成ページチェック
+    def test_member_new(self):
+
+        # フォームデータ定義
+        form_data = {
+            'employee_no': 222,
+            'name': 'トライ新規',
+            'shop': 'その他',
+            'authority': True,
+            'administrator': True,
+            'member_new': '新規登録', 
+            }
+        
+        # URLに対してPOSTリクエスト送信
+        response = self.client.post(reverse('member_new'), form_data)
+        # リクエストのレスポンスステータスコードが302(リダイレクト)であることを確認
+        self.assertEqual(response.status_code, 302)
+
+        # 新規人員情報取得
+        updated_entry = member.objects.get(employee_no = 222)
+        # レコードが更新されていることを確認
+        self.assertEqual(updated_entry.name, 'トライ新規')
+        self.assertEqual(updated_entry.break_time1, '#10401130')
+
+
+
+    #人員検索ページチェック
+    def test_member_find(self):
+
+        # memberダミーデータ
+        for No in range(1, 400):
+            self.member = member.objects.create(
+                employee_no = 1 + No,
+                name = 'トライ{}'.format(No),
+                shop = 'その他',
+                authority = True,
+                administrator = True,
+                break_time1 = '#10401130',
+                break_time1_over1 = '#15101520',
+                break_time1_over2 = '#20202110',
+                break_time1_over3 = '#01400150',
+                break_time2 = '#17501840',
+                break_time2_over1 = '#22302240',
+                break_time2_over2 = '#03400430',
+                break_time2_over3 = '#09000910',
+                break_time3 = '#01400230',
+                break_time3_over1 = '#07050715',
+                break_time3_over2 = '#12151305',
+                break_time3_over3 = '#17351745',
+                break_time4 = '#12001300',
+                break_time4_over1 = '#19001915',
+                break_time4_over2 = '#01150215',
+                break_time4_over3 = '#06150630',
+                )
+            
+        # フォームデータ定義
+        form_data = {
+            'employee_no6' : self.Business_Time_graph.work_day2,
+            'shop2': '1',
+            'member_find': '検索',
+            }
+
+        # URLに対してPOSTリクエスト送信
+        response = self.client.post(reverse('member', args = [1]), form_data)
+        # レスポンスが成功（ステータスコード200）であることを確認
+        self.assertEqual(response.status_code, 200)
+
+
+
+
+
+
+
+
+
+
 
 
 

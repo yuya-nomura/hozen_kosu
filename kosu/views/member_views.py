@@ -143,6 +143,7 @@ def member_new(request):
       # このページをリダイレクト
       return redirect(to = '/new')
 
+
     # 登録ショップが三組三交替Ⅱ甲乙丙番Cの場合の休憩初期値登録
     if request.POST['shop'] == 'W1' or request.POST['shop'] == 'W2' \
       or request.POST['shop'] == 'A1' or request.POST['shop'] == 'A2':
