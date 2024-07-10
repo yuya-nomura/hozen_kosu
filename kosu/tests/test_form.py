@@ -4,12 +4,13 @@ from django.test import TestCase, Client
 from django.urls import reverse
 from kosu.models import member, kosu_division, Business_Time_graph, team_member, administrator_data, inquiry_data
 from ..utils import round_time
+from kosu.views.member_views import member_page
 
 
 
 
 
-# 各ページリンクテスト
+# 各ページフォームテスト
 class Page_form(TestCase):
     # 初期データ作成
     @classmethod
@@ -652,7 +653,7 @@ class Page_form(TestCase):
 
 
 
-    # 工数詳細ページ工数項目削除チェック
+    # 工数詳細ページ工数項目編集チェック
     def test_detail_item_edit(self):
         # フォームデータ定義
         form_data = {
@@ -1312,7 +1313,7 @@ class Page_form(TestCase):
         # リクエストのレスポンスステータスコードが302(リダイレクト)であることを確認
         self.assertEqual(response.status_code, 302)
 
-        # テストユーザーの工数データ取得
+        # 工数区分定義データ取得
         updated_entry = kosu_division.objects.filter(kosu_name = self.kosu_division)
         # レコードがないことを確認
         self.assertEqual(updated_entry.count(), 0)
@@ -1349,7 +1350,7 @@ class Page_form(TestCase):
     def test_member_find(self):
 
         # memberダミーデータ
-        for No in range(1, 400):
+        for No in range(1, 5):
             self.member = member.objects.create(
                 employee_no = 1 + No,
                 name = 'トライ{}'.format(No),
@@ -1374,10 +1375,36 @@ class Page_form(TestCase):
                 break_time4_over3 = '#06150630',
                 )
             
+        for No in range(10, 20):
+            self.member = member.objects.create(
+                employee_no = 1 + No,
+                name = 'トライ{}'.format(No),
+                shop = 'P',
+                authority = True,
+                administrator = True,
+                break_time1 = '#10401130',
+                break_time1_over1 = '#15101520',
+                break_time1_over2 = '#20202110',
+                break_time1_over3 = '#01400150',
+                break_time2 = '#17501840',
+                break_time2_over1 = '#22302240',
+                break_time2_over2 = '#03400430',
+                break_time2_over3 = '#09000910',
+                break_time3 = '#01400230',
+                break_time3_over1 = '#07050715',
+                break_time3_over2 = '#12151305',
+                break_time3_over3 = '#17351745',
+                break_time4 = '#12001300',
+                break_time4_over1 = '#19001915',
+                break_time4_over2 = '#01150215',
+                break_time4_over3 = '#06150630',
+                )
+
+
         # フォームデータ定義
         form_data = {
-            'employee_no6' : self.Business_Time_graph.work_day2,
-            'shop2': '1',
+            'employee_no6' : self.member.employee_no,
+            'shop2': '',
             'member_find': '検索',
             }
 
@@ -1386,15 +1413,216 @@ class Page_form(TestCase):
         # レスポンスが成功（ステータスコード200）であることを確認
         self.assertEqual(response.status_code, 200)
 
+        data = response.context['data']
+        # レコードが1つであることを確認
+        self.assertEqual(len(data), 1)
+
+
+        # フォームデータ定義
+        form_data2 = {
+            'employee_no6' : '',
+            'shop2': '',
+            'member_find': '検索',
+            }
+
+        # URLに対してPOSTリクエスト送信
+        response = self.client.post(reverse('member', args = [1]), form_data2)
+        # レスポンスが成功（ステータスコード200）であることを確認
+        self.assertEqual(response.status_code, 200)
+
+        data = response.context['data']
+        # レコードが15であることを確認
+        self.assertEqual(len(data), 15)
+
+
+        # フォームデータ定義
+        form_data3 = {
+            'employee_no6' : '',
+            'shop2': 'P',
+            'member_find': '検索',
+            }
+
+        # URLに対してPOSTリクエスト送信
+        response = self.client.post(reverse('member', args = [1]), form_data3)
+        # レスポンスが成功（ステータスコード200）であることを確認
+        self.assertEqual(response.status_code, 200)
+
+        data = response.context['data']
+        # レコードが15であることを確認
+        self.assertEqual(len(data), 10)
+
+
+        # フォームデータ定義
+        form_data4 = {
+            'employee_no6' : 999,
+            'shop2': 'W1',
+            'member_find': '検索',
+            }
+
+        # URLに対してPOSTリクエスト送信
+        response = self.client.post(reverse('member', args = [1]), form_data4)
+        # レスポンスが成功（ステータスコード200）であることを確認
+        self.assertEqual(response.status_code, 200)
+
+        data = response.context['data']
+        # レコードが0であることを確認
+        self.assertEqual(len(data), 0)
 
 
 
+    #人員情報編集ページチェック
+    def test_member_edit(self):
+
+        # セッション定義
+        self.session = self.client.session
+        self.session['edit_No'] =  self.member.employee_no
+        self.session.save()
+
+        # フォームデータ定義
+        form_data = {
+            'employee_no': self.member.employee_no,
+            'name': '変更',
+            'shop': 'W2',
+            'authority': True,
+            'member_edit': '登録', 
+            }
+
+        # URLに対してPOSTリクエスト送信
+        response = self.client.post(reverse('member_edit', args = [self.member.employee_no]), form_data)
+        # リクエストのレスポンスステータスコードが302(リダイレクト)であることを確認
+        self.assertEqual(response.status_code, 302)
+
+        # テストユーザーの人員データ取得
+        updated_entry = member.objects.get(employee_no = self.member.employee_no)
+        # データが更新されていることを確認
+        self.assertEqual(updated_entry.name, '変更')
+        self.assertEqual(updated_entry.shop, 'W2')
+        self.assertEqual(updated_entry.administrator, False)
+        self.assertEqual(updated_entry.break_time1, '#11401240')
+ 
+
+        # フォームデータ定義
+        form_data2 = {
+            'employee_no': 222,
+            'name': 'トライ',
+            'shop': 'その他',
+            'authority': True,
+            'administrator': True,
+            'member_edit': '登録',
+            }
+
+        # URLに対してPOSTリクエスト送信
+        response = self.client.post(reverse('member_edit', args=[self.member.employee_no]), form_data2)
+        # リクエストのレスポンスステータスコードが302(リダイレクト)であることを確認
+        self.assertEqual(response.status_code, 302)
+
+        # テストユーザーの人員データ取得
+        updated_entry = member.objects.get(employee_no = 222)
+        # データ内容が更新されていることを確認
+        self.assertEqual(updated_entry.employee_no, 222)
+        self.assertEqual(updated_entry.break_time1, '#10401130')
+        # 工数データ取得
+        updated_entry2 = Business_Time_graph.objects.get(employee_no3 = 222)
+        # データ内容が更新されていることを確認
+        self.assertEqual(updated_entry2.name.__str__(), 'トライ')
+        # 問い合わせデータ取得
+        updated_entry3 = inquiry_data.objects.get(employee_no2 = 222)
+        # データ内容が更新されていることを確認
+        self.assertEqual(updated_entry3.name.__str__(), 'トライ')
 
 
 
+    #人員削除ページチェック
+    def test_member_delete(self):
+
+        # memberダミーデータ
+        self.member = member.objects.create(
+            employee_no = 333,
+            name = 'トライ',
+            shop = 'その他',
+            authority = True,
+            administrator = True,
+            break_time1 = '#10401130',
+            break_time1_over1 = '#15101520',
+            break_time1_over2 = '#20202110',
+            break_time1_over3 = '#01400150',
+            break_time2 = '#17501840',
+            break_time2_over1 = '#22302240',
+            break_time2_over2 = '#03400430',
+            break_time2_over3 = '#09000910',
+            break_time3 = '#01400230',
+            break_time3_over1 = '#07050715',
+            break_time3_over2 = '#12151305',
+            break_time3_over3 = '#17351745',
+            break_time4 = '#12001300',
+            break_time4_over1 = '#19001915',
+            break_time4_over2 = '#01150215',
+            break_time4_over3 = '#06150630',
+            )
+
+        # フォームデータ定義
+        form_data = {
+            'member_delete': '人員登録削除',
+            }
+
+        # URLに対してPOSTリクエスト送信
+        response = self.client.post(reverse('member_delete', args = [333]), form_data)
+        # リクエストのレスポンスステータスコードが302(リダイレクト)であることを確認
+        self.assertEqual(response.status_code, 302)
+        
+        # 人員データ取得
+        updated_entry = member.objects.filter(employee_no = 333)
+        # レコードがないことを確認
+        self.assertEqual(updated_entry.count(), 0)
 
 
 
+    #班員登録ページチェック
+    def test_team(self):
+
+        # フォームデータ定義
+        form_data = {
+            'member1': 111,
+            'member2': 111,
+            'member3': 111,
+            'member4': 111,
+            'member5': 111,
+            'member6': '',
+            'member7': '',
+            'member8': '',
+            'member9': '',
+            'member10': '',
+            'member11': '',
+            'member12': '',
+            'member13': '',
+            'member14': '',
+            'member15': '',
+            'member_delete': '人員登録削除',
+            }
+
+        # URLに対してPOSTリクエスト送信
+        response = self.client.post(reverse('team'), form_data)
+        # リクエストのレスポンスステータスコードが302(リダイレクト)であることを確認
+        self.assertEqual(response.status_code, 302)
+
+        # テストユーザーの班員データ取得
+        updated_entry = team_member.objects.get(employee_no5 = self.member.employee_no)
+        # データ内容が更新されていることを確認
+        self.assertEqual(updated_entry.member1, '111')
+        self.assertEqual(updated_entry.member2, '111')
+        self.assertEqual(updated_entry.member3, '111')
+        self.assertEqual(updated_entry.member4, '111')
+        self.assertEqual(updated_entry.member5, '111')
+        self.assertEqual(updated_entry.member6, '')
+        self.assertEqual(updated_entry.member7, '')
+        self.assertEqual(updated_entry.member8, '')
+        self.assertEqual(updated_entry.member9, '')
+        self.assertEqual(updated_entry.member10, '')
+        self.assertEqual(updated_entry.member11, '')
+        self.assertEqual(updated_entry.member12, '')
+        self.assertEqual(updated_entry.member13, '')
+        self.assertEqual(updated_entry.member14, '')
+        self.assertEqual(updated_entry.member15, '')
 
 
 
