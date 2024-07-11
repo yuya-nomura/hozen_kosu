@@ -302,7 +302,6 @@ def team_main(request):
 
   # 未ログインならログインページに飛ぶ
   if request.session.get('login_No', None) == None:
-
     return redirect(to = '/login')
 
 
@@ -321,6 +320,7 @@ def team_main(request):
   if data.authority == False:
 
     return redirect(to = '/')
+
 
   # 今日の日時を変数に格納
   today = datetime.date.today()
@@ -349,7 +349,7 @@ def team_main(request):
     # 班員フォロー用リスト定義
     team_list = []
     # 班員フォロー用リスト作成するループ
-    for t in range(1, 11):
+    for t in range(1, 16):
       # ログイン者の班員情報がある場合の処理
       if eval('team_get.member{}'.format(t)) != '':
         # 班員が人員情報にいるか確認

@@ -295,7 +295,7 @@ def team_graph(request):
     else:
       name_list.append('')
 
-  
+
   # グラフデータ作成関数定義
   def graph_function(employee_no_data):
     # グラフデータ確認
@@ -687,7 +687,7 @@ def team_kosu(request, num):
 
     # 就業日と班員の従業員番号でフィルターをかけて一致したものをHTML表示用変数に入れる
     data2 = Business_Time_graph.objects.filter(employee_no3__icontains = find, \
-      work_day2__contains = find2).order_by('work_day2').reverse()
+      employee_no3__in = filtered_list, work_day2__contains = find2).order_by('work_day2').reverse()
 
     page = Paginator(data2, page_num.menu_row)
 

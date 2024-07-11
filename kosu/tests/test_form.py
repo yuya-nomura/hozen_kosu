@@ -1626,4 +1626,226 @@ class Page_form(TestCase):
 
 
 
+    #班員グラフ確認ページチェック
+    def test_team_graph(self):
+
+        # フォームデータ定義
+        form_data = {
+            'team_day': '2000-01-01',
+            'find_day': '検索',
+            }
+
+        # URLに対してPOSTリクエスト送信
+        response = self.client.post(reverse('team_graph'), form_data)
+        # レスポンスが成功（ステータスコード200）であることを確認
+        self.assertEqual(response.status_code, 200)
+
+        # 変数を読み出し
+        name_list = response.context['name_list']
+        # 変数整合性チェック
+        self.assertEqual(name_list, ['', 'テストユーザー', '', 'テストユーザー', '', 'テストユーザー', '', 'テストユーザー', '', 'テストユーザー', '', 'テストユーザー', '', 'テストユーザー', ''])
+        # 変数を読み出し
+        n = response.context['n']
+        # 変数整合性チェック
+        self.assertEqual(n, 14)
+        # 変数を読み出し
+        graph_list2 = response.context['graph_list2']
+        # 変数整合性チェック
+        self.assertEqual(graph_list2, [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, '$', '$', '$', '$', '$', '$', '$', '$', '$', '$', '$', '$', 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 0])
+        # 変数を読み出し
+        graph_item2 = response.context['graph_item2']
+        # 変数整合性チェック
+        self.assertEqual(graph_item2, ['7:55', '8:0', '8:05', '8:10', '8:15', '8:20', '8:25', '8:30', '8:35', '8:40', '8:45', '8:50', '8:55', '9:0', '9:05', '9:10', '9:15', '9:20', '9:25', '9:30', '9:35', '9:40', '9:45', '9:50', '9:55', '10:0', '10:05', '10:10', '10:15', '10:20', '10:25', '10:30', '10:35', '10:40', '10:45', '10:50', '10:55', '11:0', '11:05', '11:10', '11:15', '11:20', '11:25', '11:30', '11:35', '11:40', '11:45', '11:50', '11:55', '12:0', '12:05', '12:10', '12:15', '12:20', '12:25', '12:30', '12:35', '12:40', '12:45', '12:50', '12:55', '13:0', '13:05', '13:10', '13:15', '13:20', '13:25', '13:30', '13:35', '13:40', '13:45', '13:50', '13:55', '14:0', '14:05', '14:10', '14:15', '14:20', '14:25', '14:30', '14:35', '14:40', '14:45', '14:50', '14:55', '15:0', '15:05', '15:10', '15:15', '15:20', '15:25', '15:30', '15:35', '15:40', '15:45', '15:50', '15:55', '16:0', '16:05', '16:10', '16:15', '16:20', '16:25', '16:30', '16:35', '16:40', '16:45', '16:50', '16:55', '17:0', '17:05', '17:10', '17:15', '17:20', '17:25', '17:30', '17:35', '17:40', '17:45', '17:50', '17:55', '18:0', '18:05', '18:10', '18:15', '18:20', '18:25', '18:30', '18:35', '18:40', '18:45', '18:50']) 
+
+
+
+    #班員グラフ確認ページチェック
+    def test_team_kosu(self):
+
+        # memberダミーデータ
+        self.member = member.objects.create(
+            employee_no = 112,
+            name = 'テストユーザー2',
+            shop = 'その他',
+            authority = True,
+            administrator = True,
+            break_time1 = '#10401130',
+            break_time1_over1 = '#15101520',
+            break_time1_over2 = '#20202110',
+            break_time1_over3 = '#01400150',
+            break_time2 = '#17501840',
+            break_time2_over1 = '#22302240',
+            break_time2_over2 = '#03400430',
+            break_time2_over3 = '#09000910',
+            break_time3 = '#01400230',
+            break_time3_over1 = '#07050715',
+            break_time3_over2 = '#12151305',
+            break_time3_over3 = '#17351745',
+            break_time4 = '#12001300',
+            break_time4_over1 = '#19001915',
+            break_time4_over2 = '#01150215',
+            break_time4_over3 = '#06150630',
+            )
+
+        # memberダミーデータ
+        self.member = member.objects.create(
+            employee_no = 113,
+            name = 'テストユーザー3',
+            shop = 'その他',
+            authority = True,
+            administrator = True,
+            break_time1 = '#10401130',
+            break_time1_over1 = '#15101520',
+            break_time1_over2 = '#20202110',
+            break_time1_over3 = '#01400150',
+            break_time2 = '#17501840',
+            break_time2_over1 = '#22302240',
+            break_time2_over2 = '#03400430',
+            break_time2_over3 = '#09000910',
+            break_time3 = '#01400230',
+            break_time3_over1 = '#07050715',
+            break_time3_over2 = '#12151305',
+            break_time3_over3 = '#17351745',
+            break_time4 = '#12001300',
+            break_time4_over1 = '#19001915',
+            break_time4_over2 = '#01150215',
+            break_time4_over3 = '#06150630',
+            )
+
+        # Business_Time_graphダミーデータ
+        self.Business_Time_graph = Business_Time_graph.objects.create(
+            employee_no3 = 111,
+            name = self.member,
+            def_ver2 = self.kosu_division.kosu_name,
+            work_day2 = '2000-01-02',
+            tyoku2 = '4',
+            time_work = '################################################################################################AAAAAAAAAAAABBBBBBBBBBBBCCCCCCCCCCCCDDDDDDDDDDDD$$$$$$$$$$$$EEEEEEEEEEEEFFFFFFFFFFFFGGGGGGGGGGGGHHHHHHHHHHHHIIIIIIIIIIIIJJJJJJJJJJ##############################################################',
+            detail_work = '$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$aaa$aaa$aaa$aaa$aaa$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$bbb$bbb$bbb$bbb$bbb$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$',
+            over_time = 120,
+            breaktime = '#12001300',
+            breaktime_over1 = '#19001915',
+            breaktime_over2 = '#01150215',
+            breaktime_over3 = '#06150630',
+            work_time = '出勤',
+            judgement = True,
+            break_change = False,
+            )
+
+        # Business_Time_graphダミーデータ
+        self.Business_Time_graph = Business_Time_graph.objects.create(
+            employee_no3 = 112,
+            name = self.member,
+            def_ver2 = self.kosu_division.kosu_name,
+            work_day2 = '2000-01-03',
+            tyoku2 = '4',
+            time_work = '################################################################################################AAAAAAAAAAAABBBBBBBBBBBBCCCCCCCCCCCCDDDDDDDDDDDD$$$$$$$$$$$$EEEEEEEEEEEEFFFFFFFFFFFFGGGGGGGGGGGGHHHHHHHHHHHHIIIIIIIIIIIIJJJJJJJJJJ##############################################################',
+            detail_work = '$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$aaa$aaa$aaa$aaa$aaa$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$bbb$bbb$bbb$bbb$bbb$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$',
+            over_time = 120,
+            breaktime = '#12001300',
+            breaktime_over1 = '#19001915',
+            breaktime_over2 = '#01150215',
+            breaktime_over3 = '#06150630',
+            work_time = '出勤',
+            judgement = True,
+            break_change = False,
+            )
+
+        # Business_Time_graphダミーデータ
+        self.Business_Time_graph = Business_Time_graph.objects.create(
+            employee_no3 = 113,
+            name = self.member,
+            def_ver2 = self.kosu_division.kosu_name,
+            work_day2 = '2000-01-02',
+            tyoku2 = '4',
+            time_work = '################################################################################################AAAAAAAAAAAABBBBBBBBBBBBCCCCCCCCCCCCDDDDDDDDDDDD$$$$$$$$$$$$EEEEEEEEEEEEFFFFFFFFFFFFGGGGGGGGGGGGHHHHHHHHHHHHIIIIIIIIIIIIJJJJJJJJJJ##############################################################',
+            detail_work = '$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$aaa$aaa$aaa$aaa$aaa$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$bbb$bbb$bbb$bbb$bbb$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$',
+            over_time = 120,
+            breaktime = '#12001300',
+            breaktime_over1 = '#19001915',
+            breaktime_over2 = '#01150215',
+            breaktime_over3 = '#06150630',
+            work_time = '出勤',
+            judgement = True,
+            break_change = False,
+            )
+
+        # team_memberダミーデータ更新
+        self.team_member.member1 = 112
+        self.team_member.save()
+
+
+        # 班員工数詳細一覧ページにアクセス
+        response = self.client.get(reverse('team_kosu', args = [1]))
+        self.assertEqual(response.status_code, 200)
+
+        # 変数を読み出し
+        data2 = response.context['data2']
+        # レコードが1つであることを確認
+        self.assertEqual(len(data2), 3)
+
+
+        # フォームデータ定義
+        form_data = {
+            'employee_no6': 111,
+            'team_day': '',
+            'find_team': '検索',
+            }
+
+        # URLに対してPOSTリクエスト送信
+        response = self.client.post(reverse('team_kosu', args = [1]), form_data)
+        # レスポンスが成功（ステータスコード200）であることを確認
+        self.assertEqual(response.status_code, 200)
+
+        # 変数を読み出し
+        data2 = response.context['data2']
+        # レコードが1つであることを確認
+        self.assertEqual(len(data2), 2)
+
+
+        # フォームデータ定義
+        form_data2 = {
+            'employee_no6': '',
+            'team_day': '2000-01-01',
+            'find_team': '検索',
+            }
+
+        # URLに対してPOSTリクエスト送信
+        response = self.client.post(reverse('team_kosu', args = [1]), form_data2)
+        # レスポンスが成功（ステータスコード200）であることを確認
+        self.assertEqual(response.status_code, 200)
+
+        # 変数を読み出し
+        data2 = response.context['data2']
+        # レコードが1つであることを確認
+        self.assertEqual(len(data2), 1)
+
+
+        # フォームデータ定義
+        form_data3 = {
+            'employee_no6': '',
+            'team_day': '',
+            'find_team': '検索',
+            }
+
+        # URLに対してPOSTリクエスト送信
+        response = self.client.post(reverse('team_kosu', args = [1]), form_data3)
+        # レスポンスが成功（ステータスコード200）であることを確認
+        self.assertEqual(response.status_code, 200)
+
+        # 変数を読み出し
+        data2 = response.context['data2']
+        # レコードが1つであることを確認
+        self.assertEqual(len(data2), 3)
+
+
+
+
+
+
+
+
+
+
+
+
 
