@@ -484,7 +484,7 @@ class inquiryForm(forms.ModelForm):
     fields = ['employee_no2', 'content_choice', 'inquiry', 'answer']
     
     widgets = {'content_choice' : forms.Select(attrs={'class' : 'form-control custom-border', 'style' : 'width : 200px;'}),
-               'inquiry' : forms.Textarea(attrs={'placeholder': '可能限り具体的に記入下さい。', 'class' : 'form-control custom-border', 'style' : 'width : 350px;'}),
+               'inquiry' : forms.Textarea(attrs={'placeholder': '可能な限り具体的に記入下さい。', 'class' : 'form-control custom-border', 'style' : 'width : 350px;'}),
                'answer' : forms.Textarea(attrs={'class' : 'form-control custom-border', 'style' : 'width : 350px;'})}
 
 

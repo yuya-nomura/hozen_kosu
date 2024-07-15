@@ -1659,7 +1659,7 @@ class Page_form(TestCase):
 
 
 
-    #班員グラフ確認ページチェック
+    #班員工数一覧ページチェック
     def test_team_kosu(self):
 
         # memberダミーデータ
@@ -1839,6 +1839,68 @@ class Page_form(TestCase):
 
 
 
+    #班員工数一覧ページチェック
+    def test_team_calendar(self):
+
+        # フォームデータ定義
+        form_data = {
+            'work_day': '2000-01-01',
+            'display_day': '表示切替',
+            }
+
+        # URLに対してPOSTリクエスト送信
+        response = self.client.post(reverse('team_calendar'), form_data)
+        # レスポンスが成功（ステータスコード200）であることを確認
+        self.assertEqual(response.status_code, 200)
+
+        # 変数を読み出し
+        member_name1 = response.context['member_name1']
+        # 変数整合性チェック
+        self.assertEqual(member_name1, '')
+        # 変数を読み出し
+        member_name2 = response.context['member_name2']
+        # 変数整合性チェック
+        self.assertEqual(member_name2.__str__(), 'テストユーザー')
+        # 変数を読み出し
+        work_list1 = response.context['work_list1']
+        # 変数整合性チェック
+        self.assertEqual(work_list1, ['　　　　　', '　　　　　', '　　　　　', '　　　　　', '　　　　　', '　　　　　', '　　　　　'])
+        # 変数を読み出し
+        work_list2 = response.context['work_list2']
+        # 変数整合性チェック
+        self.assertEqual(work_list2, ['', '', '', '', '', '', '出勤'])
+        # 変数を読み出し
+        over_time_list1 = response.context['over_time_list1']
+        # 変数整合性チェック
+        self.assertEqual(over_time_list1, ['', '', '', '', '', '', ''])
+        # 変数を読み出し
+        over_time_list2 = response.context['over_time_list2']
+        # 変数整合性チェック
+        self.assertEqual(over_time_list2, ['', '', '', '', '', '', 120])
+        # 変数を読み出し
+        kosu_list1 = response.context['kosu_list1']
+        # 変数整合性チェック
+        self.assertEqual(kosu_list1, [
+            ['　　　　　', '　　　　　', '　　　　　', '　　　　　'], 
+            ['　　　　　', '　　　　　', '　　　　　', '　　　　　'], 
+            ['　　　　　', '　　　　　', '　　　　　', '　　　　　'], 
+            ['　　　　　', '　　　　　', '　　　　　', '　　　　　'], 
+            ['　　　　　', '　　　　　', '　　　　　', '　　　　　'], 
+            ['　　　　　', '　　　　　', '　　　　　', '　　　　　'], 
+            ['　　　　　', '　　　　　', '　　　　　', '　　　　　']
+            ])
+        # 変数を読み出し
+        kosu_list2 = response.context['kosu_list2']
+        # 変数整合性チェック
+        self.assertEqual(kosu_list2, [
+            ['　　　　　', '　　　　　', '　　　　　', '　　　　　'], 
+            ['　　　　　', '　　　　　', '　　　　　', '　　　　　'], 
+            ['　　　　　', '　　　　　', '　　　　　', '　　　　　'], 
+            ['　　　　　', '　　　　　', '　　　　　', '　　　　　'], 
+            ['　　　　　', '　　　　　', '　　　　　', '　　　　　'], 
+            ['　　　　　', '　　　　　', '　　　　　', '　　　　　'], 
+            ['8:00～18:50', '　　　　　', '　　　　　', '　　　　　']
+            ])
 
 
 
@@ -1849,3 +1911,7 @@ class Page_form(TestCase):
 
 
 
+
+
+
+        

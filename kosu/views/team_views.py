@@ -1596,50 +1596,46 @@ def team_calendar(request):
   kosu_list15 = []
 
   # 工数入力OK_NGリストリセット
-  ok_ng_list1 = [False, False, False, False, False, False, False]
-  ok_ng_list2 = [False, False, False, False, False, False, False]
-  ok_ng_list3 = [False, False, False, False, False, False, False]
-  ok_ng_list4 = [False, False, False, False, False, False, False]
-  ok_ng_list5 = [False, False, False, False, False, False, False]
-  ok_ng_list6 = [False, False, False, False, False, False, False]
-  ok_ng_list7 = [False, False, False, False, False, False, False]
-  ok_ng_list8 = [False, False, False, False, False, False, False]
-  ok_ng_list9 = [False, False, False, False, False, False, False]
-  ok_ng_list10 = [False, False, False, False, False, False, False]
-  ok_ng_list11 = [False, False, False, False, False, False, False]
-  ok_ng_list12 = [False, False, False, False, False, False, False]
-  ok_ng_list13 = [False, False, False, False, False, False, False]
-  ok_ng_list14 = [False, False, False, False, False, False, False]
-  ok_ng_list15 = [False, False, False, False, False, False, False]
+  ok_ng_list1 = []
+  ok_ng_list2 = []
+  ok_ng_list3 = []
+  ok_ng_list4 = []
+  ok_ng_list5 = []
+  ok_ng_list6 = []
+  ok_ng_list7 = []
+  ok_ng_list8 = []
+  ok_ng_list9 = []
+  ok_ng_list10 = []
+  ok_ng_list11 = []
+  ok_ng_list12 = []
+  ok_ng_list13 = []
+  ok_ng_list14 = []
+  ok_ng_list15 = []
 
 
 
   # 班員(従業員番号)リストごとに就業、残業、工数入力OK_NGリスト作成
   for ind, m in enumerate(member_list):
-
     # 班員登録がある場合の処理
     if m != '':
-
       # 日付リストを使用し日付ごとの就業、残業取得しリスト作成
       for ind2, day in enumerate(day_list):
         kosu_list = []
 
         # 日付リストが空でない場合の処理
         if day != '':
-
           # 指定日に工数データあるか確認
           member_obj_filter =Business_Time_graph.objects.filter(employee_no3 = m, work_day2 = day)
 
           # 指定日に工数データがある場合の処理
           if member_obj_filter.count() != 0:
-
             # 指定日の工数データ取得
             member_obj_get =Business_Time_graph.objects.get(employee_no3 = m, work_day2 = day)
 
             # 就業、残業リストに工数データから就業、残業、工数入力OK_NG追加
             exec('work_list{}.append(member_obj_get.work_time)'.format(ind + 1))
             exec('over_time_list{}.append(member_obj_get.over_time)'.format(ind + 1))
-            exec('ok_ng_list{}[{}] = member_obj_get.judgement'.format(ind + 1, ind2))
+            exec('ok_ng_list{}.append(member_obj_get.judgement)'.format(ind + 1))
 
             # 工数データが空の場合の処理
             if member_obj_get.time_work == '#'*288:
@@ -1648,7 +1644,7 @@ def team_calendar(request):
               for k in range(4):
 
                 # 工数入力リストに空を入れる
-                kosu_list.append('')
+                kosu_list.append('　　　　　')
 
             # 工数データが空でない場合の処理
             else:
@@ -1744,7 +1740,7 @@ def team_calendar(request):
                 kosu_list.append('{}:{}～{}:{}'.format(start_hour1, str(start_min1).zfill(2), \
                                                     end_hour1, str(end_min1).zfill(2)))
               else:
-                kosu_list.append('')
+                kosu_list.append('　　　　　')
                 
               if start_index2 != 0 or end_index2 != 0:
                 start_hour2 = start_index2//12
@@ -1754,7 +1750,7 @@ def team_calendar(request):
                 kosu_list.append('{}:{}～{}:{}'.format(start_hour2, str(start_min2).zfill(2), \
                                                     end_hour2, str(end_min2).zfill(2)))
               else:
-                kosu_list.append('')
+                kosu_list.append('　　　　　')
 
               if start_index3 != 0 or end_index3 != 0:
                 start_hour3 = start_index3//12
@@ -1764,7 +1760,7 @@ def team_calendar(request):
                 kosu_list.append('{}:{}～{}:{}'.format(start_hour3, str(start_min3).zfill(2), \
                                                     end_hour3, str(end_min3).zfill(2)))
               else:
-                kosu_list.append('')
+                kosu_list.append('　　　　　')
                 
               if start_index4 != 0 or end_index4 != 0:
                 start_hour4 = start_index4//12
@@ -1782,6 +1778,7 @@ def team_calendar(request):
             # 就業、残業リストに空追加
             exec('work_list{}.append("")'.format(ind + 1))
             exec('over_time_list{}.append("")'.format(ind + 1))
+            exec('ok_ng_list{}.append({})'.format(ind + 1, False))
 
             # 空の工数入力リストを作成
             for k in range(4):
@@ -1791,14 +1788,13 @@ def team_calendar(request):
 
         # 日付リストが空の場合の処理
         else:
-
           # 就業、残業リストに空追加
           exec('work_list{}.append("")'.format(ind + 1))
           exec('over_time_list{}.append("")'.format(ind + 1))
+          exec('ok_ng_list{}.append({})'.format(ind + 1, False))
 
           # 空の工数入力リストを作成
           for k in range(4):
-
             # 工数入力リストに空を入れる
             kosu_list.append('　　　　　')
 
@@ -1807,20 +1803,18 @@ def team_calendar(request):
 
     # 班員登録がない場合の処理
     else:
-
       # 空の就業、残業リスト作成
       for b in range(7):
-
         # 就業、残業リストに空追加
         exec('work_list{}.append("　　　　　")'.format(ind + 1))
         exec('over_time_list{}.append("")'.format(ind + 1))
+        exec('ok_ng_list{}.append({})'.format(ind + 1, False))
 
 
       for n in range(7):
         kosu_list = []
         # 空の工数入力リストを作成
         for k in range(4):
-
           # 工数入力リストに空を入れる
           kosu_list.append('　　　　　')
         
