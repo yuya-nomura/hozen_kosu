@@ -36,14 +36,16 @@
 
   <script>
     document.addEventListener('DOMContentLoaded', function() {
-      // フォーム内のすべての入力要素を選択します
+      
       var inputElements = document.querySelectorAll('input, textarea');
       
       inputElements.forEach(function(inputElement) {
         inputElement.addEventListener('keydown', function(event) {
-          if (event.key === 'Enter') {
+  
+          // textarea 以外の input で Enter キーが押された場合にのみ実行
+          if (event.key === 'Enter' && inputElement.tagName.toLowerCase() !== 'textarea') {
             event.preventDefault();  // エンターキーによるフォーム送信を防止
-            inputElement.blur(); // フォーカスを外す
+            inputElement.blur();     // フォーカスを外す
           }
         });
       });
