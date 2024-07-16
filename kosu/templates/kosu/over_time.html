@@ -11,7 +11,10 @@
 </head>
 <body class="container">
   <h1 class="display-4 text-primary">{{title}}</h1>
-  <p class="h6"><a href="{% url 'kosu_main' %}">工数MENUへ</a></p>
+  <p class="h6 no-wrap">
+    <a href="{% url 'kosu_main' %}" >工数MENUへ</a>　　
+    <a href="{% url 'main' %}">メインMENUへ</a>
+  </p>
   <form action="{% url 'over_time' %}" method="post">
   {% csrf_token %}
   <div class="number-input-group">
