@@ -60,11 +60,10 @@
 
 .no-wrap {
   white-space: nowrap;
+  overflow-x: auto;
 }
 
 .text-center {
   text-align: center;
 }
-
-
 
