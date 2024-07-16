@@ -6155,6 +6155,7 @@ def schedule(request):
   today = datetime.date.today()
 
 
+
   # GET時の処理
   if (request.method == 'GET'):
     # 本日の年取得
@@ -6257,6 +6258,7 @@ def schedule(request):
 
     # 勤務フォーム定義
     form = scheduleForm(form_default_list)
+
 
 
   # カレンダー更新時の処理
@@ -6365,6 +6367,7 @@ def schedule(request):
 
     # カレンダー設定フォーム定義
     form2 = schedule_timeForm(request.POST)
+
 
 
   # 勤務登録時の処理
