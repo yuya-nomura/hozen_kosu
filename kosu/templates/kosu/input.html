@@ -14,14 +14,16 @@
 </head>
 <body class="container">
   <h1 class="display-6 text-primary">{{member_obj.name}}さんの{{title}}</h1>
-  <p class="h6">
-    <a href="{% url 'kosu_main' %}">工数MENUへ</a>　　
-    <a href="{% url 'kosu_list' 1 %}">履歴へ</a>　　
-    {% if obj_link != '' %}
-      <a href="{% url 'detail' obj_link.id %}">工数編集</a>　　
-    {% endif %}
-    <a href="{% url 'main' %}">メインMENUへ</a>
-  </p>
+  <div class="number-input-group">
+    <p class="h6">
+      <a href="{% url 'kosu_main' %}">工数MENUへ</a>　　
+      <a href="{% url 'kosu_list' 1 %}">履歴へ</a>　　
+      {% if obj_link != '' %}
+        <a href="{% url 'detail' obj_link.id %}">工数編集</a>　　
+      {% endif %}
+      <a href="{% url 'main' %}">メインMENUへ</a>
+    </p>
+  </div>
   <form action="{% url 'input' %}" method="post">
     {% csrf_token %}
     {% for message in messages %}
@@ -180,6 +182,36 @@
         },
         onAdjust: function(newVal, oldVal) {}
       });
+    });
+  </script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var workDetailInput = document.querySelector('[name="{{ form.work_detail.name }}"]');
+      
+      if (workDetailInput) {
+        workDetailInput.addEventListener('keydown', function(event) {
+          if (event.key === 'Enter') {
+            event.preventDefault(); // エンターキーによるフォーム送信を防止
+            workDetailInput.blur(); // フォーカスを外す
+          }
+        });
+      }
+    });
+  </script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var workDetailInput = document.querySelector('[name="{{ form.over_work.name }}"]');
+      
+      if (workDetailInput) {
+        workDetailInput.addEventListener('keydown', function(event) {
+          if (event.key === 'Enter') {
+            event.preventDefault(); // エンターキーによるフォーム送信を防止
+            workDetailInput.blur(); // フォーカスを外す
+          }
+        });
+      }
     });
   </script>
 
