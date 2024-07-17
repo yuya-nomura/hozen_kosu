@@ -7169,6 +7169,7 @@ def all_kosu(request, num):
 
   # POST時の処理
   if 'kosu_find' in request.POST:
+    nnn=0
 
     # 従業員番号リスト定義
     employee_no_name_list = []
@@ -7244,6 +7245,18 @@ def all_kosu(request, num):
     default_start_day = str(request.POST['start_day'])
     default_end_day = str(request.POST['end_day'])
 
+
+
+
+
+
+
+
+
+
+
+
+
   if '289_find' in request.POST:
     obj = Business_Time_graph.objects.filter(detail_work = '$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$')
 
@@ -7257,7 +7270,7 @@ def all_kosu(request, num):
 
   # 検索結果削除
   if 'kosu_delete' in request.POST:
-
+    nnn=0
     # 従業員番号リスト定義
     employee_no_name_list = []
 
@@ -7329,10 +7342,35 @@ def all_kosu(request, num):
     data = Paginator(obj, page_num.menu_row)
 
 
+
+
+
+
+
+
+
+
+    nnn=[]
+    for ss in obj:
+      if ss.detail_work.count('$') == 288:
+        mmm=[]
+        mmm.append(ss.employee_no3)
+        mmm.append(ss.work_day2)
+        nnn.append(mmm)
+    print(nnn)
     # フォーム定義
     form = all_kosu_findForm()
     # フォーム選択肢定義
     form.fields['name'].choices = name_list
+
+
+
+
+
+
+
+
+
 
 
     # 今日の日時取得
@@ -7350,6 +7388,7 @@ def all_kosu(request, num):
     'default_end_day' : default_end_day,
     'form' : form,
     'num' : num,
+    'nnn' : nnn
     }
   
 

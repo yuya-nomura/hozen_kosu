@@ -15,6 +15,7 @@
     <a href="{% url 'kosu_main' %}">工数MENUへ</a>
   </p>
   <p>　</p>
+  {{nnn}}
   <form action="{% url 'all_kosu' num %}" method="post">
     {% csrf_token %}
     <table class="table-borderless">
