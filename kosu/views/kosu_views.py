@@ -2304,7 +2304,7 @@ def input(request):
                                                    work_day2 = request.POST['work_day'], \
                                                    defaults = {'name' : member_instance, \
                                                                'time_work' : '#'*288, \
-                                                               'detail_work' : '$'*288, \
+                                                               'detail_work' : '$'*287, \
                                                                'over_time' : request.POST['over_work']})
 
     # このページをリダイレクトする
@@ -2701,7 +2701,7 @@ def input(request):
     # 作業内容と作業詳細のリストを2個連結
     work_list = work_list*2
     detail_list = detail_list*2
-  
+
     # 1直の時の処理
     if obj_get.tyoku2 == '1':
       # 作業内容と作業詳細のリストを4時半からの表示に変える
@@ -2772,62 +2772,31 @@ def input(request):
         find_list.append(i)
 
         if obj_get.tyoku2 == '1':
-          if i >= 234:
-            # 作業時間インデックスに作業時間のインデックス記録
-            kosu_list.append(i - 234)
-
-          else:
-            # 作業時間インデックスに作業時間のインデックス記録
-            kosu_list.append(i + 54)
+          kosu_list.append(i + 54)
 
         elif (data.shop == 'P' or data.shop == 'R' or data.shop == 'T1' or data.shop == 'T2' or \
             data.shop == 'その他' or data.shop == '組長以上') and obj_get.tyoku2 == '2':
-          if i >= 144:
-            # 作業時間インデックスに作業時間のインデックス記録
-            kosu_list.append(i - 144)
-
-          else:
-            # 作業時間インデックスに作業時間のインデックス記録
-            kosu_list.append(i + 144)
+          # 作業時間インデックスに作業時間のインデックス記録
+          kosu_list.append(i + 144)
 
         elif (data.shop == 'W1' or data.shop == 'W2' or data.shop == 'A1' or data.shop == 'A2') \
               and obj_get.tyoku2 == '2':
-          if i >= 180:
-            # 作業時間インデックスに作業時間のインデックス記録
-            kosu_list.append(i - 180)
-
-          else:
-            # 作業時間インデックスに作業時間のインデックス記録
-            kosu_list.append(i + 108)
+          # 作業時間インデックスに作業時間のインデックス記録
+          kosu_list.append(i + 108)
 
         elif (data.shop == 'P' or data.shop == 'R' or data.shop == 'T1' or data.shop == 'T2' or \
             data.shop == 'その他' or data.shop == '組長以上') and obj_get.tyoku2 == '3':
-          if i >= 42:
-            # 作業時間インデックスに作業時間のインデックス記録
-            kosu_list.append(i - 42)
-
-          else:
-            # 作業時間インデックスに作業時間のインデックス記録
-            kosu_list.append(i + 246)
+          # 作業時間インデックスに作業時間のインデックス記録
+          kosu_list.append(i + 246)
 
         elif (data.shop == 'W1' or data.shop == 'W2' or data.shop == 'A1' or data.shop == 'A2') \
               and obj_get.tyoku2 == '3':
-          if i >= 72:
-            # 作業時間インデックスに作業時間のインデックス記録
-            kosu_list.append(i - 72)
-
-          else:
-            # 作業時間インデックスに作業時間のインデックス記録
-            kosu_list.append(i + 216)
+          # 作業時間インデックスに作業時間のインデックス記録
+          kosu_list.append(i + 216)
 
         elif obj_get.tyoku2 == '4':
-          if i >= 216:
-            # 作業時間インデックスに作業時間のインデックス記録
-            kosu_list.append(i - 216)
-
-          else:
-            # 作業時間インデックスに作業時間のインデックス記録
-            kosu_list.append(i + 72)
+          # 作業時間インデックスに作業時間のインデックス記録
+          kosu_list.append(i + 72)
 
       # 時間区分毎に前の作業との差異がある場合の処理
       if i != 0 and (work_list[i] != work_list[i - 1] or detail_list[i] != detail_list[i - 1]):
@@ -2971,9 +2940,6 @@ def input(request):
           time_list_start.append(time_obj_start)
           time_list_end.append(time_obj_end)
 
-          # 作業開始時間をSTRで定義
-          time_obj_start = str(int(t)//12).zfill(2) + ':' + str(int(t)%12*5).zfill(2)
-
   
     # 現在使用している工数区分のオブジェクトを取得
     kosu_obj = kosu_division.objects.get(kosu_name = request.session.get('input_def', None))
@@ -3031,7 +2997,7 @@ def input(request):
       for_list.append(def_time[k])
       for_list.append(detail_time[k])
       time_display_list.append(for_list)
-  
+
   # 工数データない場合の処理
   else:
     def_n = 0
@@ -4155,7 +4121,7 @@ def today_break_time(request):
                                                   work_day2 = request.session.get('break_today', None), \
                                                   defaults = {'name' : member_instance, \
                                                               'time_work' : '#'*288, \
-                                                              'detail_work' : '$'*288, \
+                                                              'detail_work' : '$'*287, \
                                                               'breaktime' : '#' + break_time1, \
                                                               'breaktime_over1' : '#' + break_time2, \
                                                               'breaktime_over2' : '#' + break_time3, \
@@ -4333,56 +4299,32 @@ def detail(request, num):
       find_list.append(i)
 
       if obj_get.tyoku2 == '1':
-        if i >= 234:
-          # 作業時間インデックスに作業時間のインデックス記録
-          kosu_list.append(i - 234)
-        else:
-          # 作業時間インデックスに作業時間のインデックス記録
-          kosu_list.append(i + 54)
+        # 作業時間インデックスに作業時間のインデックス記録
+        kosu_list.append(i + 54)
 
       elif (data.shop == 'P' or data.shop == 'R' or data.shop == 'T1' or data.shop == 'T2' or \
           data.shop == 'その他' or data.shop == '組長以上') and obj_get.tyoku2 == '2':
-        if i >= 144:
-          # 作業時間インデックスに作業時間のインデックス記録
-          kosu_list.append(i - 144)
-        else:
-          # 作業時間インデックスに作業時間のインデックス記録
-          kosu_list.append(i + 144)
+        # 作業時間インデックスに作業時間のインデックス記録
+        kosu_list.append(i + 144)
 
       elif (data.shop == 'W1' or data.shop == 'W2' or data.shop == 'A1' or data.shop == 'A2') \
             and obj_get.tyoku2 == '2':
-        if i >= 180:
-          # 作業時間インデックスに作業時間のインデックス記録
-          kosu_list.append(i - 180)
-        else:
-          # 作業時間インデックスに作業時間のインデックス記録
-          kosu_list.append(i + 108)
+        # 作業時間インデックスに作業時間のインデックス記録
+        kosu_list.append(i + 108)
 
       elif (data.shop == 'P' or data.shop == 'R' or data.shop == 'T1' or data.shop == 'T2' or \
           data.shop == 'その他' or data.shop == '組長以上') and obj_get.tyoku2 == '3':
-        if i >= 42:
-          # 作業時間インデックスに作業時間のインデックス記録
-          kosu_list.append(i - 42)
-        else:
-          # 作業時間インデックスに作業時間のインデックス記録
-          kosu_list.append(i + 246)
+        # 作業時間インデックスに作業時間のインデックス記録
+        kosu_list.append(i + 246)
 
       elif (data.shop == 'W1' or data.shop == 'W2' or data.shop == 'A1' or data.shop == 'A2') \
             and obj_get.tyoku2 == '3':
-        if i >= 72:
-          # 作業時間インデックスに作業時間のインデックス記録
-          kosu_list.append(i - 72)
-        else:
-          # 作業時間インデックスに作業時間のインデックス記録
-          kosu_list.append(i + 216)
+        # 作業時間インデックスに作業時間のインデックス記録
+        kosu_list.append(i + 216)
 
       elif obj_get.tyoku2 == '4':
-        if i >= 216:
-          # 作業時間インデックスに作業時間のインデックス記録
-          kosu_list.append(i - 216)
-        else:
-          # 作業時間インデックスに作業時間のインデックス記録
-          kosu_list.append(i + 72)
+        # 作業時間インデックスに作業時間のインデックス記録
+        kosu_list.append(i + 72)
 
     # 時間区分毎に前の作業との差異がある場合の処理
     if i != 0 and (work_list[i] != work_list[i - 1] or detail_list[i] != detail_list[i - 1]):
@@ -4517,9 +4459,6 @@ def detail(request, num):
         # 作業開始時間と作業終了時間をリストに追加
         time_list_start.append(time_obj_start)
         time_list_end.append(time_obj_end)
-
-        # 作業開始時間をSTRで定義
-        time_obj_start = str(int(t)//12).zfill(2) + ':' + str(int(t)%12*5).zfill(2)
 
 
   # 現在使用している工数区分のオブジェクトを取得
@@ -6685,7 +6624,7 @@ def schedule(request):
               defaults = {'name' : member_instance, \
                           'work_time' : eval('request.POST["day{}"]'.format(i + 1)), \
                           'time_work' : '#'*288, \
-                          'detail_work' : '$'*288, \
+                          'detail_work' : '$'*287, \
                           'over_time' : 0, \
                           'judgement' : judgement})
 
