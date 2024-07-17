@@ -21,8 +21,8 @@
       <p>表示月指定</p>
       <div class="number-input-group">
         {{form2.year}}年　{{form2.month}}月　　
-        <input type="submit" value="表示切替" name = time_update class="btn btn-blue7 mt-2">　　　　
-        <input type="submit" value="勤務登録" name = work_update class="btn btn-blue7 mt-2">
+        <input type="submit" value="表示切替" name="time_update" class="btn btn-blue7 mt-2">　　　　
+        <input type="submit" value="勤務登録" name="work_update" class="btn btn-blue7 mt-2">
       </div>
       {% for message in messages %}
       <div {% if message.tags %}class="{{ message.tags }}"{% endif %}>
@@ -38,6 +38,9 @@
           <text x="15" y="25" font-weight="bold">入力時間</text>
         </svg>
         工数入力OK
+      </p>
+      <p>
+        <input type="submit" value="デフォルト勤務入力" name="default_work" class="btn btn-blue7 mt-2">
       </p>
       <tr><p>　</p></tr>
       <tr>
@@ -87,6 +90,30 @@
         </td>
         <td class="table-light_blue">
           {% if day_list.6 != '' %}<div class="text-center">{{form.day7}}</div>{% endif %}
+        </td>
+      </tr>
+
+      <tr>
+        <td class="table-pink">
+          {% if day_list.0 != '' %}<div class="text-center">{{form.tyoku1}}</div>{% endif %}
+        </td>
+        <td>
+          {% if day_list.1 != '' %}<div class="text-center">{{form.tyoku2}}</div>{% endif %}
+        </td>
+        <td>
+          {% if day_list.2 != '' %}<div class="text-center">{{form.tyoku3}}</div>{% endif %}
+        </td>
+        <td>
+          {% if day_list.3 != '' %}<div class="text-center">{{form.tyoku4}}</div>{% endif %}
+        </td>
+        <td>
+          {% if day_list.4 != '' %}<div class="text-center">{{form.tyoku5}}</div>{% endif %}
+        </td>
+        <td>
+          {% if day_list.5 != '' %}<div class="text-center">{{form.tyoku6}}</div>{% endif %}
+        </td>
+        <td class="table-light_blue">
+          {% if day_list.6 != '' %}<div class="text-center">{{form.tyoku7}}</div>{% endif %}
         </td>
       </tr>
 
@@ -231,6 +258,30 @@
       </tr>
 
       <tr>
+        <td class="table-pink">
+          {% if day_list.7 != '' %}<div class="text-center">{{form.tyoku8}}</div>{% endif %}
+        </td>
+        <td>
+          {% if day_list.8 != '' %}<div class="text-center">{{form.tyoku9}}</div>{% endif %}
+        </td>
+        <td>
+          {% if day_list.9 != '' %}<div class="text-center">{{form.tyoku10}}</div>{% endif %}
+        </td>
+        <td>
+          {% if day_list.10 != '' %}<div class="text-center">{{form.tyoku11}}</div>{% endif %}
+        </td>
+        <td>
+          {% if day_list.11 != '' %}<div class="text-center">{{form.tyoku12}}</div>{% endif %}
+        </td>
+        <td>
+          {% if day_list.12 != '' %}<div class="text-center">{{form.tyoku13}}</div>{% endif %}
+        </td>
+        <td class="table-light_blue">
+          {% if day_list.13 != '' %}<div class="text-center">{{form.tyoku14}}</div>{% endif %}
+        </td>
+      </tr>
+
+      <tr>
         {% if OK_NG_list.7 == True %}
         <td class="table-green">
         {% else %}
@@ -367,6 +418,30 @@
         </td>
         <td class="table-light_blue">
           {% if day_list.20 != '' %}<div class="text-center">{{form.day21}}</div>{% endif %}
+        </td>
+      </tr>
+
+      <tr>
+        <td class="table-pink">
+          {% if day_list.14 != '' %}<div class="text-center">{{form.tyoku15}}</div>{% endif %}
+        </td>
+        <td>
+          {% if day_list.15 != '' %}<div class="text-center">{{form.tyoku16}}</div>{% endif %}
+        </td>
+        <td>
+          {% if day_list.16 != '' %}<div class="text-center">{{form.tyoku17}}</div>{% endif %}
+        </td>
+        <td>
+          {% if day_list.17 != '' %}<div class="text-center">{{form.tyoku18}}</div>{% endif %}
+        </td>
+        <td>
+          {% if day_list.18 != '' %}<div class="text-center">{{form.tyoku19}}</div>{% endif %}
+        </td>
+        <td>
+          {% if day_list.19 != '' %}<div class="text-center">{{form.tyoku20}}</div>{% endif %}
+        </td>
+        <td class="table-light_blue">
+          {% if day_list.20 != '' %}<div class="text-center">{{form.tyoku21}}</div>{% endif %}
         </td>
       </tr>
 
@@ -511,6 +586,30 @@
       </tr>
 
       <tr>
+        <td class="table-pink">
+          {% if day_list.21 != '' %}<div class="text-center">{{form.tyoku22}}</div>{% endif %}
+        </td>
+        <td>
+          {% if day_list.22 != '' %}<div class="text-center">{{form.tyoku23}}</div>{% endif %}
+        </td>
+        <td>
+          {% if day_list.23 != '' %}<div class="text-center">{{form.tyoku24}}</div>{% endif %}
+        </td>
+        <td>
+          {% if day_list.24 != '' %}<div class="text-center">{{form.tyoku25}}</div>{% endif %}
+        </td>
+        <td>
+          {% if day_list.25 != '' %}<div class="text-center">{{form.tyoku26}}</div>{% endif %}
+        </td>
+        <td>
+          {% if day_list.26 != '' %}<div class="text-center">{{form.tyoku27}}</div>{% endif %}
+        </td>
+        <td class="table-light_blue">
+          {% if day_list.27 != '' %}<div class="text-center">{{form.tyoku28}}</div>{% endif %}
+        </td>
+      </tr>
+
+      <tr>
         {% if OK_NG_list.21 == True %}
         <td class="table-green">
         {% else %}
@@ -650,7 +749,31 @@
           {% if day_list.34 != '' %}<div class="text-center">{{form.day35}}</div>{% endif %}
         </td>
       </tr>
-      
+
+      <tr>
+        <td class="table-pink">
+          {% if day_list.28 != '' %}<div class="text-center">{{form.tyoku29}}</div>{% endif %}
+        </td>
+        <td>
+          {% if day_list.29 != '' %}<div class="text-center">{{form.tyoku30}}</div>{% endif %}
+        </td>
+        <td>
+          {% if day_list.30 != '' %}<div class="text-center">{{form.tyoku31}}</div>{% endif %}
+        </td>
+        <td>
+          {% if day_list.31 != '' %}<div class="text-center">{{form.tyoku32}}</div>{% endif %}
+        </td>
+        <td>
+          {% if day_list.32 != '' %}<div class="text-center">{{form.tyoku33}}</div>{% endif %}
+        </td>
+        <td>
+          {% if day_list.33 != '' %}<div class="text-center">{{form.tyoku34}}</div>{% endif %}
+        </td>
+        <td class="table-light_blue">
+          {% if day_list.34 != '' %}<div class="text-center">{{form.tyoku35}}</div>{% endif %}
+        </td>
+      </tr>
+
       <tr>
         {% if OK_NG_list.28 == True %}
         <td class="table-green">
@@ -776,6 +899,20 @@
         </td>
         <td>
           {% if day_list.36 != '' %}<div class="text-center">{{form.day37}}</div>{% endif %}
+        </td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td class="table-light_blue"></td>
+      </tr>
+
+      <tr>
+        <td class="table-pink">
+          {% if day_list.35 != '' %}<div class="text-center">{{form.tyoku36}}</div>{% endif %}
+        </td>
+        <td>
+          {% if day_list.36 != '' %}<div class="text-center">{{form.tyoku37}}</div>{% endif %}
         </td>
         <td></td>
         <td></td>

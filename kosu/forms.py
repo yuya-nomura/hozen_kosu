@@ -376,6 +376,13 @@ class scheduleForm(forms.Form):
     ('早退', '早退・遅刻'),
     ]
   
+  tyoku_list = [
+    ('', ''),
+    ('1', '1直'), 
+    ('2', '2直'), 
+    ('3', '3直'), 
+    ('4', '常昼')]
+
   day1 = forms.ChoiceField(label = '日1', choices=employment_list, required = False)
   day2 = forms.ChoiceField(label = '月1', choices=employment_list, required = False)
   day3 = forms.ChoiceField(label = '火1', choices=employment_list, required = False)
@@ -413,7 +420,43 @@ class scheduleForm(forms.Form):
   day35 = forms.ChoiceField(label = '土5', choices=employment_list, required = False)
   day36 = forms.ChoiceField(label = '日6', choices=employment_list, required = False)
   day37 = forms.ChoiceField(label = '月6', choices=employment_list, required = False)
-
+  tyoku1 = forms.ChoiceField(label = '日1', choices=tyoku_list, required = False)
+  tyoku2 = forms.ChoiceField(label = '月1', choices=tyoku_list, required = False)
+  tyoku3 = forms.ChoiceField(label = '火1', choices=tyoku_list, required = False)
+  tyoku4 = forms.ChoiceField(label = '水1', choices=tyoku_list, required = False)
+  tyoku5 = forms.ChoiceField(label = '木1', choices=tyoku_list, required = False)
+  tyoku6 = forms.ChoiceField(label = '金1', choices=tyoku_list, required = False)
+  tyoku7 = forms.ChoiceField(label = '土1', choices=tyoku_list, required = False)
+  tyoku8 = forms.ChoiceField(label = '日2', choices=tyoku_list, required = False)
+  tyoku9 = forms.ChoiceField(label = '月2', choices=tyoku_list, required = False)
+  tyoku10 = forms.ChoiceField(label = '火2', choices=tyoku_list, required = False)
+  tyoku11 = forms.ChoiceField(label = '水2', choices=tyoku_list, required = False)
+  tyoku12 = forms.ChoiceField(label = '木2', choices=tyoku_list, required = False)
+  tyoku13 = forms.ChoiceField(label = '金2', choices=tyoku_list, required = False)
+  tyoku14 = forms.ChoiceField(label = '土2', choices=tyoku_list, required = False)
+  tyoku15 = forms.ChoiceField(label = '日3', choices=tyoku_list, required = False)
+  tyoku16 = forms.ChoiceField(label = '月3', choices=tyoku_list, required = False)
+  tyoku17 = forms.ChoiceField(label = '火3', choices=tyoku_list, required = False)
+  tyoku18 = forms.ChoiceField(label = '水3', choices=tyoku_list, required = False)
+  tyoku19 = forms.ChoiceField(label = '木3', choices=tyoku_list, required = False)
+  tyoku20 = forms.ChoiceField(label = '金3', choices=tyoku_list, required = False)
+  tyoku21 = forms.ChoiceField(label = '土3', choices=tyoku_list, required = False)
+  tyoku22 = forms.ChoiceField(label = '日4', choices=tyoku_list, required = False)
+  tyoku23 = forms.ChoiceField(label = '月4', choices=tyoku_list, required = False)
+  tyoku24 = forms.ChoiceField(label = '火4', choices=tyoku_list, required = False)
+  tyoku25 = forms.ChoiceField(label = '水4', choices=tyoku_list, required = False)
+  tyoku26 = forms.ChoiceField(label = '木4', choices=tyoku_list, required = False)
+  tyoku27 = forms.ChoiceField(label = '金4', choices=tyoku_list, required = False)
+  tyoku28 = forms.ChoiceField(label = '土4', choices=tyoku_list, required = False)
+  tyoku29 = forms.ChoiceField(label = '日5', choices=tyoku_list, required = False)
+  tyoku30 = forms.ChoiceField(label = '月5', choices=tyoku_list, required = False)
+  tyoku31 = forms.ChoiceField(label = '火5', choices=tyoku_list, required = False)
+  tyoku32 = forms.ChoiceField(label = '水5', choices=tyoku_list, required = False)
+  tyoku33 = forms.ChoiceField(label = '木5', choices=tyoku_list, required = False)
+  tyoku34 = forms.ChoiceField(label = '金5', choices=tyoku_list, required = False)
+  tyoku35 = forms.ChoiceField(label = '土5', choices=tyoku_list, required = False)
+  tyoku36 = forms.ChoiceField(label = '日6', choices=tyoku_list, required = False)
+  tyoku37 = forms.ChoiceField(label = '月6', choices=tyoku_list, required = False)
 
 
 class schedule_timeForm(forms.Form):
