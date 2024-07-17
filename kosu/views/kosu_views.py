@@ -7246,27 +7246,6 @@ def all_kosu(request, num):
 
 
 
-
-
-
-
-
-
-
-
-
-
-  if '289_find' in request.POST:
-    obj = Business_Time_graph.objects.filter(detail_work = '$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$')
-
-    obj.update(detail_work = '$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$')
-    # このページ読み直し
-    return redirect(to = '/all_kosu/1')
-
-
-
-
-
   # 検索結果削除
   if 'kosu_delete' in request.POST:
 
@@ -7340,39 +7319,6 @@ def all_kosu(request, num):
     # 取得した工数データを1ページあたりの件数分取得
     data = Paginator(obj, page_num.menu_row)
 
-
-
-
-
-
-
-
-
-
-    nnn=[]
-    for ss in obj:
-      if ss.detail_work.count('$') == 288:
-        mmm=[]
-        mmm.append(ss.id)
-        mmm.append(ss.employee_no3)
-        mmm.append(ss.work_day2)
-        nnn.append(mmm)
-    print(nnn)
-    # フォーム定義
-    form = all_kosu_findForm()
-    # フォーム選択肢定義
-    form.fields['name'].choices = name_list
-
-
-
-
-
-
-
-
-
-
-
     # 今日の日時取得
     today = datetime.date.today()
     # 日付フォーム初期値定義
@@ -7388,7 +7334,6 @@ def all_kosu(request, num):
     'default_end_day' : default_end_day,
     'form' : form,
     'num' : num,
-    'nnn' : nnn
     }
   
 
