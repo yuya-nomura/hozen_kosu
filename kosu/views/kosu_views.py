@@ -7169,7 +7169,6 @@ def all_kosu(request, num):
 
   # POST時の処理
   if 'kosu_find' in request.POST:
-    nnn=0
 
     # 従業員番号リスト定義
     employee_no_name_list = []
@@ -7270,7 +7269,7 @@ def all_kosu(request, num):
 
   # 検索結果削除
   if 'kosu_delete' in request.POST:
-    nnn=0
+
     # 従業員番号リスト定義
     employee_no_name_list = []
 
@@ -7354,6 +7353,7 @@ def all_kosu(request, num):
     for ss in obj:
       if ss.detail_work.count('$') == 288:
         mmm=[]
+        mmm.append(ss.id)
         mmm.append(ss.employee_no3)
         mmm.append(ss.work_day2)
         nnn.append(mmm)
