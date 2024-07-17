@@ -51,6 +51,7 @@
     <tr><th><td>
         <input type="submit" value="検索" name="kosu_find" class="btn btn-blue7 mt-2">　　
         <input type="submit" value="検索レコード全削除" name="kosu_delete" class="btn btn-blue7 mt-2" onclick="return confirmDelete();">
+        <input type="submit" value="変更" name="289_find" class="btn btn-blue7 mt-2">
       </td></th></tr>
     </table>
     <p>　</p>
@@ -65,7 +66,6 @@
           <th style="text-align:center;">削除リンク</th>
         </tr>
         {% for i in data %}
-        {% if i.detail_work == "$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$" %}
         <tr>
           <td style="text-align:center;">
             {{i.work_day2|date:"Y-m-d"}}
@@ -90,7 +90,6 @@
             <a href="{% url 'all_kosu_delete' i.id %}">削除</a>
           </td>
         </tr>
-        {% endif %}
         {% endfor %}
       </table>
     </div>
