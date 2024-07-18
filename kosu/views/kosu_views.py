@@ -6480,35 +6480,6 @@ def schedule(request):
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   # 勤務登録時の処理
   if "work_update" in request.POST:
 
@@ -6644,7 +6615,7 @@ def schedule(request):
           # ログイン者の登録ショップが三組三交替Ⅱ甲乙丙番Cで1直の場合の処理
           if (member_obj.shop == 'W1' or member_obj.shop == 'W2' or \
             member_obj.shop == 'A1' or member_obj.shop == 'A2') and \
-              work_get.tyoku2 == '1':
+             eval('request.POST["tyoku{}"]'.format(i + 1)) == '1':
             # 半前年休時、工数合計と残業に整合性がある場合の処理
             if eval('request.POST["day{}"]'.format(i + 1)) == '半前年休' and \
               kosu_total - int(work_get.over_time) == 230:
@@ -6662,7 +6633,7 @@ def schedule(request):
           # ログイン者の登録ショップが三組三交替Ⅱ甲乙丙番Cで2直の場合の処理
           if (member_obj.shop == 'W1' or member_obj.shop == 'W2' or \
             member_obj.shop == 'A1' or member_obj.shop == 'A2') and \
-              work_get.tyoku2 == '2':
+              eval('request.POST["tyoku{}"]'.format(i + 1)) == '2':
 
             # 半前年休時、工数合計と残業に整合性がある場合の処理
             if eval('request.POST["day{}"]'.format(i + 1)) == '半前年休' and \
@@ -6682,7 +6653,7 @@ def schedule(request):
           # ログイン者の登録ショップが三組三交替Ⅱ甲乙丙番Cで3直の場合の処理
           if (member_obj.shop == 'W1' or member_obj.shop == 'W2' or \
             member_obj.shop == 'A1' or member_obj.shop == 'A2') and \
-              work_get.tyoku2 == '3':
+              eval('request.POST["tyoku{}"]'.format(i + 1)) == '3':
 
             # 半前年休時、工数合計と残業に整合性がある場合の処理
             if eval('request.POST["day{}"]'.format(i + 1)) == '半前年休' and \
@@ -6703,7 +6674,7 @@ def schedule(request):
           if (member_obj.shop == 'P' or member_obj.shop == 'R' or \
             member_obj.shop == 'T1' or member_obj.shop == 'T2' or \
               member_obj.shop == 'その他' or member_obj.shop == '組長以上') and \
-              work_get.tyoku2 == '1':
+              eval('request.POST["tyoku{}"]'.format(i + 1)) == '1':
 
             # 半前年休時、工数合計と残業に整合性がある場合の処理
             if eval('request.POST["day{}"]'.format(i + 1)) == '半前年休' and \
@@ -6724,7 +6695,7 @@ def schedule(request):
           if (member_obj.shop == 'P' or member_obj.shop == 'R' or \
             member_obj.shop == 'T1' or member_obj.shop == 'T2' or \
               member_obj.shop == 'その他' or member_obj.shop == '組長以上') and \
-              work_get.tyoku2 == '2':
+              eval('request.POST["tyoku{}"]'.format(i + 1)) == '2':
 
             # 半前年休時、工数合計と残業に整合性がある場合の処理
             if eval('request.POST["day{}"]'.format(i + 1)) == '半前年休' and \
@@ -6745,7 +6716,7 @@ def schedule(request):
           if (member_obj.shop == 'P' or member_obj.shop == 'R' or \
             member_obj.shop == 'T1' or member_obj.shop == 'T2' or \
               member_obj.shop == 'その他' or member_obj.shop == '組長以上') and \
-              work_get.tyoku2 == '3':
+              eval('request.POST["tyoku{}"]'.format(i + 1)) == '3':
 
             # 半前年休時、工数合計と残業に整合性がある場合の処理
             if eval('request.POST["day{}"]'.format(i + 1)) == '半前年休' and \
@@ -6763,8 +6734,7 @@ def schedule(request):
 
 
           # 常昼の場合の処理
-          if work_get.tyoku2 == '4':
-
+          if eval('request.POST["tyoku{}"]'.format(i + 1)) == '4':
             # 半前年休時、工数合計と残業に整合性がある場合の処理
             if eval('request.POST["day{}"]'.format(i + 1)) == '半前年休' and \
               kosu_total - int(work_get.over_time) == 230:
@@ -7525,6 +7495,12 @@ def all_kosu(request, num):
     # 日付フォーム初期値定義
     default_start_day = str(today)
     default_end_day = str(today)
+
+    # フォーム定義
+    form = all_kosu_findForm(request.POST)
+    # フォーム選択肢定義
+    form.fields['name'].choices = name_list
+
 
 
   # HTMLに渡す辞書
