@@ -457,6 +457,13 @@ class scheduleForm(forms.Form):
   tyoku35 = forms.ChoiceField(label = '土5', choices=tyoku_list, required = False)
   tyoku36 = forms.ChoiceField(label = '日6', choices=tyoku_list, required = False)
   tyoku37 = forms.ChoiceField(label = '月6', choices=tyoku_list, required = False)
+  tyoku_all_1 = forms.ChoiceField(label = '直指定1週目', choices=tyoku_list, required = False)
+  tyoku_all_2 = forms.ChoiceField(label = '直指定2週目', choices=tyoku_list, required = False)
+  tyoku_all_3 = forms.ChoiceField(label = '直指定3週目', choices=tyoku_list, required = False)
+  tyoku_all_4 = forms.ChoiceField(label = '直指定4週目', choices=tyoku_list, required = False)
+  tyoku_all_5 = forms.ChoiceField(label = '直指定5週目', choices=tyoku_list, required = False)
+  tyoku_all_6 = forms.ChoiceField(label = '直指定6週目', choices=tyoku_list, required = False)
+
 
 
 class schedule_timeForm(forms.Form):
