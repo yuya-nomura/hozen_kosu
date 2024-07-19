@@ -73,27 +73,40 @@ def kosu_list(request, num):
 
 
 
-  # POST時の処理
-  if (request.method == 'POST'):
-    # POSTした値をセッションに登録
-    find = request.POST['kosu_day']
-    request.session['find_day'] = find
-    default_day = find
-  
+  # 日付指定検索時の処理
+  if "kosu_find" in request.POST:  
     # 就業日とログイン者の従業員番号でフィルターをかけて一致した工数データを取得
-    obj_filter = Business_Time_graph.objects.filter(work_day2__contains = find, \
-                                                    employee_no3 = request.session.get('login_No', '')).\
+    obj_filter = Business_Time_graph.objects.filter(work_day2__contains = request.POST['kosu_day'], \
+                                                    employee_no3 = request.session['login_No']).\
                                                     order_by('work_day2').reverse()
     # 取得した工数データを1ページあたりの件数分取得
     data = Paginator(obj_filter, page_num.menu_row)
 
 
 
-  # POSTしていない時の処理
-  else:
+  # 日付指定検索時の処理
+  if "kosu_find_month" in request.POST: 
+    # POST送信された就業日を変数に入れる
+    post_day = request.POST['kosu_day']
+    # POST送信された就業日の年、月部分抜き出し
+    kosu_month = post_day[: 7]
+    # 指定月セッションに登録
+    request.session['kosu_month'] = kosu_month
+
+    # 指定月の工数取得
+    obj_filter = Business_Time_graph.objects.filter(employee_no3 = request.session['login_No'], \
+                                                    work_day2__startswith = request.session['kosu_month']).\
+                                                    order_by('work_day2').reverse()
+    # 取得した工数データを1ページあたりの件数分取得
+    data = Paginator(obj_filter, page_num.menu_row)
+
+
+
+  # GET時の処理
+  if (request.method == 'GET'):
     # ログイン者の従業員番号でフィルターをかけて一致した工数データを取得
-    obj_filter = Business_Time_graph.objects.filter(employee_no3 = request.session.get('login_No', ''), \
-                                                    work_day2__contains = request.session.get('find_day', '')).\
+    obj_filter = Business_Time_graph.objects.filter(employee_no3 = request.session['login_No'], \
+                                                    work_day2__startswith = request.session.get('kosu_month', '')).\
                                                     order_by('work_day2').reverse()
     # 取得した工数データを1ページあたりの件数分取得
     data = Paginator(obj_filter, page_num.menu_row)
@@ -8240,13 +8253,6 @@ def all_kosu_delete(request, num):
 
 
 #--------------------------------------------------------------------------------------------------------
-
-
-
-
-
-
-
 
 
 

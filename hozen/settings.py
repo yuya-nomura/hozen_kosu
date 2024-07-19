@@ -34,6 +34,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
+    'kosu.middleware.clear_kosu_month_middleware.ClearKosuMonthMiddleware',
 ]
 
 SESSION_COOKIE_AGE = 315360000

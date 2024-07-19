@@ -563,7 +563,7 @@ class Page_form(TestCase):
         # フォームデータ定義(工数データ有の場合)
         form_data = {
             'kosu_day': self.Business_Time_graph.work_day2,
-            'kosu_find': '検索',
+            'kosu_find': '指定日検索',
             }
 
         # URLに対してPOSTリクエスト送信
@@ -581,7 +581,7 @@ class Page_form(TestCase):
         # フォームデータ定義(工数データ無しの場合)
         form_data2 = {
             'kosu_day': datetime.datetime.strptime(self.Business_Time_graph.work_day2, '%Y-%m-%d').date() + datetime.timedelta(days = 10),
-            'kosu_find': '検索',
+            'kosu_find': '指定日検索',
             }
 
         # URLに対してPOSTリクエスト送信
@@ -597,7 +597,7 @@ class Page_form(TestCase):
         # フォームデータ定義(工数データ無しの場合)
         form_data3 = {
             'kosu_day': '',
-            'kosu_find': '検索',
+            'kosu_find': '指定日検索',
             }
 
         # URLに対してPOSTリクエスト送信
