@@ -327,7 +327,6 @@ def inquiry_display(request, num):
 
   # 本人か確認
   if str(obj_get.name) == str(data.name):
-
     # 本人の場合True
     himself = True
 
@@ -513,11 +512,44 @@ def inquiry_display(request, num):
                                     'pop_up_id5' : '',
                                     'pop_up5' : ''})
 
+    # 次の問い合わせデータ取得
+    next_record = inquiry_data.objects.filter(id__gt=num).order_by('id').first()
+    # 次の問い合わせデータあるか確認
+    has_next_record = next_record is not None
+
+    # 前の問い合わせデータ取得
+    before_record = inquiry_data.objects.filter(id__lt = num).order_by('-id').first()
+    # 前の問い合わせデータあるか確認
+    has_before_record = before_record is not None
+
+
 
   # 問い合わせ編集処理
   if "Registration" in request.POST:
     # 問い合わせ編集ページへ飛ぶ
     return redirect(to = '/inquiry_edit/{}'.format(num))
+
+
+
+  # 前の問い合わせへ
+  if "before" in request.POST:
+    # 前の問い合わせデータ取得
+    obj_before = inquiry_data.objects.filter(id__lt = num).order_by('-id').first()
+    # 前の問い合わせ詳細へ飛ぶ
+    return redirect(to = '/inquiry_display/{}'.format(obj_before.id))
+
+
+
+  # 次の問い合わせへ
+  if "after" in request.POST:
+    # 次の問い合わせデータ取得
+    obj_after = inquiry_data.objects.filter(id__gt=num).order_by('id').first()
+    # 次の問い合わせ詳細へ飛ぶ
+    return redirect(to = '/inquiry_display/{}'.format(obj_after.id))
+
+
+
+
 
 
 
@@ -528,6 +560,8 @@ def inquiry_display(request, num):
     'obj' : obj_get,
     'data' : data,
     'himself' : himself,
+    'has_next_record' : has_next_record,
+    'has_before_record' : has_before_record,
     }
   
 

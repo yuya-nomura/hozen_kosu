@@ -21,6 +21,13 @@
   <p>　</p>
   <form action="{% url 'inquiry_display' id %}" method="post">
     {% csrf_token %}
+    {% if has_next_record == True %}
+      <input type="submit" value="次の問い合わせ" name="after" class="btn btn-pink5 mt-2">　
+    {% endif %}
+    {% if has_before_record == True %}
+      <input type="submit" value="前の問い合わせ" name="before" class="btn btn-pink5 mt-2">
+    {% endif %}
+    <p>　</p>
   <table class="table table-borderless">
     <tr>
       <p class="h4">{{obj.name}}さんのお問い合わせ</p>
