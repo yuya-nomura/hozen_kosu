@@ -513,7 +513,7 @@ def inquiry_display(request, num):
                                     'pop_up5' : ''})
 
     # 次の問い合わせデータ取得
-    next_record = inquiry_data.objects.filter(id__gt=num).order_by('id').first()
+    next_record = inquiry_data.objects.filter(id__gt = num).order_by('id').first()
     # 次の問い合わせデータあるか確認
     has_next_record = next_record is not None
 
@@ -546,10 +546,6 @@ def inquiry_display(request, num):
     obj_after = inquiry_data.objects.filter(id__gt=num).order_by('id').first()
     # 次の問い合わせ詳細へ飛ぶ
     return redirect(to = '/inquiry_display/{}'.format(obj_after.id))
-
-
-
-
 
 
 

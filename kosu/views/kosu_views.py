@@ -4529,6 +4529,18 @@ def detail(request, num):
     for_list.append(detail_time[k])
     time_display_list.append(for_list)
 
+  # 次の問い合わせデータ取得
+  next_record = Business_Time_graph.objects.filter(employee_no3 = request.session['login_No'], \
+                                                   work_day2__gt = obj_get.work_day2).order_by('work_day2').first()
+  # 次の問い合わせデータあるか確認
+  has_next_record = next_record is not None
+
+  # 前の問い合わせデータ取得
+  before_record = Business_Time_graph.objects.filter(employee_no3 = request.session['login_No'], \
+                                                     work_day2__lt = obj_get.work_day2).order_by('-work_day2').first()
+  # 前の問い合わせデータあるか確認
+  has_before_record = before_record is not None
+
 
 
   # 時間指定工数削除時の処理
@@ -5243,12 +5255,34 @@ def detail(request, num):
 
 
 
+  # 次のデータへ
+  if "after" in request.POST:
+    # 前のデータ取得
+    obj_after = Business_Time_graph.objects.filter(employee_no3 = request.session['login_No'], \
+                                                   work_day2__gt = obj_get.work_day2).order_by('work_day2').first()
+    # 前の工数詳細へ飛ぶ
+    return redirect(to = '/detail/{}'.format(obj_after.id))
+
+
+
+  # 前のデータへ
+  if "before" in request.POST:
+    # 前のデータ取得
+    obj_before = Business_Time_graph.objects.filter(employee_no3 = request.session['login_No'], \
+                                                    work_day2__lt = obj_get.work_day2).order_by('-work_day2').first()
+    # 前の工数詳細へ飛ぶ
+    return redirect(to = '/detail/{}'.format(obj_before.id))
+
+
+
   # HTMLに渡す辞書
   context = {
     'title' : '工数詳細',
     'id' : num,
     'day' : obj_get.work_day2,
     'time_display_list' : time_display_list,
+    'has_next_record' : has_next_record,
+    'has_before_record' : has_before_record,
     }
 
   # 指定したHTMLに辞書を渡して表示を完成させる

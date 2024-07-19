@@ -32,6 +32,12 @@
   {% endfor %}
   <form action="{% url 'detail' id %}" method="post">
   {% csrf_token %}
+  {% if has_next_record == True %}
+    <input type="submit" value="◀次のデータ" name="after" class="btn btn-blue7 mt-2">　
+  {% endif %}
+  {% if has_before_record == True %}
+    <input type="submit" value="前のデータ▶" name="before" class="btn btn-blue7 mt-2">
+  {% endif %}
   <p>　</p>
   <div class="table-responsive">
     <table class="table no-wrap">
