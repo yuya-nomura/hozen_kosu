@@ -6311,6 +6311,176 @@ def schedule(request):
 
 
 
+  # 直一括入力の処理
+  if "default_tyoku" in request.POST:
+
+    # カレンダーの年、月取得
+    year = request.session.get('update_year', '')
+    month = request.session.get('update_month', '')
+    
+    # 月の初日取得
+    select_month = datetime.date(year, month, 1)
+    # 月の初日の曜日取得
+    week_day = select_month.weekday()
+
+    # 月の最終日取得
+    if month == 12:
+      month_end = 1
+      year_end = year + 1
+    else:
+      month_end = month + 1
+      year_end = year
+
+    select_month = datetime.date(year_end, month_end, 1)
+    month_day_end = select_month - datetime.timedelta(days = 1)
+    day_end = month_day_end.day
+
+    # カレンダー表示日付リセット
+    day_list = list(itertools.repeat('', 37))
+
+    # 1週目の日付設定
+    if week_day == 6:
+      day_list[0] = 1
+      day_list[1] = 2
+      day_list[2] = 3
+      day_list[3] = 4
+      day_list[4] = 5
+      day_list[5] = 6
+      day_list[6] = 7
+
+    if week_day == 0:
+      day_list[1] = 1
+      day_list[2] = 2
+      day_list[3] = 3
+      day_list[4] = 4
+      day_list[5] = 5
+      day_list[6] = 6
+
+    if week_day == 1:
+      day_list[2] = 1
+      day_list[3] = 2
+      day_list[4] = 3
+      day_list[5] = 4
+      day_list[6] = 5
+
+    if week_day == 2:
+      day_list[3] = 1
+      day_list[4] = 2
+      day_list[5] = 3
+      day_list[6] = 4
+
+    if week_day == 3:
+      day_list[4] = 1
+      day_list[5] = 2
+      day_list[6] = 3
+
+    if week_day == 4:
+      day_list[5] = 1
+      day_list[6] = 2
+
+    if week_day == 5:
+      day_list[6] = 1
+
+    # 基準日指定
+    start_day = day_list[6]
+
+    # 2～5週目の日付設定
+    for i in range(7, 37):
+      day_list[i] = start_day + 1
+      start_day += 1
+      if start_day == day_end:
+        break
+
+    # 直を一括書き込み
+    for ind, dd in enumerate([range(1, 6), range(8, 13), range(15, 20), range(22, 27), range(29, 34), range(36, 37)]):
+      for i in dd:
+        if day_list[i] != '':
+          # 工数データがあるか確認
+          work_filter = Business_Time_graph.objects.filter(employee_no3 = request.session['login_No'], \
+                                                            work_day2 = datetime.date(year, month, day_list[i]))
+
+          # 工数データがある場合の処理
+          if work_filter.count() != 0:
+            # 工数データ取得
+            work_get = Business_Time_graph.objects.get(employee_no3 = request.session['login_No'], \
+                                                        work_day2 = datetime.date(year, month, day_list[i]))
+            # ログイン者の情報取得
+            member_obj = member.objects.get(employee_no = request.session['login_No'])
+
+            # 工数データに勤務情報がない場合
+            if work_get.tyoku2 in (None, ''):
+              # 就業を上書き
+              Business_Time_graph.objects.update_or_create(employee_no3 = request.session['login_No'], \
+                work_day2 = datetime.date(year, month, day_list[i]), \
+                  defaults = {'tyoku2' : eval('request.POST["tyoku_all_{}"]'.format(ind + 1))})
+              
+          # 工数データがない場合の処理
+          else:
+            # 従業員番号に該当するmemberインスタンスを取得
+            member_instance = member.objects.get(employee_no = request.session['login_No'])
+            # 就業データ作成(空の工数データも入れる)
+            Business_Time_graph.objects.update_or_create(employee_no3 = request.session['login_No'], \
+              work_day2 = datetime.date(year, month, day_list[i]), \
+                defaults = {'name' : member_instance, \
+                            'tyoku2' : eval('request.POST["tyoku_all_{}"]'.format(ind + 1)), \
+                            'time_work' : '#'*288, \
+                            'detail_work' : '$'*287, \
+                            'over_time' : 0, \
+                            'judgement' : False})
+
+    # 勤務フォーム初期値リセット
+    form_default_list = {}
+
+    # 勤務フォーム初期値定義
+    for i in range(37):
+      # 日付リストに日付が入っている場合の処理
+      if day_list[i] != '':
+        # 対応する日付に工数データがあるか確認
+        day_filter = Business_Time_graph.objects.filter(employee_no3 = request.session['login_No'], \
+                                                        work_day2 = datetime.date(year, month, day_list[i]))
+
+        # 対応する日付に工数データがある場合の処理
+        if day_filter.count() != 0:
+          # 対応する日付の工数データを取得
+          day_get = Business_Time_graph.objects.get(employee_no3 = request.session['login_No'], \
+                                                    work_day2 = datetime.date(year, month, day_list[i]))
+          
+          # 就業データを初期値リストに入れる
+          form_default_list[('day{}'.format(i + 1))] = day_get.work_time
+          form_default_list[('tyoku{}'.format(i + 1))] = day_get.tyoku2
+
+    # 勤務フォーム定義
+    form = scheduleForm(form_default_list)
+    # カレンダー設定フォーム定義
+    form2 = schedule_timeForm(request.POST)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   # デフォルト勤務入力の処理
   if "default_work" in request.POST:
 
@@ -6391,7 +6561,7 @@ def schedule(request):
       if start_day == day_end:
         break
 
-    # 就業を上書き
+    # デフォルトの就業書き込み
     for i in range(37):
       if day_list[i] != '':
         # 工数データがあるか確認
@@ -6423,7 +6593,6 @@ def schedule(request):
 
         # 工数データがない場合の処理
         else:
-          print(i)
           # 従業員番号に該当するmemberインスタンスを取得
           member_instance = member.objects.get(employee_no = request.session['login_No'])
           # 平日である場合の処理
@@ -6460,13 +6629,13 @@ def schedule(request):
       # 日付リストに日付が入っている場合の処理
       if day_list[i] != '':
         # 対応する日付に工数データがあるか確認
-        day_filter = Business_Time_graph.objects.filter(employee_no3 = request.session.get('login_No', None), \
+        day_filter = Business_Time_graph.objects.filter(employee_no3 = request.session['login_No'], \
                                                         work_day2 = datetime.date(year, month, day_list[i]))
 
         # 対応する日付に工数データがある場合の処理
         if day_filter.count() != 0:
           # 対応する日付の工数データを取得
-          day_get = Business_Time_graph.objects.get(employee_no3 = request.session.get('login_No', None), \
+          day_get = Business_Time_graph.objects.get(employee_no3 = request.session['login_No'], \
                                                     work_day2 = datetime.date(year, month, day_list[i]))
           
           # 就業データを初期値リストに入れる
@@ -6567,13 +6736,13 @@ def schedule(request):
     for i in range(37):
       if day_list[i] != '':
         # 工数データがあるか確認
-        work_filter = Business_Time_graph.objects.filter(employee_no3 = request.session.get('login_No', None), \
+        work_filter = Business_Time_graph.objects.filter(employee_no3 = request.session['login_No'], \
                                                          work_day2 = datetime.date(year, month, day_list[i]))
 
         # 工数データがある場合の処理
         if work_filter.count() != 0:
           # 工数データ取得
-          work_get = Business_Time_graph.objects.get(employee_no3 = request.session.get('login_No', None), \
+          work_get = Business_Time_graph.objects.get(employee_no3 = request.session['login_No'], \
                                                      work_day2 = datetime.date(year, month, day_list[i]))
           # ログイン者の情報取得
           member_obj = member.objects.get(employee_no = request.session['login_No'])

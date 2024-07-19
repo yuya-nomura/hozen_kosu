@@ -892,7 +892,7 @@ class Page_form(TestCase):
         form_data2 = {
             'day7': '休日',
             'day8': '休日',
-            'day9': '',
+            'day9': '出勤',
             'day10': '',
             'day11': '',
             'day12': '',
@@ -921,6 +921,37 @@ class Page_form(TestCase):
             'day35': '',
             'day36': '',
             'day37': '',
+            'tyoku7': '',
+            'tyoku8': '',
+            'tyoku9': '4',
+            'tyoku10': '',
+            'tyoku11': '',
+            'tyoku12': '',
+            'tyoku13': '',
+            'tyoku14': '',
+            'tyoku15': '',
+            'tyoku16': '',
+            'tyoku17': '',
+            'tyoku18': '',
+            'tyoku19': '',
+            'tyoku20': '',
+            'tyoku21': '',
+            'tyoku22': '',
+            'tyoku23': '',
+            'tyoku24': '',
+            'tyoku25': '',
+            'tyoku26': '',
+            'tyoku27': '',
+            'tyoku28': '',
+            'tyoku29': '',
+            'tyoku30': '',
+            'tyoku31': '',
+            'tyoku32': '',
+            'tyoku33': '',
+            'tyoku34': '',
+            'tyoku35': '',
+            'tyoku36': '',
+            'tyoku37': '',
             'work_update': '勤務登録',
             }
 
@@ -934,9 +965,15 @@ class Page_form(TestCase):
                                                         work_day2 = '2000-01-01')
         updated_entry2 = Business_Time_graph.objects.get(employee_no3 = self.member.employee_no, \
                                                         work_day2 = '2000-01-02')
+        updated_entry3 = Business_Time_graph.objects.get(employee_no3 = self.member.employee_no, \
+                                                        work_day2 = '2000-01-03')
         # 作業内容が更新されていることを確認
         self.assertEqual(updated_entry1.work_time, '休日')
         self.assertEqual(updated_entry2.work_time, '休日')
+        self.assertEqual(updated_entry3.work_time, '出勤')
+        self.assertEqual(updated_entry1.tyoku2, '')
+        self.assertEqual(updated_entry2.tyoku2, '')
+        self.assertEqual(updated_entry3.tyoku2, '4')
 
 
 
