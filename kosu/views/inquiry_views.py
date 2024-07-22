@@ -512,15 +512,15 @@ def inquiry_display(request, num):
                                     'pop_up_id5' : '',
                                     'pop_up5' : ''})
 
-    # 次の問い合わせデータ取得
-    next_record = inquiry_data.objects.filter(id__gt = num).order_by('id').first()
-    # 次の問い合わせデータあるか確認
-    has_next_record = next_record is not None
+  # 次の問い合わせデータ取得
+  next_record = inquiry_data.objects.filter(id__gt = num).order_by('id').first()
+  # 次の問い合わせデータあるか確認
+  has_next_record = next_record is not None
 
-    # 前の問い合わせデータ取得
-    before_record = inquiry_data.objects.filter(id__lt = num).order_by('-id').first()
-    # 前の問い合わせデータあるか確認
-    has_before_record = before_record is not None
+  # 前の問い合わせデータ取得
+  before_record = inquiry_data.objects.filter(id__lt = num).order_by('-id').first()
+  # 前の問い合わせデータあるか確認
+  has_before_record = before_record is not None
 
 
 
