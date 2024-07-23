@@ -4,7 +4,6 @@ from django.test import TestCase, Client
 from django.urls import reverse
 from kosu.models import member, kosu_division, Business_Time_graph, team_member, administrator_data, inquiry_data
 from ..utils import round_time
-from kosu.views.member_views import member_page
 
 
 
@@ -42,7 +41,7 @@ class Page_form(TestCase):
 
         # administrator_dataダミーデータ
         cls.administrator_data = administrator_data.objects.create(
-            menu_row = 20,
+            menu_row = 200,
             administrator_employee_no1 = '111',
             administrator_employee_no2 = '',
             administrator_employee_no3 = '',
@@ -149,7 +148,7 @@ class Page_form(TestCase):
 
 
     # 工数登録ページ現在時刻表示チェック(日付またぎ無し)
-    def test_input_now_time_post_not_over_day(self):        
+    def test_input_now_time_post_not_over_day_form(self):        
         # URLに対してPOST送信するデータ定義 
         response = self.client.post(reverse('input'), {
             'now_time' : '現在時刻',
@@ -194,7 +193,7 @@ class Page_form(TestCase):
 
 
     # 工数登録ページ現在時刻表示チェック(日付またぎ有)
-    def test_input_now_time_post_over_day(self):        
+    def test_input_now_time_post_over_day_form(self):        
         # URLに対してPOST送信するデータ定義 
         response = self.client.post(reverse('input'), {
             'now_time' : '現在時刻',
@@ -239,7 +238,7 @@ class Page_form(TestCase):
 
 
     # 工数登録ページ残業登録チェック
-    def test_input_over_time_post(self):
+    def test_input_over_time_post_form(self):
         # フォームデータ定義(工数データ有の場合)
         form_data = {
             'work_day' : self.Business_Time_graph.work_day2,
@@ -281,7 +280,7 @@ class Page_form(TestCase):
 
 
     # 工数登録ページ工数入力チェック
-    def test_input_kosu_post(self):
+    def test_input_kosu_post_form(self):
         # フォームデータ定義(工数データ有、日またぎ無しの場合)
         form_data = {
             'work_day' : self.Business_Time_graph.work_day2,
@@ -404,7 +403,7 @@ class Page_form(TestCase):
 
 
     # 当日休憩変更ページ登録チェック
-    def test_today_break_time_post(self):
+    def test_today_break_time_form(self):
         # フォームデータ定義(工数データ有の場合)
         form_data = {
             'start_time1': '13:00',
@@ -439,7 +438,7 @@ class Page_form(TestCase):
 
 
     # 休憩変更ページ登録チェック
-    def test_break_time_post(self):
+    def test_break_time_form(self):
         # フォームデータ定義(工数データ有の場合)
         form_data = {
             'start_time1': '13:00',
@@ -521,43 +520,26 @@ class Page_form(TestCase):
 
 
     # 工数履歴ページ検索チェック
-    def test_kosu_list_post(self):
+    def test_kosu_list_form(self):
         # Business_Time_graphダミーデータ
-        self.Business_Time_graph = Business_Time_graph.objects.create(
-            employee_no3 = 111,
-            name = self.member,
-            def_ver2 = self.kosu_division.kosu_name,
-            work_day2 = '2000-01-02',
-            tyoku2 = '4',
-            time_work = '################################################################################################AAAAAAAAAAAABBBBBBBBBBBBCCCCCCCCCCCCDDDDDDDDDDDD$$$$$$$$$$$$EEEEEEEEEEEEFFFFFFFFFFFFGGGGGGGGGGGGHHHHHHHHHHHHIIIIIIIIIIIIJJJJJJJJJJ##############################################################',
-            detail_work = '$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$aaa$aaa$aaa$aaa$aaa$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$bbb$bbb$bbb$bbb$bbb$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$',
-            over_time = 120,
-            breaktime = '#12001300',
-            breaktime_over1 = '#19001915',
-            breaktime_over2 = '#01150215',
-            breaktime_over3 = '#06150630',
-            work_time = '出勤',
-            judgement = True,
-            break_change = False,
-            )
-        
-        self.Business_Time_graph = Business_Time_graph.objects.create(
-            employee_no3 = 111,
-            name = self.member,
-            def_ver2 = self.kosu_division.kosu_name,
-            work_day2 = '2000-01-03',
-            tyoku2 = '4',
-            time_work = '################################################################################################AAAAAAAAAAAABBBBBBBBBBBBCCCCCCCCCCCCDDDDDDDDDDDD$$$$$$$$$$$$EEEEEEEEEEEEFFFFFFFFFFFFGGGGGGGGGGGGHHHHHHHHHHHHIIIIIIIIIIIIJJJJJJJJJJ##############################################################',
-            detail_work = '$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$aaa$aaa$aaa$aaa$aaa$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$bbb$bbb$bbb$bbb$bbb$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$',
-            over_time = 120,
-            breaktime = '#12001300',
-            breaktime_over1 = '#19001915',
-            breaktime_over2 = '#01150215',
-            breaktime_over3 = '#06150630',
-            work_time = '出勤',
-            judgement = True,
-            break_change = False,
-            )
+        for day in range(1, 100):
+            self.Business_Time_graph = Business_Time_graph.objects.create(
+                employee_no3 = 111,
+                name = self.member,
+                def_ver2 = self.kosu_division.kosu_name,
+                work_day2 = datetime.datetime.strptime('2000-01-01', '%Y-%m-%d').date() + datetime.timedelta(days = day),
+                tyoku2 = '4',
+                time_work = '################################################################################################AAAAAAAAAAAABBBBBBBBBBBBCCCCCCCCCCCCDDDDDDDDDDDD$$$$$$$$$$$$EEEEEEEEEEEEFFFFFFFFFFFFGGGGGGGGGGGGHHHHHHHHHHHHIIIIIIIIIIJJJJJJJJJJJJ##############################################################',
+                detail_work = '$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$aaa$aaa$aaa$aaa$aaa$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$bbb$bbb$bbb$bbb$bbb$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$',
+                over_time = 120,
+                breaktime = '#12001300',
+                breaktime_over1 = '#19001915',
+                breaktime_over2 = '#01150215',
+                breaktime_over3 = '#06150630',
+                work_time = '出勤',
+                judgement = True,
+                break_change = False,
+                )
         
 
         # フォームデータ定義(工数データ有の場合)
@@ -575,12 +557,12 @@ class Page_form(TestCase):
         # レコードが1つのみであることを確認
         self.assertEqual(len(data), 1)
         # レコードのwork_day2フィールドの値がフォーム送信値を一致するか確認
-        self.assertEqual(data[0].work_day2.strftime('%Y-%m-%d'), self.Business_Time_graph.work_day2)
+        self.assertEqual(data[0].work_day2, self.Business_Time_graph.work_day2)
 
 
         # フォームデータ定義(工数データ無しの場合)
         form_data2 = {
-            'kosu_day': datetime.datetime.strptime(self.Business_Time_graph.work_day2, '%Y-%m-%d').date() + datetime.timedelta(days = 10),
+            'kosu_day': self.Business_Time_graph.work_day2 + datetime.timedelta(days = 10),
             'kosu_find': '指定日検索',
             }
 
@@ -607,12 +589,28 @@ class Page_form(TestCase):
 
         data = response.context['data']
         # レコードが3つであることを確認
-        self.assertEqual(len(data), 3)
+        self.assertEqual(len(data), 100)
+
+
+        # フォームデータ定義(工数データ有の場合)
+        form_data = {
+            'kosu_day': '2000-01-01',
+            'kosu_find_month': '指定月検索',
+            }
+
+        # URLに対してPOSTリクエスト送信
+        response = self.client.post(reverse('kosu_list', args = [1]), form_data)
+        # レスポンスが成功（ステータスコード200）であることを確認
+        self.assertEqual(response.status_code, 200)
+
+        data = response.context['data']
+        # レコードが31個であることを確認
+        self.assertEqual(len(data), 31)
 
 
 
     # 工数詳細ページ工数削除チェック
-    def test_detail_post(self):
+    def test_detail_form(self):
         # フォームデータ定義
         form_data = {
             'start_time': '13:00',
@@ -634,7 +632,7 @@ class Page_form(TestCase):
 
 
     # 工数詳細ページ工数項目削除チェック
-    def test_detail_item_delete(self):
+    def test_detail_item_delete_form(self):
         # フォームデータ定義
         form_data = {
             'item_delete' : '1',
@@ -654,7 +652,7 @@ class Page_form(TestCase):
 
 
     # 工数詳細ページ工数項目編集チェック
-    def test_detail_item_edit(self):
+    def test_detail_item_edit_form(self):
         # フォームデータ定義
         form_data = {
             'start_time1' : '7:30',
@@ -676,7 +674,7 @@ class Page_form(TestCase):
 
 
     # 工数削除ページ工数削除チェック
-    def test_delete_post(self):
+    def test_delete_form(self):
         # フォームデータ定義
         form_data = {
             'kosu_delete' : '工数データ削除',
@@ -696,7 +694,7 @@ class Page_form(TestCase):
 
 
     # 工数集計ページ検索チェック
-    def test_total_post(self):
+    def test_total_form(self):
         # Business_Time_graphダミーデータ
         for day in range(1, 400):
             self.Business_Time_graph = Business_Time_graph.objects.create(
@@ -834,7 +832,7 @@ class Page_form(TestCase):
 
 
     # 勤務入力ページ表示切替チェック
-    def test_schedule_change(self):
+    def test_schedule_change_form(self):
 
         # フォームデータ定義
         form_data = {
@@ -874,7 +872,7 @@ class Page_form(TestCase):
 
 
     # 勤務入力ページ勤務登録チェック
-    def test_schedule_post(self):
+    def test_schedule_form(self):
 
         # フォームデータ定義
         form_data = {
@@ -978,7 +976,7 @@ class Page_form(TestCase):
 
 
     # 残業管理ページ表示切替チェック
-    def test_over_time_change(self):
+    def test_over_time_change_form(self):
 
         # フォームデータ定義
         form_data = {
@@ -1017,8 +1015,8 @@ class Page_form(TestCase):
 
 
 
-    #工数区分定義確認ページ表示切替チェック
-    def test_kosu_def_change(self):
+    # 工数区分定義確認ページ表示切替チェック
+    def test_kosu_def_change_form(self):
 
         # フォームデータ定義
         form_data = {
@@ -1049,8 +1047,8 @@ class Page_form(TestCase):
 
 
 
-    #工数区分定義Ver切替ページ切替チェック
-    def test_def_Ver_change(self):
+    # 工数区分定義Ver切替ページ切替チェック
+    def test_def_Ver_change_form(self):
 
         # kosu_divisionダミーデータ
         self.kosu_division = kosu_division.objects.create(
@@ -1120,8 +1118,8 @@ class Page_form(TestCase):
 
 
 
-    #工数区分定義新規作成ページチェック
-    def test_def_new(self):
+    # 工数区分定義新規作成ページチェック
+    def test_def_new_form(self):
 
         # フォームデータ定義
         form_data = {
@@ -1166,8 +1164,8 @@ class Page_form(TestCase):
 
 
 
-    #工数区分定義編集ページチェック
-    def test_def_edit(self):
+    # 工数区分定義編集ページチェック
+    def test_def_edit_form(self):
 
         # フォームデータ定義
         form_data = {
@@ -1338,8 +1336,8 @@ class Page_form(TestCase):
 
 
 
-    #工数区分定義削除ページチェック
-    def test_def_delete(self):
+    # 工数区分定義削除ページチェック
+    def test_def_delete_form(self):
         # フォームデータ定義
         form_data = {
             'def_delete' : '工数区分定義削除',
@@ -1357,8 +1355,8 @@ class Page_form(TestCase):
 
 
 
-    #人員新規作成ページチェック
-    def test_member_new(self):
+    # 人員新規作成ページチェック
+    def test_member_new_form(self):
 
         # フォームデータ定義
         form_data = {
@@ -1383,8 +1381,8 @@ class Page_form(TestCase):
 
 
 
-    #人員検索ページチェック
-    def test_member_find(self):
+    # 人員検索ページチェック
+    def test_member_find_form(self):
 
         # memberダミーデータ
         for No in range(1, 5):
@@ -1507,8 +1505,8 @@ class Page_form(TestCase):
 
 
 
-    #人員情報編集ページチェック
-    def test_member_edit(self):
+    # 人員情報編集ページチェック
+    def test_member_edit_form(self):
 
         # セッション定義
         self.session = self.client.session
@@ -1569,8 +1567,8 @@ class Page_form(TestCase):
 
 
 
-    #人員削除ページチェック
-    def test_member_delete(self):
+    # 人員削除ページチェック
+    def test_member_delete_form(self):
 
         # memberダミーデータ
         self.member = member.objects.create(
@@ -1614,8 +1612,8 @@ class Page_form(TestCase):
 
 
 
-    #班員登録ページチェック
-    def test_team(self):
+    # 班員登録ページチェック
+    def test_team_form(self):
 
         # フォームデータ定義
         form_data = {
@@ -1663,8 +1661,8 @@ class Page_form(TestCase):
 
 
 
-    #班員グラフ確認ページチェック
-    def test_team_graph(self):
+    # 班員グラフ確認ページチェック
+    def test_team_graph_form(self):
 
         # フォームデータ定義
         form_data = {
@@ -1696,8 +1694,8 @@ class Page_form(TestCase):
 
 
 
-    #班員工数一覧ページチェック
-    def test_team_kosu(self):
+    # 班員工数詳細ページチェック
+    def test_team_kosu_form(self):
 
         # memberダミーデータ
         self.member = member.objects.create(
@@ -1877,7 +1875,7 @@ class Page_form(TestCase):
 
 
     #班員工数一覧ページチェック
-    def test_team_calendar(self):
+    def test_team_calendar_form(self):
 
         # フォームデータ定義
         form_data = {
@@ -1941,14 +1939,260 @@ class Page_form(TestCase):
 
 
 
+    # 班員残業ページチェック
+    def test_team_over_time_form(self):
+
+        # memberダミーデータ
+        self.member = member.objects.create(
+            employee_no = 222,
+            name = 'テストユーザー2',
+            shop = 'その他',
+            authority = True,
+            administrator = True,
+            break_time1 = '#10401130',
+            break_time1_over1 = '#15101520',
+            break_time1_over2 = '#20202110',
+            break_time1_over3 = '#01400150',
+            break_time2 = '#17501840',
+            break_time2_over1 = '#22302240',
+            break_time2_over2 = '#03400430',
+            break_time2_over3 = '#09000910',
+            break_time3 = '#01400230',
+            break_time3_over1 = '#07050715',
+            break_time3_over2 = '#12151305',
+            break_time3_over3 = '#17351745',
+            break_time4 = '#12001300',
+            break_time4_over1 = '#19001915',
+            break_time4_over2 = '#01150215',
+            break_time4_over3 = '#06150630',
+            )
+
+        # Business_Time_graphダミーデータ
+        for day in range(1, 31):
+            self.Business_Time_graph = Business_Time_graph.objects.create(
+                employee_no3 = 111,
+                name = self.member,
+                def_ver2 = self.kosu_division.kosu_name,
+                work_day2 = datetime.datetime.strptime('2000-01-01', '%Y-%m-%d').date() + datetime.timedelta(days = day),
+                tyoku2 = '4',
+                time_work = '################################################################################################AAAAAAAAAAAABBBBBBBBBBBBCCCCCCCCCCCCDDDDDDDDDDDD$$$$$$$$$$$$EEEEEEEEEEEEFFFFFFFFFFFFGGGGGGGGGGGGHHHHHHHHHHHHIIIIIIIIIIJJJJJJJJJJJJ##############################################################',
+                detail_work = '$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$aaa$aaa$aaa$aaa$aaa$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$bbb$bbb$bbb$bbb$bbb$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$',
+                over_time = 120,
+                breaktime = '#12001300',
+                breaktime_over1 = '#19001915',
+                breaktime_over2 = '#01150215',
+                breaktime_over3 = '#06150630',
+                work_time = '出勤',
+                judgement = True,
+                break_change = False,
+                )
+
+        for day in range(32):
+            self.Business_Time_graph = Business_Time_graph.objects.create(
+                employee_no3 = 222,
+                name = self.member,
+                def_ver2 = self.kosu_division.kosu_name,
+                work_day2 = datetime.datetime.strptime('2000-01-01', '%Y-%m-%d').date() + datetime.timedelta(days = day),
+                tyoku2 = '4',
+                time_work = '################################################################################################AAAAAAAAAAAABBBBBBBBBBBBCCCCCCCCCCCCDDDDDDDDDDDD$$$$$$$$$$$$EEEEEEEEEEEEFFFFFFFFFFFFGGGGGGGGGGGGHHHHHHHHHHHHIIIIIIIIII##########################################################################',
+                detail_work = '$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$aaa$aaa$aaa$aaa$aaa$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$bbb$bbb$bbb$bbb$bbb$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$',
+                over_time = 60,
+                breaktime = '#12001300',
+                breaktime_over1 = '#19001915',
+                breaktime_over2 = '#01150215',
+                breaktime_over3 = '#06150630',
+                work_time = '出勤',
+                judgement = True,
+                break_change = False,
+                )
+
+        # team_memberダミーデータ
+        team_member.objects.all().delete()
+        self.team_member = team_member.objects.update_or_create(
+            employee_no5 = 111,
+            member1 = '',
+            member2 = 111,
+            member3 = '',
+            member4 = 222,
+            member5 = '',
+            member6 = 111,
+            member7 = '',
+            member8 = 111,
+            member9 = '',
+            member10 = 111,
+            member11 = '',
+            member12 = 111,
+            member13 = '',
+            member14 = 111,
+            member15 = '',
+            )
 
 
+        # フォームデータ定義
+        form_data = {
+            'year': '2000',
+            'month': '1',
+            'switching': '切り替え',
+            }
 
+        # URLに対してPOSTリクエスト送信
+        response = self.client.post(reverse('team_over_time'), form_data)
+        # レスポンスが成功（ステータスコード200）であることを確認
+        self.assertEqual(response.status_code, 200)
 
+        # 変数を読み出し
+        week_list = response.context['week_list']
+        # 変数整合性チェック
+        self.assertEqual(week_list, ['土', '日', '月', '火', '水', '木', '金', '土', '日', '月', '火', '水', '木', '金', '土', '日', '月', '火', '水', '木', '金', '土', '日', '月', '火', '水', '木', '金', '土', '日', '月'])
 
-
-
-
-
-
+        # 変数を読み出し
+        over_time_list1 = response.context['over_time_list1']
+        # 期待するBusiness_Time_graphインスタンスリストを作成
+        expected_business_time_graph_list = [None] * 30
+        expected_over_time_list1 = ['テストユーザー', 62.0] + expected_business_time_graph_list + [62.0]
         
+        # 変数整合性チェック
+        self.assertEqual(over_time_list1[:2], expected_over_time_list1[:2])
+        self.assertEqual(over_time_list1[-1], expected_over_time_list1[-1])
+        self.assertTrue(all(isinstance(item, Business_Time_graph) for item in over_time_list1[2:-1]))
+
+        # 変数を読み出し
+        over_time_list2 = response.context['over_time_list2']
+        # 期待するBusiness_Time_graphインスタンスリストを作成
+        expected_over_time_list2 = ['テストユーザー2', 31.0] + expected_business_time_graph_list + [31.0]
+        
+        # 変数整合性チェック
+        self.assertEqual(over_time_list2[:2], expected_over_time_list2[:2])
+        self.assertEqual(over_time_list2[-1], expected_over_time_list2[-1])
+        self.assertTrue(all(isinstance(item, Business_Time_graph) for item in over_time_list2[2:-1]))
+
+
+
+    # 入力可否(ショップ)ページチェック
+    def test_class_form(self):
+
+        # memberダミーデータ
+        self.member = member.objects.create(
+            employee_no = 222,
+            name = 'テストユーザー2',
+            shop = 'その他',
+            authority = True,
+            administrator = True,
+            break_time1 = '#10401130',
+            break_time1_over1 = '#15101520',
+            break_time1_over2 = '#20202110',
+            break_time1_over3 = '#01400150',
+            break_time2 = '#17501840',
+            break_time2_over1 = '#22302240',
+            break_time2_over2 = '#03400430',
+            break_time2_over3 = '#09000910',
+            break_time3 = '#01400230',
+            break_time3_over1 = '#07050715',
+            break_time3_over2 = '#12151305',
+            break_time3_over3 = '#17351745',
+            break_time4 = '#12001300',
+            break_time4_over1 = '#19001915',
+            break_time4_over2 = '#01150215',
+            break_time4_over3 = '#06150630',
+            )
+
+        # Business_Time_graphダミーデータ
+        for day in range(1, 15):
+            self.Business_Time_graph = Business_Time_graph.objects.create(
+                employee_no3 = 111,
+                name = self.member,
+                def_ver2 = self.kosu_division.kosu_name,
+                work_day2 = datetime.datetime.strptime('2000-01-01', '%Y-%m-%d').date() + datetime.timedelta(days = day),
+                tyoku2 = '4',
+                time_work = '################################################################################################AAAAAAAAAAAABBBBBBBBBBBBCCCCCCCCCCCCDDDDDDDDDDDD$$$$$$$$$$$$EEEEEEEEEEEEFFFFFFFFFFFFGGGGGGGGGGGGHHHHHHHHHHHHIIIIIIIIIIJJJJJJJJJJJJ##############################################################',
+                detail_work = '$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$aaa$aaa$aaa$aaa$aaa$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$bbb$bbb$bbb$bbb$bbb$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$',
+                over_time = 120,
+                breaktime = '#12001300',
+                breaktime_over1 = '#19001915',
+                breaktime_over2 = '#01150215',
+                breaktime_over3 = '#06150630',
+                work_time = '出勤',
+                judgement = True,
+                break_change = False,
+                )
+
+        for day in range(21):
+            self.Business_Time_graph = Business_Time_graph.objects.create(
+                employee_no3 = 222,
+                name = self.member,
+                def_ver2 = self.kosu_division.kosu_name,
+                work_day2 = datetime.datetime.strptime('2000-01-01', '%Y-%m-%d').date() + datetime.timedelta(days = day),
+                tyoku2 = '4',
+                time_work = '################################################################################################AAAAAAAAAAAABBBBBBBBBBBBCCCCCCCCCCCCDDDDDDDDDDDD$$$$$$$$$$$$EEEEEEEEEEEEFFFFFFFFFFFFGGGGGGGGGGGGHHHHHHHHHHHHIIIIIIIIII##########################################################################',
+                detail_work = '$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$aaa$aaa$aaa$aaa$aaa$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$bbb$bbb$bbb$bbb$bbb$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$',
+                over_time = 60,
+                breaktime = '#12001300',
+                breaktime_over1 = '#19001915',
+                breaktime_over2 = '#01150215',
+                breaktime_over3 = '#06150630',
+                work_time = '出勤',
+                judgement = True,
+                break_change = False,
+                )
+
+
+        # フォームデータ定義
+        form_data = {
+            'shop2': 'その他',
+            'year': '2000',
+            'month': '1',
+            'switching': '切り替え',
+            }
+
+        # URLに対してPOSTリクエスト送信
+        response = self.client.post(reverse('class_list'), form_data)
+        # レスポンスが成功（ステータスコード200）であることを確認
+        self.assertEqual(response.status_code, 200)
+
+        # 変数を読み出し
+        week_list = response.context['week_list']
+        # 変数整合性チェック
+        self.assertEqual(week_list, ['土', '日', '月', '火', '水', '木', '金', '土', '日', '月', '火', '水', '木', '金', '土', '日', '月', '火', '水', '木', '金', '土', '日', '月', '火', '水', '木', '金', '土', '日', '月'])
+
+        # 変数を読み出し
+        ok_list = response.context['ok_list']
+        # 変数整合性チェック
+        self.assertEqual(ok_list[0][0], 'テストユーザー')
+        self.assertEqual(ok_list[1][0], 'テストユーザー2')
+        self.assertEqual(ok_list[0][1].judgement, True)
+        self.assertEqual(ok_list[0][15].judgement, True)
+        self.assertEqual(ok_list[0][16], None)
+        self.assertEqual(ok_list[1][1].judgement, True)
+        self.assertEqual(ok_list[1][21].judgement, True)
+        self.assertEqual(ok_list[1][22], None)
+
+
+        # フォームデータ定義
+        form_data2 = {
+            'shop2': 'その他',
+            'year': '2000',
+            'month': '2',
+            'switching': '切り替え',
+            }
+
+        # URLに対してPOSTリクエスト送信
+        response = self.client.post(reverse('class_list'), form_data2)
+        # レスポンスが成功（ステータスコード200）であることを確認
+        self.assertEqual(response.status_code, 200)
+
+        # 変数を読み出し
+        week_list = response.context['week_list']
+        # 変数整合性チェック
+        self.assertEqual(week_list, ['火', '水', '木', '金', '土', '日', '月', '火', '水', '木', '金', '土', '日', '月', '火', '水', '木', '金', '土', '日', '月', '火', '水', '木', '金', '土', '日', '月', '火'])
+
+        # 変数を読み出し
+        ok_list = response.context['ok_list']
+        # 変数整合性チェック
+        self.assertEqual(ok_list, [['テストユーザー', None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None], ['テストユーザー2', None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None]])
+
+
+
+
+
+
+

@@ -51,17 +51,6 @@ def kosu_list(request, num):
   # 今日の日時取得
   kosu_today = datetime.date.today()
 
-  # セッションに検索履歴がある場合の処理
-  if request.session.get('find_day', '') != '':
-    # フォームの初期値に検索履歴を入れる
-    default_day = request.session['find_day']
-
-  # セッションに検索履歴がない場合の処理
-  else:
-    # フォームの初期値に今日の日付を入れる
-    default_day = str(kosu_today)
-
-
   # 設定データ取得
   page_num = administrator_data.objects.order_by("id").last()
 
@@ -74,7 +63,14 @@ def kosu_list(request, num):
 
 
   # 日付指定検索時の処理
-  if "kosu_find" in request.POST:  
+  if "kosu_find" in request.POST:
+
+    # 指定日セッションに登録
+    request.session['find_day'] = request.POST['kosu_day']
+    # 指定月のセッション削除
+    if 'kosu_month' in request.session:
+      del request.session['kosu_month']
+
     # 就業日とログイン者の従業員番号でフィルターをかけて一致した工数データを取得
     obj_filter = Business_Time_graph.objects.filter(work_day2__contains = request.POST['kosu_day'], \
                                                     employee_no3 = request.session['login_No']).\
@@ -84,14 +80,17 @@ def kosu_list(request, num):
 
 
 
-  # 日付指定検索時の処理
-  if "kosu_find_month" in request.POST: 
+  # 月指定検索時の処理
+  if "kosu_find_month" in request.POST:
+
     # POST送信された就業日を変数に入れる
     post_day = request.POST['kosu_day']
     # POST送信された就業日の年、月部分抜き出し
     kosu_month = post_day[: 7]
     # 指定月セッションに登録
     request.session['kosu_month'] = kosu_month
+    # 指定日セッションに登録
+    request.session['find_day'] = request.POST['kosu_day']
 
     # 指定月の工数取得
     obj_filter = Business_Time_graph.objects.filter(employee_no3 = request.session['login_No'], \
@@ -104,12 +103,35 @@ def kosu_list(request, num):
 
   # GET時の処理
   if (request.method == 'GET'):
-    # ログイン者の従業員番号でフィルターをかけて一致した工数データを取得
-    obj_filter = Business_Time_graph.objects.filter(employee_no3 = request.session['login_No'], \
-                                                    work_day2__startswith = request.session.get('kosu_month', '')).\
-                                                    order_by('work_day2').reverse()
+
+    # 指定月のセッションある場合の処理
+    if 'kosu_month' in request.session:
+      # ログイン者の従業員番号でフィルターをかけて一致した工数データを取得
+      obj_filter = Business_Time_graph.objects.filter(employee_no3 = request.session['login_No'], \
+                                                      work_day2__startswith = request.session.get('kosu_month', '')).\
+                                                      order_by('work_day2').reverse()
+      
+    # 指定月のセッションない場合の処理
+    else:
+      # ログイン者の従業員番号でフィルターをかけて一致した工数データを取得
+      obj_filter = Business_Time_graph.objects.filter(employee_no3 = request.session['login_No'], \
+                                                      work_day2__startswith = request.session.get('find_day', '')).\
+                                                      order_by('work_day2').reverse()
+
     # 取得した工数データを1ページあたりの件数分取得
     data = Paginator(obj_filter, page_num.menu_row)
+
+
+
+  # セッションに検索履歴がある場合の処理
+  if request.session.get('find_day', '') != '':
+    # フォームの初期値に検索履歴を入れる
+    default_day = request.session['find_day']
+
+  # セッションに検索履歴がない場合の処理
+  else:
+    # フォームの初期値に今日の日付を入れる
+    default_day = str(kosu_today)
 
 
 
@@ -6656,7 +6678,6 @@ def schedule(request):
             
           # 休日の場合の処理
           else:
-            print('休日{}'.format(i))
             # 就業データ作成(空の工数データも入れる)
             Business_Time_graph.objects.update_or_create(employee_no3 = request.session['login_No'], \
               work_day2 = datetime.date(year, month, day_list[i]), \

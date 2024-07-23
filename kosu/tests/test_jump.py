@@ -1,3 +1,4 @@
+import datetime
 from django.test import TestCase, Client
 from django.urls import reverse
 import os
@@ -476,6 +477,23 @@ class Page_jump(TestCase):
 
 
 
+    # 工数登録からメインMENUへジャンプテスト
+    def test_input_main_MENU_jump(self):
+        # 工数登録ページにアクセス
+        response = self.client.get(reverse('input'))
+        self.assertEqual(response.status_code, 200)
+
+        # HTMLに含まれるボタンが正しく設定されているかを確認
+        self.assertContains(response, '<a href="' + reverse('main') + '" >メインMENUへ</a>', html=True)
+        # ボタンを押すシミュレーション
+        response = self.client.get(reverse('main'))
+        
+        # リダイレクトが成功し、ステータスコードが200であることを確認
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'kosu/main.html')
+
+
+
     # 工数登録から工数履歴へジャンプテスト
     def test_input_kosu_list_jump(self):
         # 工数登録ページにアクセス
@@ -646,10 +664,27 @@ class Page_jump(TestCase):
         self.assertContains(response, '<a href="' + reverse('kosu_main') + '" >工数MENUへ</a>', html=True)
         # ボタンを押すシミュレーション
         response = self.client.get(reverse('kosu_main'))
-        
+
         # リダイレクトが成功し、ステータスコードが200であることを確認
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'kosu/kosu_main.html')
+
+
+
+    # 休憩設定からメインMENUへジャンプテスト
+    def test_break_time_main_MENU_jump(self):
+        # 休憩設定ページにアクセス
+        response = self.client.get(reverse('break_time'))
+        self.assertEqual(response.status_code, 200)
+
+        # HTMLに含まれるボタンが正しく設定されているかを確認
+        self.assertContains(response, '<a href="' + reverse('main') + '" >メインMENUへ</a>', html=True)
+        # ボタンを押すシミュレーション
+        response = self.client.get(reverse('main'))
+
+        # リダイレクトが成功し、ステータスコードが200であることを確認
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'kosu/main.html')
 
 
 
@@ -684,6 +719,23 @@ class Page_jump(TestCase):
         # リダイレクトが成功し、ステータスコードが200であることを確認
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'kosu/kosu_main.html')
+
+
+
+    # 工数履歴からメインMENUへジャンプテスト
+    def test_kosu_list_main_MENU_jump(self):
+        # 工数履歴ページにアクセス
+        response = self.client.get(reverse('kosu_list', args = [1]))
+        self.assertEqual(response.status_code, 200)
+
+        # HTMLに含まれるボタンが正しく設定されているかを確認
+        self.assertContains(response, '<a href="' + reverse('main') + '" >メインMENUへ</a>', html=True)
+        # ボタンを押すシミュレーション
+        response = self.client.get(reverse('main'))
+
+        # リダイレクトが成功し、ステータスコードが200であることを確認
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'kosu/main.html')
 
 
 
@@ -823,6 +875,76 @@ class Page_jump(TestCase):
 
 
 
+    # 工数詳細前後ページ移行ジャンプテスト
+    def test_detail_jump(self):
+        # Business_Time_graphダミーデータ
+        for day in range(1, 3):
+            self.Business_Time_graph = Business_Time_graph.objects.create(
+                employee_no3 = 111,
+                name = self.member,
+                def_ver2 = self.kosu_division.kosu_name,
+                work_day2 = datetime.datetime.strptime('2000-01-01', '%Y-%m-%d').date() + datetime.timedelta(days = day),
+                tyoku2 = '4',
+                time_work = '################################################################################################AAAAAAAAAAAABBBBBBBBBBBBCCCCCCCCCCCCDDDDDDDDDDDD$$$$$$$$$$$$EEEEEEEEEEEEFFFFFFFFFFFFGGGGGGGGGGGGHHHHHHHHHHHHIIIIIIIIIIJJJJJJJJJJJJ##############################################################',
+                detail_work = '$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$aaa$aaa$aaa$aaa$aaa$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$bbb$bbb$bbb$bbb$bbb$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$',
+                over_time = 120,
+                breaktime = '#12001300',
+                breaktime_over1 = '#19001915',
+                breaktime_over2 = '#01150215',
+                breaktime_over3 = '#06150630',
+                work_time = '出勤',
+                judgement = True,
+                break_change = False,
+                )
+
+
+        # 1月2日の工数データ取得
+        obj = Business_Time_graph.objects.get(work_day2 = '2000-01-02')
+
+        # 工数詳細ページにアクセス
+        response = self.client.get(reverse('detail', args=[obj.id]))
+        self.assertEqual(response.status_code, 200)
+
+        # フォームデータ定義
+        form_data = {
+            'after': '◀次のデータ',
+            }
+
+        # URLに対してPOSTリクエスト送信
+        response = self.client.post(reverse('detail', args=[obj.id]), form_data)
+        # リクエストのレスポンスステータスコードが302(リダイレクト)であることを確認
+        self.assertEqual(response.status_code, 302)
+
+        # リダイレクト先のURLを確認
+        next_obj = Business_Time_graph.objects.get(work_day2 = '2000-01-03')
+        expected_url = reverse('detail', args = [next_obj.id])
+        self.assertRedirects(response, expected_url)
+
+
+        # 1月2日の工数データ取得
+        obj = Business_Time_graph.objects.get(work_day2 = '2000-01-02')
+
+        # 工数詳細ページにアクセス
+        response = self.client.get(reverse('detail', args=[obj.id]))
+        self.assertEqual(response.status_code, 200)
+
+        # フォームデータ定義
+        form_data = {
+            'before': '前のデータ▶',
+            }
+
+        # URLに対してPOSTリクエスト送信
+        response = self.client.post(reverse('detail', args=[obj.id]), form_data)
+        # リクエストのレスポンスステータスコードが302(リダイレクト)であることを確認
+        self.assertEqual(response.status_code, 302)
+
+        # リダイレクト先のURLを確認
+        before_obj = Business_Time_graph.objects.get(work_day2 = '2000-01-01')
+        expected_url = reverse('detail', args = [before_obj.id])
+        self.assertRedirects(response, expected_url)
+
+
+
     # 工数履歴から工数削除へジャンプテスト
     def test_kosu_list_delete_jump(self):
         # 工数履歴ページにアクセス
@@ -884,10 +1006,27 @@ class Page_jump(TestCase):
         self.assertContains(response, '<a href="' + reverse('kosu_main') + '" >工数MENUへ</a>', html=True)
         # ボタンを押すシミュレーション
         response = self.client.get(reverse('kosu_main'))
-        
+
         # リダイレクトが成功し、ステータスコードが200であることを確認
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'kosu/kosu_main.html')
+
+
+
+    # 工数集計からメインMENUへジャンプテスト
+    def test_total_main_MENU_jump(self):
+        # 工数集計ページにアクセス
+        response = self.client.get(reverse('total'))
+        self.assertEqual(response.status_code, 200)
+
+        # HTMLに含まれるボタンが正しく設定されているかを確認
+        self.assertContains(response, '<a href="' + reverse('main') + '" >メインMENUへ</a>', html=True)
+        # ボタンを押すシミュレーション
+        response = self.client.get(reverse('main'))
+
+        # リダイレクトが成功し、ステータスコードが200であることを確認
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'kosu/main.html')
 
 
 
@@ -918,10 +1057,27 @@ class Page_jump(TestCase):
         self.assertContains(response, '<a href="' + reverse('kosu_main') + '" >工数MENUへ</a>', html=True)
         # ボタンを押すシミュレーション
         response = self.client.get(reverse('kosu_main'))
-        
+
         # リダイレクトが成功し、ステータスコードが200であることを確認
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'kosu/kosu_main.html')
+
+
+
+    # 勤務入力からメインMENUへジャンプテスト
+    def test_schedule_main_MENU_jump(self):
+        # 勤務入力ページにアクセス
+        response = self.client.get(reverse('schedule'))
+        self.assertEqual(response.status_code, 200)
+
+        # HTMLに含まれるボタンが正しく設定されているかを確認
+        self.assertContains(response, '<a href="' + reverse('main') + '" >メインMENUへ</a>', html=True)
+        # ボタンを押すシミュレーション
+        response = self.client.get(reverse('main'))
+
+        # リダイレクトが成功し、ステータスコードが200であることを確認
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'kosu/main.html')
 
 
 
@@ -952,10 +1108,27 @@ class Page_jump(TestCase):
         self.assertContains(response, '<a href="' + reverse('kosu_main') + '" >工数MENUへ</a>', html=True)
         # ボタンを押すシミュレーション
         response = self.client.get(reverse('kosu_main'))
-        
+
         # リダイレクトが成功し、ステータスコードが200であることを確認
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'kosu/kosu_main.html')
+
+
+
+    # 残業管理からメインMENUへジャンプテスト
+    def test_over_time_main_MENU_jump(self):
+        # 残業管理ページにアクセス
+        response = self.client.get(reverse('over_time'))
+        self.assertEqual(response.status_code, 200)
+
+        # HTMLに含まれるボタンが正しく設定されているかを確認
+        self.assertContains(response, '<a href="' + reverse('main') + '" >メインMENUへ</a>', html=True)
+        # ボタンを押すシミュレーション
+        response = self.client.get(reverse('main'))
+
+        # リダイレクトが成功し、ステータスコードが200であることを確認
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'kosu/main.html')
 
 
 
@@ -1720,6 +1893,66 @@ class Page_jump(TestCase):
 
         # 問い合わせ編集ページにリダイレクトされることを確認
         self.assertRedirects(response, reverse('inquiry_edit', args=[self.inquiry_data.id]))
+
+
+
+    # 問い合わせ表示ページ移行ジャンプテスト
+    def test_inquiry_display_jump(self):
+        # Business_Time_graphダミーデータ
+        for nnn in range(1, 4):
+            # inquiry_dataダミーデータ
+            self.inquiry_data = inquiry_data.objects.create(
+                employee_no2 = '111',
+                name = self.member,
+                content_choice = '問い合わせ',
+                inquiry = '質問内容{}'.format(nnn),
+                answer = '回答'
+                )
+
+        # 2つ目の問い合わせデータ取得
+        obj = inquiry_data.objects.get(inquiry = '質問内容2')
+
+        # 問い合わせ表示ページにアクセス
+        response = self.client.get(reverse('inquiry_display', args=[obj.id]))
+        self.assertEqual(response.status_code, 200)
+
+        # フォームデータ定義
+        form_data = {
+            'after': '◀次のデータ',
+            }
+
+        # URLに対してPOSTリクエスト送信
+        response = self.client.post(reverse('inquiry_display', args=[obj.id]), form_data)
+        # リクエストのレスポンスステータスコードが302(リダイレクト)であることを確認
+        self.assertEqual(response.status_code, 302)
+
+        # リダイレクト先のURLを確認
+        next_obj = inquiry_data.objects.get(inquiry = '質問内容3')
+        expected_url = reverse('inquiry_display', args = [next_obj.id])
+        self.assertRedirects(response, expected_url)
+
+
+        # 2つ目の問い合わせデータ取得
+        obj = inquiry_data.objects.get(inquiry = '質問内容2')
+
+        # 問い合わせ表示ページにアクセス
+        response = self.client.get(reverse('inquiry_display', args=[obj.id]))
+        self.assertEqual(response.status_code, 200)
+
+        # フォームデータ定義
+        form_data = {
+            'before': '前のデータ▶',
+            }
+
+        # URLに対してPOSTリクエスト送信
+        response = self.client.post(reverse('inquiry_display', args=[obj.id]), form_data)
+        # リクエストのレスポンスステータスコードが302(リダイレクト)であることを確認
+        self.assertEqual(response.status_code, 302)
+
+        # リダイレクト先のURLを確認
+        next_obj = inquiry_data.objects.get(inquiry = '質問内容1')
+        expected_url = reverse('inquiry_display', args = [next_obj.id])
+        self.assertRedirects(response, expected_url)
 
 
 
