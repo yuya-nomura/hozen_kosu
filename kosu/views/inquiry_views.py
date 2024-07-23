@@ -45,7 +45,7 @@ def inquiry_new(request):
 
   # POST時の処理
   if (request.method == 'POST'):
-    
+
     # 問い合わせ内容が10文字未満の場合の処理
     if len(request.POST['inquiry']) < 10:
 

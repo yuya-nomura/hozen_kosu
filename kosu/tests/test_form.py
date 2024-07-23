@@ -147,18 +147,67 @@ class Page_form(TestCase):
 
 
 
-    # 工数登録ページ現在時刻表示チェック(日付またぎ無し)
-    def test_input_now_time_post_not_over_day_form(self):        
-        # URLに対してPOST送信するデータ定義 
+    # 工数登録ページ現在時刻表示チェック(日付またぎ無し)(スマホ画面)
+    def test_input_now_time_not_over_day_smartphone_form(self):
+        # URLに対してPOST送信するデータ定義
         response = self.client.post(reverse('input'), {
-            'now_time' : '現在時刻',
-            'start_time' : '0:00',
-            'work' : self.Business_Time_graph.work_time,
-            'tyoku2' : self.Business_Time_graph.tyoku2,
-            'kosu_def_list' : 'A',
-            'work_detail' : 'テスト',
-            'break_change' : True,
-            'over_work' : 30
+            'now_time': '現在時刻',
+            'start_time': '0:00',
+            'work': '',
+            'work2': self.Business_Time_graph.work_time,
+            'tyoku': '',
+            'tyoku2': self.Business_Time_graph.tyoku2,
+            'kosu_def_list': 'A',
+            'work_detail': 'テスト',
+            'break_change': True,
+            'over_work': 30
+        })
+
+        # リクエストのレスポンスステータスコードが200(OK)であることを確認
+        self.assertEqual(response.status_code, 200)
+        
+        # 現在時刻取得
+        now_time = datetime.datetime.now().time()
+        expected_time = round_time(now_time).strftime('%H:%M')  # round_time関数を直接使用
+
+        # BeautifulSoupを使ってHTMLレスポンスを解析
+        soup = BeautifulSoup(response.content, 'html.parser')
+
+        # <input>タグのvalue属性を取得
+        end_time_input = soup.find('input', {'id': 'end_time'})
+        if end_time_input:
+            actual_value = end_time_input.get('value')
+        else:
+            actual_value = None
+
+        # チェックボックスの状態を確認
+        tomorrow_check_input = soup.find('input', {'id': 'id_tomorrow_check'})
+        if tomorrow_check_input:
+            checkbox_checked = tomorrow_check_input.has_attr('checked')
+        else:
+            checkbox_checked = False
+
+        # value属性が期待する値と一致するか確認
+        self.assertEqual(actual_value, expected_time)
+        # チェックボックスがチェックされていないことを確認
+        self.assertFalse(checkbox_checked)
+
+
+
+    # 工数登録ページ現在時刻表示チェック(日付またぎ無し)(PC画面)
+    def test_input_now_time_not_over_day_pc_form(self):
+        # URLに対してPOST送信するデータ定義
+        response = self.client.post(reverse('input'), {
+            'now_time': '現在時刻',
+            'start_time': '0:00',
+            'work2': '',
+            'work': self.Business_Time_graph.work_time,
+            'tyoku2': '',
+            'tyoku': self.Business_Time_graph.tyoku2,
+            'kosu_def_list': 'A',
+            'work_detail': 'テスト',
+            'break_change': True,
+            'over_work': 30
         })
 
         # リクエストのレスポンスステータスコードが200(OK)であることを確認
@@ -192,18 +241,20 @@ class Page_form(TestCase):
 
 
 
-    # 工数登録ページ現在時刻表示チェック(日付またぎ有)
-    def test_input_now_time_post_over_day_form(self):        
+    # 工数登録ページ現在時刻表示チェック(日付またぎ有)(スマホ画面)
+    def test_input_now_time_over_day_smartphone_form(self):
         # URLに対してPOST送信するデータ定義 
         response = self.client.post(reverse('input'), {
-            'now_time' : '現在時刻',
-            'start_time' : '23:55',
-            'work' : self.Business_Time_graph.work_time,
-            'tyoku2' : self.Business_Time_graph.tyoku2,
-            'kosu_def_list' : 'A',
-            'work_detail' : 'テスト',
-            'break_change' : True,
-            'over_work' : 30
+            'now_time': '現在時刻',
+            'start_time': '23:55',
+            'work': '',
+            'work2': self.Business_Time_graph.work_time,
+            'tyoku': '',
+            'tyoku2': self.Business_Time_graph.tyoku2,
+            'kosu_def_list': 'A',
+            'work_detail': 'テスト',
+            'break_change': True,
+            'over_work': 30
         })
 
         # リクエストのレスポンスステータスコードが200(OK)であることを確認
@@ -237,15 +288,65 @@ class Page_form(TestCase):
 
 
 
-    # 工数登録ページ残業登録チェック
-    def test_input_over_time_post_form(self):
+    # 工数登録ページ現在時刻表示チェック(日付またぎ有)(PC画面)
+    def test_input_now_time_over_day_pc_form(self):
+        # URLに対してPOST送信するデータ定義 
+        response = self.client.post(reverse('input'), {
+            'now_time': '現在時刻',
+            'start_time': '23:55',
+            'work2': '',
+            'work': self.Business_Time_graph.work_time,
+            'tyoku2': '',
+            'tyoku': self.Business_Time_graph.tyoku2,
+            'kosu_def_list': 'A',
+            'work_detail': 'テスト',
+            'break_change': True,
+            'over_work': 30
+        })
+
+        # リクエストのレスポンスステータスコードが200(OK)であることを確認
+        self.assertEqual(response.status_code, 200)
+        
+        # 現在時刻取得
+        now_time = datetime.datetime.now().time()
+        expected_time = round_time(now_time).strftime('%H:%M')  # round_time関数を直接使用
+
+        # BeautifulSoupを使ってHTMLレスポンスを解析
+        soup = BeautifulSoup(response.content, 'html.parser')
+        
+        # <input>タグのvalue属性を取得
+        end_time_input = soup.find('input', {'id': 'end_time'})
+        if end_time_input:
+            actual_value = end_time_input.get('value')
+        else:
+            actual_value = None
+        
+        # チェックボックスの状態を確認
+        tomorrow_check_input = soup.find('input', {'id': 'id_tomorrow_check'})
+        if tomorrow_check_input:
+            checkbox_checked = tomorrow_check_input.has_attr('checked')
+        else:
+            checkbox_checked = False
+
+        # value属性が期待する値と一致するか確認
+        self.assertEqual(actual_value, expected_time)
+        # チェックボックスがチェックされていることを確認
+        self.assertTrue(checkbox_checked)
+
+
+
+    # 工数登録ページ残業登録チェック(スマホ画面)
+    def test_input_over_time_smartphone_form(self):
+
         # フォームデータ定義(工数データ有の場合)
         form_data = {
-            'work_day' : self.Business_Time_graph.work_day2,
-            'work' : self.Business_Time_graph.work_time,
-            'tyoku2' : self.Business_Time_graph.tyoku2,
-            'over_work' : '150',
-            'over_time_correction' : '残業のみ修正',
+            'work_day': self.Business_Time_graph.work_day2,
+            'work': '',
+            'work2': self.Business_Time_graph.work_time,
+            'tyoku': '',
+            'tyoku2': self.Business_Time_graph.tyoku2,
+            'over_work': '150',
+            'over_time_correction': '残業のみ修正',
             }
 
         # URLに対してPOSTリクエスト送信
@@ -261,9 +362,13 @@ class Page_form(TestCase):
 
         # フォームデータ2定義(工数データ無しの場合)
         form_data2 = {
-            'work_day' : datetime.datetime.strptime(self.Business_Time_graph.work_day2, '%Y-%m-%d').date() + datetime.timedelta(days = 1),
-            'over_work' : '90',
-            'over_time_correction' : '残業のみ修正',
+            'work_day': datetime.datetime.strptime(self.Business_Time_graph.work_day2, '%Y-%m-%d').date() + datetime.timedelta(days = 1),
+            'work': '',
+            'work2': '',
+            'tyoku': '',
+            'tyoku2': '',
+            'over_work': '90',
+            'over_time_correction': '残業のみ修正',
             }
 
         # URLに対してPOSTリクエスト送信
@@ -279,19 +384,49 @@ class Page_form(TestCase):
 
 
 
-    # 工数登録ページ工数入力チェック
-    def test_input_kosu_post_form(self):
+    # 工数登録ページ残業登録チェック(PC画面)
+    def test_input_over_time_pc_form(self):
+
+        # フォームデータ定義(工数データ有の場合)
+        form_data = {
+            'work_day': self.Business_Time_graph.work_day2,
+            'work2': '',
+            'work': self.Business_Time_graph.work_time,
+            'tyoku2': '',
+            'tyoku': self.Business_Time_graph.tyoku2,
+            'over_work': '150',
+            'over_time_correction': '残業のみ修正',
+            }
+
+        # URLに対してPOSTリクエスト送信
+        response = self.client.post(reverse('input'), form_data)
+        # リクエストのレスポンスステータスコードが302(リダイレクト)であることを確認
+        self.assertEqual(response.status_code, 302)
+
+        # テストユーザーの工数データ取得
+        updated_entry = Business_Time_graph.objects.get(employee_no3 = self.member.employee_no, \
+                                                        work_day2 = self.Business_Time_graph.work_day2)
+        # 残業時間が150に更新されていることを確認
+        self.assertEqual(updated_entry.over_time, 150)
+
+
+
+    # 工数登録ページ工数入力チェック(スマホ画面)
+    def test_input_kosu_smartphone_form(self):
+
         # フォームデータ定義(工数データ有、日またぎ無しの場合)
         form_data = {
-            'work_day' : self.Business_Time_graph.work_day2,
-            'work' : self.Business_Time_graph.work_time,
-            'tyoku2' : self.Business_Time_graph.tyoku2,
+            'work_day': self.Business_Time_graph.work_day2,
+            'work': '',
+            'work2': self.Business_Time_graph.work_time,
+            'tyoku': '',
+            'tyoku2': self.Business_Time_graph.tyoku2,
             'start_time': '18:50',
             'end_time': '19:20',
             'kosu_def_list': 'A',
             'work_detail': 'トライ',
-            'over_work' : '135',
-            'Registration' : '工数登録',
+            'over_work': '135',
+            'Registration': '工数登録',
             }
         
         # URLに対してPOSTリクエスト送信
@@ -312,16 +447,18 @@ class Page_form(TestCase):
 
         # フォームデータ2定義(工数データ有、日またぎ有の場合)
         form_data2 = {
-            'work_day' : self.Business_Time_graph.work_day2,
-            'work' : self.Business_Time_graph.work_time,
-            'tyoku2' : self.Business_Time_graph.tyoku2,
+            'work_day': self.Business_Time_graph.work_day2,
+            'work': '',
+            'work2': self.Business_Time_graph.work_time,
+            'tyoku': '',
+            'tyoku2': self.Business_Time_graph.tyoku2,
             'start_time': '23:50',
             'end_time': '0:20',
             'tomorrow_check':True,
             'kosu_def_list': 'B',
             'work_detail': 'トライ',
-            'over_work' : '150',
-            'Registration' : '工数登録',
+            'over_work': '150',
+            'Registration': '工数登録',
             }
         
         # URLに対してPOSTリクエスト送信
@@ -340,15 +477,17 @@ class Page_form(TestCase):
 
         # フォームデータ2定義(工数データ無し、日またぎ無しの場合)
         form_data3 = {
-            'work_day' : datetime.datetime.strptime(self.Business_Time_graph.work_day2, '%Y-%m-%d').date() + datetime.timedelta(days = 2),
-            'work' : self.Business_Time_graph.work_time,
-            'tyoku2' : self.Business_Time_graph.tyoku2,
+            'work_day': datetime.datetime.strptime(self.Business_Time_graph.work_day2, '%Y-%m-%d').date() + datetime.timedelta(days = 2),
+            'work': '',
+            'work2': self.Business_Time_graph.work_time,
+            'tyoku': '',
+            'tyoku2': self.Business_Time_graph.tyoku2,
             'start_time': '8:00',
             'end_time': '9:00',
             'kosu_def_list': 'A',
             'work_detail': 'トライ',
-            'over_work' : '30',
-            'Registration' : '工数登録',
+            'over_work': '30',
+            'Registration': '工数登録',
             }
         
         # URLに対してPOSTリクエスト送信
@@ -372,15 +511,149 @@ class Page_form(TestCase):
         # フォームデータ2定義(工数データ無し、日またぎ無しの場合)
         form_data4 = {
             'work_day' : datetime.datetime.strptime(self.Business_Time_graph.work_day2, '%Y-%m-%d').date() + datetime.timedelta(days = 3),
-            'work' : self.Business_Time_graph.work_time,
-            'tyoku2' : self.Business_Time_graph.tyoku2,
+            'work': '',
+            'work2': self.Business_Time_graph.work_time,
+            'tyoku': '',
+            'tyoku2': self.Business_Time_graph.tyoku2,
             'start_time': '23:30',
             'end_time': '0:30',
             'tomorrow_check':True,
             'kosu_def_list': 'A',
             'work_detail': 'トライ',
-            'over_work' : '30',
-            'Registration' : '工数登録',
+            'over_work': '30',
+            'Registration': '工数登録',
+            }
+        
+        # URLに対してPOSTリクエスト送信
+        response = self.client.post(reverse('input'), form_data4)
+        # リクエストのレスポンスステータスコードが302(リダイレクト)であることを確認
+        self.assertEqual(response.status_code, 302)
+
+        # テストユーザーの工数データ取得
+        updated_entry = Business_Time_graph.objects.get(employee_no3 = self.member.employee_no, \
+                                                        work_day2 = datetime.datetime.strptime(self.Business_Time_graph.work_day2, '%Y-%m-%d').date() + datetime.timedelta(days = 3))
+        # 作業内容が更新されていることを確認
+        self.assertEqual(updated_entry.time_work, 'AAAAAA####################################################################################################################################################################################################################################################################################AAAAAA')
+        # 残業時間が30に更新されていることを確認
+        self.assertEqual(updated_entry.over_time, 30)
+        # 整合性がNGに更新されていることを確認
+        self.assertEqual(updated_entry.judgement, False)
+        # 休憩時間が読み込まれていることを確認
+        self.assertEqual(updated_entry.breaktime, '#12001300')
+
+
+
+    # 工数登録ページ工数入力チェック(PC画面)
+    def test_input_kosu_pc_form(self):
+
+        # フォームデータ定義(工数データ有、日またぎ無しの場合)
+        form_data = {
+            'work_day': self.Business_Time_graph.work_day2,
+            'work2': '',
+            'work': self.Business_Time_graph.work_time,
+            'tyoku2': '',
+            'tyoku': self.Business_Time_graph.tyoku2,
+            'start_time': '18:50',
+            'end_time': '19:20',
+            'kosu_def_list': 'A',
+            'work_detail': 'トライ',
+            'over_work': '135',
+            'Registration': '工数登録',
+            }
+        
+        # URLに対してPOSTリクエスト送信
+        response = self.client.post(reverse('input'), form_data)
+        # リクエストのレスポンスステータスコードが302(リダイレクト)であることを確認
+        self.assertEqual(response.status_code, 302)
+
+        # テストユーザーの工数データ取得
+        updated_entry = Business_Time_graph.objects.get(employee_no3 = self.member.employee_no, \
+                                                        work_day2 = self.Business_Time_graph.work_day2)
+        # 作業内容が更新されていることを確認
+        self.assertEqual(updated_entry.time_work, '################################################################################################AAAAAAAAAAAABBBBBBBBBBBBCCCCCCCCCCCCDDDDDDDDDDDD$$$$$$$$$$$$EEEEEEEEEEEEFFFFFFFFFFFFGGGGGGGGGGGGHHHHHHHHHHHHIIIIIIIIIIJJJJJJJJJJJJAA$$$A########################################################')
+        # 残業時間が135に更新されていることを確認
+        self.assertEqual(updated_entry.over_time, 135)
+        # 整合性がOKに更新されていることを確認
+        self.assertEqual(updated_entry.judgement, True)
+
+
+        # フォームデータ2定義(工数データ有、日またぎ有の場合)
+        form_data2 = {
+            'work_day': self.Business_Time_graph.work_day2,
+            'work2': '',
+            'work': self.Business_Time_graph.work_time,
+            'tyoku2': '',
+            'tyoku': self.Business_Time_graph.tyoku2,
+            'start_time': '23:50',
+            'end_time': '0:20',
+            'tomorrow_check':True,
+            'kosu_def_list': 'B',
+            'work_detail': 'トライ',
+            'over_work': '150',
+            'Registration': '工数登録',
+            }
+        
+        # URLに対してPOSTリクエスト送信
+        response = self.client.post(reverse('input'), form_data2)
+        # リクエストのレスポンスステータスコードが302(リダイレクト)であることを確認
+        self.assertEqual(response.status_code, 302)
+        
+        # テストユーザーの工数データ取得
+        updated_entry = Business_Time_graph.objects.get(employee_no3 = self.member.employee_no, \
+                                                        work_day2 = self.Business_Time_graph.work_day2)
+        # 作業内容が更新されていることを確認
+        self.assertEqual(updated_entry.time_work, 'BBBB############################################################################################AAAAAAAAAAAABBBBBBBBBBBBCCCCCCCCCCCCDDDDDDDDDDDD$$$$$$$$$$$$EEEEEEEEEEEEFFFFFFFFFFFFGGGGGGGGGGGGHHHHHHHHHHHHIIIIIIIIIIJJJJJJJJJJJJAA$$$A######################################################BB')
+        # 整合性がNGに更新されていることを確認
+        self.assertEqual(updated_entry.judgement, False)
+
+
+        # フォームデータ2定義(工数データ無し、日またぎ無しの場合)
+        form_data3 = {
+            'work_day': datetime.datetime.strptime(self.Business_Time_graph.work_day2, '%Y-%m-%d').date() + datetime.timedelta(days = 2),
+            'work2': '',
+            'work': self.Business_Time_graph.work_time,
+            'tyoku2': '',
+            'tyoku': self.Business_Time_graph.tyoku2,
+            'start_time': '8:00',
+            'end_time': '9:00',
+            'kosu_def_list': 'A',
+            'work_detail': 'トライ',
+            'over_work': '30',
+            'Registration': '工数登録',
+            }
+        
+        # URLに対してPOSTリクエスト送信
+        response = self.client.post(reverse('input'), form_data3)
+        # リクエストのレスポンスステータスコードが302(リダイレクト)であることを確認
+        self.assertEqual(response.status_code, 302)
+
+        # テストユーザーの工数データ取得
+        updated_entry = Business_Time_graph.objects.get(employee_no3 = self.member.employee_no, \
+                                                        work_day2 = datetime.datetime.strptime(self.Business_Time_graph.work_day2, '%Y-%m-%d').date() + datetime.timedelta(days = 2))
+        # 作業内容が更新されていることを確認
+        self.assertEqual(updated_entry.time_work, '################################################################################################AAAAAAAAAAAA####################################################################################################################################################################################')
+        # 残業時間が30に更新されていることを確認
+        self.assertEqual(updated_entry.over_time, 30)
+        # 整合性がNGに更新されていることを確認
+        self.assertEqual(updated_entry.judgement, False)
+        # 休憩時間が読み込まれていることを確認
+        self.assertEqual(updated_entry.breaktime, '#12001300')
+
+
+        # フォームデータ2定義(工数データ無し、日またぎ無しの場合)
+        form_data4 = {
+            'work_day' : datetime.datetime.strptime(self.Business_Time_graph.work_day2, '%Y-%m-%d').date() + datetime.timedelta(days = 3),
+            'work2': '',
+            'work': self.Business_Time_graph.work_time,
+            'tyoku2': '',
+            'tyoku': self.Business_Time_graph.tyoku2,
+            'start_time': '23:30',
+            'end_time': '0:30',
+            'tomorrow_check':True,
+            'kosu_def_list': 'A',
+            'work_detail': 'トライ',
+            'over_work': '30',
+            'Registration': '工数登録',
             }
         
         # URLに対してPOSTリクエスト送信
@@ -404,6 +677,7 @@ class Page_form(TestCase):
 
     # 当日休憩変更ページ登録チェック
     def test_today_break_time_form(self):
+
         # フォームデータ定義(工数データ有の場合)
         form_data = {
             'start_time1': '13:00',
@@ -439,6 +713,7 @@ class Page_form(TestCase):
 
     # 休憩変更ページ登録チェック
     def test_break_time_form(self):
+
         # フォームデータ定義(工数データ有の場合)
         form_data = {
             'start_time1': '13:00',
@@ -2192,7 +2467,24 @@ class Page_form(TestCase):
 
 
 
+    # 問い合わせ入力チェック
+    def test_inquiry_new_form(self):
 
+        # フォームデータ定義(工数データ有、日またぎ無しの場合)
+        form_data = {
+            'content_choice': '不具合',
+            'inquiry': '問い合わせトライ123',
+            'inquiry_send' : '問い合わせ送信',
+            }
+        
+        # URLに対してPOSTリクエスト送信
+        response = self.client.post(reverse('inquiry_new'), form_data)
+        # リクエストのレスポンスステータスコードが302(リダイレクト)であることを確認
+        self.assertEqual(response.status_code, 302)
 
+        # 問い合わせ情報取得
+        updated_entry = inquiry_data.objects.get(content_choice = '不具合')
+        # レコードが更新されていることを確認
+        self.assertEqual(updated_entry.inquiry, '問い合わせトライ123')
 
 

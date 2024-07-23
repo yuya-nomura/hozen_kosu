@@ -386,19 +386,29 @@ def input(request):
 
   # グラフ更新時の処理
   if "update" in request.POST:
+
+    # 2つのフォームで入力のあった直を変数に入れる
+    if request.POST['tyoku'] != '':
+      tyoku = request.POST['tyoku']
+    elif request.POST['tyoku2'] != '':
+      tyoku = request.POST['tyoku2']
+    else:
+      tyoku = ''
+
+
     # POSTされた直をセッションに保存
-    request.session['tyoku'] = request.POST['tyoku2']
+    request.session['tyoku'] = tyoku
 
 
     # 1直がPOSTされた場合の処理
-    if request.POST['tyoku2'] == '1':
+    if tyoku == '1':
       # 作業終了時のセッションに06を定数として入れ直す
       request.session['end_hour'] = '06'
       # 作業終了分のセッションに30を定数として入れ直す
       request.session['end_min'] = '30'
 
     # 2直がPOSTされてログイン者のショップがボデーか組立の場合の処理
-    elif request.POST['tyoku2'] == '2' and (member_obj.shop == 'W1' or \
+    elif tyoku == '2' and (member_obj.shop == 'W1' or \
        member_obj.shop == 'W2' or member_obj.shop == 'A1' or member_obj.shop == 'A2'):
       # 作業終了時のセッションに11を定数として入れ直す
       request.session['end_hour'] = '11'
@@ -406,7 +416,7 @@ def input(request):
       request.session['end_min'] = '10'
 
     # 2直がPOSTされてログイン者のショップがプレス、成形、塗装、その他、組長以上の場合の処理
-    elif request.POST['tyoku2'] == '2' and (member_obj.shop == 'P' or \
+    elif tyoku == '2' and (member_obj.shop == 'P' or \
        member_obj.shop == 'R' or member_obj.shop == 'T1' or member_obj.shop == 'T2' or \
        member_obj.shop == 'その他' or member_obj.shop == '組長以上'):
       # 作業終了時のセッションに13を定数として入れ直す
@@ -415,7 +425,7 @@ def input(request):
       request.session['end_min'] = '40'
 
     # 3直がPOSTされてログイン者のショップがボデーか組立の場合の処理
-    elif request.POST['tyoku2'] == '3' and (member_obj.shop == 'W1' or \
+    elif tyoku == '3' and (member_obj.shop == 'W1' or \
        member_obj.shop == 'W2' or member_obj.shop == 'A1' or member_obj.shop == 'A2'):
       # 作業終了時のセッションに19を定数として入れ直す
       request.session['end_hour'] = '19'
@@ -423,7 +433,7 @@ def input(request):
       request.session['end_min'] = '50'
 
     # 3直がPOSTされてログイン者のショップがプレス、成形、塗装、その他、組長以上の場合の処理
-    elif request.POST['tyoku2'] == '3' and (member_obj.shop == 'P' or \
+    elif tyoku == '3' and (member_obj.shop == 'P' or \
        member_obj.shop == 'R' or member_obj.shop == 'T1' or member_obj.shop == 'T2' or \
        member_obj.shop == 'その他' or member_obj.shop == '組長以上'):
       # 作業終了時のセッションに22を定数として入れ直す
@@ -432,7 +442,7 @@ def input(request):
       request.session['end_min'] = '10'
 
     # 常昼がPOSTされた場合の処理
-    elif request.POST['tyoku2'] == '4':
+    elif tyoku == '4':
       # 作業終了時のセッションに08を定数として入れ直す
       request.session['end_hour'] = '08'
       # 作業終了分のセッションに00を定数として入れ直す
@@ -649,13 +659,26 @@ def input(request):
   if "Registration" in request.POST:
     # それぞれPOSTされた値を変数に入れる(従業員番号のみセッション値)
     work_day = request.POST['work_day']
-    tyoku = request.POST['tyoku2']
     start_time = request.POST['start_time']
     end_time = request.POST['end_time']
     def_work = request.POST['kosu_def_list']
     detail_work = request.POST['work_detail']
-    work = request.POST['work']
 
+    # 2つのフォームで入力のあった直を変数に入れる
+    if request.POST['tyoku'] != '':
+      tyoku = request.POST['tyoku']
+    elif request.POST['tyoku2'] != '':
+      tyoku = request.POST['tyoku2']
+    else:
+      tyoku = ''
+
+    # 2つのフォームで入力のあった勤務を変数に入れる
+    if request.POST['work'] != '':
+      work = request.POST['work']
+    elif request.POST['work2'] != '':
+      work = request.POST['work2']
+    else:
+      work = ''
 
     # 直初期値設定(エラー保持)
     request.session['error_tyoku'] = tyoku
@@ -792,28 +815,28 @@ def input(request):
         break_time_obj = member.objects.get(employee_no = request.session['login_No'])
 
         # 1直の場合の休憩時間取得
-        if request.POST['tyoku2'] == '1':
+        if tyoku == '1':
           breaktime = break_time_obj.break_time1
           breaktime_over1 = break_time_obj.break_time1_over1
           breaktime_over2 = break_time_obj.break_time1_over2
           breaktime_over3 = break_time_obj.break_time1_over3
 
         # 2直の場合の休憩時間取得
-        if request.POST['tyoku2'] == '2':
+        if tyoku == '2':
           breaktime = break_time_obj.break_time2
           breaktime_over1 = break_time_obj.break_time2_over1
           breaktime_over2 = break_time_obj.break_time2_over2
           breaktime_over3 = break_time_obj.break_time2_over3
 
         # 3直の場合の休憩時間取得
-        if request.POST['tyoku2'] == '3':
+        if tyoku == '3':
           breaktime = break_time_obj.break_time3
           breaktime_over1 = break_time_obj.break_time3_over1
           breaktime_over2 = break_time_obj.break_time3_over2
           breaktime_over3 = break_time_obj.break_time3_over3
 
         # 常昼の場合の休憩時間取得
-        if request.POST['tyoku2'] == '4':
+        if tyoku == '4':
           breaktime = break_time_obj.break_time4
           breaktime_over1 = break_time_obj.break_time4_over1
           breaktime_over2 = break_time_obj.break_time4_over2
@@ -1523,28 +1546,28 @@ def input(request):
       break_time_obj = member.objects.get(employee_no = request.session['login_No'])
 
       # 1直の場合の休憩時間取得
-      if request.POST['tyoku2'] == '1':
+      if tyoku == '1':
         breaktime = break_time_obj.break_time1
         breaktime_over1 = break_time_obj.break_time1_over1
         breaktime_over2 = break_time_obj.break_time1_over2
         breaktime_over3 = break_time_obj.break_time1_over3
 
       # 2直の場合の休憩時間取得
-      if request.POST['tyoku2'] == '2':
+      if tyoku == '2':
         breaktime = break_time_obj.break_time2
         breaktime_over1 = break_time_obj.break_time2_over1
         breaktime_over2 = break_time_obj.break_time2_over2
         breaktime_over3 = break_time_obj.break_time2_over3
 
       # 3直の場合の休憩時間取得
-      if request.POST['tyoku2'] == '3':
+      if tyoku == '3':
         breaktime = break_time_obj.break_time3
         breaktime_over1 = break_time_obj.break_time3_over1
         breaktime_over2 = break_time_obj.break_time3_over2
         breaktime_over3 = break_time_obj.break_time3_over3
 
       # 常昼の場合の休憩時間取得
-      if request.POST['tyoku2'] == '4':
+      if tyoku == '4':
         breaktime = break_time_obj.break_time4
         breaktime_over1 = break_time_obj.break_time4_over1
         breaktime_over2 = break_time_obj.break_time4_over2
@@ -2182,6 +2205,23 @@ def input(request):
 
   # 残業登録時の処理
   if "over_time_correction" in request.POST:
+
+    # 2つのフォームで入力のあった直を変数に入れる
+    if request.POST['tyoku'] != '':
+      tyoku = request.POST['tyoku']
+    elif request.POST['tyoku2'] != '':
+      tyoku = request.POST['tyoku2']
+    else:
+      tyoku = ''
+
+    # 2つのフォームで入力のあった勤務を変数に入れる
+    if request.POST['work'] != '':
+      work = request.POST['work']
+    elif request.POST['work2'] != '':
+      work = request.POST['work2']
+    else:
+      work = ''
+
     # 未入力がないことを確認
     if request.POST['over_work'] == '':
       # エラーメッセージ出力
@@ -2190,14 +2230,14 @@ def input(request):
       return redirect(to = '/input')
     
     # 残業時間が15の倍数でない場合の処理
-    if int(request.POST['over_work'])%15 != 0 and request.POST['work'] != '休出':
+    if int(request.POST['over_work'])%15 != 0 and work != '休出':
       # エラーメッセージ出力
       messages.error(request, '残業時間が15分の倍数になっていません。工数登録できませんでした。ERROR018')
       # このページをリダイレクト
       return redirect(to = '/input')
 
     # 休出時に残業時間が5の倍数でない場合の処理
-    if int(request.POST['over_work'])%5 != 0 and request.POST['work'] == '休出':
+    if int(request.POST['over_work'])%5 != 0 and work == '休出':
       # エラーメッセージ出力
       messages.error(request, '残業時間が5分の倍数になっていません。工数登録できませんでした。ERROR084')
       # このページをリダイレクト
@@ -2220,60 +2260,60 @@ def input(request):
       judgement = False
 
       # 出勤、休出時、工数合計と残業に整合性がある場合の処理
-      if (request.POST['work'] == '出勤' or request.POST['work'] == 'シフト出') and \
+      if (work == '出勤' or work == 'シフト出') and \
         kosu_total - int(request.POST['over_work']) == 470:
         # 工数入力OK_NGをOKに切り替え
         judgement = True
 
       # 休出時、工数合計と残業に整合性がある場合の処理
-      if request.POST['work'] == '休出' and kosu_total == int(request.POST['over_work']):
+      if work == '休出' and kosu_total == int(request.POST['over_work']):
         # 工数入力OK_NGをOKに切り替え
         judgement = True
 
       # 早退・遅刻時、工数合計と残業に整合性がある場合の処理
-      if request.POST['work'] == '早退・遅刻' and kosu_total != 0:
+      if work == '早退・遅刻' and kosu_total != 0:
         # 工数入力OK_NGをOKに切り替え
         judgement = True
 
       # ログイン者の登録ショップが三組三交替Ⅱ甲乙丙番Cで1直の場合の処理
       if (member_obj.shop == 'W1' or member_obj.shop == 'W2' or \
         member_obj.shop == 'A1' or member_obj.shop == 'A2') and \
-          request.POST['tyoku2'] == '1':
+          tyoku == '1':
         # 半前年休時、工数合計と残業に整合性がある場合の処理
-        if request.POST['work'] == '半前年休' and kosu_total - int(request.POST['over_work']) == 230:
+        if work == '半前年休' and kosu_total - int(request.POST['over_work']) == 230:
           # 工数入力OK_NGをOKに切り替え
           judgement = True
 
         # 半後年休時、工数合計と残業に整合性がある場合の処理
-        if request.POST['work'] == '半後年休' and kosu_total - int(request.POST['over_work']) == 240:
+        if work == '半後年休' and kosu_total - int(request.POST['over_work']) == 240:
           # 工数入力OK_NGをOKに切り替え
           judgement = True
 
       # ログイン者の登録ショップが三組三交替Ⅱ甲乙丙番Cで2直の場合の処理
       if (member_obj.shop == 'W1' or member_obj.shop == 'W2' or \
         member_obj.shop == 'A1' or member_obj.shop == 'A2') and \
-          request.POST['tyoku2'] == '2':
+          tyoku == '2':
         # 半前年休時、工数合計と残業に整合性がある場合の処理
-        if request.POST['work'] == '半前年休' and kosu_total - int(request.POST['over_work']) == 290:
+        if work == '半前年休' and kosu_total - int(request.POST['over_work']) == 290:
           # 工数入力OK_NGをOKに切り替え
           judgement = True
 
         # 半後年休時、工数合計と残業に整合性がある場合の処理
-        if request.POST['work'] == '半後年休' and kosu_total - int(request.POST['over_work']) == 180:
+        if work == '半後年休' and kosu_total - int(request.POST['over_work']) == 180:
           # 工数入力OK_NGをOKに切り替え
           judgement = True
 
       # ログイン者の登録ショップが三組三交替Ⅱ甲乙丙番Cで3直の場合の処理
       if (member_obj.shop == 'W1' or member_obj.shop == 'W2' or \
         member_obj.shop == 'A1' or member_obj.shop == 'A2') and \
-          request.POST['tyoku2'] == '3':
+          tyoku == '3':
         # 半前年休時、工数合計と残業に整合性がある場合の処理
-        if request.POST['work'] == '半前年休' and kosu_total - int(request.POST['over_work']) == 230:
+        if work == '半前年休' and kosu_total - int(request.POST['over_work']) == 230:
           # 工数入力OK_NGをOKに切り替え
           judgement = True
 
         # 半後年休時、工数合計と残業に整合性がある場合の処理
-        if request.POST['work'] == '半後年休' and kosu_total - int(request.POST['over_work']) == 240:
+        if work == '半後年休' and kosu_total - int(request.POST['over_work']) == 240:
           # 工数入力OK_NGをOKに切り替え
           judgement = True
 
@@ -2281,14 +2321,14 @@ def input(request):
       if (member_obj.shop == 'P' or member_obj.shop == 'R' or \
         member_obj.shop == 'T1' or member_obj.shop == 'T2' or \
           member_obj.shop == 'その他' or member_obj.shop == '組長以上') and \
-          request.POST['tyoku2'] == '1':
+          tyoku == '1':
         # 半前年休時、工数合計と残業に整合性がある場合の処理
-        if request.POST['work'] == '半前年休' and kosu_total - int(request.POST['over_work']) == 220:
+        if work == '半前年休' and kosu_total - int(request.POST['over_work']) == 220:
           # 工数入力OK_NGをOKに切り替え
           judgement = True
 
         # 半後年休時、工数合計と残業に整合性がある場合の処理
-        if request.POST['work'] == '半後年休' and kosu_total - int(request.POST['over_work']) == 250:
+        if work == '半後年休' and kosu_total - int(request.POST['over_work']) == 250:
           # 工数入力OK_NGをOKに切り替え
           judgement = True
 
@@ -2296,14 +2336,14 @@ def input(request):
       if (member_obj.shop == 'P' or member_obj.shop == 'R' or \
         member_obj.shop == 'T1' or member_obj.shop == 'T2' or \
           member_obj.shop == 'その他' or member_obj.shop == '組長以上') and \
-          request.POST['tyoku2'] == '2':
+          tyoku == '2':
         # 半前年休時、工数合計と残業に整合性がある場合の処理
-        if request.POST['work'] == '半前年休' and kosu_total - int(request.POST['over_work']) == 230:
+        if work == '半前年休' and kosu_total - int(request.POST['over_work']) == 230:
           # 工数入力OK_NGをOKに切り替え
           judgement = True
 
         # 半後年休時、工数合計と残業に整合性がある場合の処理
-        if request.POST['work'] == '半後年休' and kosu_total - int(request.POST['over_work']) == 240:
+        if work == '半後年休' and kosu_total - int(request.POST['over_work']) == 240:
           # 工数入力OK_NGをOKに切り替え
           judgement = True
 
@@ -2311,9 +2351,9 @@ def input(request):
       if (member_obj.shop == 'P' or member_obj.shop == 'R' or \
         member_obj.shop == 'T1' or member_obj.shop == 'T2' or \
           member_obj.shop == 'その他' or member_obj.shop == '組長以上') and \
-          request.POST['tyoku2'] == '3':
+          tyoku == '3':
         # 半前年休時、工数合計と残業に整合性がある場合の処理
-        if request.POST['work'] == '半前年休' and kosu_total - int(request.POST['over_work']) == 275:
+        if work == '半前年休' and kosu_total - int(request.POST['over_work']) == 275:
           # 工数入力OK_NGをOKに切り替え
           judgement = True
 
@@ -2349,6 +2389,23 @@ def input(request):
 
   # 現在時刻取得処理
   if "now_time" in request.POST:
+
+    # 2つのフォームで入力のあった直を変数に入れる
+    if request.POST['tyoku'] != '':
+      tyoku = request.POST['tyoku']
+    elif request.POST['tyoku2'] != '':
+      tyoku = request.POST['tyoku2']
+    else:
+      tyoku = ''
+  
+    # 2つのフォームで入力のあった勤務を変数に入れる
+    if request.POST['work'] != '':
+      work = request.POST['work']
+    elif request.POST['work2'] != '':
+      work = request.POST['work2']
+    else:
+      work = ''
+
     # 現在時刻取得
     now_time = datetime.datetime.now().time()
 
@@ -2376,8 +2433,10 @@ def input(request):
       request.session['tomorrow_check'] = False
 
     # 時刻取得時の初期値の定義
-    def_default = {'work' : request.POST['work'],
-                   'tyoku2' : request.POST['tyoku2'],
+    def_default = {'work' : work,
+                   'work2' : work,
+                   'tyoku' : tyoku,
+                   'tyoku2' : tyoku,
                    'kosu_def_list' : request.POST['kosu_def_list'],
                    'work_detail' : request.POST['work_detail'],
                    'break_change' : 'break_change' in request.POST,
@@ -2563,10 +2622,26 @@ def input(request):
   # 定義確認処理
   if "def_find" in request.POST:
 
+    # 2つのフォームで入力のあった直を変数に入れる
+    if request.POST['tyoku'] != '':
+      tyoku = request.POST['tyoku']
+    elif request.POST['tyoku2'] != '':
+      tyoku = request.POST['tyoku2']
+    else:
+      tyoku = ''
+
+    # 2つのフォームで入力のあった勤務を変数に入れる
+    if request.POST['work'] != '':
+      work = request.POST['work']
+    elif request.POST['work2'] != '':
+      work = request.POST['work2']
+    else:
+      work = ''
+
     # 直初期値設定保持
-    request.session['error_tyoku'] = request.POST['tyoku2']
+    request.session['error_tyoku'] = tyoku
     # 勤務初期値設定保持
-    request.session['error_work'] = request.POST['work']
+    request.session['error_work'] = work
     # 工数区分定義初期値設定保持
     request.session['error_def'] = request.POST['kosu_def_list']
     # 作業詳細初期値設定保持
@@ -2653,6 +2728,8 @@ def input(request):
 
   # 初期値を設定するリスト作成
   kosu_list = {'work' : work_default,
+               'work2' : work_default,
+               'tyoku' : tyoku_default,
                'tyoku2' : tyoku_default, 
                'tomorrow_check' : request.session.get('tomorrow_check', False),
                'kosu_def_list': request.session.get('error_def', ''),

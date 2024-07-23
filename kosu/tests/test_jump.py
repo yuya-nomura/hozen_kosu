@@ -562,15 +562,45 @@ class Page_jump(TestCase):
 
 
 
-    # 工数登録から当日休憩変更へジャンプテスト
-    def test_input_kosu_def_time(self):
+    # 工数登録から工数区分定義確認へジャンプテスト(スマホ画面)
+    def test_input_kosu_def_time_smartphone(self):
+
         # 工数登録ページにアクセス
         response = self.client.get(reverse('input'))
         self.assertEqual(response.status_code, 200)
 
         # 定義確認を押す
         response = self.client.post(reverse('input'), {
+            'tyoku': '',
             'tyoku2': self.Business_Time_graph.tyoku2,
+            'work': '',
+            'work2': self.Business_Time_graph.work_time,
+            'kosu_def_list': 'A',
+            'work_detail': 'テスト',
+            'over_work': self.Business_Time_graph.over_time,
+            'start_time': '20:00',
+            'end_time': '21:00',
+            'tomorrow_check': False,
+            'def_find': '定義確認',
+        })
+
+        # 定義確認を押した後に 'today_break_time' ページにリダイレクトされることを確認
+        self.assertRedirects(response, reverse('kosu_def'))
+
+
+
+    # 工数登録から工数区分定義確認へジャンプテスト(PC画面)
+    def test_input_kosu_def_time_pc(self):
+
+        # 工数登録ページにアクセス
+        response = self.client.get(reverse('input'))
+        self.assertEqual(response.status_code, 200)
+
+        # 定義確認を押す
+        response = self.client.post(reverse('input'), {
+            'tyoku2': '',
+            'tyoku': self.Business_Time_graph.tyoku2,
+            'work2': '',
             'work': self.Business_Time_graph.work_time,
             'kosu_def_list': 'A',
             'work_detail': 'テスト',
