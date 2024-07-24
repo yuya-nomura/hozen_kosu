@@ -2467,7 +2467,7 @@ class Page_form(TestCase):
 
 
 
-    # 問い合わせ入力チェック
+    # 問い合わせ新規登録チェック
     def test_inquiry_new_form(self):
 
         # フォームデータ定義(工数データ有、日またぎ無しの場合)
@@ -2484,7 +2484,232 @@ class Page_form(TestCase):
 
         # 問い合わせ情報取得
         updated_entry = inquiry_data.objects.get(content_choice = '不具合')
+        updated_entry2 = inquiry_data.objects.order_by("id").last()
         # レコードが更新されていることを確認
         self.assertEqual(updated_entry.inquiry, '問い合わせトライ123')
+        # 設定情報取得
+        updated_entry3 = administrator_data.objects.order_by("id").last()
+        # ポップアップが更新されていることを確認
+        self.assertEqual(updated_entry3.pop_up1, 'テストユーザーさんからの新しい問い合わせがあります。')
+        self.assertEqual(updated_entry3.pop_up_id1, str(updated_entry2.id))
+
+
+
+    # 問い合わせ履歴検索チェック
+    def test_inquiry_list_form(self):
+
+        # memberダミーデータ
+        self.member = member.objects.create(
+            employee_no = 222,
+            name = 'テストユーザー2',
+            shop = 'その他',
+            authority = True,
+            administrator = True,
+            break_time1 = '#10401130',
+            break_time1_over1 = '#15101520',
+            break_time1_over2 = '#20202110',
+            break_time1_over3 = '#01400150',
+            break_time2 = '#17501840',
+            break_time2_over1 = '#22302240',
+            break_time2_over2 = '#03400430',
+            break_time2_over3 = '#09000910',
+            break_time3 = '#01400230',
+            break_time3_over1 = '#07050715',
+            break_time3_over2 = '#12151305',
+            break_time3_over3 = '#17351745',
+            break_time4 = '#12001300',
+            break_time4_over1 = '#19001915',
+            break_time4_over2 = '#01150215',
+            break_time4_over3 = '#06150630',
+            )
+
+        # inquiry_dataダミーデータ
+        for nn in range(5):
+            self.inquiry_data = inquiry_data.objects.create(
+                employee_no2 = 111,
+                name = self.member,
+                content_choice = '問い合わせ',
+                inquiry = 'トライの問い合わせ内容{}'.format(nn),
+                answer = '回答{}'.format(nn),
+                )
+
+            self.inquiry_data = inquiry_data.objects.create(
+                employee_no2 = 111,
+                name = self.member,
+                content_choice = '不具合',
+                inquiry = 'トライの問い合わせ内容{}'.format(nn),
+                answer = '回答{}'.format(nn),
+                )
+
+        for nn in range(3):
+            self.inquiry_data = inquiry_data.objects.create(
+                employee_no2 = 222,
+                name = self.member,
+                content_choice = '問い合わせ',
+                inquiry = 'トライの問い合わせ内容{}'.format(nn),
+                answer = '回答{}'.format(nn),
+                )
+
+
+
+        # フォームデータ定義(工数データ有の場合)
+        form_data = {
+            'category': '',
+            'name_list': 111,
+            'find': '検索',
+            }
+
+        # URLに対してPOSTリクエスト送信
+        response = self.client.post(reverse('inquiry_list', args = [1]), form_data)
+        # レスポンスが成功（ステータスコード200）であることを確認
+        self.assertEqual(response.status_code, 200)
+
+        data = response.context['data']
+        # レコードが14個であることを確認
+        self.assertEqual(len(data), 11)
+
+
+        # フォームデータ定義(工数データ有の場合)
+        form_data2 = {
+            'category': '問い合わせ',
+            'name_list': '',
+            'find': '検索',
+            }
+
+        # URLに対してPOSTリクエスト送信
+        response = self.client.post(reverse('inquiry_list', args = [1]), form_data2)
+        # レスポンスが成功（ステータスコード200）であることを確認
+        self.assertEqual(response.status_code, 200)
+
+        data = response.context['data']
+        # レコードが14個であることを確認
+        self.assertEqual(len(data), 9)
+
+
+        # フォームデータ定義(工数データ有の場合)
+        form_data3 = {
+            'category': '問い合わせ',
+            'name_list': 111,
+            'find': '検索',
+            }
+
+        # URLに対してPOSTリクエスト送信
+        response = self.client.post(reverse('inquiry_list', args = [1]), form_data3)
+        # レスポンスが成功（ステータスコード200）であることを確認
+        self.assertEqual(response.status_code, 200)
+
+        data = response.context['data']
+        # レコードが14個であることを確認
+        self.assertEqual(len(data), 6)
+
+
+
+    # 問い合わせ編集チェック
+    def test_inquiry_edit_form(self):
+
+        # フォームデータ定義(工数データ有の場合)
+        form_data = {
+            'content_choice': '不具合',
+            'inquiry': '問い合わせ編集トライ123',
+            'answer': '問い合わせ回答トライ123',
+            'Registration': '修正',
+            }
+
+        # URLに対してPOSTリクエスト送信
+        response = self.client.post(reverse('inquiry_edit', args = [self.inquiry_data.id]), form_data)
+        # リクエストのレスポンスステータスコードが302(リダイレクト)であることを確認
+        self.assertEqual(response.status_code, 302)
+
+        # 問い合わせデータ取得
+        updated_entry = inquiry_data.objects.get(id = self.inquiry_data.id)
+        # データが更新されていることを確認
+        self.assertEqual(updated_entry.content_choice, '不具合')
+        self.assertEqual(updated_entry.inquiry, '問い合わせ編集トライ123')
+        self.assertEqual(updated_entry.answer, '問い合わせ回答トライ123')
+
+        
+
+    # 問い合わせ削除チェック
+    def test_inquiry_delete_form(self):
+
+        # フォームデータ定義(工数データ有の場合)
+        form_data = {
+            'content_choice': '不具合',
+            'inquiry': '問い合わせ編集トライ123',
+            'answer': '問い合わせ回答トライ123',
+            'delete': '削除',
+            }
+
+        # URLに対してPOSTリクエスト送信
+        response = self.client.post(reverse('inquiry_edit', args = [self.inquiry_data.id]), form_data)
+        # リクエストのレスポンスステータスコードが302(リダイレクト)であることを確認
+        self.assertEqual(response.status_code, 302)
+
+        # 問い合わせデータ取得
+        updated_entry = inquiry_data.objects.all()
+        # データが更新されていることを確認
+        self.assertEqual(updated_entry.count(), 0)
+
+
+
+    # 問い合わせポップアップ削除チェック
+    def test_inquiry_popup_delete_form(self):
+
+        # memberダミーデータ
+        self.administrator_data = administrator_data.objects.create(
+            menu_row = 200,
+            administrator_employee_no1 = '111',
+            administrator_employee_no2 = '',
+            administrator_employee_no3 = '',
+            pop_up1 = '問い合わせあり',
+            pop_up_id1 = self.inquiry_data.id,
+            )
+
+
+        # フォームデータ定義(工数データ有の場合)
+        form_data = {
+            'pop_up_reset': 'ポップアップ全リセット',
+            }
+
+        # URLに対してPOSTリクエスト送信
+        response = self.client.post(reverse('inquiry_list', args = [1]), form_data)
+        # リクエストのレスポンスステータスコードが302(リダイレクト)であることを確認
+        self.assertEqual(response.status_code, 302)
+
+        # 設定情報取得
+        updated_entry = administrator_data.objects.order_by("id").last()
+        # ポップアップが更新されていることを確認
+        self.assertEqual(updated_entry.pop_up1, '')
+        self.assertEqual(updated_entry.pop_up_id1, '')
+
+
+
+    # 設定更新チェック
+    def test_administrator_form(self):
+
+        # フォームデータ定義(工数データ有、日またぎ無しの場合)
+        form_data = {
+            'menu_row': 50,
+            'administrator_employee_no1': '',
+            'administrator_employee_no2': '',
+            'administrator_employee_no3': '',
+            'registration': '登録',
+            }
+        
+        # URLに対してPOSTリクエスト送信
+        response = self.client.post(reverse('administrator'), form_data)
+        # レスポンスが成功（ステータスコード200）であることを確認
+        self.assertEqual(response.status_code, 200)
+
+        # 設定情報取得
+        updated_entry = administrator_data.objects.order_by("id").last()
+        # ポップアップが更新されていることを確認
+        self.assertEqual(updated_entry.menu_row, '50')
+        self.assertEqual(updated_entry.administrator_employee_no1, '')
+        self.assertEqual(updated_entry.administrator_employee_no2, '')
+        self.assertEqual(updated_entry.administrator_employee_no3, '')
+
+
+
 
 
