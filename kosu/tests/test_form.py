@@ -1250,6 +1250,122 @@ class Page_form(TestCase):
 
 
 
+    # 勤務入力ページデフォルト勤務登録チェック
+    def test_schedule_default_form(self):
+
+        # フォームデータ定義
+        form_data = {
+            'year' : '2000',
+            'month': '1',
+            'time_update': '表示切替',
+            }
+
+        # URLに対してPOSTリクエスト送信
+        response = self.client.post(reverse('schedule'), form_data)
+        # レスポンスが成功（ステータスコード200）であることを確認
+        self.assertEqual(response.status_code, 200)
+
+        # フォームデータ2定義
+        form_data2 = {
+            'default_work': 'デフォルト勤務入力',
+            }
+
+        # URLに対してPOSTリクエスト送信
+        response = self.client.post(reverse('schedule'), form_data2)
+        # レスポンスが成功（ステータスコード200）であることを確認
+        self.assertEqual(response.status_code, 200)
+
+        # テストユーザーの工数データ取得
+        updated_entry1 = Business_Time_graph.objects.get(employee_no3 = self.member.employee_no, \
+                                                        work_day2 = '2000-01-02')
+        updated_entry2 = Business_Time_graph.objects.get(employee_no3 = self.member.employee_no, \
+                                                        work_day2 = '2000-01-03')
+        updated_entry3 = Business_Time_graph.objects.get(employee_no3 = self.member.employee_no, \
+                                                        work_day2 = '2000-01-04')
+        updated_entry4 = Business_Time_graph.objects.get(employee_no3 = self.member.employee_no, \
+                                                        work_day2 = '2000-01-05')
+        updated_entry5 = Business_Time_graph.objects.get(employee_no3 = self.member.employee_no, \
+                                                        work_day2 = '2000-01-06')
+        updated_entry6 = Business_Time_graph.objects.get(employee_no3 = self.member.employee_no, \
+                                                        work_day2 = '2000-01-07')
+        updated_entry7 = Business_Time_graph.objects.get(employee_no3 = self.member.employee_no, \
+                                                        work_day2 = '2000-01-08')
+
+        # 作業内容が更新されていることを確認
+        self.assertEqual(updated_entry1.work_time, '休日')
+        self.assertEqual(updated_entry2.work_time, '出勤')
+        self.assertEqual(updated_entry3.work_time, '出勤')
+        self.assertEqual(updated_entry4.work_time, '出勤')
+        self.assertEqual(updated_entry5.work_time, '出勤')
+        self.assertEqual(updated_entry6.work_time, '出勤')
+        self.assertEqual(updated_entry7.work_time, '休日')
+
+
+
+    # 勤務入力ページデフォルト勤務登録チェック
+    def test_schedule_tyoku_default_form(self):
+
+        # フォームデータ定義
+        form_data = {
+            'year' : '2000',
+            'month': '1',
+            'time_update': '表示切替',
+            }
+
+        # URLに対してPOSTリクエスト送信
+        response = self.client.post(reverse('schedule'), form_data)
+        # レスポンスが成功（ステータスコード200）であることを確認
+        self.assertEqual(response.status_code, 200)
+
+        # フォームデータ2定義
+        form_data2 = {
+            'tyoku_all_1': '1直',
+            'tyoku_all_2': '2直',
+            'tyoku_all_3': '3直',
+            'tyoku_all_4': '常昼',
+            'tyoku_all_5': '',
+            'tyoku_all_6': '',
+            'default_tyoku': '直一括入力',
+            }
+
+        # URLに対してPOSTリクエスト送信
+        response = self.client.post(reverse('schedule'), form_data2)
+        # レスポンスが成功（ステータスコード200）であることを確認
+        self.assertEqual(response.status_code, 200)
+
+        # テストユーザーの工数データ取得
+        updated_entry1 = Business_Time_graph.objects.filter(employee_no3 = self.member.employee_no, \
+                                                        work_day2 = '2000-01-02')
+        updated_entry2 = Business_Time_graph.objects.get(employee_no3 = self.member.employee_no, \
+                                                        work_day2 = '2000-01-03')
+        updated_entry3 = Business_Time_graph.objects.get(employee_no3 = self.member.employee_no, \
+                                                        work_day2 = '2000-01-04')
+        updated_entry4 = Business_Time_graph.objects.filter(employee_no3 = self.member.employee_no, \
+                                                        work_day2 = '2000-01-09')
+        updated_entry5 = Business_Time_graph.objects.get(employee_no3 = self.member.employee_no, \
+                                                        work_day2 = '2000-01-10')
+        updated_entry6 = Business_Time_graph.objects.get(employee_no3 = self.member.employee_no, \
+                                                        work_day2 = '2000-01-11')
+        updated_entry7 = Business_Time_graph.objects.filter(employee_no3 = self.member.employee_no, \
+                                                        work_day2 = '2000-01-16')
+        updated_entry8 = Business_Time_graph.objects.get(employee_no3 = self.member.employee_no, \
+                                                        work_day2 = '2000-01-17')
+        updated_entry9 = Business_Time_graph.objects.get(employee_no3 = self.member.employee_no, \
+                                                        work_day2 = '2000-01-18')
+
+        # 作業内容が更新されていることを確認
+        self.assertEqual(updated_entry1.count(), 0)
+        self.assertEqual(updated_entry2.tyoku2, '2直')
+        self.assertEqual(updated_entry3.tyoku2, '2直')
+        self.assertEqual(updated_entry4.count(), 0)
+        self.assertEqual(updated_entry5.tyoku2, '3直')
+        self.assertEqual(updated_entry6.tyoku2, '3直')
+        self.assertEqual(updated_entry7.count(), 0)
+        self.assertEqual(updated_entry8.tyoku2, '常昼')
+        self.assertEqual(updated_entry9.tyoku2, '常昼')
+
+
+
     # 残業管理ページ表示切替チェック
     def test_over_time_change_form(self):
 

@@ -2763,7 +2763,7 @@ def input(request):
 
   # 工数区分登録数カウント
   for kosu_num in range(1, 50):
-    if eval('kosu_obj.kosu_title_{}'.format(kosu_num)) != None:
+    if eval('kosu_obj.kosu_title_{}'.format(kosu_num)) not in [None, '']:
       n = kosu_num
 
 
