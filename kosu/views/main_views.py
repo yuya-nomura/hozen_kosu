@@ -2598,7 +2598,7 @@ def help(request):
 
   # HTMLに渡す辞書
   context = {
-    'title' : 'help',
+    'title' : 'ヘルプ',
     'form' : form,
     'display' : display,
     }
