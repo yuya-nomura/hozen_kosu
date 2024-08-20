@@ -11,7 +11,7 @@ SECRET_KEY=env('SECRET_KEY')
 
 DEBUG=env.bool('DEBUG')
 
-ALLOWED_HOSTS = [os.environ['WEBSITE_SITE_NAME'] + '.azurewebsites.net', 'https://kosuapptry.azurewebsites.net', 'localhost', '127.0.0.1'] if 'WEBSITE_SITE_NAME' in os.environ else []
+ALLOWED_HOSTS = [os.environ['WEBSITE_SITE_NAME'] + '.azurewebsites.net', 'localhost', '127.0.0.1'] if 'WEBSITE_SITE_NAME' in os.environ else []
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -106,7 +106,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
-CSRF_TRUSTED_ORIGINS = ['https://kosu-hozen.azurewebsites.net', 'https://kosuapptry.azurewebsites.net']
+CSRF_TRUSTED_ORIGINS = ['https://kosu-hozen.azurewebsites.net']
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
