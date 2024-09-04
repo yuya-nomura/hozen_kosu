@@ -49,6 +49,19 @@ def team(request):
   if data.authority == False:
     return redirect(to = '/')
   
+
+  # 班員登録時の処理
+  if "shop_choice" in request.POST:
+    # 絞り込むショップをセッションに保存する
+    request.session['shop_choose'] = request.POST['shop']
+
+    # このページをリダイレクトする
+    return redirect(to = '/team')
+
+
+
+
+
   # ログイン者の班員情報取得
   data2 = team_member.objects.filter(employee_no5 = request.session['login_No'])
 
@@ -58,8 +71,11 @@ def team(request):
 
     # ログイン者が組長以上か確認
     if data.shop == '組長以上':
-      # 組長以上なら人員登録のオブジェクトを全て取得
-      member_obj = member.objects.all().order_by('employee_no')
+      # 組長以上なら人員登録のオブジェクトを全て取得(絞り込み有効)
+      if request.session.get('shop_choose', None) != None:
+        member_obj = member.objects.filter(shop = request.session.get('shop_choose', '')).order_by('employee_no')
+      else:
+        member_obj = member.objects.all().order_by('employee_no')
     else:
       # そうでないならログイン者と同じショップの人員のオブジェクトを取得
       member_obj = member.objects.filter(shop = data.shop).order_by('employee_no')
@@ -88,8 +104,8 @@ def team(request):
     form.fields['member15'].choices = choices_list
 
 
-    # POST時の処理
-    if (request.method == 'POST'):
+    # 班員登録時の処理
+    if "team_new" in request.POST:
       # POST送信された値を変数に入れる
       member1 = request.POST['member1']
       member2 = request.POST['member2']
@@ -123,14 +139,17 @@ def team(request):
 
 
   # ログイン者の班員登録がある場合の処理
-  if data2.count() != 0:
+  else:
     # ログイン者の班員登録のオブジェクトを取得
     obj = team_member.objects.get(employee_no5 = request.session['login_No'])
 
     # ログイン者が組長以上か確認
     if data.shop == '組長以上':
-      # 組長以上なら人員登録のオブジェクトを全て取得
-      member_obj = member.objects.all().order_by('employee_no')
+      # 組長以上なら人員登録のオブジェクトを全て取得(絞り込み有効)
+      if request.session.get('shop_choose', None) != None:
+        member_obj = member.objects.filter(shop = request.session.get('shop_choose', '')).order_by('employee_no')
+      else:
+        member_obj = member.objects.all().order_by('employee_no')
     else:
       # そうでないならログイン者と同じショップの人員のオブジェクトを取得
       member_obj = member.objects.filter(shop = data.shop).order_by('employee_no')
@@ -175,8 +194,8 @@ def team(request):
     form.fields['member14'].choices = choices_list
     form.fields['member15'].choices = choices_list
 
-    # POST時の処理
-    if (request.method == 'POST'):
+    # 班員登録時の処理
+    if "team_new" in request.POST:
 
       # 指定IDのレコードにPOST送信された値を上書きする
       team_member.objects.update_or_create(employee_no5 = request.session['login_No'], \
