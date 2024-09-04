@@ -135,7 +135,8 @@ class teamForm(forms.Form):
   member14 = forms.ChoiceField(label = 'メンバー従業員番号14', widget = forms.Select(attrs ={'class' : 'form-control custom-border', 'style' : 'width : 200px;'}), required = False)
   member15 = forms.ChoiceField(label = 'メンバー従業員番号15', widget = forms.Select(attrs ={'class' : 'form-control custom-border', 'style' : 'width : 200px;'}), required = False)
   follow = forms.BooleanField(label = 'フォローON/OFF', required = False, widget = forms.CheckboxInput(attrs = {'class' : 'form-check-input'}))
-  shop = forms.ChoiceField(label = 'ショップ', choices = shop_list, required = False, widget = forms.Select(attrs ={'class' : 'form-control custom-border', 'style' : 'width : 200px;'}))
+  shop = forms.ChoiceField(label = 'ショップ', choices = shop_list, required = False, widget = forms.Select(attrs ={'class' : 'form-control custom-border', 'style' : 'width : 90px;'}))
+  shop2 = forms.ChoiceField(label = 'ショップ', choices = shop_list, required = False, widget = forms.Select(attrs ={'class' : 'form-control custom-border', 'style' : 'width : 90px;'}))
 
 
 
