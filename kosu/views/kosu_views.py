@@ -7817,7 +7817,7 @@ def all_kosu(request, num):
 
 
     # 取得した工数データを1ページあたりの件数分取得
-    data = Paginator(obj, page_num.menu_row)
+    data = Paginator(obj, 500)
 
 
     # フォーム定義
@@ -7902,7 +7902,7 @@ def all_kosu(request, num):
     # 全工数データを取得
     obj = Business_Time_graph.objects.all().order_by('work_day2', 'employee_no3').reverse()
     # 取得した工数データを1ページあたりの件数分取得
-    data = Paginator(obj, page_num.menu_row)
+    data = Paginator(obj, 500)
 
     # 今日の日時取得
     today = datetime.date.today()
