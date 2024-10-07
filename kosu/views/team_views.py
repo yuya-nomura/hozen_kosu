@@ -2994,7 +2994,7 @@ def class_list(request):
     # 前回のショップ検索履歴がある場合の処理
     if request.session.get('find_shop', '') != '':
       # 検索履歴ショップの人員取得
-      member_obj_filter = member.objects.filter(shop__contains = request.session['find_shop'])\
+      member_obj_filter = member.objects.filter(shop = request.session['find_shop'])\
                                         .order_by('employee_no')
 
     # 前回のショップ検索履歴がない場合の処理
