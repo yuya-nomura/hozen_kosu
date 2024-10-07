@@ -2863,7 +2863,7 @@ def class_list(request):
     shop_default = {'shop2' : request.POST['shop2']}
     schedule_default = {'year' : request.POST['year'], 
                         'month' : request.POST['month']}
-    
+
     # フォーム定義
     shop_form = member_findForm(shop_default)
     schedule_form = schedule_timeForm(schedule_default)
@@ -2875,7 +2875,7 @@ def class_list(request):
 
 
     # 選択ショップの人員取得
-    member_obj_filter = member.objects.filter(shop__contains = request.POST['shop2']).order_by('employee_no')
+    member_obj_filter = member.objects.filter(shop = request.POST['shop2']).order_by('employee_no')
 
     # 空のリスト定義
     No_list = []
@@ -3000,7 +3000,7 @@ def class_list(request):
     # 前回のショップ検索履歴がない場合の処理
     else:
       # ログイン者と同じショップの人員取得
-      member_obj_filter = member.objects.filter(shop__contains = data.shop).order_by('employee_no')
+      member_obj_filter = member.objects.filter(shop = data.shop).order_by('employee_no')
 
 
     # 空のリスト定義
