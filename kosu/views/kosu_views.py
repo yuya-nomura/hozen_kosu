@@ -2861,6 +2861,7 @@ def input(request):
   for i, m in enumerate(str_list):
     choices_list.append((m,eval('kosu_obj.kosu_title_{}'.format(i + 1))))
     graph_kosu_list.append(eval('kosu_obj.kosu_title_{}'.format(i + 1)))
+  choices_list.append(('$','休憩'))
 
 
   # ログイン者情報取得
