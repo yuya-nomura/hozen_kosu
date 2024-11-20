@@ -363,7 +363,8 @@ def input(request):
 
           # ログイン者のショップがボデーか組立の場合の処理
           if member_obj.shop == 'W1' or member_obj.shop == 'W2' or \
-            member_obj.shop == 'A1' or member_obj.shop == 'A2':
+            member_obj.shop == 'A1' or member_obj.shop == 'A2' or \
+              member_obj.shop == '組長以上(W,A)':
             # 工数が入力され終わりのインデントが140以下である場合の処理(工数入力が4:40以前の場合)
             if graph_end_index <= 140:
               # 工数が入力され終わりのインデントを140にする(4:40の定時まで表示)
@@ -638,7 +639,8 @@ def input(request):
 
           # ログイン者のショップがボデーか組立の場合の処理
           if member_obj.shop == 'W1' or member_obj.shop == 'W2' or \
-            member_obj.shop == 'A1' or member_obj.shop == 'A2':
+            member_obj.shop == 'A1' or member_obj.shop == 'A2' or \
+              member_obj.shop == '組長以上(W,A)':
             # 工数が入力され終わりのインデントが140以下である場合の処理(工数入力が4:40以前の場合)
             if graph_end_index <= 140:
               # 工数が入力され終わりのインデントを140にする(4:40の定時まで表示)
