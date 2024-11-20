@@ -389,78 +389,14 @@ def input(request):
   # グラフ更新時の処理
   if "update" in request.POST:
 
-    # 2つのフォームで入力のあった直を変数に入れる
-    if request.POST['tyoku'] != '':
-      tyoku = request.POST['tyoku']
-    elif request.POST['tyoku2'] != '':
-      tyoku = request.POST['tyoku2']
-    else:
-      tyoku = ''
-
-
-    # POSTされた直をセッションに保存
-    request.session['tyoku'] = tyoku
-
-
-    # 1直がPOSTされた場合の処理
-    if tyoku == '1':
-      # 作業終了時のセッションに06を定数として入れ直す
-      request.session['end_hour'] = '06'
-      # 作業終了分のセッションに30を定数として入れ直す
-      request.session['end_min'] = '30'
-
-    # 2直がPOSTされてログイン者のショップがボデーか組立の場合の処理
-    elif tyoku == '2' and (member_obj.shop == 'W1' or \
-       member_obj.shop == 'W2' or member_obj.shop == 'A1' or member_obj.shop == 'A2' or \
-        member_obj.shop == '組長以上(W,A)'):
-      # 作業終了時のセッションに11を定数として入れ直す
-      request.session['end_hour'] = '11'
-      # 作業終了分のセッションに10を定数として入れ直す
-      request.session['end_min'] = '10'
-
-    # 2直がPOSTされてログイン者のショップがプレス、成形、塗装の場合の処理
-    elif tyoku == '2' and (member_obj.shop == 'P' or \
-       member_obj.shop == 'R' or member_obj.shop == 'T1' or member_obj.shop == 'T2' or \
-       member_obj.shop == 'その他' or member_obj.shop == '組長以上(P,R,T,その他)'):
-      # 作業終了時のセッションに13を定数として入れ直す
-      request.session['end_hour'] = '13'
-      # 作業終了分のセッションに40を定数として入れ直す
-      request.session['end_min'] = '40'
-
-    # 3直がPOSTされてログイン者のショップがボデーか組立の場合の処理
-    elif tyoku == '3' and (member_obj.shop == 'W1' or \
-       member_obj.shop == 'W2' or member_obj.shop == 'A1' or member_obj.shop == 'A2' or \
-        member_obj.shop == '組長以上(W,A)'):
-      # 作業終了時のセッションに19を定数として入れ直す
-      request.session['end_hour'] = '19'
-      # 作業終了分のセッションに50を定数として入れ直す
-      request.session['end_min'] = '50'
-
-    # 3直がPOSTされてログイン者のショップがプレス、成形、塗装、その他の場合の処理
-    elif tyoku == '3' and (member_obj.shop == 'P' or \
-       member_obj.shop == 'R' or member_obj.shop == 'T1' or member_obj.shop == 'T2' or \
-       member_obj.shop == 'その他' or member_obj.shop == '組長以上(P,R,T,その他)'):
-      # 作業終了時のセッションに22を定数として入れ直す
-      request.session['end_hour'] = '22'
-      # 作業終了分のセッションに10を定数として入れ直す
-      request.session['end_min'] = '10'
-
-    # 常昼がPOSTされた場合の処理
-    elif tyoku == '4':
-      # 作業終了時のセッションに08を定数として入れ直す
-      request.session['end_hour'] = '08'
-      # 作業終了分のセッションに00を定数として入れ直す
-      request.session['end_min'] = '00'
-
-
     # 更新された就業日をセッションに登録
     request.session['day'] = request.POST['work_day']
 
     # 更新された就業日を変数に入れる
-    new_work_day = request.session.get('day', None)
+    new_work_day = request.session['day']
 
     # グラフデータ確認用データ取得
-    data_count = Business_Time_graph.objects.filter(employee_no3 = request.session.get('login_No', None),\
+    data_count = Business_Time_graph.objects.filter(employee_no3 = request.session['login_No'],\
                                                     work_day2 = new_work_day)
 
     # グラフラベルデータリセット
@@ -496,6 +432,57 @@ def input(request):
       # グラフデータを取得
       obj_get = Business_Time_graph.objects.get(employee_no3 = request.session.get('login_No', None),\
                                                   work_day2 = new_work_day)
+      
+      # 1直がPOSTされた場合の処理
+      if obj_get.tyoku2 == '1':
+        # 作業開始時間更新
+        request.session['start_time'] = '06:30'
+        # 作業終了時間更新
+        request.session['end_time'] = '06:30'
+
+      # 2直がPOSTされてログイン者のショップがボデーか組立の場合の処理
+      elif obj_get.tyoku2 == '2' and (member_obj.shop == 'W1' or \
+        member_obj.shop == 'W2' or member_obj.shop == 'A1' or member_obj.shop == 'A2' or \
+          member_obj.shop == '組長以上(W,A)'):
+        # 作業開始時間更新
+        request.session['start_time'] = '11:10'
+        # 作業終了時間更新
+        request.session['end_time'] = '11:10'
+
+      # 2直がPOSTされてログイン者のショップがプレス、成形、塗装の場合の処理
+      elif obj_get.tyoku2 == '2' and (member_obj.shop == 'P' or \
+        member_obj.shop == 'R' or member_obj.shop == 'T1' or member_obj.shop == 'T2' or \
+        member_obj.shop == 'その他' or member_obj.shop == '組長以上(P,R,T,その他)'):
+        # 作業開始時間更新
+        request.session['start_time'] = '13:40'
+        # 作業終了時間更新
+        request.session['end_time'] = '13:40'
+
+      # 3直がPOSTされてログイン者のショップがボデーか組立の場合の処理
+      elif obj_get.tyoku2 == '3' and (member_obj.shop == 'W1' or \
+        member_obj.shop == 'W2' or member_obj.shop == 'A1' or member_obj.shop == 'A2' or \
+          member_obj.shop == '組長以上(W,A)'):
+        # 作業開始時間更新
+        request.session['start_time'] = '19:50'
+        # 作業終了時間更新
+        request.session['end_time'] = '19:50'
+
+      # 3直がPOSTされてログイン者のショップがプレス、成形、塗装、その他の場合の処理
+      elif obj_get.tyoku2 == '3' and (member_obj.shop == 'P' or \
+        member_obj.shop == 'R' or member_obj.shop == 'T1' or member_obj.shop == 'T2' or \
+        member_obj.shop == 'その他' or member_obj.shop == '組長以上(P,R,T,その他)'):
+        # 作業開始時間更新
+        request.session['start_time'] = '22:10'
+        # 作業終了時間更新
+        request.session['end_time'] = '22:10'
+
+      # 常昼がPOSTされた場合の処理
+      elif obj_get.tyoku2 == '4':
+        # 作業開始時間更新
+        request.session['start_time'] = '08:00'
+        # 作業終了時間更新
+        request.session['end_time'] = '08:00'
+
       # 取得したグラフデータをリストに解凍
       graph_list = list(obj_get.time_work)
 
