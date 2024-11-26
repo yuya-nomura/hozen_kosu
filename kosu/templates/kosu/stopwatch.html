@@ -10,9 +10,17 @@
   <link rel="stylesheet" type="text/css" href="{% static 'kosu/css/custom.css' %}">
   
   <style>
+    /* 等幅フォントと固定幅のスタイル */
     #timeDisplay {
         font-family: 'Courier New', Courier, monospace; /* 等幅フォントを使用 */
         letter-spacing: 1px; /* 文字間隔を調整 */
+        text-align: center;
+    }
+    .timeDisplayContainer {
+        display: flex;
+        justify-content: center; /* 水平方向に中央揃え */
+        align-items: center; /* 垂直方向に中央揃え */
+        height: 100px; /* 必要に応じて高さを調整 */
     }
   </style>
 </head>
@@ -22,8 +30,11 @@
     <p>　</p>
     <p>スマホにストップウォッチないためトライで追加</p>
     <p>タクト測定などに使用下さい(不要なら消します)</p>
+    
     <div class="container text-center mt-5">
-        <div class="display-2 mb-2" id="timeDisplay">00:00:00.00</div>
+        <div class="timeDisplayContainer">
+            <div class="display-1 mb-2" id="timeDisplay">00:00:00.00</div>
+        </div>
         <div class="button-group">
             <button class="btn btn-blue1 mt-2 btn-sm" id="startStopButton" onclick="startStop()">Start</button>　　
             <button class="btn btn-green1 mt-2 btn-sm" id="resetButton" onclick="reset()">Reset</button>　　
@@ -33,55 +44,99 @@
     </div>
 
     <script>
-        let startTime = 0;
-        let elapsedTime = 0;
-        let timerInterval;
-        let running = false;
+        let startTime = 0; // ストップウォッチが開始された時刻を保持するための変数
+        let elapsedTime = 0; // 経過時間を保持するための変数
+        let timerInterval; // setInterval の戻り値を保持するための変数
+        let running = false; // ストップウォッチが動作中かどうかを示すフラグ
 
+        // ページ読み込み時にデータを復元する
+        window.onload = () => {
+            // セッションストレージからストップウォッチの動作状態を復元
+            if (sessionStorage.getItem('running') === 'true') {
+                running = true;
+                startTime = parseInt(sessionStorage.getItem('startTime'));
+                elapsedTime = parseInt(sessionStorage.getItem('elapsedTime'));
+                timerInterval = setInterval(updateTime, 10);
+                document.getElementById("startStopButton").innerHTML = "Stop";
+            } else {
+                // セッションストレージから経過時間を復元
+                if (sessionStorage.getItem('elapsedTime')) {
+                    elapsedTime = parseInt(sessionStorage.getItem('elapsedTime'));
+                    updateTime(); // 現在の時間を表示
+                }
+            }
+            restoreLaps(); // ラップタイムを復元
+        };
+
+        // 現在の時間を表示する関数
         function updateTime() {
-            elapsedTime = Date.now() - startTime;
-            const milliseconds = ((elapsedTime % 1000) / 10).toFixed(0).padStart(2, '0');
-            const seconds = Math.floor((elapsedTime / 1000) % 60);
-            const minutes = Math.floor((elapsedTime / (1000 * 60)) % 60);
-            const hours = Math.floor((elapsedTime / (1000 * 60 * 60)) % 24);
+            const currentElapsedTime = running ? Date.now() - startTime : elapsedTime;
+            const milliseconds = ((currentElapsedTime % 1000) / 10).toFixed(0).padStart(2, '0');
+            const seconds = Math.floor((currentElapsedTime / 1000) % 60).toString().padStart(2, '0');
+            const minutes = Math.floor((currentElapsedTime / (1000 * 60)) % 60).toString().padStart(2, '0');
+            const hours = Math.floor((currentElapsedTime / (1000 * 60 * 60))).toString().padStart(2, '0'); // 時間部分は数日までに対応
 
             document.getElementById("timeDisplay").innerHTML = 
-                `${pad(hours)}:${pad(minutes)}:${pad(seconds)}.${milliseconds}`;
+                `${hours}:${minutes}:${seconds}.${milliseconds}`;
         }
 
+        // 時刻を2桁にフォーマットする関数
         function pad(number) {
-            return number < 10 ? "0" + number : number;
+            return number < 10 ? "0" + number : number.toString();
         }
 
+        // ストップウォッチの開始/停止ボタンが押されたときの関数
         function startStop() {
             if (running) {
-                // Stop the clock
+                // ストップウォッチを停止
                 clearInterval(timerInterval);
+                elapsedTime = Date.now() - startTime;
+                sessionStorage.setItem('elapsedTime', elapsedTime);
                 document.getElementById("startStopButton").innerHTML = "Start";
             } else {
-                // Start the clock
+                // ストップウォッチを開始
                 startTime = Date.now() - elapsedTime;
+                sessionStorage.setItem('startTime', startTime);
                 timerInterval = setInterval(updateTime, 10);
                 document.getElementById("startStopButton").innerHTML = "Stop";
             }
-            running = !running;
+            running = !running; // 動作状態を切り替え
+            sessionStorage.setItem('running', running); // 動作状態をセッションストレージに保存
         }
 
+        // ストップウォッチをリセットする関数
         function reset() {
-            clearInterval(timerInterval);
+            clearInterval(timerInterval); // ストップウォッチを停止
             running = false;
             startTime = 0;
             elapsedTime = 0;
+            sessionStorage.clear(); // セッションストレージをクリア
             document.getElementById("timeDisplay").innerHTML = "00:00:00.00";
             document.getElementById("startStopButton").innerHTML = "Start";
             document.getElementById("laps").innerHTML = "";
         }
 
+        // ラップボタンが押されたときの関数
         function lap() {
             if (running) {
                 const lapTime = document.getElementById("timeDisplay").innerHTML;
                 const lapElement = document.createElement("div");
                 lapElement.innerHTML = lapTime;
+                document.getElementById("laps").appendChild(lapElement);
+
+                // 保存されたラップデータを更新
+                let laps = sessionStorage.getItem('laps') ? JSON.parse(sessionStorage.getItem('laps')) : [];
+                laps.push(lapTime);
+                sessionStorage.setItem('laps', JSON.stringify(laps)); // ラップデータをセッションストレージに保存
+            }
+        }
+
+        // セッションストレージからラップタイムを復元する関数
+        function restoreLaps() {
+            let laps = sessionStorage.getItem('laps') ? JSON.parse(sessionStorage.getItem('laps')) : [];
+            for (let lap of laps) {
+                const lapElement = document.createElement("div");
+                lapElement.innerHTML = lap;
                 document.getElementById("laps").appendChild(lapElement);
             }
         }
