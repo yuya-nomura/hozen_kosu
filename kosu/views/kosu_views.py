@@ -3863,7 +3863,7 @@ def input(request):
     default_total = 0
     if obj_get.work_time == '出勤':
       default_total = 470
-    elif obj_get.work_time == 'シフト出勤':
+    elif obj_get.work_time == 'シフト出':
       default_total = 470
     elif obj_get.work_time == '休出':
       default_total = 0
@@ -5531,7 +5531,7 @@ def detail(request, num):
   default_total = 0
   if obj_get.work_time == '出勤':
     default_total = 470
-  elif obj_get.work_time == 'シフト出勤':
+  elif obj_get.work_time == 'シフト出':
     default_total = 470
   elif obj_get.work_time == '休出':
     default_total = 0
